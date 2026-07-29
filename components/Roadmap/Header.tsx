@@ -12,6 +12,7 @@ export default function Header() {
       <p
         style={{
           color: '#8db596',
+          fontSize: '1.75rem',
           fontWeight: 700,
           letterSpacing: '2px',
           textTransform: 'uppercase',

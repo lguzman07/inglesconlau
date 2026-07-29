@@ -1,7 +1,15 @@
 export default function WhyDifferent() {
   const cards = [
+
     {
-      icon: '🧠',
+      icon: '🚪',
+      title: 'Accesibilidad desde el diseño',
+      description:
+        'Aprender debe ser una experiencia inclusiva y cómoda. Por eso hemos diseñado una plataforma pensada para personas con dislexia, TDAH, autismo (TEA) y/o sensibilidad sensorial. Porque cuando eliminamos barreras, más personas tienen la oportunidad de aprender.',
+    },
+
+    {
+      icon: '🧠', 
       title: 'Aprende entendiendo',
       description:
         'No memorizas reglas sin propósito. Comprendes cómo funciona el inglés para usarlo con confianza.',
@@ -24,12 +32,7 @@ export default function WhyDifferent() {
       description:
         'Cometer errores es parte del proceso. Primero desarrollamos confianza y después perfeccionamos el idioma.',
     },
-    {
-      icon: '🔗',
-      title: 'Conecta con lo que ya sabes',
-      description:
-        'No empiezas desde cero. Construimos sobre conocimientos que ya tienes para aprender de forma más natural.',
-    },
+    
     {
       icon: '🎯',
       title: 'Cada lección tiene un propósito',

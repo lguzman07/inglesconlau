@@ -5,7 +5,7 @@ export default function Methodology() {
     <section
       id="methodology"
       style={{
-        padding: '8rem 2rem',
+        padding: '3.5rem 2rem 4rem',
         background: '#ffffff',
       }}
     >
@@ -15,15 +15,15 @@ export default function Methodology() {
           margin: '0 auto',
           display: 'grid',
           gridTemplateColumns: '1.2fr .8fr',
-          gap: '5rem',
+          gap: '3rem',
           alignItems: 'center',
         }}
       >
-        {/* Left Content */}
         <div>
           <p
             style={{
               color: '#8db596',
+              fontSize: '1.75rem',
               fontWeight: 700,
               letterSpacing: '2px',
               textTransform: 'uppercase',
@@ -128,7 +128,6 @@ export default function Methodology() {
           </div>
         </div>
 
-        {/* Right Side */}
         <div
           style={{
             display: 'flex',
@@ -148,18 +147,19 @@ export default function Methodology() {
               borderRadius: '24px',
               objectFit: 'cover',
               boxShadow: '0 12px 30px rgba(0,0,0,.08)',
+              marginTop: '-2rem',
+              transform: 'translateY(-350px)',
             }}
           />
         </div>
       </div>
 
-      {/* Quote */}
       <div
         style={{
           maxWidth: '900px',
-          margin: '6rem auto 0',
+          margin: '3rem auto 0',
           textAlign: 'center',
-          padding: '3rem',
+          padding: '2.5rem',
           borderRadius: '24px',
           background: '#fff8f6',
         }}
