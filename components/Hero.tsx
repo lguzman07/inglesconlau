@@ -2,7 +2,7 @@ export default function Hero() {
   return (
     <section className="home">
       <div className="hero">
-        <h1>English With Lau</h1>
+        <h1>Inglés Con Lau</h1>
 
         <h2 className="hero-slogan">
           Porque lo que quieres...

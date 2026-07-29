@@ -40,7 +40,17 @@ export default function AudioPlayer({ text, language }: AudioPlayerProps) {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to generate audio.');
+          const errorText = await response.text();
+
+          console.error('Audio API error:', {
+            status: response.status,
+            statusText: response.statusText,
+            body: errorText,
+          });
+
+          throw new Error(
+            `Failed to generate audio: ${response.status} ${response.statusText}`
+          );
         }
 
         blob = await response.blob();
