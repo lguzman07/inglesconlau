@@ -3,42 +3,46 @@ export default function WhyDifferent() {
 
     {
       icon: '🚪',
-      title: 'Accesibilidad desde el diseño',
+      title: 'Compromiso con la accesibilidad',
       description:
-        'Aprender debe ser una experiencia inclusiva y cómoda. Por eso hemos diseñado una plataforma pensada para personas con dislexia, TDAH, autismo (TEA) y/o sensibilidad sensorial. Porque cuando eliminamos barreras, más personas tienen la oportunidad de aprender.',
+        'La inclusividad de tipos de aprendizaje fue pensada desde el inicio del proyecto como parte esencial del diseño, no para cumplir con un requisito. He diseñado la plataforma pensada para personas con dislexia, TDAH, autismo (TEA) y/o sensibilidad sensorial. Porque cuando eliminamos barreras, más personas tienen la oportunidad de aprender.',
     },
 
-    {
-      icon: '🧠', 
-      title: 'Aprende entendiendo',
-      description:
-        'No memorizas reglas sin propósito. Comprendes cómo funciona el inglés para usarlo con confianza.',
-    },
+
     {
       icon: '🌎',
-      title: 'Diseñado por y para hispanohablantes',
+      title: 'Metodología diseñada por y para hispanohablantes',
       description:
-        'Cada lección está creada pensando en las dudas y dificultades que tenemos al aprender inglés partiendo del español.',
+        'Aprender inglés debe ser una experiencia gratificante; no frustrante. En ocasiones, se espera que conozcas el idioma incluso antes de empezar a hablarlo. Es por eso que he diseñado un espacio específicamente para hispanohablantes, donde se explican los conceptos a partir de tu lengua materna, pensando en las posibles preguntas o dificultades que puedas tener.', 
+      },
+
+          {
+      icon: '🌱',
+      title: 'Aprendizaje pausado',
+      description:
+        'No hay niveles que desbloquear, vidas que perder, ni rankings que alcanzar. Nuestra filosofía se basa en aprender de una manera calmada, a tu ritmo, y compitiendo solamente contigo mismo.',
+    },
+        {
+      icon: '🛣️',
+      title: 'Las rutas son una guía, no un camino obligatorio',
+      description:
+        'Te presentamos un camino estructurado, un orden sugerido, pero tú puedes aprender lo que quieras, cuando quieras.',
     },
     {
       icon: '💬',
-      title: 'Habla desde la primera lección',
+      title: 'Aprende solo, practica con otros',
       description:
-        'El objetivo no es completar ejercicios. Es que puedas comunicarte desde el primer día.',
+        'La idea es la siguiente: aprendes a tu ritmo, y practicas con personas que tienen la misma meta que tú: hablar inglés. No hay presión, competencia, ni obligación de participar. Todas las prácticas son guiadas y supervisadas por mí, para que puedas aprender de una manera segura y efectiva.',
     },
-    {
-      icon: '🌱',
-      title: 'Confianza antes que perfección',
+
+
+        {
+      icon: '🧠', 
+      title: 'Te enseño inglés, no a usar una plataforma confusa',
       description:
-        'Cometer errores es parte del proceso. Primero desarrollamos confianza y después perfeccionamos el idioma.',
+        'hola',
     },
-    
-    {
-      icon: '🎯',
-      title: 'Cada lección tiene un propósito',
-      description:
-        'Todo sigue un camino claro para ayudarte a comunicarte paso a paso, sin sentirte perdido.',
-    },
+
   ];
 
   return (
