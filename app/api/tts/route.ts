@@ -7,6 +7,7 @@ const SPANISH_VOICE_ID = process.env.ELEVENLABS_SPANISH_VOICE_ID!;
 export async function POST(request: NextRequest) {
   try {
     const { text, language } = await request.json();
+    console.log('Texto recibido:', text);
 
     if (!text) {
       return Response.json({ error: 'Missing text.' }, { status: 400 });
