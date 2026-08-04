@@ -229,7 +229,7 @@ export default function Lesson() {
               color: '#2f3437',
             }}
           >
-            What's your name?
+            What&apos;s your name?
           </p>
 
           <AudioPlayer text="What's your name?" language="en" />
