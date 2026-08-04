@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Lexend } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
 
 const lexend = Lexend({
@@ -20,7 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={lexend.className}>{children}</body>
+      <body className={lexend.className}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
