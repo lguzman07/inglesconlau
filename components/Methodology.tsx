@@ -172,10 +172,10 @@ export default function Methodology() {
             fontWeight: 700,
           }}
         >
-          "No te enseño inglés como si empezaras desde cero.
+          &ldquo;No te enseño inglés como si empezaras desde cero.
           <br />
           Te lo enseño a partir de algo que ya conoces perfectamente:
-          <span style={{ color: '#8db596' }}> el español.</span>"
+          <span style={{ color: '#8db596' }}> el español.</span>&rdquo;
         </h3>
       </div>
     </section>
