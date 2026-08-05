@@ -30,9 +30,9 @@ export default function WhyDifferent() {
     },
     {
       icon: '💬',
-      title: 'Aprende solo, practica con otros',
+      title: 'Asistencia en español al correo electrónico',
       description:
-        'La idea es la siguiente: aprendes a tu ritmo, y practicas con personas que tienen la misma meta que tú: hablar inglés. No hay presión, competencia, ni obligación de participar. Todas las prácticas son guiadas y supervisadas por mí, para que puedas aprender de una manera segura y efectiva.',
+        'De tener preguntas sobre las lecciones puedes escribirnos al correo lau@inglesconlau.com y recibirás asistencia en español. No necesitas escribir en inglés para recibir ayuda.',
     },
 
 
