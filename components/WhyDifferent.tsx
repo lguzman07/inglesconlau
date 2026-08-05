@@ -5,7 +5,7 @@ export default function WhyDifferent() {
       icon: '🚪',
       title: 'Compromiso con la accesibilidad',
       description:
-        'La inclusividad de tipos de aprendizaje fue pensada desde el inicio del proyecto como parte esencial del diseño, no para cumplir con un requisito. He diseñado la plataforma pensada para personas con dislexia, TDAH, autismo (TEA) y/o sensibilidad sensorial. Porque cuando eliminamos barreras, más personas tienen la oportunidad de aprender.',
+        'La inclusividad de tipos de aprendizaje fue pensada desde el inicio del proyecto como parte esencial del diseño. He diseñado la plataforma pensada para personas con dislexia, TDAH, autismo (TEA) y/o sensibilidad sensorial. Porque cuando eliminamos barreras, más personas tienen la oportunidad de aprender.',
     },
 
 
@@ -34,13 +34,13 @@ export default function WhyDifferent() {
       icon: '🛣️',
       title: 'Las rutas son una guía, no un camino obligatorio',
       description:
-        'Te presentamos un camino estructurado, un orden sugerido, pero tú puedes aprender lo que quieras, cuando quieras.',
+        'Te presentamos un camino estructurado, un orden sugerido, pero tú decides qué aprender. No hay lecciones bloqueadas, ni niveles que alcanzar. Puedes repetir lecciones o incluso saltarlas si ya conoces el tema.',
     },
     {
       icon: '💬',
       title: 'Asistencia en español al correo electrónico',
       description:
-        'De tener preguntas sobre las lecciones puedes escribirnos al correo lau@inglesconlau.com y recibirás asistencia en español. No necesitas escribir en inglés para recibir ayuda.',
+        'De tener preguntas sobre las lecciones puedes escribirnos al correo lau@inglesconlau.com y recibirás asistencia en español. No necesitas saber inglés para recibir ayuda.',
     },
 
   ];
