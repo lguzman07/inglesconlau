@@ -54,64 +54,148 @@ export default function Methodology() {
               color: '#6b7280',
             }}
           >
-            <p>Aprendí inglés de una forma bastante natural.</p>
 
             <p>
-              Sí, tomé clases, pero gran parte de mi aprendizaje vino de estar
-              expuesta al idioma desde pequeña: viendo películas, escuchando
-              música y rodeándome del inglés durante muchos años.
+              Aprendí inglés de una manera bastante inusual. Sí, tomé clases, pero la
+              mayoría de lo aprendido fue a través de métodos que muchos no considerarían
+              tradicionales: escuchar música, ver series, películas, hablar con mis amigos
+              con el mucho o poco inglés que supiéramos… Verán, al aprenderlo desde niña
+              tuve una ventaja bastante significativa. Los niños son como esponjas, lo
+              absorben todo: tanto lo bueno como lo malo. Es por eso que siempre escuchan:
+              “ponlo desde chiquito en clases que así aprende más fácil.”
             </p>
 
             <p>
-              Con el tiempo descubrí que esa experiencia me dio algo muy
-              valioso: una intuición del idioma.
+              Dicho esto, aprender como adulto, a pesar de ser menos intuitivo y en
+              ocasiones más difícil (de no aprender con las herramientas correctas), tiene
+              una particularidad muy hermosa, y es que aprendemos porque deseamos hacerlo.
+              No presentamos esa resistencia del “¡no quiero!”, y es que ya en nuestra
+              adultez podemos decidir qué aprender y qué no aprender. Claro, en muchos de
+              los casos quizás sí nos veamos forzados a aprender el idioma: porque sabemos
+              que con el inglés tendremos más oportunidades laborales, porque nuestro
+              trabajo actual lo requiere para poder seguir escalando, en fin. Un sinnúmero
+              de razones, todas buenas y válidas, para aprenderlo.
             </p>
 
             <p>
-              Sin embargo, cuando comencé a enseñar inglés a estudiantes
-              hispanohablantes, entendí que{' '}
+              Dicho esto, quiero expresarte por qué me apasiona tanto enseñar y de dónde
+              viene esta idea.
+            </p>
+
+            <p>
+              Habiendo aprendido inglés de una manera tan inusual, pude adquirir una
+              intuición por el idioma que no todos tienen, y es que aprender inglés no es
+              tan difícil como se pinta. Tiene sus reglas gramaticales, sus puntos no tan
+              sencillos, pero visto de manera objetiva, el inglés es mucho más fácil que el
+              español.
+            </p>
+
+            <p>
+              Los adjetivos no tienen ni género ni número: una manzana roja o tres carros
+              rojos en inglés es <strong>a red apple</strong> y{' '}
+              <strong>three red cars</strong>.
+            </p>
+
+            <p>Conjugar también es mucho más fácil:</p>
+
+            <table
+              style={{
+                width: '100%',
+                borderCollapse: 'collapse',
+                margin: '0.5rem 0',
+                borderRadius: '16px',
+                overflow: 'hidden',
+                background: '#ffffff',
+                boxShadow: '0 8px 24px rgba(0,0,0,.05)',
+              }}
+            >
+              <thead>
+                <tr style={{ background: '#fff8f6' }}>
+                  <th
+                    style={{
+                      padding: '1rem',
+                      textAlign: 'left',
+                      color: '#2f3437',
+                    }}
+                  >
+                    Español
+                  </th>
+
+                  <th
+                    style={{
+                      padding: '1rem',
+                      textAlign: 'left',
+                      color: '#2f3437',
+                    }}
+                  >
+                    Inglés
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {[
+                  ['Yo hago', 'I do'],
+                  ['Tú haces', 'You do'],
+                  ['Él hace', 'He does'],
+                  ['Ella hace', 'She does'],
+                  ['Nosotros hacemos', 'We do'],
+                  ['Ustedes hacen', 'You do'],
+                  ['Ellos hacen', 'They do'],
+                ].map(([es, en]) => (
+                  <tr
+                    key={es}
+                    style={{
+                      borderTop: '1px solid #ece8e4',
+                    }}
+                  >
+                    <td style={{ padding: '0.9rem 1rem' }}>{es}</td>
+
+                    <td
+                      style={{
+                        padding: '0.9rem 1rem',
+                        fontWeight: 700,
+                        color: '#8db596',
+                      }}
+                    >
+                      {en}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <p>
+              ¿Pueden verlo? Lo complicado viene por el miedo a aprenderlo, por pensar que
+              no somos lo suficientemente capaces o inteligentes para aprender un idioma
+              desde cero. Y por eso tengo dos cosas que decirte:
+            </p>
+
+            <p>
+              <strong>SÍ eres lo suficientemente inteligente y capaz.</strong>
+            </p>
+
+            <p>
+              <strong>NO lo estarías aprendiendo desde cero.</strong> El español y el inglés
+              tienen un sinnúmero de similitudes, <strong>INCLUSO, en la pronunciación.</strong>{' '}
+              Y es algo que podrás ver a través de todo este curso.
+            </p>
+
+            <p>
+              Mi amor por enseñar viene precisamente de eso, de poder demostrarles a las
+              personas que son inteligentes, que son capaces, y que no está fuera de sus
+              posibilidades aprender un idioma nuevo. Nace de querer ayudar a la gran
+              comunidad de dominicanos e hispanohablantes en general a aprender algo que
+              muchas veces pensaron imposible, de hacerlo de una manera fácil, intuitiva,
+              con herramientas prácticas y pedagógicas que solamente sumarán a tu
+              aprendizaje y harán de él <strong>a rewarding experience.</strong>
+            </p>
+
+            <p>
               <strong>
-                no todo el mundo tiene la oportunidad de aprender de esa manera.
+                ¡Acompáñame en este viaje que es el aprendizaje y permíteme demostrarte de
+                lo que eres capaz!
               </strong>
-            </p>
-
-            <p>
-              La mayoría necesita una guía clara, entender por qué las cosas
-              funcionan como funcionan y ganar confianza antes de atreverse a
-              hablar.
-            </p>
-
-            <p>
-              Fue ahí donde nació <strong>English With Lau</strong>.
-            </p>
-
-            <p>No para replicar la forma en la que yo aprendí.</p>
-
-            <p>
-              Sino para crear la forma en la que creo que{' '}
-              <strong>es mejor enseñar.</strong>
-            </p>
-
-            <p>
-              Una metodología creada por una persona que entiende las
-              dificultades que puede tener un hispanohablante al aprender inglés
-              y que sabe cómo hacer ese proceso más fácil, comparando el inglés
-              con algo que ya conoces perfectamente:{' '}
-              <strong>el español.</strong>
-            </p>
-
-            <p>
-              Porque aprender un idioma no siempre consiste en memorizar más
-              reglas.
-            </p>
-
-            <p>
-              Muchas veces consiste en que alguien te ayude a entender el inglés
-              utilizando algo que ya conoces.
-            </p>
-
-            <p>
-              Esa es la idea detrás de <strong>English With Lau.</strong>
             </p>
 
             <p
