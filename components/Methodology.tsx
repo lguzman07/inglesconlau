@@ -60,8 +60,8 @@ export default function Methodology() {
               mayoría de lo aprendido fue a través de métodos que muchos no considerarían
               tradicionales: escuchar música, ver series, películas, hablar con mis amigos
               con el mucho o poco inglés que supiéramos… Verás, al aprenderlo desde niña
-              tuve una ventaja bastante significativa. Los niños son como esponjas, lo
-              absorben todo: tanto lo bueno como lo malo. Es por eso que es tan común
+              tuve una ventaja bastante significativa. Los niños son como esponjas: lo
+              absorben todo. Es por eso que es tan común
               escuchar: “ponlo desde chiquito en clases que así aprende más fácil.”
             </p>
 
