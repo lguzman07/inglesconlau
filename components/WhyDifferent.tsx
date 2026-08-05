@@ -13,14 +13,14 @@ export default function WhyDifferent() {
       icon: '🌎',
       title: 'Metodología diseñada por y para hispanohablantes',
       description:
-        'Aprender inglés debe ser una experiencia gratificante; no frustrante. En ocasiones, se espera que conozcas el idioma incluso antes de empezar a hablarlo. Es por eso que he diseñado un espacio específicamente para hispanohablantes, donde se explican los conceptos a partir de tu lengua materna, pensando en las posibles preguntas o dificultades que puedas tener.',
+        'Este es un espacio diseñado específicamente para hispanohablantes, donde se explican los conceptos a partir de tu lengua materna, pensando en las posibles preguntas o dificultades que puedas tener.',
     },
 
     {
       icon: '🧠',
       title: 'Te enseño inglés, no a usar una plataforma confusa',
       description:
-        'He diseñado una plataforma intuitiva y fácil de usar. Accede a todas las reuniones bajo un mismo enlace. Cada lección en PDF viene con su hoja de respuestas incluida.Las lecciones son cortas, con botones grandes, y explicaciones incluidas en la sección de cada ejercicio. Concéntrate en aprender inglés, no en cómo usar la plataforma.',
+        'La plataforma es intuitiva y fácil de usar. Accede a todas las reuniones bajo un mismo enlace. Cada lección en PDF viene con su hoja de respuestas incluida.Las lecciones son cortas, con botones grandes, y explicaciones incluidas en la sección de cada ejercicio.',
     },
 
 
