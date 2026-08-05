@@ -1,25 +1,37 @@
 /* ==========================================
-   English With Lau Design System v2
+   Inglés Con Lau — Accessible Design System
 ========================================== */
 
 :root {
-  --background: #fffdfb;
-  --surface: rgba(255, 255, 255, 0.85);
+  /* Fondos */
+  --background: #f4f1ea;
+  --surface: rgba(238, 241, 243, 0.94);
+  --surface-solid: #eef1f3;
+  --surface-soft: #e6ebee;
 
-  --primary: #8db596;
-  --primary-hover: #7aa886;
+  /* Azul grisáceo principal */
+  --primary: #587484;
+  --primary-hover: #496473;
+  --primary-light: #dce6eb;
 
-  --secondary: #f7cfd8;
-  --secondary-hover: #efbcc8;
+  /* Color secundario neutro */
+  --secondary: #d8e0e4;
+  --secondary-hover: #cbd6dc;
 
-  --text: #2f3437;
-  --text-light: #6b7280;
+  /* Texto */
+  --text: #28343b;
+  --text-light: #56666f;
 
-  --border: #ece8e4;
+  /* Bordes y enfoque */
+  --border: #cbd3d7;
+  --focus: #345f73;
 
-  --shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  /* Sombras suaves */
+  --shadow: 0 10px 28px rgba(40, 52, 59, 0.09);
+  --shadow-hover: 0 14px 30px rgba(40, 52, 59, 0.13);
+
   --radius: 18px;
-  --transition: 0.25s ease;
+  --transition: 0.2s ease;
 }
 
 * {
@@ -43,6 +55,18 @@ html {
 body {
   background: var(--background);
   color: var(--text);
+  line-height: 1.6;
+}
+
+/* Enfoque visible para teclado */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
 }
 
 /* ==========================================
@@ -66,10 +90,10 @@ body {
 
 .section-eyebrow {
   color: var(--primary);
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   margin-bottom: 1rem;
 }
 
@@ -92,27 +116,29 @@ body {
 }
 
 .section-content p {
+  max-width: 68ch;
   font-size: 1.15rem;
   line-height: 1.9;
   color: var(--text-light);
 }
 
 .photo-placeholder {
-  aspect-ratio: 4/5;
+  aspect-ratio: 4 / 5;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 1px solid var(--border);
   border-radius: 28px;
-  background: #f7f7f7;
+  background: var(--surface-soft);
   color: var(--text-light);
 }
 
 .quote-card {
   margin-top: 5rem;
   padding: 3rem;
+  border: 1px solid var(--border);
   border-radius: 28px;
-  background: #fff8f6;
+  background: var(--surface-solid);
   text-align: center;
 }
 
@@ -142,7 +168,7 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 999px;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
 
   box-shadow: var(--shadow);
 }
@@ -158,10 +184,14 @@ body {
 }
 
 .nav-links a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+
   text-decoration: none;
   color: var(--text);
   font-weight: 600;
-  transition: var(--transition);
+  transition: color var(--transition);
 }
 
 .nav-links a:hover {
@@ -186,18 +216,19 @@ body {
 
 .hero h1 {
   font-size: clamp(3.5rem, 8vw, 5rem);
-  line-height: 1;
+  line-height: 1.05;
   margin-bottom: 0.8rem;
 }
 
 .hero-slogan {
   font-size: 1.45rem;
   color: var(--primary);
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 2rem;
 }
 
 .hero p {
+  max-width: 68ch;
   font-size: 1.3rem;
   line-height: 1.8;
   color: var(--text-light);
@@ -214,35 +245,45 @@ body {
 .primary-button,
 .secondary-button {
   width: 320px;
+  min-height: 64px;
   padding: 1rem 1.5rem;
-  border: none;
+
+  border: 1px solid transparent;
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+
   cursor: pointer;
-  transition: var(--transition);
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
+
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
   align-items: center;
+  justify-content: center;
 }
 
 .primary-button {
   background: var(--primary);
-  color: white;
+  color: #ffffff;
+  box-shadow: var(--shadow);
 }
 
 .primary-button:hover {
   background: var(--primary-hover);
-  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
 }
 
 .secondary-button {
   background: var(--secondary);
+  color: var(--text);
+  border-color: var(--border);
 }
 
 .secondary-button:hover {
   background: var(--secondary-hover);
-  transform: translateY(-3px);
+  box-shadow: var(--shadow);
 }
 
 .button-title {
@@ -251,8 +292,8 @@ body {
 }
 
 .button-subtitle {
-  font-size: 1.2rem;
-  opacity: 0.85;
+  font-size: 1.1rem;
+  opacity: 0.9;
 }
 
 /* ==========================================
@@ -266,17 +307,20 @@ body {
 }
 
 .feature-card {
-  background: white;
+  background: var(--surface-solid);
   border: 1px solid var(--border);
   border-radius: 24px;
   padding: 2rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
-  transition: var(--transition);
+  box-shadow: 0 6px 20px rgba(40, 52, 59, 0.06);
+
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
 }
 
 .feature-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.08);
+  border-color: #aebcc4;
+  box-shadow: var(--shadow);
 }
 
 .feature-icon {
@@ -305,10 +349,10 @@ body {
   width: 56px;
   height: 56px;
 
-  background: var(--secondary);
-  color: white;
+  background: var(--primary);
+  color: #ffffff;
 
-  border: none;
+  border: 1px solid var(--primary-hover);
   border-radius: 18px;
 
   display: flex;
@@ -320,15 +364,17 @@ body {
   line-height: 1;
 
   cursor: pointer;
-
   box-shadow: var(--shadow);
 
   opacity: 0;
   visibility: hidden;
+  transform: translateY(12px);
 
-  transform: translateY(20px);
-
-  transition: all 0.3s ease;
+  transition:
+    opacity var(--transition),
+    visibility var(--transition),
+    transform var(--transition),
+    background-color var(--transition);
 
   z-index: 1000;
 }
@@ -340,9 +386,26 @@ body {
 }
 
 .scroll-to-top:hover {
-  background: var(--secondary-hover);
-  transform: translateY(-4px);
-  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.12);
+  background: var(--primary-hover);
+}
+
+/* ==========================================
+   Reduced Motion
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ==========================================
@@ -356,6 +419,7 @@ body {
 
   .section-grid {
     grid-template-columns: 1fr;
+    gap: 3rem;
   }
 
   .features-grid {
@@ -379,7 +443,7 @@ body {
   .nav-links {
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1.25rem;
+    gap: 0.75rem 1.25rem;
   }
 
   .hero {
@@ -402,5 +466,9 @@ body {
   .secondary-button {
     width: 100%;
     max-width: 320px;
+  }
+
+  .quote-card {
+    padding: 2rem 1.25rem;
   }
 }
