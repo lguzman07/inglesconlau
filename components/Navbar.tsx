@@ -7,7 +7,6 @@ export default function Navbar() {
         <a href="#methodology">Metodología</a>
         <a href="#why">¿Por qué nosotros?</a>
         <a href="#roadmap">Roadmap</a>
-        <a href="#laura">Laura</a>
         <a href="#faq">FAQ</a>
       </div>
     </nav>
