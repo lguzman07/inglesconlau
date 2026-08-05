@@ -1,7 +1,7 @@
 export default function Navbar() {
   return (
     <nav className="navbar">
-      <div className="logo">🌸 Inglés Con Lau</div>
+      <div className="logo">Inglés Con Lau</div>
 
       <div className="nav-links">
         <a href="#methodology">Metodología</a>
@@ -11,4 +11,4 @@ export default function Navbar() {
       </div>
     </nav>
   );
-}                                                       
+}
