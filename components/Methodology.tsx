@@ -188,7 +188,7 @@ export default function Methodology() {
               comunidad de dominicanos e hispanohablantes en general a aprender algo que
               muchas veces pensaron imposible, de hacerlo de una manera fácil, intuitiva,
               con herramientas prácticas y pedagógicas que solamente sumarán a tu
-              aprendizaje y harán de él <strong>a rewarding experience.</strong>
+              aprendizaje y harán de él una experiencia gratificante.
             </p>
 
             <p>
