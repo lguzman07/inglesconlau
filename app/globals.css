@@ -4,26 +4,29 @@
 
 :root {
   /* Fondos */
-  --background: #f4f1ea;
-  --surface: rgba(238, 241, 243, 0.94);
-  --surface-solid: #eef1f3;
-  --surface-soft: #e6ebee;
+  --background: #f1ede5;
+  --surface: rgba(232, 237, 240, 0.96);
+  --surface-solid: #e8edf0;
+  --surface-soft: #dfe6ea;
 
   /* Azul grisáceo principal */
   --primary: #587484;
   --primary-hover: #496473;
-  --primary-light: #dce6eb;
+  --primary-light: #d6e1e7;
+
+  /* Acento más oscuro para títulos pequeños */
+  --accent: #496473;
 
   /* Color secundario neutro */
-  --secondary: #d8e0e4;
-  --secondary-hover: #cbd6dc;
+  --secondary: #d3dde2;
+  --secondary-hover: #c5d2d9;
 
   /* Texto */
   --text: #28343b;
   --text-light: #56666f;
 
   /* Bordes y enfoque */
-  --border: #cbd3d7;
+  --border: #c5cfd4;
   --focus: #345f73;
 
   /* Sombras suaves */
@@ -89,7 +92,7 @@ select:focus-visible {
 }
 
 .section-eyebrow {
-  color: var(--primary);
+  color: var(--accent);
   font-size: 1.5rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -266,7 +269,7 @@ select:focus-visible {
 
 .primary-button {
   background: var(--primary);
-  color: #ffffff;
+  color: #f7f8f9;
   box-shadow: var(--shadow);
 }
 
@@ -350,7 +353,7 @@ select:focus-visible {
   height: 56px;
 
   background: var(--primary);
-  color: #ffffff;
+  color: #f7f8f9;
 
   border: 1px solid var(--primary-hover);
   border-radius: 18px;
