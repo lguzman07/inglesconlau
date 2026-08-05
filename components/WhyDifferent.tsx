@@ -40,7 +40,7 @@ export default function WhyDifferent() {
       icon: '🧠', 
       title: 'Te enseño inglés, no a usar una plataforma confusa',
       description:
-        'Tengo un compromiso con hacer la plataforma intuitiva y fácil de usar. Puedes acceder a todas las reuniones bajo un mismo enlace, sin importar el tipo. Hay una sección dedicada a cómo hacer cada uno de los ejercicos. Las lecciones  de ejercicio en pdf vienen con su hoja de respuestas en el mismo documento. Absolutamente todo lo que necesitas esta dentro de esta página, nada de estar buscando en Google translate una palabra que no entiendes. Tengo mi correo electrónico (lau@inglesconlau.com) abierto 24/7 para responder ante cualquier duda que tengas! Las lecciones son cortas, el diseño de la plataforma es intuitivo con botones grandes, y si hay algún tipo de ejercicio que te resulta muy complicado de hacer siempre puedes saltarlo y marcar la casilla de (hice la hoja de trabajo) para que tu progreso no se vea afectado.',
+        'He diseñado una plataforma intuitiva y fácil de usar. Accede a todas las reuniones bajo un mismo enlace. Cada lección en PDF viene con su hoja de respuestas incluida.Las lecciones son cortas, con botones grandes, y explicaciones incluidas en la sección de cada ejercicio. Concéntrate en aprender inglés, no en cómo usar la plataforma.',
     },
 
   ];
