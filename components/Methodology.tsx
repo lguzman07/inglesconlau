@@ -62,7 +62,7 @@ export default function Methodology() {
               con el mucho o poco inglés que supiéramos… Verás, al aprenderlo desde niña
               tuve una ventaja bastante significativa. Los niños son como esponjas: lo
               absorben todo. Es por eso que es tan común
-              escuchar: “ponlo desde chiquito en clases que así aprende más fácil.”
+              escuchar: “ponlo desde chiquito en clases que así aprende más fácil”.
             </p>
 
             <p>
