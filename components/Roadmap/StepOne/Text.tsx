@@ -33,7 +33,7 @@ export default function Text() {
           color: '#1F2937',
         }}
       >
-        Emmpieza a hablar inglés desde el primer día.
+        Empieza a hablar inglés desde el primer día.
       </h2>
 
       <p

@@ -20,7 +20,7 @@ export default function WhyDifferent() {
       icon: '🧠',
       title: 'Te enseño inglés, no a usar una plataforma confusa',
       description:
-        'La plataforma es intuitiva y fácil de usar. Accede a todas las reuniones bajo un mismo enlace. Cada lección en PDF viene con su hoja de respuestas incluida.Las lecciones son cortas, con botones grandes, y explicaciones incluidas en la sección de cada ejercicio.',
+        'La plataforma es intuitiva y fácil de usar. Accede a todas las reuniones bajo un mismo enlace. Cada lección en PDF viene con su hoja de respuestas incluida. Las lecciones son cortas, con botones grandes, y explicaciones incluidas en la sección de cada ejercicio.',
     },
 
 
@@ -49,7 +49,7 @@ export default function WhyDifferent() {
     <section id="why" className="section">
       <div className="container">
         <div className="section-header">
-          <p className="section-eyebrow">¿POR QUÉ ENGLISH WITH LAU?</p>
+          <p className="section-eyebrow">¿POR QUÉ INGLÉS CON LAU?</p>
 
           <h2 className="section-title">
             Una forma diferente de aprender inglés.
