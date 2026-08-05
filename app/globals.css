@@ -177,8 +177,33 @@ select:focus-visible {
 }
 
 .logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 1rem;
+
   font-size: 1.35rem;
   font-weight: 700;
+  line-height: 1;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.logo img {
+  display: block;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .nav-links {

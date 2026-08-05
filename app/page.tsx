@@ -1,6 +1,6 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import Methodology from '@/components/Methodology';
+import Methodology from '@/components/Methodology/Methodology';
 import WhyDifferent from '@/components/WhyDifferent';
 import Philosophy from '@/components/Philosophy';
 import Roadmap from '@/components/Roadmap';

@@ -1,0 +1,183 @@
+.methodology {
+  padding: 3.5rem 2rem 4rem;
+  background: var(--background);
+}
+
+.container {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+}
+
+.header {
+  max-width: 900px;
+  margin-bottom: 3rem;
+}
+
+.eyebrow {
+  margin-bottom: 1rem;
+  color: var(--accent);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.title {
+  color: var(--text);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  line-height: 1.15;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  width: 100%;
+  color: var(--text-light);
+  font-size: 1.1rem;
+  line-height: 1.9;
+}
+
+.content > p {
+  width: 100%;
+}
+
+.content strong {
+  color: var(--text);
+}
+
+.comparisonRow {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.75fr) minmax(0, 1.25fr);
+  gap: 3rem;
+  align-items: start;
+  width: 100%;
+  margin: 0.5rem 0 1rem;
+}
+
+.comparisonText {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  line-height: 1.9;
+}
+
+.comparisonText p {
+  margin: 0;
+}
+
+.comparisonText strong {
+  color: var(--text);
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface-solid);
+  box-shadow: var(--shadow);
+}
+
+.table {
+  width: 100%;
+  min-width: 540px;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: var(--primary-light);
+}
+
+.table th,
+.table td {
+  padding: 1rem 1.25rem;
+  text-align: left;
+}
+
+.table th {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.table tbody tr {
+  border-top: 1px solid var(--border);
+}
+
+.table tbody tr:hover {
+  background: var(--surface-soft);
+}
+
+.englishCell {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.emphasis {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.closing {
+  margin-top: 0.5rem;
+  color: var(--text);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.quote {
+  width: 100%;
+  margin: 4rem auto 0;
+  padding: 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--primary-light);
+  text-align: center;
+}
+
+.quote h3 {
+  color: var(--text);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.quote span {
+  color: var(--primary);
+}
+
+@media (max-width: 900px) {
+  .comparisonRow {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .methodology {
+    padding: 3rem 1rem;
+  }
+
+  .header {
+    margin-bottom: 2rem;
+  }
+
+  .eyebrow {
+    font-size: 1.25rem;
+  }
+
+  .content,
+  .comparisonText {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+
+  .quote {
+    padding: 2rem 1.25rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.9rem 1rem;
+  }
+}

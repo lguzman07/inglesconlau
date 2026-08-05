@@ -1,3 +1,13 @@
+.roadmap {
+  padding: 9rem 2rem;
+  background: var(--background);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .roadmapContainer {
   max-width: 1200px;
   margin: 0 auto;

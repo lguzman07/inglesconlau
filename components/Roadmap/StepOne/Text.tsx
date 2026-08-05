@@ -21,7 +21,7 @@ export default function Text() {
           fontWeight: 600,
         }}
       >
-        🌱 Paso 1
+
       </div>
 
       <h2
