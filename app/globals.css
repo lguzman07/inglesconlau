@@ -1,5 +1,5 @@
 /* ==========================================
-   InglÃ©s Con Lau â€” Accessible Design System
+   InglÃƒÂ©s Con Lau Ã¢â‚¬â€ Accessible Design System
 ========================================== */
 
 :root {
@@ -9,12 +9,12 @@
   --surface-solid: #e8edf0;
   --surface-soft: #dfe6ea;
 
-  /* Azul grisÃ¡ceo principal */
+  /* Azul grisÃƒÂ¡ceo principal */
   --primary: #587484;
   --primary-hover: #496473;
   --primary-light: #d6e1e7;
 
-  /* Acento para tÃ­tulos pequeÃ±os */
+  /* Acento para tÃƒÂ­tulos pequeÃƒÂ±os */
   --accent: #496473;
 
   /* Color secundario */
@@ -38,7 +38,7 @@
 }
 
 /* ==========================================
-   Modos de visualizaciÃ³n
+   Modos de visualizaciÃƒÂ³n
 ========================================== */
 
 html[data-theme='dark'] {
@@ -855,6 +855,53 @@ html[data-theme='contrast'] .faq-question:focus-visible {
   .photo-placeholder {
     max-width: 420px;
     margin: auto;
+  }
+}
+
+/* Tabletas: el contenido del menÃº necesita mÃ¡s espacio que el diseÃ±o de escritorio */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .navbar {
+    width: calc(100% - 2rem);
+    margin: 1rem auto;
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+    gap: 1rem;
+    border-radius: 28px;
+  }
+
+  .logo,
+  .nav-brand {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav-right {
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-links {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 2rem;
+  }
+
+  .nav-links a {
+    min-height: 40px;
+    text-align: center;
+  }
+
+  .accessibility-controls {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .accessibility-controls .theme-button {
+    flex: 0 1 140px;
+    justify-content: center;
   }
 }
 
