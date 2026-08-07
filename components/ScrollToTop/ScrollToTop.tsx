@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export default function ScrollToTop() {
   const [visible, setVisible] = useState(false);
@@ -10,28 +10,29 @@ export default function ScrollToTop() {
       setVisible(window.scrollY > 300);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     handleScroll();
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   };
 
   return (
     <button
-      className={`scroll-to-top ${visible ? "visible" : ""}`}
+      type="button"
+      className={`scroll-to-top ${visible ? 'visible' : ''}`}
       onClick={scrollToTop}
       aria-label="Volver arriba"
     >
-      ↑
+      <span aria-hidden="true">↑</span>
     </button>
   );
 }

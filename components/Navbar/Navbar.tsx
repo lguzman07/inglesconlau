@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import logo from '@/app/assets/logo-transparent.png';
 import { useEffect, useState } from 'react';
 
 type DisplayMode = 'normal' | 'dark' | 'contrast';
@@ -29,12 +30,11 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="logo">
+      <div className="nav-brand">
         <Image
-          src="/logo.png"
-          alt="Inglés Con Lau"
-          width={60}
-          height={60}
+          src={logo}
+          alt="Logo de Inglés con Lau"
+          className="nav-logo"
           priority
         />
 
@@ -51,6 +51,7 @@ export default function Navbar() {
 
         <div
           className="accessibility-controls"
+          role="group"
           aria-label="Modo de visualización"
         >
           <button
