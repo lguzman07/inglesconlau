@@ -1,5 +1,5 @@
 /* ==========================================
-   Inglés Con Lau — Accessible Design System
+   InglÃ©s Con Lau â€” Accessible Design System
 ========================================== */
 
 :root {
@@ -9,12 +9,12 @@
   --surface-solid: #e8edf0;
   --surface-soft: #dfe6ea;
 
-  /* Azul grisáceo principal */
+  /* Azul grisÃ¡ceo principal */
   --primary: #587484;
   --primary-hover: #496473;
   --primary-light: #d6e1e7;
 
-  /* Acento para títulos pequeños */
+  /* Acento para tÃ­tulos pequeÃ±os */
   --accent: #496473;
 
   /* Color secundario */
@@ -38,7 +38,7 @@
 }
 
 /* ==========================================
-   Modos de visualización
+   Modos de visualizaciÃ³n
 ========================================== */
 
 html[data-theme='dark'] {
@@ -871,45 +871,73 @@ html[data-theme='contrast'] .faq-question:focus-visible {
   }
 
   .navbar {
+    width: calc(100% - 1rem);
+    margin: 0.5rem auto 1rem;
     flex-direction: column;
     gap: 1rem;
     border-radius: 24px;
-    padding: 1.25rem;
+    padding: 1rem;
+    overflow: hidden;
   }
 
-  /* El resto del código que ya tienes continúa aquí */
-}
+  .logo,
+  .nav-brand {
+    width: 100%;
+    justify-content: center;
+  }
 
-.nav-links {
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem 1.25rem;
-}
+  .nav-right {
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+    gap: 1rem;
+  }
 
-.hero {
-  padding: 1rem;
-}
+  .nav-links {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 1rem;
+  }
 
-.hero h1 {
-  font-size: clamp(2.8rem, 12vw, 4rem);
-}
+  .nav-links a {
+    min-height: 40px;
+    text-align: center;
+  }
 
-.hero-slogan {
-  font-size: 1.2rem;
-}
+  .accessibility-controls {
+    width: 100%;
+    justify-content: center;
+    gap: 0.4rem;
+  }
 
-.hero p {
-  font-size: 1.1rem;
-}
+  .accessibility-controls .theme-button {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 120px;
+    padding: 0.5rem 0.35rem;
+    font-size: 0.76rem;
+  }
 
-.primary-button,
-.secondary-button {
-  width: 100%;
-  max-width: 320px;
-}
+  .hero {
+    padding: 1rem;
+  }
 
-.quote-card {
-  padding: 2rem 1.25rem;
+  .hero h1 {
+    font-size: clamp(2.8rem, 12vw, 4rem);
+  }
+
+  .hero-slogan {
+    font-size: 1.2rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+  }
+
+  .quote-card {
+    padding: 2rem 1.25rem;
+  }
 }
 
 /* ==========================================
