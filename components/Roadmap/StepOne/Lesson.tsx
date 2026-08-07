@@ -1,5 +1,5 @@
-import AudioPlayer from '@/components/AudioPlayer';
-import NameSetup from '@/components/NameSetup';
+import AudioPlayer from '@/components/AudioPlayer/AudioPlayer';
+import NameSetup from '@/components/NameSetup/NameSetup';
 
 export default function Lesson() {
   return (
@@ -7,11 +7,12 @@ export default function Lesson() {
       style={{
         width: '100%',
         maxWidth: '520px',
-        background: '#ffffff',
+        background: 'var(--surface-solid)',
+        color: 'var(--text)',
         borderRadius: '28px',
         padding: '2rem',
-        border: '1px solid #ececec',
-        boxShadow: '0 20px 60px rgba(0,0,0,.08)',
+        border: '1px solid var(--border)',
+        boxShadow: 'var(--shadow)',
       }}
     >
       {/* Header */}
@@ -21,6 +22,7 @@ export default function Lesson() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          gap: '1rem',
           marginBottom: '2rem',
         }}
       >
@@ -28,7 +30,7 @@ export default function Lesson() {
           <p
             style={{
               margin: 0,
-              color: '#8db596',
+              color: 'var(--accent)',
               fontWeight: 700,
               fontSize: '.9rem',
               letterSpacing: '1px',
@@ -40,7 +42,7 @@ export default function Lesson() {
           <h3
             style={{
               margin: '.5rem 0 0',
-              color: '#2f3437',
+              color: 'var(--text)',
               fontSize: '1.7rem',
             }}
           >
@@ -52,8 +54,10 @@ export default function Lesson() {
           style={{
             width: '54px',
             height: '54px',
+            flexShrink: 0,
             borderRadius: '50%',
-            background: '#EEF8F2',
+            background: 'var(--primary-light)',
+            border: '1px solid var(--border)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -68,7 +72,8 @@ export default function Lesson() {
 
       <div
         style={{
-          background: '#F8F9FB',
+          background: 'var(--surface-soft)',
+          border: '1px solid var(--border)',
           borderRadius: '18px',
           padding: '1.2rem',
           marginBottom: '1rem',
@@ -76,11 +81,10 @@ export default function Lesson() {
       >
         <p
           style={{
-            margin: 0,
-            color: '#8db596',
+            margin: '0 0 .9rem',
+            color: 'var(--accent)',
             fontWeight: 700,
             fontSize: '.9rem',
-            marginBottom: '.9rem',
           }}
         >
           👩 Profesora
@@ -91,6 +95,7 @@ export default function Lesson() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: '1rem',
           }}
         >
           <p
@@ -98,7 +103,7 @@ export default function Lesson() {
               margin: 0,
               fontSize: '1.35rem',
               fontWeight: 700,
-              color: '#2f3437',
+              color: 'var(--text)',
             }}
           >
             Hello!
@@ -112,13 +117,14 @@ export default function Lesson() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: '1rem',
             marginTop: '.8rem',
           }}
         >
           <p
             style={{
               margin: 0,
-              color: '#6b7280',
+              color: 'var(--text-light)',
             }}
           >
             🇪🇸 ¡Hola!
@@ -132,7 +138,8 @@ export default function Lesson() {
 
       <div
         style={{
-          background: '#F8F9FB',
+          background: 'var(--surface-soft)',
+          border: '1px solid var(--border)',
           borderRadius: '18px',
           padding: '1.2rem',
           marginBottom: '1rem',
@@ -140,11 +147,10 @@ export default function Lesson() {
       >
         <p
           style={{
-            margin: 0,
-            color: '#5A8DEE',
+            margin: '0 0 .9rem',
+            color: 'var(--primary)',
             fontWeight: 700,
             fontSize: '.9rem',
-            marginBottom: '.9rem',
           }}
         >
           👨 Tú
@@ -155,6 +161,7 @@ export default function Lesson() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: '1rem',
           }}
         >
           <p
@@ -162,7 +169,7 @@ export default function Lesson() {
               margin: 0,
               fontSize: '1.35rem',
               fontWeight: 700,
-              color: '#2f3437',
+              color: 'var(--text)',
             }}
           >
             Hi!
@@ -176,13 +183,14 @@ export default function Lesson() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: '1rem',
             marginTop: '.8rem',
           }}
         >
           <p
             style={{
               margin: 0,
-              color: '#6b7280',
+              color: 'var(--text-light)',
             }}
           >
             🇪🇸 ¡Hola!
@@ -196,7 +204,8 @@ export default function Lesson() {
 
       <div
         style={{
-          background: '#F8F9FB',
+          background: 'var(--surface-soft)',
+          border: '1px solid var(--border)',
           borderRadius: '18px',
           padding: '1.2rem',
           marginBottom: '1rem',
@@ -204,11 +213,10 @@ export default function Lesson() {
       >
         <p
           style={{
-            margin: 0,
-            color: '#8db596',
+            margin: '0 0 .9rem',
+            color: 'var(--accent)',
             fontWeight: 700,
             fontSize: '.9rem',
-            marginBottom: '.9rem',
           }}
         >
           👩 Profesora
@@ -219,6 +227,7 @@ export default function Lesson() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: '1rem',
           }}
         >
           <p
@@ -226,7 +235,7 @@ export default function Lesson() {
               margin: 0,
               fontSize: '1.35rem',
               fontWeight: 700,
-              color: '#2f3437',
+              color: 'var(--text)',
             }}
           >
             What&apos;s your name?
@@ -240,13 +249,14 @@ export default function Lesson() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: '1rem',
             marginTop: '.8rem',
           }}
         >
           <p
             style={{
               margin: 0,
-              color: '#6b7280',
+              color: 'var(--text-light)',
             }}
           >
             🇪🇸 ¿Cómo te llamas?
@@ -267,8 +277,9 @@ export default function Lesson() {
           marginTop: '2rem',
           padding: '1rem',
           borderRadius: '18px',
-          background: '#FFF8E8',
-          border: '1px solid #F3E2A9',
+          background: 'var(--primary-light)',
+          color: 'var(--text)',
+          border: '1px solid var(--border)',
         }}
       >
         <strong>🎯 Objetivo de la lección</strong>
@@ -276,7 +287,7 @@ export default function Lesson() {
         <p
           style={{
             margin: '.6rem 0 0',
-            color: '#5b5b5b',
+            color: 'var(--text-light)',
             lineHeight: 1.7,
           }}
         >

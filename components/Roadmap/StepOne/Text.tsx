@@ -8,22 +8,6 @@ export default function Text() {
         maxWidth: '520px',
       }}
     >
-      <div
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          width: 'fit-content',
-          padding: '0.45rem 0.9rem',
-          borderRadius: '999px',
-          background: '#EEF8F2',
-          color: '#2F855A',
-          fontSize: '0.85rem',
-          fontWeight: 600,
-        }}
-      >
-
-      </div>
-
       <h2
         style={{
           margin: 0,

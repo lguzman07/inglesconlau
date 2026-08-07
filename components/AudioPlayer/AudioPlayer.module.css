@@ -16,21 +16,21 @@
 }
 
 .audioPlayer:hover .icon {
-  color: #e79fc2;
+  color: var(--primary);
 }
 
 .icon {
   width: 22px;
   height: 22px;
   flex-shrink: 0;
-  color: #d98bb5;
-  transition: color 0.2s ease;
+  color: var(--primary);
+  transition: color var(--transition);
 }
 
 .progress {
   flex: 1;
   height: 6px;
-  background: #f8ddea;
+  background: var(--primary-light);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -38,7 +38,7 @@
 .progressFill {
   height: 100%;
   width: 0%;
-  background: #b6e7ab;
+  background: var(--primary);
   border-radius: inherit;
   transition: width 0.08s linear;
 }

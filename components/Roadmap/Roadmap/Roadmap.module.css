@@ -1,0 +1,102 @@
+.roadmap {
+  padding: 9rem 2rem;
+  background: var(--background);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.roadmapContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.stepOne {
+  margin-top: 8rem;
+}
+
+.twoColumn {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.leftColumn {
+  padding-top: 1rem;
+}
+
+.cta {
+  margin-top: 8rem;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.ctaTitle {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+}
+
+.ctaText {
+  margin: 1rem 0 2rem;
+  color: var(--text-light);
+  font-size: 1.1rem;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.6rem;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--primary);
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.ctaButton:hover {
+  background: var(--primary-hover);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.ctaButton:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 4px;
+}
+
+@media (max-width: 1200px) {
+  .twoColumn {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .leftColumn {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .roadmap {
+    padding: 6rem 1.25rem;
+  }
+
+  .stepOne {
+    margin-top: 5rem;
+  }
+
+  .cta {
+    margin-top: 5rem;
+    padding: 3rem 1.5rem;
+  }
+}

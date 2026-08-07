@@ -20,21 +20,13 @@ export default function Header() {
 
       <div className={styles.path}>
         <span className={styles.bubble}>🌱 Hablar</span>
-
         <span className={styles.arrow}>⟶</span>
-
         <span className={styles.bubble}>🎙️ Pronunciar</span>
-
         <span className={styles.arrow}>⟶</span>
-
         <span className={styles.bubble}>🧠 Entender</span>
-
         <span className={styles.arrow}>⟶</span>
-
         <span className={styles.bubble}>💬 Conversar</span>
-
         <span className={styles.arrow}>⟶</span>
-
         <span className={styles.bubble}>🌎 Vivir el inglés</span>
       </div>
     </div>
