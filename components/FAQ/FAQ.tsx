@@ -43,8 +43,7 @@ const faqs = [
   },
   {
     question: '¿Qué hago si tengo dudas sobre una lección o un ejercicio?',
-    answer:
-      'Puedes escribirme a lau@inglesconlau.com y te ayudaré con tus dudas sobre las lecciones o los ejercicios. Aunque estudies a tu propio ritmo, no quiero que sientas que estás aprendiendo completamente solo.',
+    answer: '',
     includesEmail: true,
   },
   {
@@ -57,16 +56,11 @@ const faqs = [
     answer:
       'Depende de tu nivel y de lo que quieras lograr. Si tienes un nivel avanzado y solo quieres practicar conversación, un profesor nativo que no hable español puede ser tu mejor opción, porque te verás obligado a comunicarte siempre en inglés. Sin embargo, he creado Inglés con Lau para todo tipo de estudiantes. La ventaja de aprender conmigo es que conozco tanto el idioma que quieres aprender como tu idioma natal. Esto me permite comprender por qué cometes ciertos errores, explicarte los conceptos partiendo del español y ayudarte con las dificultades de pronunciación que suelen tener los hispanohablantes.',
   },
-  {
-    question: '¿Cómo puedo obtener acceso gratis a la plataforma?',
-    answer:
-      'Durante los primeros seis meses desde el lanzamiento, seleccionaré al azar a una persona cada mes para que reciba acceso gratuito a Inglés con Lau mientras la plataforma continúe ofreciendo este servicio. Para participar, solo tienes que seguirme en Instagram y comentar en el video fijado de ese mes por qué quieres aprender inglés.',
-  },
 ];
 
 export default function FAQ() {
   return (
-    <section id="faq" className="section faq-section">
+    <section id="faq" className="section">
       <div className="container">
         <div className="section-header">
           <p className="section-eyebrow">PREGUNTAS FRECUENTES</p>
