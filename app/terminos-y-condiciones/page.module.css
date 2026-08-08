@@ -1,0 +1,179 @@
+.page {
+  min-height: 100vh;
+  padding: 40px 20px 80px;
+  color: var(--text);
+  background-color: var(--surface-soft);
+
+  transition:
+    color var(--transition),
+    background-color var(--transition);
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.backLink {
+  display: inline-block;
+  margin-bottom: 28px;
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+
+  transition: color var(--transition);
+}
+
+.backLink:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.backLink:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.card {
+  padding: clamp(24px, 5vw, 56px);
+  background-color: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(74, 52, 120, 0.08);
+
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+.title {
+  margin: 0 0 12px;
+  color: var(--text);
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.15;
+}
+
+.version {
+  margin: 0 0 28px;
+  color: var(--text-light);
+  font-size: 0.95rem;
+}
+
+.introduction {
+  margin: 0 0 40px;
+  padding: 20px;
+  line-height: 1.75;
+  background-color: var(--surface-soft);
+  border-left: 5px solid var(--accent);
+  border-radius: 12px;
+
+  transition:
+    background-color var(--transition),
+    border-color var(--transition);
+}
+
+.section {
+  margin-top: 38px;
+}
+
+.heading {
+  margin: 0 0 14px;
+  color: var(--text);
+  font-size: 1.4rem;
+  line-height: 1.35;
+}
+
+.paragraph {
+  margin: 0 0 14px;
+  line-height: 1.8;
+}
+
+.list {
+  margin: 12px 0 18px;
+  padding-left: 24px;
+  line-height: 1.8;
+}
+
+.contactList {
+  margin: 12px 0 0;
+  padding: 0;
+  line-height: 2;
+  list-style: none;
+}
+
+.link {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+
+  transition: color var(--transition);
+}
+
+.link:hover {
+  color: var(--primary-hover);
+}
+
+.link:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.references {
+  margin-top: 48px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+
+  transition: border-color var(--transition);
+}
+
+.footer {
+  margin-top: 40px;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Contraste alto */
+
+:global(html[data-theme='contrast']) .card {
+  box-shadow: none;
+  border-width: 2px;
+}
+
+:global(html[data-theme='contrast']) .backLink,
+:global(html[data-theme='contrast']) .link {
+  color: #003d73;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+:global(html[data-theme='contrast']) .introduction {
+  border-left-width: 7px;
+}
+
+/* Celulares */
+
+@media (max-width: 600px) {
+  .page {
+    padding: 24px 14px 60px;
+  }
+
+  .card {
+    border-radius: 18px;
+  }
+
+  .introduction {
+    padding: 16px;
+  }
+
+  .section {
+    margin-top: 32px;
+  }
+}

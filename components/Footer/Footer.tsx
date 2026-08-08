@@ -1,18 +1,21 @@
+import Link from 'next/link';
+import styles from './Footer.module.css';
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="site-footer">
-      <div className="footer-container">
-        <div className="footer-brand">
-          <p className="footer-logo">Inglés con Lau</p>
+    <footer className={styles.siteFooter}>
+      <div className={styles.footerContainer}>
+        <div className={styles.footerBrand}>
+          <p className={styles.footerLogo}>Inglés con Lau</p>
 
-          <p className="footer-description">
+          <p className={styles.footerDescription}>
             Aprende inglés con confianza, a tu ritmo y sin miedo a equivocarte.
           </p>
 
-          <div className="footer-social">
-            <p className="footer-title">Sígueme</p>
+          <div className={styles.footerSocial}>
+            <p className={styles.footerTitle}>Sígueme</p>
 
             <a
               href="https://www.instagram.com/inglesconlaurd/"
@@ -24,15 +27,35 @@ export default function Footer() {
               <span>@inglesconlaurd</span>
             </a>
           </div>
+
+          <nav
+            className={styles.footerLegal}
+            aria-label="Información legal"
+          >
+            <p className={styles.footerTitle}>Información legal</p>
+
+            <ul className={styles.footerLegalLinks}>
+              <li>
+                <Link href="/terminos-y-condiciones">
+                  Términos y condiciones
+                </Link>
+              </li>
+
+              <li>
+                <Link href="/politica-de-privacidad">
+                  Política de privacidad
+                </Link>
+              </li>
+            </ul>
+          </nav>
         </div>
 
-        <div className="footer-contact">
-          <h2 className="footer-title">Contacto</h2>
+        <div className={styles.footerContact}>
+          <h2 className={styles.footerTitle}>Contacto</h2>
 
-          <ul className="footer-email-list">
-
+          <ul className={styles.footerEmailList}>
             <li>
-              <span>Dudas sobre los ejercicios</span>
+              <span>Consultas generales</span>
 
               <a href="mailto:lau@inglesconlau.com">
                 lau@inglesconlau.com
@@ -40,7 +63,7 @@ export default function Footer() {
             </li>
 
             <li>
-              <span>Ayuda y soporte</span>
+              <span>Soporte, cuenta y privacidad</span>
 
               <a href="mailto:soporte@inglesconlau.com">
                 soporte@inglesconlau.com
@@ -48,7 +71,7 @@ export default function Footer() {
             </li>
 
             <li>
-              <span>Pagos y suscripciones</span>
+              <span>Pagos, cobros y facturación</span>
 
               <a href="mailto:pagos@inglesconlau.com">
                 pagos@inglesconlau.com
@@ -62,13 +85,11 @@ export default function Footer() {
                 eventos@inglesconlau.com
               </a>
             </li>
-
-
           </ul>
         </div>
       </div>
 
-      <div className="footer-bottom">
+      <div className={styles.footerBottom}>
         <p>
           © {currentYear} Inglés con Lau. Todos los derechos reservados.
         </p>

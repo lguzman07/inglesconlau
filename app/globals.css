@@ -1,5 +1,5 @@
 /* ==========================================
-   InglÃƒÂ©s Con Lau Ã¢â‚¬â€ Accessible Design System
+   Inglés con Lau — Accessible Design System
 ========================================== */
 
 :root {
@@ -9,12 +9,12 @@
   --surface-solid: #e8edf0;
   --surface-soft: #dfe6ea;
 
-  /* Azul grisÃƒÂ¡ceo principal */
+  /* Azul grisáceo principal */
   --primary: #587484;
   --primary-hover: #496473;
   --primary-light: #d6e1e7;
 
-  /* Acento para tÃƒÂ­tulos pequeÃƒÂ±os */
+  /* Acento para títulos pequeños */
   --accent: #496473;
 
   /* Color secundario */
@@ -38,7 +38,7 @@
 }
 
 /* ==========================================
-   Modos de visualizaciÃƒÂ³n
+   Modos de visualización
 ========================================== */
 
 html[data-theme='dark'] {
@@ -858,7 +858,7 @@ html[data-theme='contrast'] .faq-question:focus-visible {
   }
 }
 
-/* Tabletas: el contenido del menÃº necesita mÃ¡s espacio que el diseÃ±o de escritorio */
+/* Tabletas: el contenido del menú necesita más espacio que el diseño de escritorio */
 @media (min-width: 769px) and (max-width: 1024px) {
   .navbar {
     width: calc(100% - 2rem);
@@ -984,187 +984,6 @@ html[data-theme='contrast'] .faq-question:focus-visible {
 
   .quote-card {
     padding: 2rem 1.25rem;
-  }
-}
-
-/* ==========================================
-   Footer
-========================================== */
-
-.site-footer {
-  width: 100%;
-  margin-top: 4rem;
-
-  background: var(--surface-solid);
-  color: var(--text);
-  border-top: 1px solid var(--border);
-
-  transition:
-    background-color var(--transition),
-    color var(--transition),
-    border-color var(--transition);
-}
-
-.footer-container {
-  width: min(1120px, calc(100% - 2rem));
-  margin: 0 auto;
-  padding: 3rem 0;
-
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 1fr);
-  gap: 4rem;
-}
-
-.footer-brand {
-  max-width: 480px;
-}
-
-.footer-logo {
-  margin: 0 0 0.8rem;
-  color: var(--text);
-  font-size: 1.5rem;
-  font-weight: 800;
-}
-
-.footer-description {
-  margin: 0;
-  color: var(--text-light);
-  font-size: 0.95rem;
-  line-height: 1.8;
-}
-
-.footer-title {
-  margin: 0 0 1.25rem;
-  color: var(--accent);
-  font-size: 1.1rem;
-  font-weight: 800;
-}
-
-.footer-email-list {
-  margin: 0;
-  padding: 0;
-
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  list-style: none;
-}
-
-.footer-email-list li {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.footer-email-list span {
-  color: var(--text-light);
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-.footer-email-list a {
-  width: fit-content;
-
-  color: var(--primary);
-  font-size: 0.95rem;
-  font-weight: 700;
-
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
-  overflow-wrap: anywhere;
-
-  transition: color var(--transition);
-}
-
-.footer-email-list a:hover {
-  color: var(--primary-hover);
-}
-
-.footer-email-list a:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 4px;
-  border-radius: 4px;
-}
-
-/* Instagram */
-
-.footer-social {
-  margin-top: 2rem;
-}
-
-.footer-social .footer-title {
-  margin-bottom: 0.75rem;
-}
-
-.footer-social a {
-  width: fit-content;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  color: var(--primary);
-  font-size: 0.95rem;
-  font-weight: 700;
-  text-decoration: none;
-
-  transition:
-    color var(--transition),
-    transform var(--transition);
-}
-
-.footer-social a:hover {
-  color: var(--primary-hover);
-  transform: translateY(-1px);
-}
-
-.footer-social a:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 4px;
-  border-radius: 4px;
-}
-
-/* Parte inferior */
-
-.footer-bottom {
-  padding: 1.25rem 1rem;
-
-  background: var(--surface-soft);
-  border-top: 1px solid var(--border);
-
-  text-align: center;
-}
-
-.footer-bottom p {
-  margin: 0;
-  color: var(--text-light);
-  font-size: 0.82rem;
-  line-height: 1.6;
-}
-
-/* Contraste alto */
-
-html[data-theme='contrast'] .footer-email-list a,
-html[data-theme='contrast'] .footer-social a {
-  color: #003d73;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
-}
-
-/* Celulares */
-
-@media (max-width: 700px) {
-  .site-footer {
-    margin-top: 3rem;
-  }
-
-  .footer-container {
-    padding: 2.5rem 0;
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
   }
 }
 

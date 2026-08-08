@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 type DisplayMode = 'normal' | 'dark' | 'contrast';
@@ -16,8 +16,13 @@ function isDisplayMode(value: string | null): value is DisplayMode {
 export default function ThemeControls() {
   const pathname = usePathname();
 
-  const [displayMode, setDisplayMode] =
-    useState<DisplayMode>('normal');
+  const [displayMode, setDisplayMode] = useState<DisplayMode>('normal');
+
+  const applyDisplayMode = useCallback((mode: DisplayMode) => {
+    document.documentElement.setAttribute('data-theme', mode);
+    localStorage.setItem('display-mode', mode);
+    setDisplayMode(mode);
+  }, []);
 
   useEffect(() => {
     const savedMode = localStorage.getItem('display-mode');
@@ -26,14 +31,11 @@ export default function ThemeControls() {
       ? savedMode
       : 'normal';
 
-    setDisplayMode(initialMode);
-    document.documentElement.dataset.theme = initialMode;
-  }, [pathname]);
+    applyDisplayMode(initialMode);
+  }, [applyDisplayMode, pathname]);
 
   function changeDisplayMode(mode: DisplayMode) {
-    setDisplayMode(mode);
-    document.documentElement.dataset.theme = mode;
-    localStorage.setItem('display-mode', mode);
+    applyDisplayMode(mode);
   }
 
   /*
@@ -52,8 +54,7 @@ export default function ThemeControls() {
     >
       <button
         type="button"
-        className={`theme-button ${displayMode === 'normal' ? 'active' : ''
-          }`}
+        className={`theme-button ${displayMode === 'normal' ? 'active' : ''}`}
         aria-pressed={displayMode === 'normal'}
         onClick={() => changeDisplayMode('normal')}
       >
@@ -63,8 +64,7 @@ export default function ThemeControls() {
 
       <button
         type="button"
-        className={`theme-button ${displayMode === 'dark' ? 'active' : ''
-          }`}
+        className={`theme-button ${displayMode === 'dark' ? 'active' : ''}`}
         aria-pressed={displayMode === 'dark'}
         onClick={() => changeDisplayMode('dark')}
       >
@@ -74,8 +74,7 @@ export default function ThemeControls() {
 
       <button
         type="button"
-        className={`theme-button ${displayMode === 'contrast' ? 'active' : ''
-          }`}
+        className={`theme-button ${displayMode === 'contrast' ? 'active' : ''}`}
         aria-pressed={displayMode === 'contrast'}
         onClick={() => changeDisplayMode('contrast')}
       >
