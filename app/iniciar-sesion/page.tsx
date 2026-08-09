@@ -14,6 +14,39 @@ export default function IniciarSesionPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isSendingRecovery, setIsSendingRecovery] = useState(false);
+
+  async function handlePasswordRecovery() {
+    setMessage('');
+
+    if (!email.trim()) {
+      setMessage(
+        'Escribe tu correo electrónico primero para poder restablecer tu contraseña.'
+      );
+      return;
+    }
+
+    setIsSendingRecovery(true);
+
+    const supabase = createClient();
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${window.location.origin}/restablecer-contrasena`,
+    });
+
+    setIsSendingRecovery(false);
+
+    if (error) {
+      setMessage(
+        'No pudimos enviar el correo de recuperación. Inténtalo nuevamente.'
+      );
+      return;
+    }
+
+    setMessage(
+      'Te enviamos un correo para restablecer tu contraseña. Revisa también la carpeta de correo no deseado.'
+    );
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -24,7 +57,7 @@ export default function IniciarSesionPage() {
     const supabase = createClient();
 
     const { error } = await supabase.auth.signInWithPassword({
-      email,
+      email: email.trim(),
       password,
     });
 
@@ -41,12 +74,12 @@ export default function IniciarSesionPage() {
   }
 
   return (
-    <main className={styles.main}>
-      <section className={styles.card} aria-labelledby="login-title">
-        <Link className={styles.backLink} href="/">
-          ← Volver al inicio
-        </Link>
+    <main className={styles.page}>
+      <Link className={styles.backLink} href="/">
+        ← Volver al inicio
+      </Link>
 
+      <section className={styles.card} aria-labelledby="login-title">
         <div className={styles.header}>
           <p className={styles.eyebrow}>INGLÉS CON LAU</p>
 
@@ -67,8 +100,12 @@ export default function IniciarSesionPage() {
               type="email"
               autoComplete="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setMessage('');
+              }}
               placeholder="nombre@ejemplo.com"
+              disabled={isLoading || isSendingRecovery}
               required
             />
           </div>
@@ -83,7 +120,11 @@ export default function IniciarSesionPage() {
                 type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                  setMessage('');
+                }}
+                disabled={isLoading || isSendingRecovery}
                 required
               />
 
@@ -95,14 +136,38 @@ export default function IniciarSesionPage() {
                   showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
                 }
                 aria-pressed={showPassword}
+                disabled={isLoading || isSendingRecovery}
               >
                 {showPassword ? 'Ocultar' : 'Ver'}
               </button>
             </div>
           </div>
 
+          <button
+            type="button"
+            onClick={handlePasswordRecovery}
+            disabled={isLoading || isSendingRecovery}
+            style={{
+              alignSelf: 'flex-end',
+              padding: 0,
+              color: '#496473',
+              background: 'transparent',
+              border: 'none',
+              font: 'inherit',
+              fontSize: '0.9rem',
+              fontWeight: 600,
+              cursor:
+                isLoading || isSendingRecovery ? 'not-allowed' : 'pointer',
+              opacity: isLoading || isSendingRecovery ? 0.65 : 1,
+            }}
+          >
+            {isSendingRecovery
+              ? 'Enviando correo...'
+              : '¿Olvidaste tu contraseña?'}
+          </button>
+
           {message && (
-            <div className={styles.errorMessage} role="alert">
+            <div className={styles.errorMessage} role="status">
               {message}
             </div>
           )}
@@ -110,7 +175,7 @@ export default function IniciarSesionPage() {
           <button
             className={styles.submitButton}
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || isSendingRecovery}
           >
             {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
           </button>
