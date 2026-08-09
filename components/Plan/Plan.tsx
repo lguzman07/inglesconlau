@@ -61,9 +61,9 @@ export default function Plan() {
             ))}
           </ul>
 
-          <a href="#suscripcion" className={styles.button}>
+          <Link href="/registro" className={styles.button}>
             Comenzar mi suscripción
-          </a>
+          </Link>
 
           <div className={styles.conditions}>
             <span>Sin cargos ocultos.</span>
