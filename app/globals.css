@@ -1,6 +1,10 @@
 /* ==========================================
    Inglés con Lau — Accessible Design System
 ========================================== */
+html,
+body {
+  font-family: var(--font-lexend), sans-serif;
+}
 
 :root {
   /* Fondos */

@@ -9,6 +9,7 @@ import './globals.css';
 const lexend = Lexend({
   subsets: ['latin'],
   display: 'swap',
+  variable: '--font-lexend',
 });
 
 export const metadata: Metadata = {
@@ -48,9 +49,10 @@ export default function RootLayout({
         />
       </head>
 
-      <body className={lexend.className}>
-        <ThemeControls />
-
+      <body
+        className={lexend.className}
+        style={{ fontFamily: lexend.style.fontFamily }}
+      >
         {children}
 
         <Footer />
