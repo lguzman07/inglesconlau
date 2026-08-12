@@ -9,8 +9,32 @@
 }
 
 .header {
-  max-width: 900px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 3rem;
+  align-items: center;
+  width: 100%;
   margin-bottom: 3rem;
+}
+
+.headerText {
+  max-width: 850px;
+}
+
+.imageWrapper {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--surface-soft);
+  box-shadow: var(--shadow);
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  object-position: center;
 }
 
 .eyebrow {
@@ -147,6 +171,21 @@
 }
 
 @media (max-width: 900px) {
+  .header {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .imageWrapper {
+    width: min(100%, 420px);
+  }
+
+  .image {
+    height: auto;
+    max-height: 480px;
+    object-fit: cover;
+  }
+
   .comparisonRow {
     grid-template-columns: 1fr;
     gap: 1.5rem;
@@ -170,6 +209,10 @@
   .comparisonText {
     font-size: 1rem;
     line-height: 1.8;
+  }
+
+  .imageWrapper {
+    width: 100%;
   }
 
   .quote {

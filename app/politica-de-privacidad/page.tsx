@@ -125,7 +125,7 @@ export default function PoliticaDePrivacidadPage() {
 
               <li>
                 Proporcionar lecciones, ejercicios, rutas y
-                seguimiento del progreso.
+                visualización del progreso.
               </li>
 
               <li>

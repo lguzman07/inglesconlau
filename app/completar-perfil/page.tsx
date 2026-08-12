@@ -210,6 +210,8 @@ const COUNTRIES = [
 
 const ENGLISH_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'No lo sé'];
 
+const GENDERS = ['Femenino', 'Masculino', 'Prefiero no decirlo'];
+
 const LEARNING_GOALS = [
     'Conversar con confianza',
     'Conseguir empleo o crecer profesionalmente',
@@ -222,6 +224,7 @@ type Profile = {
     full_name: string;
     birth_date: string;
     country: string;
+    gender: string;
     english_level: string;
     learning_goal: string;
 };
@@ -230,6 +233,7 @@ const EMPTY_PROFILE: Profile = {
     full_name: '',
     birth_date: '',
     country: '',
+    gender: '',
     english_level: '',
     learning_goal: '',
 };
@@ -386,7 +390,7 @@ export default function CompletarPerfilPage() {
             const { data, error } = await supabase
                 .from('profiles')
                 .select(
-                    'full_name, birth_date, country, english_level, learning_goal'
+                    'full_name, birth_date, country, gender, english_level, learning_goal'
                 )
                 .eq('id', user.id)
                 .maybeSingle();
@@ -404,6 +408,7 @@ export default function CompletarPerfilPage() {
                     full_name: data.full_name ?? '',
                     birth_date: data.birth_date ?? '',
                     country: data.country ?? '',
+                    gender: data.gender ?? '',
                     english_level: data.english_level ?? '',
                     learning_goal: data.learning_goal ?? '',
                 });
@@ -485,6 +490,7 @@ export default function CompletarPerfilPage() {
         if (
             !profile.full_name.trim() ||
             !profile.birth_date ||
+            !profile.gender ||
             !profile.english_level ||
             !profile.learning_goal
         ) {
@@ -494,6 +500,11 @@ export default function CompletarPerfilPage() {
 
         if (!ENGLISH_LEVELS.includes(profile.english_level)) {
             setErrorMessage('Selecciona un nivel de inglés válido.');
+            return;
+        }
+
+        if (!GENDERS.includes(profile.gender)) {
+            setErrorMessage('Selecciona una opción de género válida.');
             return;
         }
 
@@ -510,6 +521,7 @@ export default function CompletarPerfilPage() {
                 full_name: profile.full_name.trim(),
                 birth_date: profile.birth_date,
                 country: normalizedCountry,
+                gender: profile.gender,
                 english_level: profile.english_level,
                 learning_goal: profile.learning_goal,
             },
@@ -534,6 +546,7 @@ export default function CompletarPerfilPage() {
         }));
 
         setSuccessMessage('Tu perfil se guardó correctamente.');
+        router.push('/inicio');
     }
 
     if (isLoading) {
@@ -600,7 +613,7 @@ export default function CompletarPerfilPage() {
                                         'DD/MM/AAAA'}
                                 </span>
                                 <span className="calendar-icon" aria-hidden="true">
-                                    ▦
+                                    ◦
                                 </span>
                             </button>
 
@@ -824,6 +837,30 @@ export default function CompletarPerfilPage() {
                         <p className="profile-field-help">
                             Escribe el nombre y selecciona tu país de la lista.
                         </p>
+                    </div>
+
+                    <div className="profile-field">
+                        <label htmlFor="gender">Género</label>
+
+                        <select
+                            id="gender"
+                            name="gender"
+                            value={profile.gender}
+                            onChange={(event) =>
+                                updateField('gender', event.target.value)
+                            }
+                            required
+                        >
+                            <option value="" disabled>
+                                Selecciona una opción
+                            </option>
+
+                            {GENDERS.map((gender) => (
+                                <option key={gender} value={gender}>
+                                    {gender}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="profile-field">

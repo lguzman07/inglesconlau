@@ -12,7 +12,7 @@ const faqs = [
   {
     question: '¿Qué incluye la suscripción?',
     answer:
-      'Con tu suscripción tendrás acceso a lecciones grabadas en video, ejercicios interactivos, seguimiento de tu progreso, una ruta de aprendizaje y el club de lectura.',
+      'Con tu suscripción tendrás acceso a lecciones grabadas en video, ejercicios interactivos, visualización de tu progreso, una ruta de aprendizaje y el club de lectura.',
   },
   {
     question: '¿Las clases son en vivo, grabadas o ambas?',

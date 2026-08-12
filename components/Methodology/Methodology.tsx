@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import me from '@/app/assets/me.png';
 import styles from './Methodology.module.css';
 
 const adjectiveRows = [
@@ -22,11 +24,22 @@ export default function Methodology() {
     <section id="methodology" className={styles.methodology}>
       <div className={styles.container}>
         <header className={styles.header}>
-          <p className={styles.eyebrow}>Nuestra historia</p>
+          <div className={styles.headerText}>
+            <p className={styles.eyebrow}>Nuestra historia</p>
 
-          <h2 className={styles.title}>
-            Una metodología creada por y para hispanohablantes.
-          </h2>
+            <h2 className={styles.title}>
+              Una metodología creada por y para hispanohablantes.
+            </h2>
+          </div>
+
+          <div className={styles.imageWrapper}>
+            <Image
+              className={styles.image}
+              src={me}
+              alt="Laura, creadora de Inglés con Lau"
+              priority
+            />
+          </div>
         </header>
 
         <div className={styles.content}>
@@ -55,8 +68,8 @@ export default function Methodology() {
           </p>
 
           <p>
-            Dicho esto, quiero expresarte por qué me apasiona tanto enseñar y de
-            dónde viene esta idea.
+            Quiero expresarte por qué me apasiona tanto enseñar y de dónde viene
+            esta idea.
           </p>
 
           <p>

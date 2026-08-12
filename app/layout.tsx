@@ -36,11 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="es"
-      data-theme="normal"
-      suppressHydrationWarning
-    >
+    <html lang="es" data-theme="normal" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -53,6 +49,8 @@ export default function RootLayout({
         className={lexend.className}
         style={{ fontFamily: lexend.style.fontFamily }}
       >
+        <ThemeControls />
+
         {children}
 
         <Footer />

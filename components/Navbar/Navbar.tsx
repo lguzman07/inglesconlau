@@ -1,94 +1,86 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
 import logo from '@/app/assets/logo-transparent.png';
-import { useEffect, useState } from 'react';
-
-type DisplayMode = 'normal' | 'dark' | 'contrast';
 
 export default function Navbar() {
-  const [displayMode, setDisplayMode] =
-    useState<DisplayMode>('normal');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const savedMode = localStorage.getItem('display-mode');
-
-    const initialMode: DisplayMode =
-      savedMode === 'dark' || savedMode === 'contrast'
-        ? savedMode
-        : 'normal';
-
-    setDisplayMode(initialMode);
-    document.documentElement.dataset.theme = initialMode;
-  }, []);
-
-  function changeDisplayMode(mode: DisplayMode) {
-    setDisplayMode(mode);
-    document.documentElement.dataset.theme = mode;
-    localStorage.setItem('display-mode', mode);
+  function closeMenu() {
+    setIsMenuOpen(false);
   }
 
   return (
     <nav className="navbar">
-      <div className="nav-brand">
-        <Image
-          src={logo}
-          alt="Logo de Inglés con Lau"
-          className="nav-logo"
-          priority
-        />
+      <div className="nav-header">
+        <Link
+          className="nav-brand"
+          href="/"
+          aria-label="Ir al inicio"
+          onClick={closeMenu}
+        >
+          <Image
+            src={logo}
+            alt="Logo de Inglés con Lau"
+            className="nav-logo"
+            priority
+          />
 
-        <span>Inglés Con Lau</span>
+          <span>Inglés Con Lau</span>
+        </Link>
+
+        <button
+          type="button"
+          className="nav-menu-button"
+          aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-expanded={isMenuOpen}
+          aria-controls="navigation-menu"
+          onClick={() => setIsMenuOpen((current) => !current)}
+        >
+          <span aria-hidden="true">{isMenuOpen ? '×' : '☰'}</span>
+        </button>
       </div>
 
-      <div className="nav-right">
+      <div
+        id="navigation-menu"
+        className={`nav-right ${isMenuOpen ? 'nav-right-open' : ''}`}
+      >
         <div className="nav-links">
-          <a href="#methodology">Metodología</a>
-          <a href="#why">¿Por qué nosotros?</a>
-          <a href="#roadmap">Roadmap</a>
-          <a href="#faq">FAQ</a>
+          <a href="#methodology" onClick={closeMenu}>
+            Metodología
+          </a>
+
+          <a href="#why" onClick={closeMenu}>
+            ¿Por qué nosotros?
+          </a>
+
+          <a href="#roadmap" onClick={closeMenu}>
+            Roadmap
+          </a>
+
+          <a href="#faq" onClick={closeMenu}>
+            FAQ
+          </a>
         </div>
 
-        <div
-          className="accessibility-controls"
-          role="group"
-          aria-label="Modo de visualización"
-        >
-          <button
-            type="button"
-            className={`theme-button ${
-              displayMode === 'normal' ? 'active' : ''
-            }`}
-            aria-pressed={displayMode === 'normal'}
-            onClick={() => changeDisplayMode('normal')}
+        <div className="nav-auth">
+          <Link
+            className="nav-login-button"
+            href="/iniciar-sesion"
+            onClick={closeMenu}
           >
-            <span aria-hidden="true">☀️</span>
-            <span>Normal</span>
-          </button>
+            Iniciar sesión
+          </Link>
 
-          <button
-            type="button"
-            className={`theme-button ${
-              displayMode === 'dark' ? 'active' : ''
-            }`}
-            aria-pressed={displayMode === 'dark'}
-            onClick={() => changeDisplayMode('dark')}
+          <Link
+            className="nav-register-button"
+            href="/registro"
+            onClick={closeMenu}
           >
-            <span aria-hidden="true">🌙</span>
-            <span>Oscuro</span>
-          </button>
-
-          <button
-            type="button"
-            className={`theme-button ${
-              displayMode === 'contrast' ? 'active' : ''
-            }`}
-            aria-pressed={displayMode === 'contrast'}
-            onClick={() => changeDisplayMode('contrast')}
-          >
-            <span aria-hidden="true">◐</span>
-            <span>Contraste</span>
-          </button>
+            Registrarse
+          </Link>
         </div>
       </div>
     </nav>

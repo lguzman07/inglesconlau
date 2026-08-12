@@ -32,7 +32,7 @@ export default function WhyDifferent() {
     },
     {
       icon: '🚪',
-      title: 'Compromiso con la accesibilidad',
+      title: 'Aprendizaje para todos',
       description:
         'La inclusividad de distintos tipos de aprendizaje fue pensada desde el inicio del proyecto como parte esencial del diseño. He diseñado la plataforma pensando en personas con dislexia, TDAH, autismo (TEA) y/o sensibilidad sensorial. Porque cuando eliminamos barreras, más personas tienen la oportunidad de aprender.',
     },

@@ -62,7 +62,7 @@ export default function TerminosYCondicionesPage() {
             <p className={styles.paragraph}>
               La suscripción ofrece acceso, mientras permanezca activa, a
               lecciones grabadas, ejercicios interactivos, rutas de
-              aprendizaje, seguimiento del progreso, materiales
+              aprendizaje, visualización del progreso, materiales
               descargables cuando se indiquen y el club de lectura. El
               contenido disponible puede ampliarse, reorganizarse o mejorarse
               sin reducir de manera sustancial el servicio contratado.

@@ -4,12 +4,11 @@ import styles from './Plan.module.css';
 const benefits = [
   'Acceso a todos los niveles, desde A1 hasta C1.',
   'Cada lección incluye su propio video explicativo.',
-  'Ejercicios interactivos dentro de la plataforma con corrección inmediata y seguimiento de tu progreso.',
+  'Ejercicios interactivos dentro de la plataforma con corrección inmediata y visualización de tu progreso.',
   'Acceso al club de lectura todos los jueves, de 7:00 p. m. a 9:00 p. m. (hora de República Dominicana).',
   'Consejos de pronunciación diseñados específicamente para hispanohablantes.',
   'Traducciones al español personalizables dentro de las lecciones.',
   'Acceso inmediato al contenido disponible y a todas las novedades mientras tu suscripción esté activa.',
-  'Seguimiento general de tu progreso dentro de la plataforma.',
   'Grabaciones del club disponibles durante 30 días.',
 ];
 

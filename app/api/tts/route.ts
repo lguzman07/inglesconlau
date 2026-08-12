@@ -15,6 +15,9 @@ export async function POST(request: NextRequest) {
 
     const voiceId = language === 'es' ? SPANISH_VOICE_ID : ENGLISH_VOICE_ID;
 
+    console.log('Idioma:', language);
+    console.log('Voice ID usado:', voiceId);
+
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
       {
