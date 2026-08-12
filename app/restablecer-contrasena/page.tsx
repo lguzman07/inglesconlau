@@ -22,12 +22,32 @@ export default function RestablecerContrasenaPage() {
 
   useEffect(() => {
     async function checkRecoverySession() {
+      setIsCheckingSession(true);
+      setErrorMessage('');
+
+      const searchParams = new URLSearchParams(window.location.search);
+      const code = searchParams.get('code');
+
+      if (code) {
+        const { error: exchangeError } =
+          await supabase.auth.exchangeCodeForSession(code);
+
+        if (exchangeError) {
+          setHasValidSession(false);
+          setErrorMessage(
+            'El enlace de recuperación no es válido o ha expirado. Solicita uno nuevo.'
+          );
+          setIsCheckingSession(false);
+          return;
+        }
+      }
+
       const {
         data: { session },
-        error,
+        error: sessionError,
       } = await supabase.auth.getSession();
 
-      if (error || !session) {
+      if (sessionError || !session) {
         setHasValidSession(false);
         setErrorMessage(
           'El enlace de recuperación no es válido o ha expirado. Solicita uno nuevo.'
