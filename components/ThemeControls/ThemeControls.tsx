@@ -1,49 +1,84 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
 
-type DisplayMode = 'normal' | 'dark' | 'contrast';
+type DisplayPreference = 'auto' | 'normal' | 'dark' | 'contrast';
+type AppliedTheme = 'normal' | 'dark' | 'contrast';
 
-function isDisplayMode(value: string | null): value is DisplayMode {
+const STORAGE_KEY = 'display-mode-v2';
+
+function isDisplayPreference(
+  value: string | null
+): value is DisplayPreference {
   return (
+    value === 'auto' ||
     value === 'normal' ||
     value === 'dark' ||
     value === 'contrast'
   );
 }
 
+function getSystemTheme(): AppliedTheme {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'normal';
+}
+
 export default function ThemeControls() {
-  const pathname = usePathname();
+  const [displayPreference, setDisplayPreference] =
+    useState<DisplayPreference>('auto');
 
-  const [displayMode, setDisplayMode] = useState<DisplayMode>('normal');
+  const applyDisplayPreference = useCallback(
+    (preference: DisplayPreference) => {
+      const theme =
+        preference === 'auto' ? getSystemTheme() : preference;
 
-  const applyDisplayMode = useCallback((mode: DisplayMode) => {
-    document.documentElement.setAttribute('data-theme', mode);
-    localStorage.setItem('display-mode', mode);
-    setDisplayMode(mode);
-  }, []);
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem(STORAGE_KEY, preference);
+      setDisplayPreference(preference);
+    },
+    []
+  );
 
   useEffect(() => {
-    const savedMode = localStorage.getItem('display-mode');
+    const savedPreference = localStorage.getItem(STORAGE_KEY);
 
-    const initialMode: DisplayMode = isDisplayMode(savedMode)
-      ? savedMode
-      : 'normal';
+    const initialPreference: DisplayPreference =
+      isDisplayPreference(savedPreference)
+        ? savedPreference
+        : 'auto';
 
-    applyDisplayMode(initialMode);
-  }, [applyDisplayMode, pathname]);
+    applyDisplayPreference(initialPreference);
+  }, [applyDisplayPreference]);
 
-  function changeDisplayMode(mode: DisplayMode) {
-    applyDisplayMode(mode);
-  }
+  useEffect(() => {
+    const systemTheme = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    );
 
-  /*
-    En la landing no mostramos estos controles globales,
-    porque ya están dentro del Navbar.
-  */
-  if (pathname === '/') {
-    return null;
+    function handleSystemThemeChange() {
+      if (displayPreference === 'auto') {
+        document.documentElement.setAttribute(
+          'data-theme',
+          systemTheme.matches ? 'dark' : 'normal'
+        );
+      }
+    }
+
+    systemTheme.addEventListener('change', handleSystemThemeChange);
+
+    return () => {
+      systemTheme.removeEventListener(
+        'change',
+        handleSystemThemeChange
+      );
+    };
+  }, [displayPreference]);
+
+  function changeDisplayPreference(
+    preference: AppliedTheme
+  ) {
+    applyDisplayPreference(preference);
   }
 
   return (
@@ -54,32 +89,41 @@ export default function ThemeControls() {
     >
       <button
         type="button"
-        className={`theme-button ${displayMode === 'normal' ? 'active' : ''}`}
-        aria-pressed={displayMode === 'normal'}
-        onClick={() => changeDisplayMode('normal')}
+        className={`theme-button ${
+          displayPreference === 'normal' ? 'active' : ''
+        }`}
+        aria-label="Usar modo normal"
+        aria-pressed={displayPreference === 'normal'}
+        title="Normal"
+        onClick={() => changeDisplayPreference('normal')}
       >
         <span aria-hidden="true">☀️</span>
-        <span>Normal</span>
       </button>
 
       <button
         type="button"
-        className={`theme-button ${displayMode === 'dark' ? 'active' : ''}`}
-        aria-pressed={displayMode === 'dark'}
-        onClick={() => changeDisplayMode('dark')}
+        className={`theme-button ${
+          displayPreference === 'dark' ? 'active' : ''
+        }`}
+        aria-label="Usar modo oscuro"
+        aria-pressed={displayPreference === 'dark'}
+        title="Oscuro"
+        onClick={() => changeDisplayPreference('dark')}
       >
         <span aria-hidden="true">🌙</span>
-        <span>Oscuro</span>
       </button>
 
       <button
         type="button"
-        className={`theme-button ${displayMode === 'contrast' ? 'active' : ''}`}
-        aria-pressed={displayMode === 'contrast'}
-        onClick={() => changeDisplayMode('contrast')}
+        className={`theme-button ${
+          displayPreference === 'contrast' ? 'active' : ''
+        }`}
+        aria-label="Usar modo de alto contraste"
+        aria-pressed={displayPreference === 'contrast'}
+        title="Contraste"
+        onClick={() => changeDisplayPreference('contrast')}
       >
         <span aria-hidden="true">◐</span>
-        <span>Contraste</span>
       </button>
     </div>
   );

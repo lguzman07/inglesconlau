@@ -30,9 +30,12 @@ export default function IniciarSesionPage() {
 
     const supabase = createClient();
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: `${window.location.origin}/restablecer-contrasena`,
-    });
+    const { error } = await supabase.auth.resetPasswordForEmail(
+      email.trim(),
+      {
+        redirectTo: `${window.location.origin}/restablecer-contrasena`,
+      }
+    );
 
     setIsSendingRecovery(false);
 
@@ -56,12 +59,13 @@ export default function IniciarSesionPage() {
 
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
+    const { data: authData, error: signInError } =
+      await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
 
-    if (error) {
+    if (signInError || !authData.user) {
       setMessage(
         'No pudimos iniciar sesión. Revisa tu correo y contraseña e inténtalo nuevamente.'
       );
@@ -69,7 +73,37 @@ export default function IniciarSesionPage() {
       return;
     }
 
-    router.push('/completar-perfil');
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select(
+        'full_name, birth_date, country, gender, english_level, learning_goal'
+      )
+      .eq('id', authData.user.id)
+      .maybeSingle();
+
+    if (profileError) {
+      setMessage(
+        'Iniciaste sesión, pero no pudimos comprobar tu perfil. Inténtalo nuevamente.'
+      );
+      setIsLoading(false);
+      return;
+    }
+
+    const profileIsComplete = Boolean(
+      profile?.full_name?.trim() &&
+        profile?.birth_date &&
+        profile?.country?.trim() &&
+        profile?.gender &&
+        profile?.english_level &&
+        profile?.learning_goal
+    );
+
+    if (profileIsComplete) {
+      router.replace('/perfil');
+    } else {
+      router.replace('/completar-perfil');
+    }
+
     router.refresh();
   }
 
@@ -157,7 +191,9 @@ export default function IniciarSesionPage() {
               fontSize: '0.9rem',
               fontWeight: 600,
               cursor:
-                isLoading || isSendingRecovery ? 'not-allowed' : 'pointer',
+                isLoading || isSendingRecovery
+                  ? 'not-allowed'
+                  : 'pointer',
               opacity: isLoading || isSendingRecovery ? 0.65 : 1,
             }}
           >

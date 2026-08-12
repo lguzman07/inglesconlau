@@ -20,13 +20,26 @@ export const metadata: Metadata = {
 
 const themeInitializationScript = `
   try {
-    const savedMode = localStorage.getItem('display-mode');
-    const validModes = ['normal', 'dark', 'contrast'];
+    const savedPreference = localStorage.getItem('display-mode-v2');
+    const validPreferences = ['auto', 'normal', 'dark', 'contrast'];
+
+    const preference = validPreferences.includes(savedPreference)
+      ? savedPreference
+      : 'auto';
+
+    const systemTheme = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    ).matches
+      ? 'dark'
+      : 'normal';
 
     document.documentElement.dataset.theme =
-      validModes.includes(savedMode) ? savedMode : 'normal';
+      preference === 'auto' ? systemTheme : preference;
   } catch {
-    document.documentElement.dataset.theme = 'normal';
+    document.documentElement.dataset.theme =
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'normal';
   }
 `;
 
@@ -36,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" data-theme="normal" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
