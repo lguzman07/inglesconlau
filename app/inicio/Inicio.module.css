@@ -1,7 +1,7 @@
 .main {
   min-height: 100vh;
-  background: #f8f7f4;
-  color: #20201e;
+  background: var(--background);
+  color: var(--text);
 }
 
 .navbar {
@@ -10,12 +10,12 @@
   justify-content: space-between;
   gap: 32px;
   padding: 22px 210px 22px 6%;
-  background: #ffffff;
-  border-bottom: 1px solid #e8e5df;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
 
 .logo {
-  color: #20201e;
+  color: var(--text);
   font-size: 1.25rem;
   font-weight: 700;
   text-decoration: none;
@@ -29,26 +29,27 @@
 
 .navLink,
 .activeLink {
-  color: #68655f;
+  color: var(--text-light);
   font-size: 0.95rem;
   font-weight: 600;
   text-decoration: none;
 }
 
 .activeLink {
-  color: #20201e;
+  color: var(--text);
 }
 
 .logoutButton {
   padding: 10px 16px;
   background: transparent;
-  color: #68655f;
+  color: var(--text-light);
   font: inherit;
   font-size: 0.9rem;
   font-weight: 600;
-  border: 1px solid #d8d4cd;
+  border: 1px solid var(--border);
   border-radius: 999px;
   cursor: pointer;
+  transition: var(--transition);
 }
 
 .container {
@@ -59,14 +60,15 @@
 
 .welcome {
   padding: 48px;
-  background: #e9efe8;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
   border-radius: 24px;
 }
 
 .eyebrow,
 .cardLabel {
   margin: 0 0 12px;
-  color: #6f7e6b;
+  color: var(--primary);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -82,7 +84,7 @@
 .description {
   max-width: 570px;
   margin: 18px 0 0;
-  color: #5e625b;
+  color: var(--text-light);
   font-size: 1.05rem;
   line-height: 1.7;
 }
@@ -90,13 +92,14 @@
 .lessonButton {
   flex-shrink: 0;
   padding: 14px 22px;
-  background: #24392f;
-  color: #ffffff;
+  background: var(--primary);
+  color: var(--surface);
   font: inherit;
   font-weight: 700;
   border: 0;
   border-radius: 999px;
   cursor: pointer;
+  transition: var(--transition);
 }
 
 .summaryGrid {
@@ -110,20 +113,22 @@
 .currentLesson,
 .readingClub {
   padding: 28px;
-  background: #ffffff;
-  border: 1px solid #e8e5df;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 20px;
+  box-shadow: var(--shadow);
 }
 
 .cardValue {
   margin: 0;
+  color: var(--text);
   font-size: 2rem;
   font-weight: 700;
 }
 
 .cardText {
   margin: 10px 0 0;
-  color: #706d67;
+  color: var(--text-light);
   line-height: 1.6;
 }
 
@@ -132,14 +137,14 @@
   height: 9px;
   margin-top: 18px;
   overflow: hidden;
-  background: #ebe9e4;
+  background: var(--surface-soft);
   border-radius: 999px;
 }
 
 .progressBar {
   display: block;
   height: 100%;
-  background: #6f8a73;
+  background: var(--primary);
   border-radius: inherit;
 }
 
@@ -159,28 +164,30 @@
 
 .sectionTitle {
   margin: 0;
+  color: var(--text);
   font-size: 1.4rem;
 }
 
 .readingClub {
-  background: #f4eee4;
+  background: var(--surface-soft);
 }
 
 .clubDay {
   margin: 20px 0 0;
+  color: var(--text);
   font-size: 1.5rem;
   font-weight: 700;
 }
 
 .logoutButton:hover,
 .logoutButton:focus-visible {
-  color: #20201e;
-  border-color: #8c8880;
+  color: var(--text);
+  border-color: var(--primary);
 }
 
 .lessonButton:hover,
 .lessonButton:focus-visible {
-  background: #17271f;
+  background: var(--primary-hover);
 }
 
 .navLink:focus-visible,
@@ -188,7 +195,7 @@
 .logo:focus-visible,
 .logoutButton:focus-visible,
 .lessonButton:focus-visible {
-  outline: 3px solid #a8b9a4;
+  outline: 3px solid var(--primary-light);
   outline-offset: 3px;
 }
 

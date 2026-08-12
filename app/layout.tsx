@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import { Lexend } from 'next/font/google';
-import { Analytics } from '@vercel/analytics/react';
 import ThemeControls from '@/components/ThemeControls/ThemeControls';
 import ScrollToTop from '@/components/ScrollToTop/ScrollToTop';
 import Footer from '@/components/Footer/Footer';
@@ -36,17 +36,14 @@ const themeInitializationScript = `
     document.documentElement.dataset.theme =
       preference === 'auto' ? systemTheme : preference;
   } catch {
-    document.documentElement.dataset.theme =
-      window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'normal';
+    document.documentElement.dataset.theme = 'normal';
   }
 `;
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="es" suppressHydrationWarning>
@@ -58,17 +55,13 @@ export default function RootLayout({
         />
       </head>
 
-      <body
-        className={lexend.className}
-        style={{ fontFamily: lexend.style.fontFamily }}
-      >
+      <body className={lexend.className}>
         <ThemeControls />
 
         {children}
 
         <Footer />
         <ScrollToTop />
-        <Analytics />
       </body>
     </html>
   );
