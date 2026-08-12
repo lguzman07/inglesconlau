@@ -99,7 +99,7 @@ export default function IniciarSesionPage() {
     );
 
     if (profileIsComplete) {
-      router.replace('/perfil');
+      router.replace('/inicio');
     } else {
       router.replace('/completar-perfil');
     }

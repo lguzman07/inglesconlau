@@ -1,7 +1,60 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
 import styles from './Inicio.module.css';
 
 export default function InicioPage() {
+  const [indicatedLevel, setIndicatedLevel] = useState('');
+  const [gender, setGender] = useState('');
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+
+  useEffect(() => {
+    async function loadProfile() {
+      const supabase = createClient();
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        setIsLoadingProfile(false);
+        return;
+      }
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('english_level, gender')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (profile?.english_level) {
+        setIndicatedLevel(profile.english_level);
+      }
+
+      if (profile?.gender) {
+        setGender(profile.gender);
+      }
+
+      setIsLoadingProfile(false);
+    }
+
+    loadProfile();
+  }, []);
+
+  function getGreeting() {
+    if (gender === 'Masculino') {
+      return '¡Hola! ¿Listo para continuar?';
+    }
+
+    if (gender === 'Prefiero no decirlo') {
+      return '¡Hola! ¿Todo listo para continuar?';
+    }
+
+    return '¡Hola! ¿Lista para continuar?';
+  }
+
   return (
     <main className={styles.main}>
       <header className={styles.navbar}>
@@ -14,7 +67,7 @@ export default function InicioPage() {
             Inicio
           </Link>
 
-          <Link href="/perfil" className={styles.navLink}>
+          <Link href="/completar-perfil" className={styles.navLink}>
             Mi perfil
           </Link>
 
@@ -29,16 +82,14 @@ export default function InicioPage() {
           <div>
             <p className={styles.eyebrow}>MI ESPACIO DE APRENDIZAJE</p>
 
-            <h1 className={styles.title}>¡Hola! ¿Lista para continuar?</h1>
+            <h1 className={styles.title}>
+              {isLoadingProfile ? '¡Hola!' : getGreeting()}
+            </h1>
 
             <p className={styles.description}>
               Sigue avanzando a tu ritmo. Cada paso cuenta.
             </p>
           </div>
-
-          <button type="button" className={styles.continueButton}>
-            Continuar aprendiendo
-          </button>
         </section>
 
         <section className={styles.summaryGrid}>
@@ -46,6 +97,19 @@ export default function InicioPage() {
             <p className={styles.cardLabel}>Nivel actual</p>
             <p className={styles.cardValue}>A1</p>
             <p className={styles.cardText}>Principiante</p>
+
+            <p className={styles.cardText}>
+              *Calculado según las lecciones completadas.
+            </p>
+
+            <p className={styles.cardText}>
+              Nivel indicado al registrarte:{' '}
+              <strong>
+                {isLoadingProfile
+                  ? 'Cargando...'
+                  : indicatedLevel || 'No indicado'}
+              </strong>
+            </p>
           </article>
 
           <article className={styles.summaryCard}>
@@ -77,8 +141,12 @@ export default function InicioPage() {
         <section className={styles.contentGrid}>
           <article className={styles.currentLesson}>
             <div>
-              <p className={styles.cardLabel}>CONTINÚA DONDE TE QUEDASTE</p>
+              <p className={styles.cardLabel}>
+                CONTINÚA DONDE TE QUEDASTE
+              </p>
+
               <h2 className={styles.sectionTitle}>Tu primera lección</h2>
+
               <p className={styles.cardText}>
                 Comienza tu recorrido y construye una base sólida en inglés.
               </p>
@@ -93,6 +161,7 @@ export default function InicioPage() {
             <p className={styles.cardLabel}>CLUB DE LECTURA</p>
             <h2 className={styles.sectionTitle}>Próxima sesión</h2>
             <p className={styles.clubDay}>Jueves</p>
+
             <p className={styles.cardText}>
               7:00 p. m. – 9:00 p. m.
               <br />
