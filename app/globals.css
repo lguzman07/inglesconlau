@@ -432,7 +432,7 @@ select:focus-visible {
   border-radius: 999px;
   backdrop-filter: blur(10px);
 
-  box-shadow: var(--shadow);
+  box-shadow: 0 12px 30px rgba(40, 52, 59, 0.08);
 }
 
 .logo {
@@ -471,6 +471,7 @@ select:focus-visible {
 }
 
 .nav-links a {
+  position: relative;
   min-height: 44px;
   display: flex;
   align-items: center;
@@ -481,8 +482,27 @@ select:focus-visible {
   transition: color var(--transition);
 }
 
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  left: 0;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 999px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--transition);
+}
+
 .nav-links a:hover {
   color: var(--primary);
+}
+
+.nav-links a:hover::after,
+.nav-links a:focus-visible::after {
+  transform: scaleX(1);
 }
 
 .nav-right {
