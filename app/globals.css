@@ -105,7 +105,7 @@ html[data-theme='contrast'] {
 
 @media (max-width: 1400px) {
   .global-theme-area {
-    height: 76px;
+    height: 62px;
 
     display: flex;
     align-items: center;
@@ -941,6 +941,14 @@ html[data-theme='contrast'] .faq-question:focus-visible {
 ========================================== */
 
 @media (max-width: 900px) {
+  .home {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 3.5rem);
+  }
+
   .section {
     padding: 5rem 0;
   }
@@ -973,11 +981,11 @@ html[data-theme='contrast'] .faq-question:focus-visible {
   }
 
   .hero {
-    padding: 1rem;
+    padding: 0.5rem;
   }
 
   .hero h1 {
-    font-size: clamp(2.8rem, 12vw, 4rem);
+    font-size: clamp(2.75rem, 11vw, 3.5rem);
   }
 
   .hero-slogan {
@@ -1518,7 +1526,7 @@ html[data-theme='contrast'] .complete-profile-button:hover:not(:disabled) {
   .navbar {
     display: block;
     width: calc(100% - 2rem);
-    margin: 1rem auto;
+    margin: 0.5rem auto 1rem;
     padding: 1rem;
     border-radius: 24px;
     box-sizing: border-box;
