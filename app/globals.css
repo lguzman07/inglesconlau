@@ -127,13 +127,13 @@ html[data-theme='contrast'] {
 
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 
-  padding: 0.35rem 0.5rem;
+  padding: 0.3rem;
 
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 14px;
   box-shadow: var(--shadow);
   backdrop-filter: blur(12px);
 }
@@ -143,8 +143,9 @@ html[data-theme='contrast'] {
 }
 
 .theme-button {
+  width: 44px;
   min-height: 44px;
-  padding: 0.55rem 0.75rem;
+  padding: 0.5rem;
 
   display: flex;
   align-items: center;
@@ -155,7 +156,7 @@ html[data-theme='contrast'] {
   color: var(--text);
 
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 10px;
 
   font-family: inherit;
   font-size: 0.85rem;
@@ -171,7 +172,7 @@ html[data-theme='contrast'] {
 
 .theme-button:hover {
   background: var(--secondary-hover);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 .theme-button:focus-visible {
