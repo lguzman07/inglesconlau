@@ -626,7 +626,7 @@ html[data-theme='contrast'] .photo-placeholder {
 .primary-button {
   background: var(--primary);
   color: #f7f8f9;
-  box-shadow: var(--shadow);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--primary) 28%, transparent);
 }
 
 .primary-button:hover {
@@ -636,15 +636,20 @@ html[data-theme='contrast'] .photo-placeholder {
 }
 
 .secondary-button {
-  background: var(--secondary);
+  background: transparent;
   color: var(--text);
-  border-color: var(--border);
+  border-color: var(--primary);
 }
 
 .secondary-button:hover {
-  background: var(--secondary-hover);
+  background: var(--primary-light);
   box-shadow: var(--shadow);
   transform: translateY(-2px);
+}
+
+.primary-button:active,
+.secondary-button:active {
+  transform: translateY(0);
 }
 
 .button-title {
