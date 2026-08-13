@@ -1522,7 +1522,7 @@ html[data-theme='contrast'] .complete-profile-button:hover:not(:disabled) {
   display: none;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
   .navbar {
     display: block;
     width: calc(100% - 2rem);
@@ -1577,6 +1577,7 @@ html[data-theme='contrast'] .complete-profile-button:hover:not(:disabled) {
     flex-direction: column;
     align-items: stretch;
     gap: 1.25rem;
+    animation: mobile-menu-reveal 180ms ease-out;
   }
 
   .nav-links {
@@ -1588,10 +1589,20 @@ html[data-theme='contrast'] .complete-profile-button:hover:not(:disabled) {
 
   .nav-links a {
     width: 100%;
-    padding: 0.9rem 0;
+    padding: 0.9rem 0.75rem;
     border-bottom: 1px solid var(--border);
+    border-radius: 10px;
     box-sizing: border-box;
     text-align: left;
+  }
+
+  .nav-links a::after {
+    display: none;
+  }
+
+  .nav-links a:hover,
+  .nav-links a:focus-visible {
+    background: var(--surface-soft);
   }
 
   .nav-auth {
@@ -1606,6 +1617,18 @@ html[data-theme='contrast'] .complete-profile-button:hover:not(:disabled) {
     width: 100%;
     box-sizing: border-box;
     text-align: center;
+  }
+}
+
+@keyframes mobile-menu-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
