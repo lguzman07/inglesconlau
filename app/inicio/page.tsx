@@ -71,9 +71,9 @@ export default function InicioPage() {
             Mi perfil
           </Link>
 
-          <button type="button" className={styles.logoutButton}>
+          <Link href="/" className={styles.logoutButton}>
             Cerrar sesión
-          </button>
+          </Link>
         </nav>
       </header>
 

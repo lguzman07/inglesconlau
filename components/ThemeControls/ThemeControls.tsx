@@ -51,6 +51,7 @@ export default function ThemeControls() {
     applyDisplayPreference(initialPreference);
   }, [applyDisplayPreference]);
 
+
   useEffect(() => {
     const systemTheme = window.matchMedia(
       '(prefers-color-scheme: dark)'

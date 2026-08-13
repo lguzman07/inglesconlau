@@ -56,7 +56,9 @@ export default function RootLayout({
       </head>
 
       <body className={lexend.className}>
-        <ThemeControls />
+        <div className="global-theme-area">
+          <ThemeControls />
+        </div>
 
         {children}
 
