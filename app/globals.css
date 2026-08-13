@@ -703,12 +703,14 @@ html[data-theme='contrast'] .photo-placeholder {
 
   transition:
     border-color var(--transition),
-    box-shadow var(--transition);
+    box-shadow var(--transition),
+    transform var(--transition);
 }
 
 .feature-card:hover {
   border-color: #aebcc4;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-4px);
 }
 
 .feature-icon {
