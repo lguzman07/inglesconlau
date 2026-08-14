@@ -8,7 +8,43 @@ import styles from './Inicio.module.css';
 export default function InicioPage() {
   const [indicatedLevel, setIndicatedLevel] = useState('');
   const [gender, setGender] = useState('');
+  const [readingClubDate, setReadingClubDate] = useState('Jueves');
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+
+  useEffect(() => {
+    const now = new Date();
+    const weekday = new Intl.DateTimeFormat('en-US', {
+      weekday: 'short',
+      timeZone: 'America/Santo_Domingo',
+    }).format(now);
+
+    const weekdayIndex: Record<string, number> = {
+      Sun: 0,
+      Mon: 1,
+      Tue: 2,
+      Wed: 3,
+      Thu: 4,
+      Fri: 5,
+      Sat: 6,
+    };
+
+    const currentDay = weekdayIndex[weekday];
+    const daysUntilThursday = (4 - currentDay + 7) % 7;
+    const nextThursday = new Date(
+      now.getTime() + daysUntilThursday * 24 * 60 * 60 * 1000
+    );
+
+    const formattedDate = new Intl.DateTimeFormat('es-DO', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      timeZone: 'America/Santo_Domingo',
+    }).format(nextThursday);
+
+    setReadingClubDate(
+      formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
+    );
+  }, []);
 
   useEffect(() => {
     async function loadProfile() {
@@ -106,7 +142,7 @@ export default function InicioPage() {
           <aside className={styles.readingClub}>
             <p className={styles.cardLabel}>CLUB DE LECTURA</p>
             <h2 className={styles.sectionTitle}>Próxima sesión</h2>
-            <p className={styles.clubDay}>Jueves</p>
+            <p className={styles.clubDay}>{readingClubDate}</p>
 
             <p className={styles.cardText}>
               7:00 p. m. – 9:00 p. m.
