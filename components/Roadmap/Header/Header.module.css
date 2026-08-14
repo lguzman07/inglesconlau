@@ -1,86 +1,41 @@
-.header {
-  max-width: 1450px;
-  margin: 0 auto 8rem;
-  text-align: center;
-}
+.header { max-width: 1450px; margin: 0 auto 8rem; text-align: center; }
+.eyebrow { margin-bottom: 1rem; color: var(--accent); font-size: 1.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+.title { margin-bottom: 2rem; color: var(--text); font-size: clamp(2.8rem, 5vw, 4.8rem); line-height: 1.1; }
+.description { max-width: 700px; margin: 0 auto; color: var(--text-light); font-size: 1.2rem; line-height: 2; }
 
-.eyebrow {
-  color: var(--accent);
-  font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
+.pathWrapper { position: relative; margin-top: 5rem; }
+.path { display: flex; gap: 1rem; align-items: center; width: 100%; margin: 0; padding: 1.75rem max(calc((100% - 270px) / 2), 1rem); overflow-x: auto; list-style: none; scroll-behavior: smooth; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-inline: contain; }
+.path::-webkit-scrollbar { display: none; }
+.pathStep { flex: 0 0 270px; opacity: 0.5; scale: 0.9; scroll-snap-align: center; transition: opacity 300ms ease, scale 300ms ease; }
+.activeStep { opacity: 1; scale: 1; }
+.bubble { width: 100%; min-height: 64px; padding: 0.9rem 1.25rem; color: var(--text); background: var(--surface-solid); border: 1px solid var(--border); border-radius: 999px; box-shadow: var(--shadow); font: inherit; font-size: 0.98rem; font-weight: 700; white-space: nowrap; cursor: pointer; transition: var(--transition); }
+.activeStep .bubble { color: white; background: var(--primary); border-color: var(--primary); box-shadow: var(--shadow-hover); }
 
-.title {
-  font-size: clamp(2.8rem, 5vw, 4.8rem);
-  line-height: 1.1;
-  color: var(--text);
-  margin-bottom: 2rem;
-}
+.pathArrow { position: absolute; top: 50%; z-index: 4; display: grid; width: 46px; height: 46px; padding: 0; place-items: center; color: white; background: var(--primary); border: 0; border-radius: 50%; box-shadow: var(--shadow); font-size: 1.2rem; cursor: pointer; transform: translateY(-50%); transition: var(--transition); }
+.pathArrow:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-50%) scale(1.06); }
+.pathArrow:disabled { opacity: 0.3; cursor: not-allowed; }
+.pathArrowLeft { left: 0; }
+.pathArrowRight { right: 0; }
 
-.description {
-  max-width: 700px;
-  margin: 0 auto;
-  color: var(--text-light);
-  font-size: 1.2rem;
-  line-height: 2;
-}
-
-.path {
-  margin-top: 5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  width: 100%;
-}
-
-.bubble {
-  background: var(--surface-solid);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 1rem 1.8rem;
-  font-weight: 600;
-  color: var(--text);
-  white-space: nowrap;
-  box-shadow: var(--shadow);
-  flex-shrink: 0;
-}
-
-.arrow {
-  color: var(--accent);
-  font-size: 1.6rem;
-  font-weight: 700;
-  flex-shrink: 0;
-}
+.pathDots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.5rem; }
+.pathDots button { width: 9px; height: 9px; padding: 0; background: var(--border); border: 0; border-radius: 999px; cursor: pointer; transition: var(--transition); }
+.pathDots .activeDot { width: 26px; background: var(--primary); }
 
 @media (max-width: 768px) {
-  .header {
-    margin-bottom: 5rem;
-  }
+  .header { margin-bottom: 5rem; }
+  .eyebrow { font-size: 1.35rem; }
+  .title { font-size: clamp(2.2rem, 10vw, 3.5rem); }
+  .description { font-size: 1.05rem; line-height: 1.8; }
+  .description br { display: none; }
+  .pathWrapper { width: calc(100% + 2.5rem); margin-top: 3.5rem; margin-left: -1.25rem; }
+  .path { display: grid; grid-auto-flow: column; grid-auto-columns: 72vw; grid-template-columns: none; gap: 0.75rem; padding: 1.5rem calc((100% - 72vw) / 2); }
+  .pathStep { width: auto; opacity: 0.48; scale: 0.92; }
+  .activeStep { opacity: 1; scale: 1; }
+  .bubble { min-height: 58px; padding: 0.8rem 1rem; font-size: 0.92rem; }
+  .pathArrow { display: none; }
+}
 
-  .title {
-    font-size: clamp(2.2rem, 10vw, 3.5rem);
-  }
-
-  .description {
-    font-size: 1.1rem;
-    line-height: 1.8;
-  }
-
-  .path {
-    gap: 0.75rem;
-  }
-
-  .bubble {
-    padding: 0.9rem 1.3rem;
-    font-size: 0.95rem;
-  }
-
-  .arrow {
-    display: none;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .path { scroll-behavior: auto; }
+  .pathStep { transition: none; }
 }
