@@ -14,9 +14,32 @@ const lexend = Lexend({
 });
 
 export const metadata: Metadata = {
-  title: 'Inglés con Lau',
+  metadataBase: new URL('https://inglesconlau.com'),
+  title: {
+    default: 'Inglés con Lau | Aprende conmigo',
+    template: '%s | Inglés con Lau',
+  },
   description:
-    'Learn English with confidence through interactive, accessible lessons designed for Spanish speakers.',
+    'Aprende inglés con confianza mediante lecciones grabadas, ejercicios interactivos y una ruta diseñada especialmente para hispanohablantes.',
+  applicationName: 'Inglés con Lau',
+  creator: 'Laura Guzmán',
+  publisher: 'Inglés con Lau',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'Inglés con Lau | Aprende conmigo',
+    description:
+      'Lecciones grabadas, ejercicios interactivos y una ruta clara para aprender inglés con confianza y a tu propio ritmo.',
+    url: '/',
+    siteName: 'Inglés con Lau',
+    locale: 'es_DO',
+    type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 const themeInitializationScript = `
