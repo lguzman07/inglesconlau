@@ -3,15 +3,13 @@ import me from '@/app/assets/me.png';
 import styles from './Methodology.module.css';
 
 const adjectiveRows = [
-  ['Una manzana roja', 'A red apple'],
-  ['Tres manzanas rojas', 'Three red apples'],
+  ['Casa roja', 'Red house'],
+  ['Casas rojas', 'Red houses'],
 ];
 
 const conjugationRows = [
   ['Yo hago', 'I do'],
-  ['Tú haces', 'You do'],
   ['Él hace', 'He does'],
-  ['Nosotros hacemos', 'We do'],
 ];
 
 export default function Methodology() {
@@ -64,8 +62,8 @@ export default function Methodology() {
             <div className={styles.comparisonText}>
               <p>
                 Los adjetivos no tienen ni género ni número. En español decimos{' '}
-                <strong>una manzana roja</strong>, pero también{' '}
-                <strong>tres manzanas rojas</strong>. En inglés, en cambio, el
+                <strong>casa roja</strong>, pero también{' '}
+                <strong>casas rojas</strong>. En inglés, en cambio, el
                 adjetivo nunca cambia:
               </p>
             </div>
@@ -134,7 +132,7 @@ export default function Methodology() {
           </p>
 
           <p>
-            Mi amor por enseñar viene de demostrar que
+            Mi amor por enseñar viene precisamente de eso: de demostrar que
             aprender un idioma nuevo no está fuera de tus posibilidades. Nace
             de querer ayudar a la gran comunidad de dominicanos e
             hispanohablantes a aprender algo que muchas veces creyeron

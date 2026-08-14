@@ -117,7 +117,8 @@
 
 .table {
   width: 100%;
-  min-width: 540px;
+  min-width: 0;
+  table-layout: fixed;
   border-collapse: collapse;
 }
 
@@ -235,6 +236,26 @@
     line-height: 1.8;
   }
 
+
+  .comparisonRow {
+    gap: 0.75rem;
+    margin: 0.25rem 0 0.75rem;
+  }
+
+
+  .tableWrapper {
+    overflow-x: visible;
+    border-radius: 14px;
+  }
+
+
+  .table th,
+  .table td {
+    padding: 0.8rem 0.65rem;
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
+  }
+
   .content > p:first-child {
     font-size: 1.05rem;
   }
@@ -267,8 +288,4 @@
     padding: 2rem 1.25rem;
   }
 
-  .table th,
-  .table td {
-    padding: 0.9rem 1rem;
-  }
 }
