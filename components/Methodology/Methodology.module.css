@@ -100,6 +100,10 @@
   object-position: center;
 }
 
+.mobileImage {
+  display: none;
+}
+
 .eyebrow {
   margin-bottom: 1rem;
   color: var(--accent);
@@ -367,6 +371,14 @@
     line-height: 1.8;
   }
 
+  .content {
+    display: block;
+  }
+
+  .content > * + * {
+    margin-top: 1.5rem;
+  }
+
 
   .comparisonRow {
     gap: 0.75rem;
@@ -408,11 +420,21 @@
     font-size: 1.05rem;
   }
 
-  .imageWrapper {
+  .desktopImage {
+    display: none;
+  }
+
+  .mobileImage {
+    display: block;
+    float: right;
     width: 160px;
     height: 160px;
-    margin: -0.5rem 0 -0.5rem auto;
+    margin: 0 0 1rem 1.25rem;
     border-radius: 50%;
+  }
+
+  .mobileImage + p {
+    margin-top: 0;
   }
 
   .storySummary {
@@ -430,6 +452,7 @@
   }
 
   .comparisonRow {
+    clear: both;
     padding: 1.25rem;
     border-radius: 18px;
   }

@@ -24,7 +24,7 @@ export default function Methodology() {
               Una metodología creada por y para hispanohablantes.
             </h2>
 
-            <div className={styles.imageWrapper}>
+            <div className={`${styles.imageWrapper} ${styles.desktopImage}`}>
               <Image
                 className={styles.image}
                 src={me}
@@ -33,6 +33,14 @@ export default function Methodology() {
             </div>
 
             <div className={styles.content}>
+              <div className={`${styles.imageWrapper} ${styles.mobileImage}`}>
+                <Image
+                  className={styles.image}
+                  src={me}
+                  alt="Laura, creadora de Inglés con Lau"
+                />
+              </div>
+
               <p>
                 Aprendí inglés de una manera bastante inusual. Sí, tomé clases, pero
                 la mayoría de lo aprendido fue a través de métodos que muchos no
