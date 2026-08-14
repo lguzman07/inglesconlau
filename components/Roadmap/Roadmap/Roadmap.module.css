@@ -1,12 +1,6 @@
 .roadmap {
   padding: 9rem 2rem;
-  background: color-mix(
-    in srgb,
-    var(--surface-soft) 55%,
-    var(--background)
-  );
-  border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background: var(--background);
 }
 
 .container {
@@ -28,6 +22,50 @@
   grid-template-columns: 1fr 1fr;
   gap: 5rem;
   align-items: start;
+}
+
+.singleColumn {
+  width: min(760px, 100%);
+  margin: 0 auto;
+}
+
+.lessonPdf {
+  display: block;
+  overflow: hidden;
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface-solid);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.lessonPdf:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-3px);
+}
+
+.lessonPdf:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.lessonPdfPreview {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.lessonPdfLabel {
+  display: block;
+  padding: 1rem 1.25rem;
+  color: var(--primary);
+  font-weight: 700;
+  text-align: center;
+  border-top: 1px solid var(--border);
 }
 
 .leftColumn {
