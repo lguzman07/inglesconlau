@@ -131,7 +131,7 @@ export default function InicioPage() {
             <div>
               <p className={styles.cardLabel}>CONTINÚA DONDE TE QUEDASTE</p>
 
-              <h2 className={styles.lessonTitle}>Tu primera lección</h2>
+              <h2 className={styles.lessonTitle}>titulo de la leccion tbd</h2>
             </div>
 
             <button type="button" className={styles.lessonButton}>
