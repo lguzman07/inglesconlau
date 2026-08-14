@@ -28,7 +28,12 @@ export default function WhyDifferent() {
     let animationFrame = 0;
 
     function updateActiveCard() {
-      const trackCenter = track.getBoundingClientRect().left + track.clientWidth / 2;
+      const currentTrack = trackRef.current;
+      if (!currentTrack) return;
+
+      const trackCenter =
+        currentTrack.getBoundingClientRect().left +
+        currentTrack.clientWidth / 2;
       let closestIndex = 0;
       let closestDistance = Number.POSITIVE_INFINITY;
 
