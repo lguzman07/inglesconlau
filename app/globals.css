@@ -640,8 +640,13 @@ html[data-theme='contrast'] .section-soft {
   color: var(--primary);
 }
 
+.nav-links a.active {
+  color: var(--primary);
+}
+
 .nav-links a:hover::after,
-.nav-links a:focus-visible::after {
+.nav-links a:focus-visible::after,
+.nav-links a.active::after {
   transform: scaleX(1);
 }
 
@@ -1783,7 +1788,8 @@ html[data-theme='contrast'] .complete-profile-button:hover:not(:disabled) {
   }
 
   .nav-links a:hover,
-  .nav-links a:focus-visible {
+  .nav-links a:focus-visible,
+  .nav-links a.active {
     background: var(--surface-soft);
   }
 

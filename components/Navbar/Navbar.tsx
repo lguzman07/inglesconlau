@@ -2,12 +2,42 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from '@/app/assets/logo-transparent.png';
 import ThemeControls from '@/components/ThemeControls/ThemeControls';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+
+  useEffect(() => {
+    const sectionIds = ['methodology', 'why', 'roadmap', 'faq'];
+
+    function updateActiveSection() {
+      const currentPosition = window.scrollY + 220;
+      let currentSection = '';
+
+      sectionIds.forEach((sectionId) => {
+        const section = document.getElementById(sectionId);
+
+        if (section && section.offsetTop <= currentPosition) {
+          currentSection = sectionId;
+        }
+      });
+
+      setActiveSection(currentSection);
+    }
+
+    updateActiveSection();
+    window.addEventListener('scroll', updateActiveSection, { passive: true });
+    window.addEventListener('resize', updateActiveSection);
+
+    return () => {
+      window.removeEventListener('scroll', updateActiveSection);
+      window.removeEventListener('resize', updateActiveSection);
+    };
+  }, []);
+
   function closeMenu() { setIsMenuOpen(false); }
 
   return (
@@ -31,10 +61,38 @@ export default function Navbar() {
 
       <div id="navigation-menu" className={`nav-right ${isMenuOpen ? 'nav-right-open' : ''}`}>
         <div className="nav-links">
-          <a href="#methodology" onClick={closeMenu}>Metodología</a>
-          <a href="#why" onClick={closeMenu}>¿Por qué nosotros?</a>
-          <a href="#roadmap" onClick={closeMenu}>Roadmap</a>
-          <a href="#faq" onClick={closeMenu}>FAQ</a>
+          <a
+            href="#methodology"
+            className={activeSection === 'methodology' ? 'active' : ''}
+            aria-current={activeSection === 'methodology' ? 'location' : undefined}
+            onClick={closeMenu}
+          >
+            Metodología
+          </a>
+          <a
+            href="#why"
+            className={activeSection === 'why' ? 'active' : ''}
+            aria-current={activeSection === 'why' ? 'location' : undefined}
+            onClick={closeMenu}
+          >
+            ¿Por qué nosotros?
+          </a>
+          <a
+            href="#roadmap"
+            className={activeSection === 'roadmap' ? 'active' : ''}
+            aria-current={activeSection === 'roadmap' ? 'location' : undefined}
+            onClick={closeMenu}
+          >
+            Roadmap
+          </a>
+          <a
+            href="#faq"
+            className={activeSection === 'faq' ? 'active' : ''}
+            aria-current={activeSection === 'faq' ? 'location' : undefined}
+            onClick={closeMenu}
+          >
+            FAQ
+          </a>
         </div>
 
         <ThemeControls />
