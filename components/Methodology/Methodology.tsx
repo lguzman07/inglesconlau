@@ -2,16 +2,6 @@ import Image from 'next/image';
 import me from '@/app/assets/me.png';
 import styles from './Methodology.module.css';
 
-const adjectiveRows = [
-  ['Casa roja', 'Red house'],
-  ['Casas rojas', 'Red houses'],
-];
-
-const conjugationRows = [
-  ['Yo hago', 'I do'],
-  ['Él hace', 'He does'],
-];
-
 export default function Methodology() {
   return (
     <section id="methodology" className={styles.methodology}>
@@ -62,8 +52,8 @@ export default function Methodology() {
             <div className={styles.comparisonText}>
               <p>
                 Los adjetivos no tienen ni género ni número. En español decimos{' '}
-                <strong>casa roja</strong>, pero también{' '}
-                <strong>casas rojas</strong>. En inglés, en cambio, el
+                <strong>carro rojo</strong>, pero también{' '}
+                <strong>carros rojos</strong>. En inglés, en cambio, el
                 adjetivo nunca cambia:
               </p>
             </div>
@@ -78,12 +68,23 @@ export default function Methodology() {
                 </thead>
 
                 <tbody>
-                  {adjectiveRows.map(([spanish, english]) => (
-                    <tr key={spanish}>
-                      <td>{spanish}</td>
-                      <td className={styles.englishCell}>{english}</td>
-                    </tr>
-                  ))}
+                  <tr>
+                    <td>
+                      Carro <strong>rojo</strong>
+                    </td>
+                    <td className={styles.englishCell}>
+                      <strong>Red</strong> car
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      Carros <strong>rojos</strong>
+                    </td>
+                    <td className={styles.englishCell}>
+                      <strong>Red</strong> cars
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -94,24 +95,20 @@ export default function Methodology() {
               <p>Conjugar también es mucho más fácil:</p>
             </div>
 
-            <div className={styles.tableWrapper}>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th>Español</th>
-                    <th>Inglés</th>
-                  </tr>
-                </thead>
+            <div className={styles.conjugationSummary}>
+              <div className={styles.languageSummary}>
+                <strong>Español</strong>
+                <p>hago · haces · hace · hacemos · hacen</p>
+              </div>
 
-                <tbody>
-                  {conjugationRows.map(([spanish, english]) => (
-                    <tr key={spanish}>
-                      <td>{spanish}</td>
-                      <td className={styles.englishCell}>{english}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className={styles.languageSummary}>
+                <strong>Inglés</strong>
+                <p>
+                  I / You / We / They → <span>do</span>
+                  <br />
+                  He / She → <span>does</span>
+                </p>
+              </div>
             </div>
           </div>
 
