@@ -76,9 +76,13 @@
   margin-top: 8rem;
   padding: 4rem 2rem;
   text-align: center;
-  background: var(--surface-soft);
+  background: linear-gradient(
+    135deg,
+    var(--surface-soft),
+    color-mix(in srgb, var(--primary-light) 70%, var(--surface-solid))
+  );
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 28px;
   box-shadow: var(--shadow);
 }
 
@@ -99,19 +103,27 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.9rem 1.6rem;
+  min-height: 56px;
+  padding: 1rem 2.25rem;
   color: white;
-  font-weight: 600;
+  font-size: 1.05rem;
+  font-weight: 700;
   text-decoration: none;
   background: var(--primary);
-  border-radius: var(--radius);
-  transition: var(--transition);
+  border: 1px solid transparent;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px
+    color-mix(in srgb, var(--primary) 28%, transparent);
+  transition:
+    background-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
 }
 
 .ctaButton:hover {
   background: var(--primary-hover);
   box-shadow: var(--shadow-hover);
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.02);
 }
 
 .ctaButton:focus-visible {
@@ -147,5 +159,10 @@ html[data-theme='contrast'] .roadmap {
   .cta {
     margin-top: 5rem;
     padding: 3rem 1.5rem;
+  }
+
+
+  .ctaButton {
+    width: min(100%, 320px);
   }
 }
