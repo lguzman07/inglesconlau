@@ -82,8 +82,6 @@
 }
 
 .imageWrapper {
-  position: sticky;
-  top: 140px;
   grid-column: 2;
   grid-row: 1 / span 2;
   width: 100%;
