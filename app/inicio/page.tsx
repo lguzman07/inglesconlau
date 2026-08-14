@@ -193,7 +193,7 @@ export default function InicioPage() {
             <p className={styles.cardText}>
               7:00 p. m. – 9:00 p. m.
               <br />
-              Hora de República Dominicana
+              Hora de República Dominicana (UTC-4)
             </p>
 
             {hasActiveAccess ? (
