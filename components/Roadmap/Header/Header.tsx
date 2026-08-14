@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './Header.module.css';
 
 const steps = [
-  '🎥 Ver la lección',
+  '🎥 Ver el video de la lección',
   '🎧 Escuchar y repetir',
   '🧠 Entender el significado',
   '💬 Practicar la conversación',
