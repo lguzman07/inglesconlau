@@ -9,9 +9,6 @@ export default function Methodology() {
         <header className={styles.header}>
           <div className={styles.headerText}>
             <p className={styles.eyebrow}>Nuestra historia</p>
-            <h2 className={styles.title}>
-              Una metodología creada por y para hispanohablantes.
-            </h2>
           </div>
         </header>
 
@@ -23,6 +20,10 @@ export default function Methodology() {
           </summary>
 
           <div className={styles.storyExpanded}>
+            <h2 className={styles.title}>
+              Una metodología creada por y para hispanohablantes.
+            </h2>
+
             <div className={styles.imageWrapper}>
               <Image
                 className={styles.image}
