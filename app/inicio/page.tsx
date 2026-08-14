@@ -113,6 +113,15 @@ export default function InicioPage() {
               <br />
               Hora de República Dominicana
             </p>
+
+            <button
+              type="button"
+              className={styles.joinButton}
+              disabled
+              title="Disponible próximamente"
+            >
+              Unirme
+            </button>
           </aside>
         </section>
 
