@@ -1056,7 +1056,11 @@ html[data-theme='contrast'] .faq-question:focus-visible {
   }
 
   .faq-answer {
-    padding: 0 1.1rem 1.25rem;
+    padding: 0 1.1rem;
+  }
+
+  .faq-item-open .faq-answer {
+    padding-bottom: 1.25rem;
   }
 
   .faq-answer p {
