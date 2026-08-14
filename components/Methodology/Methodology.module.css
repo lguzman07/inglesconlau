@@ -50,6 +50,7 @@
   color: var(--text);
   font-size: clamp(2.2rem, 5vw, 3.5rem);
   line-height: 1.15;
+  text-wrap: balance;
 }
 
 .content {
@@ -63,7 +64,14 @@
 }
 
 .content > p {
-  width: 100%;
+  width: min(100%, 82ch);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.content > p:first-child {
+  color: var(--text);
+  font-size: 1.15rem;
 }
 
 .content strong {
@@ -76,7 +84,12 @@
   gap: 3rem;
   align-items: start;
   width: 100%;
-  margin: 0.5rem 0 1rem;
+  margin: 1rem 0;
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: color-mix(in srgb, var(--surface-solid) 72%, transparent);
+  box-shadow: 0 8px 24px rgba(40, 52, 59, 0.06);
 }
 
 .comparisonText {
@@ -125,6 +138,7 @@
 
 .table tbody tr {
   border-top: 1px solid var(--border);
+  transition: background-color var(--transition);
 }
 
 .table tbody tr:hover {
@@ -137,16 +151,25 @@
 }
 
 .emphasis {
+  padding: 1.25rem 1.5rem;
   color: var(--text);
+  background: var(--surface-soft);
+  border-left: 4px solid var(--primary);
+  border-radius: 0 14px 14px 0;
   font-weight: 700;
 }
 
 .closing {
   margin-top: 0.5rem;
+  padding: 1.5rem;
   color: var(--text);
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 18px;
   font-size: 1.35rem;
   font-weight: 700;
   line-height: 1.6;
+  text-align: center;
 }
 
 .quote {
@@ -164,6 +187,7 @@
   font-size: clamp(1.8rem, 4vw, 2.6rem);
   font-weight: 700;
   line-height: 1.5;
+  text-wrap: balance;
 }
 
 .quote span {
@@ -211,8 +235,32 @@
     line-height: 1.8;
   }
 
+  .content > p:first-child {
+    font-size: 1.05rem;
+  }
+
   .imageWrapper {
+    width: min(78vw, 290px);
+    margin: 0 auto;
+    border-radius: 22px;
+  }
+
+
+  .image {
     width: 100%;
+    height: auto;
+    max-height: 340px;
+    object-fit: cover;
+  }
+
+  .comparisonRow {
+    padding: 1.25rem;
+    border-radius: 18px;
+  }
+
+  .emphasis,
+  .closing {
+    padding: 1.1rem 1.25rem;
   }
 
   .quote {
