@@ -4,6 +4,7 @@ import { Lexend } from 'next/font/google';
 import ScrollToTop from '@/components/ScrollToTop/ScrollToTop';
 import Footer from '@/components/Footer/Footer';
 import RevealOnScroll from '@/components/RevealOnScroll/RevealOnScroll';
+import ScrollProgress from '@/components/ScrollProgress/ScrollProgress';
 import './globals.css';
 
 const lexend = Lexend({
@@ -56,6 +57,7 @@ export default function RootLayout({
       </head>
 
       <body className={lexend.className}>
+        <ScrollProgress />
         <RevealOnScroll />
 
         {children}
