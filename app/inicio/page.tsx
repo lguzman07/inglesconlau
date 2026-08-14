@@ -8,6 +8,8 @@ import styles from './Inicio.module.css';
 export default function InicioPage() {
   const [indicatedLevel, setIndicatedLevel] = useState('');
   const [gender, setGender] = useState('');
+  const [role, setRole] = useState('student');
+  const [subscriptionStatus, setSubscriptionStatus] = useState('inactive');
   const [readingClubDate, setReadingClubDate] = useState('Jueves');
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
 
@@ -61,7 +63,7 @@ export default function InicioPage() {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('english_level, gender')
+        .select('english_level, gender, role')
         .eq('id', user.id)
         .maybeSingle();
 
@@ -71,6 +73,20 @@ export default function InicioPage() {
 
       if (profile?.gender) {
         setGender(profile.gender);
+      }
+
+      if (profile?.role) {
+        setRole(profile.role);
+      }
+
+      const { data: subscription } = await supabase
+        .from('subscriptions')
+        .select('status')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (subscription?.status) {
+        setSubscriptionStatus(subscription.status);
       }
 
       setIsLoadingProfile(false);
@@ -89,6 +105,19 @@ export default function InicioPage() {
     }
 
     return '¡Hola! ¿Lista para continuar?';
+  }
+
+  const hasActiveAccess =
+    role === 'admin' || subscriptionStatus === 'active';
+
+  function getAccessLabel() {
+    if (role === 'admin') {
+      return 'Acceso administrativo';
+    }
+
+    return hasActiveAccess
+      ? 'Suscripción activa'
+      : 'Suscripción inactiva';
   }
 
   return (
@@ -115,7 +144,24 @@ export default function InicioPage() {
 
       <div className={styles.container}>
         <section className={styles.welcome}>
-          <p className={styles.eyebrow}>MI ESPACIO DE APRENDIZAJE</p>
+          <div className={styles.welcomeTop}>
+            <p className={styles.eyebrow}>MI ESPACIO DE APRENDIZAJE</p>
+
+            {!isLoadingProfile && (
+              <div className={styles.accessStatus}>
+                <span
+                  className={`${styles.statusLight} ${
+                    hasActiveAccess
+                      ? styles.statusLightActive
+                      : styles.statusLightInactive
+                  }`}
+                  aria-hidden="true"
+                />
+
+                <span>{getAccessLabel()}</span>
+              </div>
+            )}
+          </div>
 
           <h1 className={styles.title}>
             {isLoadingProfile ? '¡Hola!' : getGreeting()}
@@ -150,14 +196,29 @@ export default function InicioPage() {
               Hora de República Dominicana
             </p>
 
-            <button
-              type="button"
-              className={styles.joinButton}
-              disabled
-              title="Disponible próximamente"
-            >
-              Unirme
-            </button>
+            {hasActiveAccess ? (
+              <Link
+                href="/club-de-lectura"
+                className={styles.joinButton}
+              >
+                Unirme
+              </Link>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className={styles.joinButton}
+                  disabled
+                  title="Requiere una suscripción activa"
+                >
+                  Unirme
+                </button>
+
+                <p className={styles.clubAccessNote}>
+                  Requiere una suscripción activa.
+                </p>
+              </>
+            )}
           </aside>
         </section>
 
