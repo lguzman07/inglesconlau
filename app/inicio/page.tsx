@@ -79,77 +79,23 @@ export default function InicioPage() {
 
       <div className={styles.container}>
         <section className={styles.welcome}>
-          <div>
-            <p className={styles.eyebrow}>MI ESPACIO DE APRENDIZAJE</p>
+          <p className={styles.eyebrow}>MI ESPACIO DE APRENDIZAJE</p>
 
-            <h1 className={styles.title}>
-              {isLoadingProfile ? '¡Hola!' : getGreeting()}
-            </h1>
+          <h1 className={styles.title}>
+            {isLoadingProfile ? '¡Hola!' : getGreeting()}
+          </h1>
 
-            <p className={styles.description}>
-              Sigue avanzando a tu ritmo. Cada paso cuenta.
-            </p>
-          </div>
+          <p className={styles.description}>
+            Sigue avanzando a tu ritmo. Cada paso cuenta.
+          </p>
         </section>
 
-        <section className={styles.summaryGrid}>
-          <article className={styles.summaryCard}>
-            <p className={styles.cardLabel}>Nivel actual</p>
-            <p className={styles.cardValue}>A1</p>
-            <p className={styles.cardText}>Principiante</p>
-
-            <p className={styles.cardText}>
-              *Calculado según las lecciones completadas.
-            </p>
-
-            <p className={styles.cardText}>
-              Nivel indicado al registrarte:{' '}
-              <strong>
-                {isLoadingProfile
-                  ? 'Cargando...'
-                  : indicatedLevel || 'No indicado'}
-              </strong>
-            </p>
-          </article>
-
-          <article className={styles.summaryCard}>
-            <p className={styles.cardLabel}>Progreso general</p>
-            <p className={styles.cardValue}>0%</p>
-
-            <div
-              className={styles.progressTrack}
-              role="progressbar"
-              aria-label="Progreso general"
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={0}
-            >
-              <span
-                className={styles.progressBar}
-                style={{ width: '0%' }}
-              />
-            </div>
-          </article>
-
-          <article className={styles.summaryCard}>
-            <p className={styles.cardLabel}>Lecciones completadas</p>
-            <p className={styles.cardValue}>0</p>
-            <p className={styles.cardText}>Sigue avanzando</p>
-          </article>
-        </section>
-
-        <section className={styles.contentGrid}>
+        <section className={styles.primaryGrid}>
           <article className={styles.currentLesson}>
             <div>
-              <p className={styles.cardLabel}>
-                CONTINÚA DONDE TE QUEDASTE
-              </p>
+              <p className={styles.cardLabel}>CONTINÚA DONDE TE QUEDASTE</p>
 
-              <h2 className={styles.sectionTitle}>Tu primera lección</h2>
-
-              <p className={styles.cardText}>
-                Comienza tu recorrido y construye una base sólida en inglés.
-              </p>
+              <h2 className={styles.lessonTitle}>Tu primera lección</h2>
             </div>
 
             <button type="button" className={styles.lessonButton}>
@@ -168,6 +114,56 @@ export default function InicioPage() {
               Hora de República Dominicana
             </p>
           </aside>
+        </section>
+
+        <section className={styles.summarySection}>
+          <h2 className={styles.summaryTitle}>Tu progreso</h2>
+
+          <div className={styles.summaryGrid}>
+            <article className={styles.summaryCard}>
+              <p className={styles.cardLabel}>Nivel actual</p>
+              <p className={styles.cardValue}>A1</p>
+              <p className={styles.cardText}>Principiante</p>
+
+              <p className={styles.cardNote}>
+                Calculado según las lecciones completadas.
+              </p>
+
+              <p className={styles.cardText}>
+                Nivel indicado al registrarte:{' '}
+                <strong>
+                  {isLoadingProfile
+                    ? 'Cargando...'
+                    : indicatedLevel || 'No indicado'}
+                </strong>
+              </p>
+            </article>
+
+            <article className={styles.summaryCard}>
+              <p className={styles.cardLabel}>Progreso general</p>
+              <p className={styles.cardValue}>0%</p>
+
+              <div
+                className={styles.progressTrack}
+                role="progressbar"
+                aria-label="Progreso general"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={0}
+              >
+                <span
+                  className={styles.progressBar}
+                  style={{ width: '0%' }}
+                />
+              </div>
+            </article>
+
+            <article className={styles.summaryCard}>
+              <p className={styles.cardLabel}>Lecciones completadas</p>
+              <p className={styles.cardValue}>0</p>
+              <p className={styles.cardText}>Sigue avanzando</p>
+            </article>
+          </div>
         </section>
       </div>
     </main>
