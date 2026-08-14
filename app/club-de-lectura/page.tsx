@@ -21,13 +21,18 @@ export default async function ClubDeLecturaPage() {
       .maybeSingle(),
     supabase
       .from('subscriptions')
-      .select('status')
+      .select('status, current_period_end')
       .eq('user_id', user.id)
       .maybeSingle(),
   ]);
 
+  const hasCurrentSubscription =
+    subscription?.status === 'active' &&
+    subscription.current_period_end !== null &&
+    new Date(subscription.current_period_end).getTime() > Date.now();
+
   const hasClubAccess =
-    profile?.role === 'admin' || subscription?.status === 'active';
+    profile?.role === 'admin' || hasCurrentSubscription;
 
   if (!hasClubAccess) {
     redirect('/inicio');

@@ -10,42 +10,93 @@ export default function InicioPage() {
   const [gender, setGender] = useState('');
   const [role, setRole] = useState('student');
   const [subscriptionStatus, setSubscriptionStatus] = useState('inactive');
+  const [subscriptionEndsAt, setSubscriptionEndsAt] = useState<string | null>(
+    null
+  );
   const [readingClubDate, setReadingClubDate] = useState('Jueves');
+  const [clubCountdown, setClubCountdown] = useState('Calculando...');
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
 
   useEffect(() => {
-    const now = new Date();
-    const weekday = new Intl.DateTimeFormat('en-US', {
-      weekday: 'short',
-      timeZone: 'America/Santo_Domingo',
-    }).format(now);
+    const dominicanOffset = 4 * 60 * 60 * 1000;
+    const sessionDuration = 2 * 60 * 60 * 1000;
 
-    const weekdayIndex: Record<string, number> = {
-      Sun: 0,
-      Mon: 1,
-      Tue: 2,
-      Wed: 3,
-      Thu: 4,
-      Fri: 5,
-      Sat: 6,
-    };
+    function updateClubSession() {
+      const now = new Date();
+      const dominicanNow = new Date(now.getTime() - dominicanOffset);
+      const currentDay = dominicanNow.getUTCDay();
+      let daysUntilThursday = (4 - currentDay + 7) % 7;
 
-    const currentDay = weekdayIndex[weekday];
-    const daysUntilThursday = (4 - currentDay + 7) % 7;
-    const nextThursday = new Date(
-      now.getTime() + daysUntilThursday * 24 * 60 * 60 * 1000
-    );
+      let sessionStart = new Date(
+        Date.UTC(
+          dominicanNow.getUTCFullYear(),
+          dominicanNow.getUTCMonth(),
+          dominicanNow.getUTCDate() + daysUntilThursday,
+          23,
+          0,
+          0
+        )
+      );
 
-    const formattedDate = new Intl.DateTimeFormat('es-DO', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      timeZone: 'America/Santo_Domingo',
-    }).format(nextThursday);
+      if (
+        currentDay === 4 &&
+        now.getTime() >= sessionStart.getTime() + sessionDuration
+      ) {
+        daysUntilThursday = 7;
+        sessionStart = new Date(
+          Date.UTC(
+            dominicanNow.getUTCFullYear(),
+            dominicanNow.getUTCMonth(),
+            dominicanNow.getUTCDate() + daysUntilThursday,
+            23,
+            0,
+            0
+          )
+        );
+      }
 
-    setReadingClubDate(
-      formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
-    );
+      const formattedDate = new Intl.DateTimeFormat('es-DO', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        timeZone: 'America/Santo_Domingo',
+      }).format(sessionStart);
+
+      setReadingClubDate(
+        formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
+      );
+
+      const timeUntilSession = sessionStart.getTime() - now.getTime();
+
+      if (timeUntilSession <= 0 && timeUntilSession > -sessionDuration) {
+        setClubCountdown('En vivo ahora');
+        return;
+      }
+
+      const totalMinutes = Math.max(0, Math.floor(timeUntilSession / 60000));
+      const days = Math.floor(totalMinutes / 1440);
+      const hours = Math.floor((totalMinutes % 1440) / 60);
+      const minutes = totalMinutes % 60;
+
+      if (days > 0) {
+        setClubCountdown(
+          `Comienza en ${days} ${days === 1 ? 'día' : 'días'} y ${hours} h`
+        );
+        return;
+      }
+
+      if (hours > 0) {
+        setClubCountdown(`Comienza en ${hours} h y ${minutes} min`);
+        return;
+      }
+
+      setClubCountdown(`Comienza en ${minutes} min`);
+    }
+
+    updateClubSession();
+    const intervalId = window.setInterval(updateClubSession, 60000);
+
+    return () => window.clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -81,12 +132,13 @@ export default function InicioPage() {
 
       const { data: subscription } = await supabase
         .from('subscriptions')
-        .select('status')
+        .select('status, current_period_end')
         .eq('user_id', user.id)
         .maybeSingle();
 
       if (subscription?.status) {
         setSubscriptionStatus(subscription.status);
+        setSubscriptionEndsAt(subscription.current_period_end);
       }
 
       setIsLoadingProfile(false);
@@ -107,8 +159,12 @@ export default function InicioPage() {
     return '¡Hola! ¿Lista para continuar?';
   }
 
-  const hasActiveAccess =
-    role === 'admin' || subscriptionStatus === 'active';
+  const hasCurrentSubscription =
+    subscriptionStatus === 'active' &&
+    subscriptionEndsAt !== null &&
+    new Date(subscriptionEndsAt).getTime() > Date.now();
+
+  const hasActiveAccess = role === 'admin' || hasCurrentSubscription;
 
   function getAccessLabel() {
     if (role === 'admin') {
@@ -193,8 +249,10 @@ export default function InicioPage() {
             <p className={styles.cardText}>
               7:00 p. m. – 9:00 p. m.
               <br />
-              Hora de República Dominicana (UTC-4)
+              Hora de República Dominicana (UTC−4)
             </p>
+
+            <p className={styles.clubCountdown}>{clubCountdown}</p>
 
             {hasActiveAccess ? (
               <Link
