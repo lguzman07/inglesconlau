@@ -87,7 +87,7 @@ export default function Header() {
       </h2>
 
       <p className={styles.description}>
-        No encontrarás una colección de clases al azar.
+        No encontrarás una colección de videos al azar.
         <br />
         Cada lección prepara la siguiente para que avanzar se sienta natural.
       </p>
