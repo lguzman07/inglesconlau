@@ -2009,8 +2009,34 @@ html[data-theme='contrast'] .complete-profile-button:hover:not(:disabled) {
 .carousel-dots button.active { width: 28px; background: var(--primary); }
 
 @media (max-width: 600px) {
-  .features-carousel { gap: 0.75rem; padding: 1.5rem calc((100% - 82vw) / 2); }
-  .carousel-card { flex-basis: 82vw; min-height: 0; scale: 0.94; }
+  .features-carousel {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 78vw;
+    grid-template-columns: none;
+    gap: 0.75rem;
+    overflow-x: auto;
+    padding: 1.5rem calc((100% - 78vw) / 2);
+  }
+
+  .carousel-card {
+    width: auto;
+    min-width: 0;
+    min-height: 0;
+    padding: 1.75rem;
+    scale: 0.94;
+  }
+
+  .carousel-card h3 {
+    font-size: 1.15rem;
+    line-height: 1.4;
+  }
+
+  .carousel-card p {
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+
   .carousel-arrow { display: none; }
 }
 
