@@ -409,9 +409,10 @@
   }
 
   .imageWrapper {
-    width: min(78vw, 290px);
+    width: 190px;
+    height: 190px;
     margin: 0 auto;
-    border-radius: 22px;
+    border-radius: 50%;
   }
 
   .storySummary {
@@ -422,9 +423,10 @@
 
   .image {
     width: 100%;
-    height: auto;
-    max-height: 340px;
+    height: 100%;
+    max-height: none;
     object-fit: cover;
+    object-position: center 28%;
   }
 
   .comparisonRow {
