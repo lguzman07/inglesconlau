@@ -39,7 +39,7 @@ export default function WhyDifferent() {
   ];
 
   return (
-    <section id="why" className="section">
+    <section id="why" className="section section-soft">
       <div className="container">
         <div className="section-header">
           <p className="section-eyebrow">¿POR QUÉ INGLÉS CON LAU?</p>

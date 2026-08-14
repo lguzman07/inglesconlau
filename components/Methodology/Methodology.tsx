@@ -5,18 +5,13 @@ import styles from './Methodology.module.css';
 const adjectiveRows = [
   ['Una manzana roja', 'A red apple'],
   ['Tres manzanas rojas', 'Three red apples'],
-  ['Un carro rojo', 'A red car'],
-  ['Tres carros rojos', 'Three red cars'],
 ];
 
 const conjugationRows = [
   ['Yo hago', 'I do'],
   ['Tú haces', 'You do'],
   ['Él hace', 'He does'],
-  ['Ella hace', 'She does'],
   ['Nosotros hacemos', 'We do'],
-  ['Ustedes hacen', 'You do'],
-  ['Ellos hacen', 'They do'],
 ];
 
 export default function Methodology() {
@@ -48,28 +43,13 @@ export default function Methodology() {
             la mayoría de lo aprendido fue a través de métodos que muchos no
             considerarían tradicionales: escuchar música, ver series, películas,
             hablar con mis amigos con el mucho o poco inglés que supiéramos…
-            Verás, al aprenderlo desde niña tuve una ventaja bastante
-            significativa. Los niños son como esponjas: lo absorben todo. Es por
-            eso que es tan común escuchar: “ponlo desde chiquito en clases que
-            así aprende más fácil”.
           </p>
 
           <p>
             Dicho esto, aprender como adulto, a pesar de ser menos intuitivo y
             en ocasiones más difícil —de no aprender con las herramientas
             correctas—, tiene una particularidad muy hermosa, y es que
-            aprendemos porque deseamos hacerlo. No presentamos esa resistencia
-            del “¡no quiero!”, y es que ya en nuestra adultez podemos decidir
-            qué aprender y qué no aprender. Claro, en muchos de los casos quizás
-            sí nos veamos forzados a aprender el idioma: porque sabemos que con
-            el inglés tendremos más oportunidades laborales, porque nuestro
-            trabajo actual lo requiere para poder seguir escalando, en fin. Un
-            sinnúmero de razones, todas buenas y válidas, para aprenderlo.
-          </p>
-
-          <p>
-            Quiero expresarte por qué me apasiona tanto enseñar y de dónde viene
-            esta idea.
+            aprendemos porque deseamos hacerlo.
           </p>
 
           <p>
@@ -85,9 +65,7 @@ export default function Methodology() {
               <p>
                 Los adjetivos no tienen ni género ni número. En español decimos{' '}
                 <strong>una manzana roja</strong>, pero también{' '}
-                <strong>tres manzanas rojas</strong>. O{' '}
-                <strong>un carro rojo</strong> y{' '}
-                <strong>tres carros rojos</strong>. En inglés, en cambio, el
+                <strong>tres manzanas rojas</strong>. En inglés, en cambio, el
                 adjetivo nunca cambia:
               </p>
             </div>
@@ -142,8 +120,7 @@ export default function Methodology() {
           <p>
             ¿Puedes verlo? Lo complicado viene por el miedo a aprenderlo, por
             pensar que no eres lo suficientemente inteligente o capaz para
-            aprender un idioma desde cero. Y por eso tengo dos cosas que
-            decirte:
+            aprender un idioma desde cero.
           </p>
 
           <p className={styles.emphasis}>
@@ -153,23 +130,17 @@ export default function Methodology() {
           <p>
             <strong>NO lo estarías aprendiendo desde cero.</strong> El español y
             el inglés tienen un sinnúmero de similitudes,{' '}
-            <strong>INCLUSO, en la pronunciación.</strong> Y es algo que podrás
-            descubrir a lo largo de toda esta experiencia de aprendizaje.
+            <strong>INCLUSO, en la pronunciación.</strong>
           </p>
 
           <p>
-            Mi amor por enseñar viene precisamente de eso: de demostrar que
+            Mi amor por enseñar viene de demostrar que
             aprender un idioma nuevo no está fuera de tus posibilidades. Nace
             de querer ayudar a la gran comunidad de dominicanos e
             hispanohablantes a aprender algo que muchas veces creyeron
             imposible, de hacerlo de una manera fácil, intuitiva, con
             herramientas prácticas y pedagógicas que solamente sumarán a tu
             aprendizaje y harán de él una experiencia gratificante.
-          </p>
-
-          <p className={styles.emphasis}>
-            ¡Acompáñame en este gran viaje que es el aprendizaje y permíteme
-            demostrarte de lo que eres capaz!
           </p>
 
           <p className={styles.closing}>

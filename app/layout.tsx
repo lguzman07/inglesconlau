@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Lexend } from 'next/font/google';
-import ThemeControls from '@/components/ThemeControls/ThemeControls';
 import ScrollToTop from '@/components/ScrollToTop/ScrollToTop';
 import Footer from '@/components/Footer/Footer';
+import RevealOnScroll from '@/components/RevealOnScroll/RevealOnScroll';
 import './globals.css';
 
 const lexend = Lexend({
@@ -56,9 +56,7 @@ export default function RootLayout({
       </head>
 
       <body className={lexend.className}>
-        <div className="global-theme-area">
-          <ThemeControls />
-        </div>
+        <RevealOnScroll />
 
         {children}
 

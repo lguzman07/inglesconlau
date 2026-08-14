@@ -10,8 +10,11 @@ import ScrollToTop from '@/components/ScrollToTop/ScrollToTop';
 export default function Home() {
   return (
     <main>
-      <Navbar />
-      <Hero />
+      <div className="landing-intro">
+        <Navbar />
+        <Hero />
+      </div>
+
       <Methodology />
       <WhyDifferent />
       <Philosophy />
