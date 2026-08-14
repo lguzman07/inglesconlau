@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import ClubBooking from '@/components/ClubBooking/ClubBooking';
 import styles from './page.module.css';
 
 export default async function ClubDeLecturaPage() {
@@ -38,15 +39,41 @@ export default async function ClubDeLecturaPage() {
     redirect('/inicio');
   }
 
+  const { data: session } = await supabase
+    .from('club_sessions')
+    .select('id, title, starts_at, ends_at, max_readers')
+    .eq('is_published', true)
+    .gte('starts_at', new Date().toISOString())
+    .order('starts_at', { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (!session) {
+    return (
+      <main className={styles.main}>
+        <section className={styles.card}>
+          <p className={styles.eyebrow}>CLUB DE LECTURA</p>
+          <h1 className={styles.title}>Próxima sesión</h1>
+          <p className={styles.text}>
+            Publicaré la próxima sesión pronto.
+          </p>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main className={styles.main}>
-      <section className={styles.card}>
-        <p className={styles.eyebrow}>CLUB DE LECTURA</p>
-        <h1 className={styles.title}>Lectura en vivo</h1>
-        <p className={styles.text}>
-          La sala del club estará disponible aquí antes de cada sesión.
-        </p>
-      </section>
+      <ClubBooking
+        isAdmin={profile?.role === 'admin'}
+        session={{
+          id: session.id,
+          title: session.title,
+          startsAt: session.starts_at,
+          endsAt: session.ends_at,
+          maxReaders: session.max_readers,
+        }}
+      />
     </main>
   );
 }

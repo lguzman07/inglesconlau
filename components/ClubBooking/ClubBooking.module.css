@@ -1,0 +1,156 @@
+.card {
+  width: min(680px, 100%);
+  padding: clamp(2rem, 6vw, 4rem);
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.eyebrow {
+  margin: 0 0 1rem;
+  color: var(--primary);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.title {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.1;
+}
+
+.details {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.date,
+.time,
+.text,
+.hostNote,
+.roomNote,
+.message,
+.confirmation p {
+  color: var(--text-light);
+  line-height: 1.65;
+}
+
+.date {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.time {
+  margin: 0.6rem 0 0;
+}
+
+.reservationArea {
+  margin-top: 2rem;
+}
+
+.reservationTitle {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.35rem;
+}
+
+.text {
+  margin: 0.75rem 0 0;
+}
+
+.primaryButton,
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.25rem;
+  padding: 0.85rem 1.15rem;
+  font: inherit;
+  font-weight: 700;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.primaryButton {
+  color: var(--surface);
+  background: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.secondaryButton {
+  color: var(--primary);
+  background: transparent;
+  border: 1px solid var(--primary);
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.secondaryButton:hover:not(:disabled) {
+  color: var(--surface);
+  background: var(--primary);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.confirmation {
+  margin-top: 1.25rem;
+  padding: 1rem 1.1rem;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.confirmation p {
+  margin: 0;
+}
+
+.confirmation strong {
+  color: var(--text);
+}
+
+.message {
+  margin: 1rem 0 0;
+  font-weight: 600;
+}
+
+.hostNote {
+  margin: 2rem 0 0;
+  padding: 1rem 1.1rem;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.roomNote {
+  margin: 2rem 0 0;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 520px) {
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
+}
