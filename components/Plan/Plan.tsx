@@ -7,7 +7,6 @@ const benefits = [
   'Ejercicios interactivos dentro de la plataforma con corrección inmediata y visualización de tu progreso.',
   'Acceso al club de lectura todos los jueves, de 7:00 p. m. a 9:00 p. m. (hora de República Dominicana).',
   'Consejos de pronunciación diseñados específicamente para hispanohablantes.',
-  'Traducciones al español personalizables dentro de las lecciones.',
   'Acceso inmediato al contenido disponible y a todas las novedades mientras tu suscripción esté activa.',
   'Grabaciones del club disponibles durante 30 días.',
 ];
