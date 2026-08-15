@@ -7,6 +7,7 @@ import styles from './Inicio.module.css';
 
 export default function InicioPage() {
   const [indicatedLevel, setIndicatedLevel] = useState('');
+  const [studentName, setStudentName] = useState('');
   const [gender, setGender] = useState('');
   const [role, setRole] = useState('student');
   const [subscriptionStatus, setSubscriptionStatus] = useState('inactive');
@@ -15,6 +16,10 @@ export default function InicioPage() {
   );
   const [readingClubDate, setReadingClubDate] = useState('Jueves');
   const [clubCountdown, setClubCountdown] = useState('Calculando...');
+  const [availableReadingSlots, setAvailableReadingSlots] = useState<
+    number | null
+  >(null);
+  const [clubSessionId, setClubSessionId] = useState<string | null>(null);
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
 
   useEffect(() => {
@@ -100,6 +105,35 @@ export default function InicioPage() {
   }, []);
 
   useEffect(() => {
+    async function loadReadingAvailability() {
+      const supabase = createClient();
+      const { data: session } = await supabase
+        .from('club_sessions')
+        .select('id')
+        .eq('is_published', true)
+        .gte('starts_at', new Date().toISOString())
+        .order('starts_at', { ascending: true })
+        .limit(1)
+        .maybeSingle();
+
+      if (!session) {
+        setAvailableReadingSlots(0);
+        return;
+      }
+
+      setClubSessionId(session.id);
+
+      const { data } = await supabase.rpc('get_reading_slot_availability', {
+        p_session_id: session.id,
+      });
+
+      setAvailableReadingSlots(typeof data === 'number' ? data : 0);
+    }
+
+    loadReadingAvailability();
+  }, []);
+
+  useEffect(() => {
     async function loadProfile() {
       const supabase = createClient();
 
@@ -110,6 +144,16 @@ export default function InicioPage() {
       if (!user) {
         setIsLoadingProfile(false);
         return;
+      }
+
+      const accountName =
+        user.user_metadata?.full_name ||
+        user.user_metadata?.name ||
+        user.user_metadata?.first_name ||
+        '';
+
+      if (typeof accountName === 'string') {
+        setStudentName(accountName.trim().split(/\s+/)[0] || '');
       }
 
       const { data: profile } = await supabase
@@ -148,15 +192,17 @@ export default function InicioPage() {
   }, []);
 
   function getGreeting() {
+    const name = studentName ? `, ${studentName}` : '';
+
     if (gender === 'Masculino') {
-      return '¡Hola! ¿Listo para continuar?';
+      return `¡Hola${name}! ¿Listo para continuar?`;
     }
 
     if (gender === 'Prefiero no decirlo') {
-      return '¡Hola! ¿Todo listo para continuar?';
+      return `¡Hola${name}! ¿Todo listo para continuar?`;
     }
 
-    return '¡Hola! ¿Lista para continuar?';
+    return `¡Hola${name}! ¿Lista para continuar?`;
   }
 
   const hasCurrentSubscription =
@@ -255,12 +301,47 @@ export default function InicioPage() {
             <p className={styles.clubCountdown}>{clubCountdown}</p>
 
             {hasActiveAccess ? (
-              <Link
-                href="/club-de-lectura"
-                className={styles.joinButton}
-              >
-                Unirme
-              </Link>
+              <>
+                <p className={styles.reservationPrompt}>
+                  ¿Quieres leer en vivo? Reserva tu cupo antes de que se
+                  agoten.
+                </p>
+
+                {availableReadingSlots === null ? (
+                  <p className={styles.availableSlots}>Cargando cupos...</p>
+                ) : availableReadingSlots > 0 ? (
+                  <p className={styles.availableSlots}>
+                    {availableReadingSlots}{' '}
+                    {availableReadingSlots === 1
+                      ? 'cupo disponible'
+                      : 'cupos disponibles'}
+                  </p>
+                ) : (
+                  <p className={styles.availableSlots}>
+                    Los cupos para leer ya están completos.
+                  </p>
+                )}
+
+                <div className={styles.clubActions}>
+                  {clubSessionId &&
+                    availableReadingSlots !== null &&
+                    availableReadingSlots > 0 && (
+                    <Link
+                      href="/club-de-lectura#reservar-turno"
+                      className={styles.joinButton}
+                    >
+                      Reservar cupo para leer
+                    </Link>
+                  )}
+
+                  <Link
+                    href="/club-de-lectura"
+                    className={styles.listenerButton}
+                  >
+                    Unirme al club
+                  </Link>
+                </div>
+              </>
             ) : (
               <>
                 <button
@@ -269,7 +350,7 @@ export default function InicioPage() {
                   disabled
                   title="Requiere una suscripción activa"
                 >
-                  Unirme
+                  Reservar cupo para leer
                 </button>
 
                 <p className={styles.clubAccessNote}>

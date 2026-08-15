@@ -23,6 +23,54 @@ type ClubBookingProps = {
   isAdmin: boolean;
 };
 
+function getSessionCountdown(startsAt: string, endsAt: string) {
+  const now = Date.now();
+  const startTime = new Date(startsAt).getTime();
+  const endTime = new Date(endsAt).getTime();
+
+  if (now >= startTime && now < endTime) {
+    return 'Sesión en vivo ahora';
+  }
+
+  if (now >= endTime) {
+    return 'Sesión finalizada';
+  }
+
+  const totalMinutes = Math.max(
+    1,
+    Math.ceil((startTime - now) / (1000 * 60))
+  );
+
+  const days = Math.floor(totalMinutes / 1440);
+  const hours = Math.floor((totalMinutes % 1440) / 60);
+  const minutes = totalMinutes % 60;
+
+  if (days > 0) {
+    const dayText = days === 1 ? 'día' : 'días';
+
+    if (hours > 0) {
+      const hourText = hours === 1 ? 'hora' : 'horas';
+      return `Próxima sesión en ${days} ${dayText} y ${hours} ${hourText}`;
+    }
+
+    return `Próxima sesión en ${days} ${dayText}`;
+  }
+
+  if (hours > 0) {
+    const hourText = hours === 1 ? 'hora' : 'horas';
+
+    if (minutes > 0) {
+      const minuteText = minutes === 1 ? 'minuto' : 'minutos';
+      return `Próxima sesión en ${hours} ${hourText} y ${minutes} ${minuteText}`;
+    }
+
+    return `Próxima sesión en ${hours} ${hourText}`;
+  }
+
+  const minuteText = totalMinutes === 1 ? 'minuto' : 'minutos';
+  return `Próxima sesión en ${totalMinutes} ${minuteText}`;
+}
+
 export default function ClubBooking({
   session,
   isAdmin,
@@ -32,6 +80,9 @@ export default function ClubBooking({
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState('');
+  const [countdown, setCountdown] = useState(() =>
+    getSessionCountdown(session.startsAt, session.endsAt)
+  );
 
   const sessionDate = new Intl.DateTimeFormat('es-DO', {
     weekday: 'long',
@@ -39,6 +90,18 @@ export default function ClubBooking({
     month: 'long',
     timeZone: 'America/Santo_Domingo',
   }).format(new Date(session.startsAt));
+
+  useEffect(() => {
+    function updateCountdown() {
+      setCountdown(getSessionCountdown(session.startsAt, session.endsAt));
+    }
+
+    updateCountdown();
+
+    const intervalId = window.setInterval(updateCountdown, 30000);
+
+    return () => window.clearInterval(intervalId);
+  }, [session.startsAt, session.endsAt]);
 
   useEffect(() => {
     async function loadReservation() {
@@ -109,12 +172,13 @@ export default function ClubBooking({
   return (
     <section className={styles.card}>
       <p className={styles.eyebrow}>CLUB DE LECTURA</p>
-      <h1 className={styles.title}>{session.title}</h1>
+      <h1 className={styles.title}>{countdown}</h1>
 
       <div className={styles.details}>
         <p className={styles.date}>
           {sessionDate.charAt(0).toUpperCase() + sessionDate.slice(1)}
         </p>
+
         <p className={styles.time}>
           7:00 p. m. – 9:00 p. m.
           <br />
@@ -130,6 +194,7 @@ export default function ClubBooking({
       ) : (
         <div className={styles.reservationArea}>
           <h2 className={styles.reservationTitle}>¿Quieres leer en vivo?</h2>
+
           <p className={styles.text}>
             Hay {session.maxReaders} turnos disponibles. Quien reserve podrá
             participar leyendo; los demás podrán asistir como oyentes.
@@ -142,6 +207,7 @@ export default function ClubBooking({
               <p>
                 Tu turno de lectura: <strong>#{reservation.slot_number}</strong>
               </p>
+
               <button
                 type="button"
                 className={styles.secondaryButton}

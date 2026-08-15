@@ -1,52 +1,88 @@
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import ClubBooking from '@/components/ClubBooking/ClubBooking';
+import { createClient } from '@/lib/supabase/client';
 import styles from './page.module.css';
 
-export default async function ClubDeLecturaPage() {
-  const supabase = createClient();
+type ClubSession = {
+  id: string;
+  title: string;
+  starts_at: string;
+  ends_at: string;
+  max_readers: number;
+};
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export default function ClubDeLecturaPage() {
+  const router = useRouter();
+  const [session, setSession] = useState<ClubSession | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (!user) {
-    redirect('/iniciar-sesion');
+  useEffect(() => {
+    async function loadClub() {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        router.replace('/iniciar-sesion');
+        return;
+      }
+
+      const [{ data: profile }, { data: subscription }] = await Promise.all([
+        supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .maybeSingle(),
+        supabase
+          .from('subscriptions')
+          .select('status, current_period_end')
+          .eq('user_id', user.id)
+          .maybeSingle(),
+      ]);
+
+      const hasCurrentSubscription =
+        subscription?.status === 'active' &&
+        subscription.current_period_end !== null &&
+        new Date(subscription.current_period_end).getTime() > Date.now();
+
+      const userIsAdmin = profile?.role === 'admin';
+
+      if (!userIsAdmin && !hasCurrentSubscription) {
+        router.replace('/inicio');
+        return;
+      }
+
+      const { data: sessions } = await supabase
+        .from('club_sessions')
+        .select('id, title, starts_at, ends_at, max_readers')
+        .eq('is_published', true)
+        .gte('starts_at', new Date().toISOString())
+        .order('starts_at', { ascending: true })
+        .limit(1);
+
+      setIsAdmin(userIsAdmin);
+      setSession(sessions?.[0] ?? null);
+      setIsLoading(false);
+    }
+
+    loadClub();
+  }, [router]);
+
+  if (isLoading) {
+    return (
+      <main className={styles.main}>
+        <section className={styles.card}>
+          <p className={styles.eyebrow}>CLUB DE LECTURA</p>
+          <p className={styles.text}>Cargando la sesión...</p>
+        </section>
+      </main>
+    );
   }
-
-  const [{ data: profile }, { data: subscription }] = await Promise.all([
-    supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .maybeSingle(),
-    supabase
-      .from('subscriptions')
-      .select('status, current_period_end')
-      .eq('user_id', user.id)
-      .maybeSingle(),
-  ]);
-
-  const hasCurrentSubscription =
-    subscription?.status === 'active' &&
-    subscription.current_period_end !== null &&
-    new Date(subscription.current_period_end).getTime() > Date.now();
-
-  const hasClubAccess =
-    profile?.role === 'admin' || hasCurrentSubscription;
-
-  if (!hasClubAccess) {
-    redirect('/inicio');
-  }
-
-  const { data: session } = await supabase
-    .from('club_sessions')
-    .select('id, title, starts_at, ends_at, max_readers')
-    .eq('is_published', true)
-    .gte('starts_at', new Date().toISOString())
-    .order('starts_at', { ascending: true })
-    .limit(1)
-    .maybeSingle();
 
   if (!session) {
     return (
@@ -55,7 +91,7 @@ export default async function ClubDeLecturaPage() {
           <p className={styles.eyebrow}>CLUB DE LECTURA</p>
           <h1 className={styles.title}>Próxima sesión</h1>
           <p className={styles.text}>
-            Publicaré la próxima sesión pronto.
+            No pudimos cargar la sesión. Vuelve a intentarlo en un momento.
           </p>
         </section>
       </main>
@@ -65,7 +101,7 @@ export default async function ClubDeLecturaPage() {
   return (
     <main className={styles.main}>
       <ClubBooking
-        isAdmin={profile?.role === 'admin'}
+        isAdmin={isAdmin}
         session={{
           id: session.id,
           title: session.title,
