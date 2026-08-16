@@ -326,20 +326,13 @@ export default function InicioPage() {
                   {clubSessionId &&
                     availableReadingSlots !== null &&
                     availableReadingSlots > 0 && (
-                    <Link
-                      href="/club-de-lectura#reservar-turno"
-                      className={styles.joinButton}
-                    >
-                      Reservar cupo para leer
-                    </Link>
-                  )}
-
-                  <Link
-                    href="/club-de-lectura"
-                    className={styles.listenerButton}
-                  >
-                    Unirme al club
-                  </Link>
+                      <Link
+                        href="/club-de-lectura#reservar-turno"
+                        className={styles.joinButton}
+                      >
+                        Reservar cupo para leer
+                      </Link>
+                    )}
                 </div>
               </>
             ) : (
