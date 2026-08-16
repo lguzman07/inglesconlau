@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import ClubBooking from '@/components/ClubBooking/ClubBooking';
 import { createClient } from '@/lib/supabase/client';
@@ -14,6 +15,14 @@ type ClubSession = {
   max_readers: number;
 };
 
+function BackToDashboard() {
+  return (
+    <Link href="/inicio" className={styles.backLink}>
+      ← Volver al dashboard
+    </Link>
+  );
+}
+
 export default function ClubDeLecturaPage() {
   const router = useRouter();
   const [session, setSession] = useState<ClubSession | null>(null);
@@ -23,6 +32,7 @@ export default function ClubDeLecturaPage() {
   useEffect(() => {
     async function loadClub() {
       const supabase = createClient();
+
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -76,10 +86,14 @@ export default function ClubDeLecturaPage() {
   if (isLoading) {
     return (
       <main className={styles.main}>
-        <section className={styles.card}>
-          <p className={styles.eyebrow}>CLUB DE LECTURA</p>
-          <p className={styles.text}>Cargando la sesión...</p>
-        </section>
+        <div className={styles.content}>
+          <BackToDashboard />
+
+          <section className={styles.card}>
+            <p className={styles.eyebrow}>CLUB DE LECTURA</p>
+            <p className={styles.text}>Cargando la sesión...</p>
+          </section>
+        </div>
       </main>
     );
   }
@@ -87,29 +101,37 @@ export default function ClubDeLecturaPage() {
   if (!session) {
     return (
       <main className={styles.main}>
-        <section className={styles.card}>
-          <p className={styles.eyebrow}>CLUB DE LECTURA</p>
-          <h1 className={styles.title}>Próxima sesión</h1>
-          <p className={styles.text}>
-            No pudimos cargar la sesión. Vuelve a intentarlo en un momento.
-          </p>
-        </section>
+        <div className={styles.content}>
+          <BackToDashboard />
+
+          <section className={styles.card}>
+            <p className={styles.eyebrow}>CLUB DE LECTURA</p>
+            <h1 className={styles.title}>Próxima sesión</h1>
+            <p className={styles.text}>
+              No pudimos cargar la sesión. Vuelve a intentarlo en un momento.
+            </p>
+          </section>
+        </div>
       </main>
     );
   }
 
   return (
     <main className={styles.main}>
-      <ClubBooking
-        isAdmin={isAdmin}
-        session={{
-          id: session.id,
-          title: session.title,
-          startsAt: session.starts_at,
-          endsAt: session.ends_at,
-          maxReaders: session.max_readers,
-        }}
-      />
+      <div className={styles.content}>
+        <BackToDashboard />
+
+        <ClubBooking
+          isAdmin={isAdmin}
+          session={{
+            id: session.id,
+            title: session.title,
+            startsAt: session.starts_at,
+            endsAt: session.ends_at,
+            maxReaders: session.max_readers,
+          }}
+        />
+      </div>
     </main>
   );
 }

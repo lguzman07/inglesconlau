@@ -7,8 +7,33 @@
   place-items: center;
 }
 
-.card {
+.content {
+  display: grid;
   width: min(680px, 100%);
+  gap: 0.9rem;
+}
+
+.backLink {
+  width: fit-content;
+  color: var(--primary);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.backLink:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.card {
+  width: 100%;
   padding: clamp(2rem, 6vw, 4rem);
   background: var(--surface-solid);
   border: 1px solid var(--border);
@@ -36,4 +61,10 @@
   color: var(--text-light);
   font-size: 1.05rem;
   line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .main {
+    padding: 1.25rem;
+  }
 }

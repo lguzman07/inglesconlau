@@ -91,6 +91,27 @@ export default function ClubBooking({
     timeZone: 'America/Santo_Domingo',
   }).format(new Date(session.startsAt));
 
+  async function loadCurrentReservation() {
+    const supabase = createClient();
+
+    const { data, error } = await supabase.rpc(
+      'get_my_reading_reservation',
+      {
+        p_session_id: session.id,
+      }
+    );
+
+    if (error || !data) {
+      setReservation(null);
+      return null;
+    }
+
+    const currentReservation = data as ReadingReservation;
+    setReservation(currentReservation);
+
+    return currentReservation;
+  }
+
   useEffect(() => {
     function updateCountdown() {
       setCountdown(getSessionCountdown(session.startsAt, session.endsAt));
@@ -105,28 +126,16 @@ export default function ClubBooking({
 
   useEffect(() => {
     async function loadReservation() {
-      const supabase = createClient();
-
-      const { data, error } = await supabase
-        .from('reading_reservations')
-        .select('id, slot_number, status')
-        .eq('session_id', session.id)
-        .eq('status', 'reserved')
-        .maybeSingle();
-
-      if (!error && data) {
-        setReservation(data as ReadingReservation);
+      if (isAdmin) {
+        setIsLoading(false);
+        return;
       }
 
+      await loadCurrentReservation();
       setIsLoading(false);
     }
 
-    if (!isAdmin) {
-      loadReservation();
-      return;
-    }
-
-    setIsLoading(false);
+    loadReservation();
   }, [isAdmin, session.id]);
 
   async function reserveTurn() {
@@ -139,7 +148,12 @@ export default function ClubBooking({
     });
 
     if (error) {
-      setMessage(error.message);
+      const currentReservation = await loadCurrentReservation();
+
+      if (!currentReservation) {
+        setMessage(error.message);
+      }
+
       setIsSaving(false);
       return;
     }
@@ -205,7 +219,8 @@ export default function ClubBooking({
           ) : reservation ? (
             <div className={styles.confirmation}>
               <p>
-                Tu turno de lectura: <strong>#{reservation.slot_number}</strong>
+                Tu turno de lectura es el{' '}
+                <strong>#{reservation.slot_number}</strong>.
               </p>
 
               <button
