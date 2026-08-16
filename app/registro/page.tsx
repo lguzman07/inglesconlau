@@ -49,7 +49,7 @@ export default function RegistroPage() {
 
     if (error) {
       setMessage(
-        'No pudimos crear tu cuenta. Revisa la información e inténtalo nuevamente.'
+        'No pudimos procesar tu registro. Revisa la información e inténtalo nuevamente.'
       );
       setMessageType('error');
       setIsLoading(false);
@@ -57,7 +57,7 @@ export default function RegistroPage() {
     }
 
     setMessage(
-      '¡Cuenta creada! Revisa tu correo para confirmar tu dirección antes de iniciar sesión.'
+      'Revisa tu correo para confirmar tu dirección antes de iniciar sesión. Si ya tenías una cuenta, inicia sesión o restablece tu contraseña.'
     );
     setMessageType('success');
     setEmail('');
@@ -192,7 +192,7 @@ export default function RegistroPage() {
             type="submit"
             disabled={isLoading}
           >
-            {isLoading ? 'Creando cuenta...' : 'Crear mi cuenta'}
+            {isLoading ? 'Procesando...' : 'Crear mi cuenta'}
           </button>
         </form>
 

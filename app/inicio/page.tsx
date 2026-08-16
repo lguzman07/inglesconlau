@@ -107,6 +107,7 @@ export default function InicioPage() {
   useEffect(() => {
     async function loadReadingAvailability() {
       const supabase = createClient();
+
       const { data: session } = await supabase
         .from('club_sessions')
         .select('id')
@@ -234,6 +235,10 @@ export default function InicioPage() {
             Inicio
           </Link>
 
+          <Link href="/lecciones" className={styles.navLink}>
+            Lecciones
+          </Link>
+
           <Link href="/completar-perfil" className={styles.navLink}>
             Mi perfil
           </Link>
@@ -279,12 +284,12 @@ export default function InicioPage() {
             <div>
               <p className={styles.cardLabel}>CONTINÚA DONDE TE QUEDASTE</p>
 
-              <h2 className={styles.lessonTitle}>titulo de la leccion tbd</h2>
+              <h2 className={styles.lessonTitle}>Título de la lección</h2>
             </div>
 
-            <button type="button" className={styles.lessonButton}>
+            <Link href="/lecciones" className={styles.lessonButton}>
               Comenzar lección
-            </button>
+            </Link>
           </article>
 
           <aside className={styles.readingClub}>
@@ -402,6 +407,14 @@ export default function InicioPage() {
               <p className={styles.cardText}>Sigue avanzando</p>
             </article>
           </div>
+        </section>
+
+        <section className={styles.exploreSection}>
+          <p className={styles.exploreText}>¿Quieres ver más?</p>
+
+          <Link href="/lecciones" className={styles.exploreButton}>
+            Explorar lecciones
+          </Link>
         </section>
       </div>
     </main>

@@ -170,11 +170,15 @@
 }
 
 .lessonButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   padding: 14px 22px;
   color: var(--surface);
   font: inherit;
   font-weight: 700;
+  text-decoration: none;
   background: var(--primary);
   border: 0;
   border-radius: 999px;
@@ -254,40 +258,14 @@
   opacity: 1;
 }
 
-.listenerButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 0.75rem 1rem;
-  color: var(--primary);
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-decoration: none;
-  background: transparent;
-  border: 1px solid var(--primary);
-  border-radius: 999px;
-}
-
 .joinButton:disabled {
   cursor: not-allowed;
   opacity: 0.55;
 }
 
-.clubCountdown + .joinButton {
-  margin-top: 1rem;
-}
-
-.joinButton:focus-visible,
-.listenerButton:focus-visible {
+.joinButton:focus-visible {
   outline: 3px solid var(--primary-light);
   outline-offset: 3px;
-}
-
-.listenerButton:hover {
-  color: var(--surface);
-  background: var(--primary);
 }
 
 .clubAccessNote {
@@ -347,6 +325,46 @@
   border-radius: inherit;
 }
 
+.exploreSection {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 40px;
+  padding: 34px 24px;
+  text-align: center;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+
+.exploreText {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.exploreButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 21px;
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+  transition: var(--transition);
+}
+
+.exploreButton:hover,
+.exploreButton:focus-visible {
+  color: var(--surface);
+  background: var(--primary);
+}
+
 .logoutButton:hover,
 .logoutButton:focus-visible {
   color: var(--text);
@@ -362,7 +380,8 @@
 .activeLink:focus-visible,
 .logo:focus-visible,
 .logoutButton:focus-visible,
-.lessonButton:focus-visible {
+.lessonButton:focus-visible,
+.exploreButton:focus-visible {
   outline: 3px solid var(--primary-light);
   outline-offset: 3px;
 }
@@ -392,7 +411,6 @@
   .lessonButton {
     width: 100%;
   }
-
 }
 
 @media (max-width: 600px) {
