@@ -234,6 +234,36 @@
   line-height: 1.5;
 }
 
+.reservationConfirmed {
+  width: 100%;
+  margin-top: 1.2rem;
+  padding: 16px;
+  background: var(--surface-soft);
+  border: 1px solid var(--primary-light);
+  border-radius: 16px;
+}
+
+.reservationConfirmedTitle {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.96rem;
+  font-weight: 700;
+}
+
+.reservationTurn {
+  margin: 8px 0 0;
+  color: var(--primary);
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.reservationConfirmedText {
+  margin: 7px 0 0;
+  color: var(--text-light);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
 .clubActions {
   display: grid;
   width: 100%;
@@ -241,31 +271,50 @@
   margin-top: 1rem;
 }
 
-.joinButton {
+.joinButton,
+.cancelReservationButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   padding: 14px 22px;
-  color: var(--surface);
   font: inherit;
   font-weight: 700;
   text-decoration: none;
-  background: var(--primary);
-  border: 0;
   border-radius: 999px;
   cursor: pointer;
-  opacity: 1;
 }
 
-.joinButton:disabled {
+.joinButton {
+  color: var(--surface);
+  background: var(--primary);
+  border: 0;
+}
+
+.cancelReservationButton {
+  color: var(--primary);
+  background: transparent;
+  border: 1px solid var(--primary);
+}
+
+.joinButton:disabled,
+.cancelReservationButton:disabled {
   cursor: not-allowed;
   opacity: 0.55;
 }
 
-.joinButton:focus-visible {
+.joinButton:focus-visible,
+.cancelReservationButton:focus-visible {
   outline: 3px solid var(--primary-light);
   outline-offset: 3px;
+}
+
+.reservationError {
+  margin: 0.85rem 0 0;
+  color: #b42318;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.5;
 }
 
 .clubAccessNote {
@@ -372,8 +421,16 @@
 }
 
 .lessonButton:hover,
-.lessonButton:focus-visible {
+.lessonButton:focus-visible,
+.joinButton:hover,
+.joinButton:focus-visible {
   background: var(--primary-hover);
+}
+
+.cancelReservationButton:hover,
+.cancelReservationButton:focus-visible {
+  color: var(--surface);
+  background: var(--primary);
 }
 
 .navLink:focus-visible,

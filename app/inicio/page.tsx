@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import styles from './Inicio.module.css';
@@ -20,7 +20,59 @@ export default function InicioPage() {
     number | null
   >(null);
   const [clubSessionId, setClubSessionId] = useState<string | null>(null);
+  const [readingReservationSlot, setReadingReservationSlot] = useState<
+    number | null
+  >(null);
+  const [isCancellingReservation, setIsCancellingReservation] = useState(false);
+  const [reservationError, setReservationError] = useState('');
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+
+  const loadReadingAvailability = useCallback(async () => {
+    const supabase = createClient();
+
+    const { data: session } = await supabase
+      .from('club_sessions')
+      .select('id')
+      .eq('is_published', true)
+      .gte('starts_at', new Date().toISOString())
+      .order('starts_at', { ascending: true })
+      .limit(1)
+      .maybeSingle();
+
+    if (!session) {
+      setClubSessionId(null);
+      setAvailableReadingSlots(0);
+      setReadingReservationSlot(null);
+      return;
+    }
+
+    setClubSessionId(session.id);
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const [{ data: availability }, { data: reservation }] = await Promise.all([
+      supabase.rpc('get_reading_slot_availability', {
+        p_session_id: session.id,
+      }),
+      user
+        ? supabase
+          .from('reading_reservations')
+          .select('slot_number')
+          .eq('session_id', session.id)
+          .eq('user_id', user.id)
+          .eq('status', 'reserved')
+          .maybeSingle()
+        : Promise.resolve({ data: null }),
+    ]);
+
+    setAvailableReadingSlots(
+      typeof availability === 'number' ? availability : 0
+    );
+
+    setReadingReservationSlot(reservation?.slot_number ?? null);
+  }, []);
 
   useEffect(() => {
     const dominicanOffset = 4 * 60 * 60 * 1000;
@@ -105,34 +157,8 @@ export default function InicioPage() {
   }, []);
 
   useEffect(() => {
-    async function loadReadingAvailability() {
-      const supabase = createClient();
-
-      const { data: session } = await supabase
-        .from('club_sessions')
-        .select('id')
-        .eq('is_published', true)
-        .gte('starts_at', new Date().toISOString())
-        .order('starts_at', { ascending: true })
-        .limit(1)
-        .maybeSingle();
-
-      if (!session) {
-        setAvailableReadingSlots(0);
-        return;
-      }
-
-      setClubSessionId(session.id);
-
-      const { data } = await supabase.rpc('get_reading_slot_availability', {
-        p_session_id: session.id,
-      });
-
-      setAvailableReadingSlots(typeof data === 'number' ? data : 0);
-    }
-
-    loadReadingAvailability();
-  }, []);
+    void loadReadingAvailability();
+  }, [loadReadingAvailability]);
 
   useEffect(() => {
     async function loadProfile() {
@@ -191,6 +217,33 @@ export default function InicioPage() {
 
     loadProfile();
   }, []);
+
+  async function handleCancelReservation() {
+    if (!clubSessionId || isCancellingReservation) {
+      return;
+    }
+
+    setIsCancellingReservation(true);
+    setReservationError('');
+
+    const supabase = createClient();
+
+    const { error } = await supabase.rpc('cancel_reading_reservation', {
+      p_session_id: clubSessionId,
+    });
+
+    if (error) {
+      setReservationError(
+        'No pudimos cancelar tu turno. Inténtalo de nuevo.'
+      );
+      setIsCancellingReservation(false);
+      return;
+    }
+
+    setReadingReservationSlot(null);
+    setIsCancellingReservation(false);
+    await loadReadingAvailability();
+  }
 
   function getGreeting() {
     const name = studentName ? `, ${studentName}` : '';
@@ -257,11 +310,10 @@ export default function InicioPage() {
             {!isLoadingProfile && (
               <div className={styles.accessStatus}>
                 <span
-                  className={`${styles.statusLight} ${
-                    hasActiveAccess
+                  className={`${styles.statusLight} ${hasActiveAccess
                       ? styles.statusLightActive
                       : styles.statusLightInactive
-                  }`}
+                    }`}
                   aria-hidden="true"
                 />
 
@@ -306,40 +358,84 @@ export default function InicioPage() {
             <p className={styles.clubCountdown}>{clubCountdown}</p>
 
             {hasActiveAccess ? (
-              <>
-                <p className={styles.reservationPrompt}>
-                  ¿Quieres leer en vivo? Reserva tu cupo antes de que se
-                  agoten.
-                </p>
+              readingReservationSlot !== null ? (
+                <>
+                  <div className={styles.reservationConfirmed}>
+                    <p className={styles.reservationConfirmedTitle}>
+                      Tu reserva está confirmada
+                    </p>
 
-                {availableReadingSlots === null ? (
-                  <p className={styles.availableSlots}>Cargando cupos...</p>
-                ) : availableReadingSlots > 0 ? (
-                  <p className={styles.availableSlots}>
-                    {availableReadingSlots}{' '}
-                    {availableReadingSlots === 1
-                      ? 'cupo disponible'
-                      : 'cupos disponibles'}
-                  </p>
-                ) : (
-                  <p className={styles.availableSlots}>
-                    Los cupos para leer ya están completos.
-                  </p>
-                )}
+                    <p className={styles.reservationTurn}>
+                      Tu turno es #{readingReservationSlot}
+                    </p>
 
-                <div className={styles.clubActions}>
-                  {clubSessionId &&
-                    availableReadingSlots !== null &&
-                    availableReadingSlots > 0 && (
-                      <Link
-                        href="/club-de-lectura#reservar-turno"
-                        className={styles.joinButton}
-                      >
-                        Reservar cupo para leer
-                      </Link>
-                    )}
-                </div>
-              </>
+                    <p className={styles.reservationConfirmedText}>
+                      Ya tienes tu cupo para leer en vivo.
+                    </p>
+                  </div>
+
+                  <div className={styles.clubActions}>
+                    <Link
+                      href="/club-de-lectura"
+                      className={styles.joinButton}
+                    >
+                      Ver mi reserva
+                    </Link>
+
+                    <button
+                      type="button"
+                      className={styles.cancelReservationButton}
+                      onClick={handleCancelReservation}
+                      disabled={isCancellingReservation}
+                    >
+                      {isCancellingReservation
+                        ? 'Cancelando...'
+                        : 'Cancelar turno'}
+                    </button>
+                  </div>
+
+                  {reservationError && (
+                    <p className={styles.reservationError} role="alert">
+                      {reservationError}
+                    </p>
+                  )}
+                </>
+              ) : (
+                <>
+                  <p className={styles.reservationPrompt}>
+                    ¿Quieres leer en vivo? Reserva tu cupo antes de que se
+                    agoten.
+                  </p>
+
+                  {availableReadingSlots === null ? (
+                    <p className={styles.availableSlots}>Cargando cupos...</p>
+                  ) : availableReadingSlots > 0 ? (
+                    <p className={styles.availableSlots}>
+                      {availableReadingSlots}{' '}
+                      {availableReadingSlots === 1
+                        ? 'cupo disponible'
+                        : 'cupos disponibles'}
+                    </p>
+                  ) : (
+                    <p className={styles.availableSlots}>
+                      Los cupos para leer ya están completos.
+                    </p>
+                  )}
+
+                  <div className={styles.clubActions}>
+                    {clubSessionId &&
+                      availableReadingSlots !== null &&
+                      availableReadingSlots > 0 && (
+                        <Link
+                          href="/club-de-lectura#reservar-turno"
+                          className={styles.joinButton}
+                        >
+                          Reservar cupo para leer
+                        </Link>
+                      )}
+                  </div>
+                </>
+              )
             ) : (
               <>
                 <button
