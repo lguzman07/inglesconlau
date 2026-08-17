@@ -37,10 +37,12 @@
 .backLink:focus-visible,
 .loginText a:focus-visible,
 .submitButton:focus-visible,
+.recoveryButton:focus-visible,
 .field input:focus-visible,
 .legalCheckbox input:focus-visible,
-.legalCheckbox a:focus-visible {
-  outline: 3px solid var(--accent);
+.legalCheckbox a:focus-visible,
+.sessionCheckbox input:focus-visible {
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
 
@@ -118,7 +120,7 @@
   top: 50%;
   right: 12px;
   padding: 6px 10px;
-  color: var(--accent);
+  color: var(--foreground);
   font: inherit;
   font-size: 0.9rem;
   font-weight: 700;
@@ -134,7 +136,7 @@
 }
 
 .passwordToggle:focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
 
@@ -155,19 +157,98 @@
 }
 
 .legalCheckbox input {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
-  margin: 4px 0 0;
+  margin: 3px 0 0;
   accent-color: var(--accent);
   cursor: pointer;
 }
 
 .legalCheckbox a {
-  color: var(--accent);
+  color: var(--foreground);
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.sessionCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: fit-content;
+  min-height: 52px;
+  padding: 13px 18px;
+  color: var(--foreground);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.4;
+  background: var(--background);
+  border: 2px solid var(--border-color);
+  border-radius: 14px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.sessionCheckbox:hover {
+  border-color: #d94f87;
+  transform: translateY(-1px);
+}
+
+.sessionCheckbox input {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  margin: 0;
+  accent-color: #d94f87;
+  cursor: pointer;
+}
+
+.sessionCheckbox input:disabled {
+  cursor: not-allowed;
+}
+
+.sessionCheckbox:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.recoveryButton {
+  align-self: flex-end;
+  min-height: 46px;
+  padding: 10px 16px;
+  color: #fff;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  background: #b83268;
+  border: 2px solid #b83268;
+  border-radius: 12px;
+  box-shadow: 0 5px 14px rgb(0 0 0 / 18%);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.recoveryButton:hover:not(:disabled) {
+  background: #962750;
+  border-color: #962750;
+  transform: translateY(-1px);
+}
+
+.recoveryButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.recoveryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
 }
 
 .successMessage,
@@ -191,23 +272,35 @@
 }
 
 .submitButton {
-  min-height: 54px;
-  padding: 13px 20px;
+  min-height: 56px;
+  padding: 14px 20px;
   color: #fff;
   font: inherit;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  background: var(--accent);
-  border: 2px solid var(--accent);
+  background: #496473;
+  border: 2px solid #496473;
   border-radius: 12px;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 18%);
   cursor: pointer;
   transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
     transform 0.2s ease,
     opacity 0.2s ease;
 }
 
 .submitButton:hover:not(:disabled) {
+  background: #385563;
+  border-color: #385563;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 24%);
   transform: translateY(-2px);
+}
+
+.submitButton:active:not(:disabled) {
+  box-shadow: 0 5px 12px rgb(0 0 0 / 18%);
+  transform: translateY(0);
 }
 
 .submitButton:disabled {
@@ -221,8 +314,25 @@
 }
 
 .loginText a {
-  color: var(--accent);
+  color: var(--foreground);
   font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:global(html[data-theme='contrast']) .submitButton,
+:global(html[data-theme='contrast']) .recoveryButton {
+  color: #fff;
+  background: #000;
+  border-color: #000;
+  box-shadow: none;
+}
+
+:global(html[data-theme='contrast']) .submitButton:hover:not(:disabled),
+:global(html[data-theme='contrast']) .recoveryButton:hover:not(:disabled) {
+  color: #000;
+  background: #ffeb3b;
+  border-color: #000;
 }
 
 @media (max-width: 600px) {
@@ -241,10 +351,23 @@
     padding: 28px 22px;
     border-radius: 18px;
   }
+
+  .sessionCheckbox,
+  .recoveryButton {
+    width: 100%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .submitButton {
+  .submitButton,
+  .sessionCheckbox,
+  .recoveryButton {
     transition: none;
+  }
+
+  .sessionCheckbox:hover,
+  .submitButton:hover:not(:disabled),
+  .recoveryButton:hover:not(:disabled) {
+    transform: none;
   }
 }

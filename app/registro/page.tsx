@@ -2,100 +2,131 @@
 
 import { FormEvent, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import styles from './page.module.css';
+import styles from '../registro/page.module.css';
 
-export default function RegistroPage() {
+export default function IniciarSesionPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [acceptedLegal, setAcceptedLegal] = useState(false);
+  const [keepSession, setKeepSession] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isSendingRecovery, setIsSendingRecovery] = useState(false);
+
+  async function handlePasswordRecovery() {
+    setMessage('');
+
+    if (!email.trim()) {
+      setMessage(
+        'Escribe tu correo electrónico primero para poder restablecer tu contraseña.'
+      );
+      return;
+    }
+
+    setIsSendingRecovery(true);
+
+    const supabase = createClient();
+
+    const { error } = await supabase.auth.resetPasswordForEmail(
+      email.trim(),
+      {
+        redirectTo: `${window.location.origin}/restablecer-contrasena`,
+      }
+    );
+
+    setIsSendingRecovery(false);
+
+    if (error) {
+      setMessage(
+        'No pudimos enviar el correo de recuperación. Inténtalo nuevamente.'
+      );
+      return;
+    }
+
+    setMessage(
+      'Te enviamos un correo para restablecer tu contraseña. Revisa también la carpeta de correo no deseado.'
+    );
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setMessage('');
-    setMessageType('');
-
-    if (password.length < 8) {
-      setMessage('La contraseña debe tener al menos 8 caracteres.');
-      setMessageType('error');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setMessage('Las contraseñas no coinciden.');
-      setMessageType('error');
-      return;
-    }
-
-    if (!acceptedLegal) {
-      setMessage(
-        'Debes aceptar los Términos y condiciones y la Política de privacidad.'
-      );
-      setMessageType('error');
-      return;
-    }
-
     setIsLoading(true);
 
+    window.localStorage.setItem(
+      'inglesconlau-keep-session',
+      keepSession ? 'true' : 'false'
+    );
+
     const supabase = createClient();
-    const acceptedAt = new Date().toISOString();
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/iniciar-sesion`,
-        data: {
-          terms_accepted_at: acceptedAt,
-          terms_version: '1.0',
-          privacy_policy_accepted_at: acceptedAt,
-          privacy_policy_version: '1.0',
-        },
-      },
-    });
+    const { data: authData, error: signInError } =
+      await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
 
-    if (error) {
+    if (signInError || !authData.user) {
       setMessage(
-        'No pudimos procesar tu registro. Revisa la información e inténtalo nuevamente.'
+        'No pudimos iniciar sesión. Revisa tu correo y contraseña e inténtalo nuevamente.'
       );
-      setMessageType('error');
       setIsLoading(false);
       return;
     }
 
-    setMessage(
-      'Revisa tu correo para confirmar tu dirección antes de iniciar sesión. Si ya tenías una cuenta, inicia sesión o restablece tu contraseña.'
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select(
+        'full_name, birth_date, country, gender, english_level, learning_goal'
+      )
+      .eq('id', authData.user.id)
+      .maybeSingle();
+
+    if (profileError) {
+      setMessage(
+        'Iniciaste sesión, pero no pudimos comprobar tu perfil. Inténtalo nuevamente.'
+      );
+      setIsLoading(false);
+      return;
+    }
+
+    const profileIsComplete = Boolean(
+      profile?.full_name?.trim() &&
+        profile?.birth_date &&
+        profile?.country?.trim() &&
+        profile?.gender &&
+        profile?.english_level &&
+        profile?.learning_goal
     );
-    setMessageType('success');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-    setAcceptedLegal(false);
-    setIsLoading(false);
+
+    if (profileIsComplete) {
+      router.replace('/inicio');
+    } else {
+      router.replace('/completar-perfil');
+    }
+
+    router.refresh();
   }
 
   return (
     <main className={styles.page}>
-      <section className={styles.card} aria-labelledby="registration-title">
-        <Link className={styles.backLink} href="/">
-          ← Volver al inicio
-        </Link>
+      <Link className={styles.backLink} href="/">
+        ← Volver al inicio
+      </Link>
 
+      <section className={styles.card} aria-labelledby="login-title">
         <div className={styles.header}>
           <p className={styles.eyebrow}>INGLÉS CON LAU</p>
 
-          <h1 id="registration-title">Crea tu cuenta</h1>
+          <h1 id="login-title">Inicia sesión</h1>
 
           <p>
-            Regístrate para acceder a tu ruta de aprendizaje y guardar tu
-            progreso.
+            Accede a tu ruta de aprendizaje y continúa desde donde te quedaste.
           </p>
         </div>
 
@@ -109,8 +140,12 @@ export default function RegistroPage() {
               type="email"
               autoComplete="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setMessage('');
+              }}
               placeholder="nombre@ejemplo.com"
+              disabled={isLoading || isSendingRecovery}
               required
             />
           </div>
@@ -123,10 +158,13 @@ export default function RegistroPage() {
                 id="password"
                 name="password"
                 type={showPassword ? 'text' : 'password'}
-                autoComplete="new-password"
+                autoComplete="current-password"
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                aria-describedby="password-help"
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                  setMessage('');
+                }}
+                disabled={isLoading || isSendingRecovery}
                 required
               />
 
@@ -138,78 +176,37 @@ export default function RegistroPage() {
                   showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
                 }
                 aria-pressed={showPassword}
+                disabled={isLoading || isSendingRecovery}
               >
                 {showPassword ? 'Ocultar' : 'Ver'}
               </button>
             </div>
-
-            <p id="password-help" className={styles.helpText}>
-              Usa al menos 8 caracteres.
-            </p>
           </div>
 
-          <div className={styles.field}>
-            <label htmlFor="confirm-password">Confirmar contraseña</label>
-
-            <div className={styles.passwordWrapper}>
-              <input
-                id="confirm-password"
-                name="confirm-password"
-                type={showConfirmPassword ? 'text' : 'password'}
-                autoComplete="new-password"
-                value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
-                required
-              />
-
-              <button
-                className={styles.passwordToggle}
-                type="button"
-                onClick={() =>
-                  setShowConfirmPassword((current) => !current)
-                }
-                aria-label={
-                  showConfirmPassword
-                    ? 'Ocultar confirmación de contraseña'
-                    : 'Mostrar confirmación de contraseña'
-                }
-                aria-pressed={showConfirmPassword}
-              >
-                {showConfirmPassword ? 'Ocultar' : 'Ver'}
-              </button>
-            </div>
-          </div>
-
-          <label className={styles.legalCheckbox}>
+          <label className={styles.sessionCheckbox}>
             <input
               type="checkbox"
-              checked={acceptedLegal}
-              onChange={(event) => setAcceptedLegal(event.target.checked)}
-              required
+              checked={keepSession}
+              onChange={(event) => setKeepSession(event.target.checked)}
+              disabled={isLoading || isSendingRecovery}
             />
 
-            <span>
-              He leído y acepto los{' '}
-              <Link href="/terminos-y-condiciones" target="_blank">
-                Términos y condiciones
-              </Link>{' '}
-              y la{' '}
-              <Link href="/politica-de-privacidad" target="_blank">
-                Política de privacidad
-              </Link>
-              .
-            </span>
+            <span>Mantener sesión iniciada</span>
           </label>
 
+          <button
+            type="button"
+            className={styles.recoveryButton}
+            onClick={handlePasswordRecovery}
+            disabled={isLoading || isSendingRecovery}
+          >
+            {isSendingRecovery
+              ? 'Enviando correo...'
+              : '¿Olvidaste tu contraseña?'}
+          </button>
+
           {message && (
-            <div
-              className={
-                messageType === 'success'
-                  ? styles.successMessage
-                  : styles.errorMessage
-              }
-              role={messageType === 'error' ? 'alert' : 'status'}
-            >
+            <div className={styles.errorMessage} role="status">
               {message}
             </div>
           )}
@@ -217,14 +214,15 @@ export default function RegistroPage() {
           <button
             className={styles.submitButton}
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || isSendingRecovery}
           >
-            {isLoading ? 'Procesando...' : 'Crear mi cuenta'}
+            {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
           </button>
         </form>
 
         <p className={styles.loginText}>
-          ¿Ya tienes una cuenta? <Link href="/iniciar-sesion">Inicia sesión</Link>
+          ¿Todavía no tienes una cuenta?{' '}
+          <Link href="/registro">Crea tu cuenta</Link>
         </p>
       </section>
     </main>

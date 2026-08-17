@@ -2,30 +2,27 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import styles from './Inicio.module.css';
 
 export default function InicioPage() {
+  const router = useRouter();
   const [indicatedLevel, setIndicatedLevel] = useState('');
   const [studentName, setStudentName] = useState('');
   const [gender, setGender] = useState('');
   const [role, setRole] = useState('student');
   const [subscriptionStatus, setSubscriptionStatus] = useState('inactive');
-  const [subscriptionEndsAt, setSubscriptionEndsAt] = useState<string | null>(
-    null
-  );
+  const [subscriptionEndsAt, setSubscriptionEndsAt] = useState<string | null>(null);
   const [readingClubDate, setReadingClubDate] = useState('Jueves');
   const [clubCountdown, setClubCountdown] = useState('Calculando...');
-  const [availableReadingSlots, setAvailableReadingSlots] = useState<
-    number | null
-  >(null);
+  const [availableReadingSlots, setAvailableReadingSlots] = useState<number | null>(null);
   const [clubSessionId, setClubSessionId] = useState<string | null>(null);
-  const [readingReservationSlot, setReadingReservationSlot] = useState<
-    number | null
-  >(null);
+  const [readingReservationSlot, setReadingReservationSlot] = useState<number | null>(null);
   const [isCancellingReservation, setIsCancellingReservation] = useState(false);
   const [reservationError, setReservationError] = useState('');
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const loadReadingAvailability = useCallback(async () => {
     const supabase = createClient();
@@ -58,19 +55,16 @@ export default function InicioPage() {
       }),
       user
         ? supabase
-          .from('reading_reservations')
-          .select('slot_number')
-          .eq('session_id', session.id)
-          .eq('user_id', user.id)
-          .eq('status', 'reserved')
-          .maybeSingle()
+            .from('reading_reservations')
+            .select('slot_number')
+            .eq('session_id', session.id)
+            .eq('user_id', user.id)
+            .eq('status', 'reserved')
+            .maybeSingle()
         : Promise.resolve({ data: null }),
     ]);
 
-    setAvailableReadingSlots(
-      typeof availability === 'number' ? availability : 0
-    );
-
+    setAvailableReadingSlots(typeof availability === 'number' ? availability : 0);
     setReadingReservationSlot(reservation?.slot_number ?? null);
   }, []);
 
@@ -139,15 +133,11 @@ export default function InicioPage() {
         setClubCountdown(
           `Comienza en ${days} ${days === 1 ? 'día' : 'días'} y ${hours} h`
         );
-        return;
-      }
-
-      if (hours > 0) {
+      } else if (hours > 0) {
         setClubCountdown(`Comienza en ${hours} h y ${minutes} min`);
-        return;
+      } else {
+        setClubCountdown(`Comienza en ${minutes} min`);
       }
-
-      setClubCountdown(`Comienza en ${minutes} min`);
     }
 
     updateClubSession();
@@ -173,6 +163,16 @@ export default function InicioPage() {
         return;
       }
 
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('english_level, gender, role')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (profile?.english_level) setIndicatedLevel(profile.english_level);
+      if (profile?.gender) setGender(profile.gender);
+      if (profile?.role) setRole(profile.role);
+
       const accountName =
         user.user_metadata?.full_name ||
         user.user_metadata?.name ||
@@ -181,24 +181,6 @@ export default function InicioPage() {
 
       if (typeof accountName === 'string') {
         setStudentName(accountName.trim().split(/\s+/)[0] || '');
-      }
-
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('english_level, gender, role')
-        .eq('id', user.id)
-        .maybeSingle();
-
-      if (profile?.english_level) {
-        setIndicatedLevel(profile.english_level);
-      }
-
-      if (profile?.gender) {
-        setGender(profile.gender);
-      }
-
-      if (profile?.role) {
-        setRole(profile.role);
       }
 
       const { data: subscription } = await supabase
@@ -215,27 +197,32 @@ export default function InicioPage() {
       setIsLoadingProfile(false);
     }
 
-    loadProfile();
+    void loadProfile();
   }, []);
 
+  async function handleLogout() {
+    setIsLoggingOut(true);
+
+    const supabase = createClient();
+    await supabase.auth.signOut();
+
+    router.replace('/');
+    router.refresh();
+  }
+
   async function handleCancelReservation() {
-    if (!clubSessionId || isCancellingReservation) {
-      return;
-    }
+    if (!clubSessionId || isCancellingReservation) return;
 
     setIsCancellingReservation(true);
     setReservationError('');
 
     const supabase = createClient();
-
     const { error } = await supabase.rpc('cancel_reading_reservation', {
       p_session_id: clubSessionId,
     });
 
     if (error) {
-      setReservationError(
-        'No pudimos cancelar tu turno. Inténtalo de nuevo.'
-      );
+      setReservationError('No pudimos cancelar tu turno. Inténtalo de nuevo.');
       setIsCancellingReservation(false);
       return;
     }
@@ -248,10 +235,7 @@ export default function InicioPage() {
   function getGreeting() {
     const name = studentName ? `, ${studentName}` : '';
 
-    if (gender === 'Masculino') {
-      return `¡Hola${name}! ¿Listo para continuar?`;
-    }
-
+    if (gender === 'Masculino') return `¡Hola${name}! ¿Listo para continuar?`;
     if (gender === 'Prefiero no decirlo') {
       return `¡Hola${name}! ¿Todo listo para continuar?`;
     }
@@ -266,15 +250,12 @@ export default function InicioPage() {
 
   const hasActiveAccess = role === 'admin' || hasCurrentSubscription;
 
-  function getAccessLabel() {
-    if (role === 'admin') {
-      return 'Acceso administrativo';
-    }
-
-    return hasActiveAccess
-      ? 'Suscripción activa'
-      : 'Suscripción inactiva';
-  }
+  const accessLabel =
+    role === 'admin'
+      ? 'Acceso administrativo'
+      : hasActiveAccess
+        ? 'Suscripción activa'
+        : 'Suscripción inactiva';
 
   return (
     <main className={styles.main}>
@@ -284,21 +265,18 @@ export default function InicioPage() {
         </Link>
 
         <nav className={styles.navigation} aria-label="Navegación principal">
-          <Link href="/inicio" className={styles.activeLink}>
-            Inicio
-          </Link>
+          <Link href="/inicio" className={styles.activeLink}>Inicio</Link>
+          <Link href="/lecciones" className={styles.navLink}>Lecciones</Link>
+          <Link href="/completar-perfil" className={styles.navLink}>Mi perfil</Link>
 
-          <Link href="/lecciones" className={styles.navLink}>
-            Lecciones
-          </Link>
-
-          <Link href="/completar-perfil" className={styles.navLink}>
-            Mi perfil
-          </Link>
-
-          <Link href="/" className={styles.logoutButton}>
-            Cerrar sesión
-          </Link>
+          <button
+            type="button"
+            className={styles.logoutButton}
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+          >
+            {isLoggingOut ? 'Cerrando sesión...' : 'Cerrar sesión'}
+          </button>
         </nav>
       </header>
 
@@ -310,14 +288,14 @@ export default function InicioPage() {
             {!isLoadingProfile && (
               <div className={styles.accessStatus}>
                 <span
-                  className={`${styles.statusLight} ${hasActiveAccess
+                  className={`${styles.statusLight} ${
+                    hasActiveAccess
                       ? styles.statusLightActive
                       : styles.statusLightInactive
-                    }`}
+                  }`}
                   aria-hidden="true"
                 />
-
-                <span>{getAccessLabel()}</span>
+                <span>{accessLabel}</span>
               </div>
             )}
           </div>
@@ -335,7 +313,6 @@ export default function InicioPage() {
           <article className={styles.currentLesson}>
             <div>
               <p className={styles.cardLabel}>CONTINÚA DONDE TE QUEDASTE</p>
-
               <h2 className={styles.lessonTitle}>Título de la lección</h2>
             </div>
 
@@ -345,7 +322,7 @@ export default function InicioPage() {
           </article>
 
           <aside className={styles.readingClub}>
-            <p className={styles.cardLabel}>CLUB DE LECTURA</p>
+            <p className={styles.cardLabel}>LECTURA EN VIVO</p>
             <h2 className={styles.sectionTitle}>Próxima sesión</h2>
             <p className={styles.clubDay}>{readingClubDate}</p>
 
@@ -364,24 +341,18 @@ export default function InicioPage() {
                     <p className={styles.reservationConfirmedTitle}>
                       Tu reserva está confirmada
                     </p>
-
                     <p className={styles.reservationTurn}>
                       Tu turno es #{readingReservationSlot}
                     </p>
-
                     <p className={styles.reservationConfirmedText}>
-                      Ya tienes tu cupo para leer en vivo.
+                      Ya tienes tu turno para leer en vivo.
                     </p>
                   </div>
 
                   <div className={styles.clubActions}>
-                    <Link
-                      href="/club-de-lectura"
-                      className={styles.joinButton}
-                    >
+                    <Link href="/club-de-lectura" className={styles.joinButton}>
                       Ver mi reserva
                     </Link>
-
                     <button
                       type="button"
                       className={styles.cancelReservationButton}
@@ -403,37 +374,36 @@ export default function InicioPage() {
               ) : (
                 <>
                   <p className={styles.reservationPrompt}>
-                    ¿Quieres leer en vivo? Reserva tu cupo antes de que se
-                    agoten.
+                    ¿Quieres leer en vivo? Reserva tu turno antes de que se agoten.
                   </p>
 
                   {availableReadingSlots === null ? (
-                    <p className={styles.availableSlots}>Cargando cupos...</p>
+                    <p className={styles.availableSlots}>Cargando turnos...</p>
                   ) : availableReadingSlots > 0 ? (
                     <p className={styles.availableSlots}>
                       {availableReadingSlots}{' '}
                       {availableReadingSlots === 1
-                        ? 'cupo disponible'
-                        : 'cupos disponibles'}
+                        ? 'turno disponible'
+                        : 'turnos disponibles'}
                     </p>
                   ) : (
                     <p className={styles.availableSlots}>
-                      Los cupos para leer ya están completos.
+                      Los turnos para leer ya están completos.
                     </p>
                   )}
 
-                  <div className={styles.clubActions}>
-                    {clubSessionId &&
-                      availableReadingSlots !== null &&
-                      availableReadingSlots > 0 && (
+                  {clubSessionId &&
+                    availableReadingSlots !== null &&
+                    availableReadingSlots > 0 && (
+                      <div className={styles.clubActions}>
                         <Link
                           href="/club-de-lectura#reservar-turno"
                           className={styles.joinButton}
                         >
-                          Reservar cupo para leer
+                          Reservar mi turno
                         </Link>
-                      )}
-                  </div>
+                      </div>
+                    )}
                 </>
               )
             ) : (
@@ -444,9 +414,8 @@ export default function InicioPage() {
                   disabled
                   title="Requiere una suscripción activa"
                 >
-                  Reservar cupo para leer
+                  Reservar mi turno
                 </button>
-
                 <p className={styles.clubAccessNote}>
                   Requiere una suscripción activa.
                 </p>
@@ -463,11 +432,9 @@ export default function InicioPage() {
               <p className={styles.cardLabel}>Nivel actual</p>
               <p className={styles.cardValue}>A1</p>
               <p className={styles.cardText}>Principiante</p>
-
               <p className={styles.cardNote}>
                 Calculado según las lecciones completadas.
               </p>
-
               <p className={styles.cardText}>
                 Nivel indicado al registrarte:{' '}
                 <strong>
@@ -481,7 +448,6 @@ export default function InicioPage() {
             <article className={styles.summaryCard}>
               <p className={styles.cardLabel}>Progreso general</p>
               <p className={styles.cardValue}>0%</p>
-
               <div
                 className={styles.progressTrack}
                 role="progressbar"
@@ -490,10 +456,7 @@ export default function InicioPage() {
                 aria-valuemax={100}
                 aria-valuenow={0}
               >
-                <span
-                  className={styles.progressBar}
-                  style={{ width: '0%' }}
-                />
+                <span className={styles.progressBar} style={{ width: '0%' }} />
               </div>
             </article>
 
@@ -507,7 +470,6 @@ export default function InicioPage() {
 
         <section className={styles.exploreSection}>
           <p className={styles.exploreText}>¿Quieres ver más?</p>
-
           <Link href="/lecciones" className={styles.exploreButton}>
             Explorar lecciones
           </Link>

@@ -11,6 +11,7 @@ export default function IniciarSesionPage() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [keepSession, setKeepSession] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -56,6 +57,11 @@ export default function IniciarSesionPage() {
 
     setMessage('');
     setIsLoading(true);
+
+    window.localStorage.setItem(
+      'inglesconlau-keep-session',
+      keepSession ? 'true' : 'false'
+    );
 
     const supabase = createClient();
 
@@ -176,6 +182,17 @@ export default function IniciarSesionPage() {
               </button>
             </div>
           </div>
+
+          <label className={styles.sessionCheckbox}>
+            <input
+              type="checkbox"
+              checked={keepSession}
+              onChange={(event) => setKeepSession(event.target.checked)}
+              disabled={isLoading || isSendingRecovery}
+            />
+
+            <span>Mantener sesión iniciada</span>
+          </label>
 
           <button
             type="button"
