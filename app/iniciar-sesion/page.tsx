@@ -1,21 +1,32 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import styles from '../registro/page.module.css';
+
+const KEEP_SESSION_KEY = 'inglesconlau-keep-session';
 
 export default function IniciarSesionPage() {
   const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [keepSession, setKeepSession] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [keepSession, setKeepSession] = useState(true);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSendingRecovery, setIsSendingRecovery] = useState(false);
+
+  useEffect(() => {
+    const savedPreference =
+      window.localStorage.getItem(KEEP_SESSION_KEY);
+
+    if (savedPreference !== null) {
+      setKeepSession(savedPreference !== 'false');
+    }
+  }, []);
 
   async function handlePasswordRecovery() {
     setMessage('');
@@ -59,7 +70,7 @@ export default function IniciarSesionPage() {
     setIsLoading(true);
 
     window.localStorage.setItem(
-      'inglesconlau-keep-session',
+      KEEP_SESSION_KEY,
       keepSession ? 'true' : 'false'
     );
 
@@ -126,7 +137,8 @@ export default function IniciarSesionPage() {
           <h1 id="login-title">Inicia sesión</h1>
 
           <p>
-            Accede a tu ruta de aprendizaje y continúa desde donde te quedaste.
+            Accede a tu ruta de aprendizaje y continúa desde donde te
+            quedaste.
           </p>
         </div>
 
@@ -171,9 +183,13 @@ export default function IniciarSesionPage() {
               <button
                 className={styles.passwordToggle}
                 type="button"
-                onClick={() => setShowPassword((current) => !current)}
+                onClick={() =>
+                  setShowPassword((current) => !current)
+                }
                 aria-label={
-                  showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
+                  showPassword
+                    ? 'Ocultar contraseña'
+                    : 'Mostrar contraseña'
                 }
                 aria-pressed={showPassword}
                 disabled={isLoading || isSendingRecovery}
@@ -187,7 +203,9 @@ export default function IniciarSesionPage() {
             <input
               type="checkbox"
               checked={keepSession}
-              onChange={(event) => setKeepSession(event.target.checked)}
+              onChange={(event) =>
+                setKeepSession(event.target.checked)
+              }
               disabled={isLoading || isSendingRecovery}
             />
 
@@ -195,24 +213,10 @@ export default function IniciarSesionPage() {
           </label>
 
           <button
+            className={styles.recoveryButton}
             type="button"
             onClick={handlePasswordRecovery}
             disabled={isLoading || isSendingRecovery}
-            style={{
-              alignSelf: 'flex-end',
-              padding: 0,
-              color: '#496473',
-              background: 'transparent',
-              border: 'none',
-              font: 'inherit',
-              fontSize: '0.9rem',
-              fontWeight: 600,
-              cursor:
-                isLoading || isSendingRecovery
-                  ? 'not-allowed'
-                  : 'pointer',
-              opacity: isLoading || isSendingRecovery ? 0.65 : 1,
-            }}
           >
             {isSendingRecovery
               ? 'Enviando correo...'
