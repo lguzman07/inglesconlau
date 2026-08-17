@@ -29,7 +29,7 @@ function getSessionCountdown(startsAt: string, endsAt: string) {
   const endTime = new Date(endsAt).getTime();
 
   if (now >= startTime && now < endTime) {
-    return 'Sesión en vivo ahora';
+    return 'Lectura en vivo ahora';
   }
 
   if (now >= endTime) {
@@ -46,29 +46,20 @@ function getSessionCountdown(startsAt: string, endsAt: string) {
   const minutes = totalMinutes % 60;
 
   if (days > 0) {
-    const dayText = days === 1 ? 'día' : 'días';
-
-    if (hours > 0) {
-      const hourText = hours === 1 ? 'hora' : 'horas';
-      return `Próxima sesión en ${days} ${dayText} y ${hours} ${hourText}`;
-    }
-
-    return `Próxima sesión en ${days} ${dayText}`;
+    return `Próxima sesión en ${days} ${
+      days === 1 ? 'día' : 'días'
+    }${hours > 0 ? ` y ${hours} ${hours === 1 ? 'hora' : 'horas'}` : ''}`;
   }
 
   if (hours > 0) {
-    const hourText = hours === 1 ? 'hora' : 'horas';
-
-    if (minutes > 0) {
-      const minuteText = minutes === 1 ? 'minuto' : 'minutos';
-      return `Próxima sesión en ${hours} ${hourText} y ${minutes} ${minuteText}`;
-    }
-
-    return `Próxima sesión en ${hours} ${hourText}`;
+    return `Próxima sesión en ${hours} ${
+      hours === 1 ? 'hora' : 'horas'
+    }${minutes > 0 ? ` y ${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}` : ''}`;
   }
 
-  const minuteText = totalMinutes === 1 ? 'minuto' : 'minutos';
-  return `Próxima sesión en ${totalMinutes} ${minuteText}`;
+  return `Próxima sesión en ${totalMinutes} ${
+    totalMinutes === 1 ? 'minuto' : 'minutos'
+  }`;
 }
 
 export default function ClubBooking({
@@ -94,12 +85,22 @@ export default function ClubBooking({
   async function loadCurrentReservation() {
     const supabase = createClient();
 
-    const { data, error } = await supabase.rpc(
-      'get_my_reading_reservation',
-      {
-        p_session_id: session.id,
-      }
-    );
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      setReservation(null);
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .from('reading_reservations')
+      .select('id, slot_number, status')
+      .eq('session_id', session.id)
+      .eq('user_id', user.id)
+      .eq('status', 'reserved')
+      .maybeSingle();
 
     if (error || !data) {
       setReservation(null);
@@ -118,7 +119,6 @@ export default function ClubBooking({
     }
 
     updateCountdown();
-
     const intervalId = window.setInterval(updateCountdown, 30000);
 
     return () => window.clearInterval(intervalId);
@@ -135,7 +135,7 @@ export default function ClubBooking({
       setIsLoading(false);
     }
 
-    loadReservation();
+    void loadReservation();
   }, [isAdmin, session.id]);
 
   async function reserveTurn() {
@@ -143,23 +143,24 @@ export default function ClubBooking({
     setMessage('');
 
     const supabase = createClient();
-    const { data, error } = await supabase.rpc('reserve_reading_slot', {
+
+    const { error } = await supabase.rpc('reserve_reading_slot', {
       p_session_id: session.id,
     });
 
     if (error) {
-      const currentReservation = await loadCurrentReservation();
-
-      if (!currentReservation) {
-        setMessage(error.message);
-      }
-
+      setMessage(error.message);
       setIsSaving(false);
       return;
     }
 
-    setReservation(data as ReadingReservation);
-    setMessage('Tu turno de lectura quedó reservado.');
+    const newReservation = await loadCurrentReservation();
+
+    setMessage(
+      newReservation
+        ? 'Tu turno de lectura quedó reservado.'
+        : 'No pudimos confirmar tu turno. Inténtalo de nuevo.'
+    );
     setIsSaving(false);
   }
 
@@ -168,12 +169,13 @@ export default function ClubBooking({
     setMessage('');
 
     const supabase = createClient();
+
     const { error } = await supabase.rpc('cancel_reading_reservation', {
       p_session_id: session.id,
     });
 
     if (error) {
-      setMessage(error.message);
+      setMessage('No pudimos cancelar tu turno. Inténtalo de nuevo.');
       setIsSaving(false);
       return;
     }
@@ -185,7 +187,7 @@ export default function ClubBooking({
 
   return (
     <section className={styles.card}>
-      <p className={styles.eyebrow}>CLUB DE LECTURA</p>
+      <p className={styles.eyebrow}>LECTURA EN VIVO</p>
       <h1 className={styles.title}>{countdown}</h1>
 
       <div className={styles.details}>
@@ -202,16 +204,15 @@ export default function ClubBooking({
 
       {isAdmin ? (
         <p className={styles.hostNote}>
-          Eres la anfitriona de esta sesión. Pronto verás aquí la lista de
-          lectores de hoy.
+          Eres la anfitriona. Pronto verás aquí la lista de los 10 lectores.
         </p>
       ) : (
         <div className={styles.reservationArea}>
-          <h2 className={styles.reservationTitle}>¿Quieres leer en vivo?</h2>
+          <h2 className={styles.reservationTitle}>Reserva tu turno para leer</h2>
 
           <p className={styles.text}>
-            Hay {session.maxReaders} turnos disponibles. Quien reserve podrá
-            participar leyendo; los demás podrán asistir como oyentes.
+            Hay hasta {session.maxReaders} turnos disponibles. La lectura en
+            vivo es para los estudiantes que reservaron un turno.
           </p>
 
           {isLoading ? (

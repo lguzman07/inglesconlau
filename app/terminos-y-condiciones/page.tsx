@@ -21,7 +21,7 @@ export default function TerminosYCondicionesPage() {
             <h1 className={styles.title}>Términos y condiciones</h1>
 
             <p className={styles.version}>
-              Inglés con Lau · Versión 1.0 · Última actualización: 8 de agosto
+              Inglés con Lau · Versión 1.0 · Última actualización: 16 de agosto
               de 2026
             </p>
 
@@ -63,7 +63,7 @@ export default function TerminosYCondicionesPage() {
               La suscripción ofrece acceso, mientras permanezca activa, a
               lecciones grabadas, ejercicios interactivos, rutas de
               aprendizaje, visualización del progreso, materiales
-              descargables cuando se indiquen y el club de lectura. El
+              descargables cuando se indiquen y las lecturas en vivo. El
               contenido disponible puede ampliarse, reorganizarse o mejorarse
               sin reducir de manera sustancial el servicio contratado.
             </p>
@@ -154,7 +154,7 @@ export default function TerminosYCondicionesPage() {
             <p className={styles.paragraph}>
               Por tratarse de acceso digital disponible inmediatamente, los
               períodos ya iniciados no se reembolsan por falta de uso,
-              inasistencia al club o cambio de decisión, salvo cobro duplicado,
+              inasistencia a una lectura en vivo o cambio de decisión, salvo cobro duplicado,
               incumplimiento atribuible a Inglés con Lau o cualquier otro
               supuesto en que la legislación aplicable reconozca
               obligatoriamente un reembolso o remedio.
@@ -184,56 +184,47 @@ export default function TerminosYCondicionesPage() {
           </section>
 
           <section className={styles.section}>
-            <h2 className={styles.heading}>8. Club de lectura</h2>
+            <h2 className={styles.heading}>8. Lecturas en vivo</h2>
 
             <p className={styles.paragraph}>
-              El club de lectura es un beneficio adicional, opcional y sujeto
-              al calendario publicado. Se ofrecerá dentro del portal mediante
-              tecnología de videollamada integrada y solo estará disponible
-              para cuentas con acceso vigente.
+              Las lecturas en vivo son un beneficio adicional, opcional y sujeto
+              al calendario publicado. Cada sesión está destinada a Laura y a
+              un máximo de 10 estudiantes con un turno reservado para leer. No
+              existe una modalidad de oyente, público o participación separada.
             </p>
 
             <p className={styles.paragraph}>
-              La sesión se realizará si asiste al menos una persona. Si nadie
-              se conecta durante los primeros 20 minutos, se cancelará sin
-              grabación, reprogramación ni compensación.
+              Las lecturas en vivo estarán disponibles únicamente para cuentas
+              con acceso vigente y se realizarán mediante la tecnología de
+              videollamada integrada en la plataforma.
             </p>
 
             <p className={styles.paragraph}>
-              Si Inglés con Lau cancela una sesión, se avisará por correo y se
-              reprogramará; si no fuera posible, se ofrecerá una sesión
-              adicional.
+              Si una lectura en vivo no puede realizarse un jueves, no se
+              trasladará a otro día. El calendario regular continuará el jueves
+              siguiente, sin que ello cree una sesión individual, crédito o
+              compensación adicional.
             </p>
 
             <p className={styles.paragraph}>
-              La inasistencia no genera reembolso ni sesión individual. Cuando
-              exista una grabación, podrá reproducirse dentro de la plataforma
-              durante 30 días.
+              La inasistencia o la cancelación del turno por parte del estudiante
+              no genera reembolso ni una lectura individual. Cuando exista una
+              grabación, podrá reproducirse dentro de la plataforma durante 30
+              días.
             </p>
 
             <p className={styles.paragraph}>
-              Las grabaciones mostrarán la imagen y voz de Laura, además de la
-              lectura compartida. No mostrarán las cámaras ni los nombres de
-              participantes, pero sus voces podrán escucharse cuando
-              intervengan.
+              Las grabaciones podrán incluir la imagen y voz de Laura, la lectura
+              compartida y la voz de cada estudiante durante su turno. Las
+              cámaras de los estudiantes no serán necesarias ni se mostrarán en
+              la grabación publicada.
             </p>
 
             <p className={styles.paragraph}>
-              Antes de entrar se informará que la voz puede grabarse. Quien no
-              desee que su voz aparezca podrá mantener el micrófono apagado y
-              participar por el chat.
-            </p>
-
-            <p className={styles.paragraph}>
-              Las grabaciones no podrán descargarse, copiarse ni compartirse.
-            </p>
-
-            <p className={styles.paragraph}>
-              No se editarán intervenciones individuales por solicitudes
-              ordinarias una vez publicada la grabación, sin perjuicio de los
-              derechos que correspondan legalmente en un caso concreto. Inglés
-              con Lau podrá retirar o editar una grabación por razones de
-              privacidad, seguridad, calidad o cumplimiento legal.
+              Antes de reservar un turno se informará que la voz puede grabarse.
+              Quien no desee que su voz quede incluida no debe reservar un turno
+              para esa sesión. Las grabaciones no podrán descargarse, copiarse
+              ni compartirse.
             </p>
           </section>
 
@@ -328,7 +319,7 @@ export default function TerminosYCondicionesPage() {
             </p>
 
             <p className={styles.paragraph}>
-              El club podrá utilizar obras en dominio público, textos propios o
+              Las lecturas en vivo podrán utilizar obras en dominio público, textos propios o
               materiales debidamente licenciados. Los derechos sobre obras de
               terceros pertenecen a sus respectivos titulares.
             </p>
@@ -344,7 +335,7 @@ export default function TerminosYCondicionesPage() {
               que forma parte de estas condiciones. Solo enviaremos
               comunicaciones necesarias: recibos, incidencias de pago,
               seguridad, recuperación de contraseña, soporte solicitado,
-              cambios importantes y avisos del club de lectura.
+              cambios importantes y avisos de las lecturas en vivo.
             </p>
           </section>
 

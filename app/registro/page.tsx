@@ -9,12 +9,11 @@ export default function RegistroPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [acceptedLegal, setAcceptedLegal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState<
-    'success' | 'error' | ''
-  >('');
+  const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -35,15 +34,30 @@ export default function RegistroPage() {
       return;
     }
 
+    if (!acceptedLegal) {
+      setMessage(
+        'Debes aceptar los Términos y condiciones y la Política de privacidad.'
+      );
+      setMessageType('error');
+      return;
+    }
+
     setIsLoading(true);
 
     const supabase = createClient();
+    const acceptedAt = new Date().toISOString();
 
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/iniciar-sesion`,
+        data: {
+          terms_accepted_at: acceptedAt,
+          terms_version: '1.0',
+          privacy_policy_accepted_at: acceptedAt,
+          privacy_policy_version: '1.0',
+        },
       },
     });
 
@@ -63,15 +77,13 @@ export default function RegistroPage() {
     setEmail('');
     setPassword('');
     setConfirmPassword('');
+    setAcceptedLegal(false);
     setIsLoading(false);
   }
 
   return (
     <main className={styles.page}>
-      <section
-        className={styles.card}
-        aria-labelledby="registration-title"
-      >
+      <section className={styles.card} aria-labelledby="registration-title">
         <Link className={styles.backLink} href="/">
           ← Volver al inicio
         </Link>
@@ -123,9 +135,7 @@ export default function RegistroPage() {
                 type="button"
                 onClick={() => setShowPassword((current) => !current)}
                 aria-label={
-                  showPassword
-                    ? 'Ocultar contraseña'
-                    : 'Mostrar contraseña'
+                  showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
                 }
                 aria-pressed={showPassword}
               >
@@ -139,9 +149,7 @@ export default function RegistroPage() {
           </div>
 
           <div className={styles.field}>
-            <label htmlFor="confirm-password">
-              Confirmar contraseña
-            </label>
+            <label htmlFor="confirm-password">Confirmar contraseña</label>
 
             <div className={styles.passwordWrapper}>
               <input
@@ -150,9 +158,7 @@ export default function RegistroPage() {
                 type={showConfirmPassword ? 'text' : 'password'}
                 autoComplete="new-password"
                 value={confirmPassword}
-                onChange={(event) =>
-                  setConfirmPassword(event.target.value)
-                }
+                onChange={(event) => setConfirmPassword(event.target.value)}
                 required
               />
 
@@ -173,6 +179,27 @@ export default function RegistroPage() {
               </button>
             </div>
           </div>
+
+          <label className={styles.legalCheckbox}>
+            <input
+              type="checkbox"
+              checked={acceptedLegal}
+              onChange={(event) => setAcceptedLegal(event.target.checked)}
+              required
+            />
+
+            <span>
+              He leído y acepto los{' '}
+              <Link href="/terminos-y-condiciones" target="_blank">
+                Términos y condiciones
+              </Link>{' '}
+              y la{' '}
+              <Link href="/politica-de-privacidad" target="_blank">
+                Política de privacidad
+              </Link>
+              .
+            </span>
+          </label>
 
           {message && (
             <div
@@ -197,8 +224,7 @@ export default function RegistroPage() {
         </form>
 
         <p className={styles.loginText}>
-          ¿Ya tienes una cuenta?{' '}
-          <Link href="/iniciar-sesion">Inicia sesión</Link>
+          ¿Ya tienes una cuenta? <Link href="/iniciar-sesion">Inicia sesión</Link>
         </p>
       </section>
     </main>

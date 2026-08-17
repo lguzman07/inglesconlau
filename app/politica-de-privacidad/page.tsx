@@ -21,7 +21,7 @@ export default function PoliticaDePrivacidadPage() {
             <h1 className={styles.title}>Política de privacidad</h1>
 
             <p className={styles.version}>
-              Inglés con Lau · Versión 1.0 · Última actualización: 8 de agosto
+              Inglés con Lau · Versión 1.0 · Última actualización: 16 de agosto
               de 2026
             </p>
 
@@ -102,10 +102,9 @@ export default function PoliticaDePrivacidadPage() {
               </li>
 
               <li>
-                <strong>Club de lectura:</strong> asistencia, chat y, cuando
-                intervengas con el micrófono, tu voz en la grabación. Las
-                cámaras y nombres de participantes no aparecerán en la grabación
-                publicada.
+                <strong>Lecturas en vivo:</strong> reserva de turno, asistencia
+                y voz durante tu lectura. Las cámaras de los estudiantes no son
+                necesarias ni se mostrarán en la grabación publicada.
               </li>
 
               <li>
@@ -134,7 +133,7 @@ export default function PoliticaDePrivacidadPage() {
               </li>
 
               <li>
-                Ofrecer el club de lectura y sus grabaciones durante el período
+                Ofrecer las lecturas en vivo y sus grabaciones durante el período
                 anunciado.
               </li>
 
@@ -188,7 +187,7 @@ export default function PoliticaDePrivacidadPage() {
               correo exclusivamente para recibos, incidencias de pago, seguridad,
               recuperación de contraseña, soporte solicitado, cambios importantes
               en el servicio, precio o documentos legales, y avisos necesarios
-              del club de lectura.
+              de las lecturas en vivo.
             </p>
           </section>
 
@@ -240,7 +239,7 @@ export default function PoliticaDePrivacidadPage() {
 
               <li>
                 El proveedor de videollamadas o transmisión integrado, para
-                realizar y grabar el club de lectura.
+                realizar y grabar las lecturas en vivo.
               </li>
 
               <li>
@@ -264,24 +263,30 @@ export default function PoliticaDePrivacidadPage() {
 
           <section className={styles.section}>
             <h2 className={styles.heading}>
-              9. Grabaciones del club de lectura
+              9. Grabaciones de lecturas en vivo
             </h2>
 
             <p className={styles.paragraph}>
-              Antes de entrar a una sesión se informará que las voces pueden
-              grabarse. La grabación publicada mostrará la imagen y voz de Laura y
-              la lectura compartida; ocultará las cámaras y nombres de
-              participantes. Si hablas, tu voz puede quedar incluida. Puedes
-              participar por chat con el micrófono apagado si no deseas que se
-              grabe tu voz.
+              Las lecturas en vivo se realizan con Laura y hasta 10 estudiantes
+              que hayan reservado un turno para leer. No existe una modalidad de
+              oyente ni de participación por chat. Antes de reservar, se
+              informará que la voz del estudiante durante su turno puede quedar
+              incluida en la grabación.
+            </p>
+
+            <p className={styles.paragraph}>
+              La grabación publicada podrá mostrar la imagen y voz de Laura, la
+              lectura compartida y las voces de los estudiantes mientras leen.
+              Las cámaras de los estudiantes no son necesarias ni se mostrarán.
+              Si no deseas que tu voz pueda grabarse, no reserves un turno para
+              esa sesión.
             </p>
 
             <p className={styles.paragraph}>
               Las grabaciones estarán disponibles solo dentro de la plataforma
-              durante 30 días y no podrán descargarse ni compartirse. No se
-              editarán intervenciones individuales por solicitudes ordinarias,
-              pero se atenderán los derechos y obligaciones legales que
-              correspondan en cada caso.
+              durante 30 días y no podrán descargarse ni compartirse. Se
+              atenderán los derechos y obligaciones legales que correspondan en
+              cada caso.
             </p>
           </section>
 
@@ -310,7 +315,7 @@ export default function PoliticaDePrivacidadPage() {
               </li>
 
               <li>
-                <strong>Grabaciones del club:</strong> estarán disponibles
+                <strong>Grabaciones de lecturas en vivo:</strong> estarán disponibles
                 durante 30 días y luego se retirarán del acceso ordinario; las
                 copias técnicas temporales podrán persistir durante un período
                 limitado de respaldo y seguridad.
