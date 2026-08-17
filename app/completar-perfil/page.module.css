@@ -8,12 +8,12 @@
   justify-content: center;
   min-height: 50px;
   padding: 11px 18px;
-  color: #ffacd0;
+  color: #b83268;
   font-size: 1rem;
   font-weight: 800;
   text-decoration: none;
-  background: #263946;
-  border: 2px solid #ffacd0;
+  background: #ffffff;
+  border: 2px solid #b83268;
   border-radius: 999px;
   transition:
     color 0.2s ease,
@@ -22,8 +22,8 @@
 }
 
 .backLink:hover {
-  color: #162129;
-  background: #ffacd0;
+  color: #ffffff;
+  background: #b83268;
   transform: translateY(-1px);
 }
 
@@ -47,32 +47,32 @@
 .saveButton {
   color: #ffffff;
   background: #496473;
-  border: 2px solid #a9d0e3;
+  border: 2px solid #496473;
 }
 
 .saveButton:hover:not(:disabled) {
-  background: #5e7d8e;
-  border-color: #c7e8f6;
+  background: #35515f;
+  border-color: #35515f;
   transform: translateY(-1px);
 }
 
 .skipButton {
   margin-top: 12px;
-  color: #ffacd0;
-  background: transparent;
-  border: 2px solid #ffacd0;
+  color: #b83268;
+  background: #ffffff;
+  border: 2px solid #b83268;
 }
 
 .skipButton:hover:not(:disabled) {
-  color: #162129;
-  background: #ffacd0;
+  color: #ffffff;
+  background: #b83268;
   transform: translateY(-1px);
 }
 
 .backLink:focus-visible,
 .saveButton:focus-visible,
 .skipButton:focus-visible {
-  outline: 4px solid #ffffff;
+  outline: 4px solid #263946;
   outline-offset: 4px;
 }
 
