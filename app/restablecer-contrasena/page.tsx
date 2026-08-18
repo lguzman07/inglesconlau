@@ -1,27 +1,26 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
 export default function RestablecerContrasenaPage() {
   const router = useRouter();
-  const supabase = useMemo(() => createClient(), []);
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [hasValidSession, setHasValidSession] = useState(false);
-
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     async function checkRecoverySession() {
+      const supabase = createClient();
+
       setIsCheckingSession(true);
       setErrorMessage('');
 
@@ -61,11 +60,10 @@ export default function RestablecerContrasenaPage() {
     }
 
     void checkRecoverySession();
-  }, [supabase]);
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     setErrorMessage('');
     setSuccessMessage('');
 
@@ -92,10 +90,8 @@ export default function RestablecerContrasenaPage() {
     }
 
     setIsSaving(true);
-
-    const { error } = await supabase.auth.updateUser({
-      password,
-    });
+    const supabase = createClient();
+    const { error } = await supabase.auth.updateUser({ password });
 
     if (error) {
       setIsSaving(false);
@@ -116,7 +112,6 @@ export default function RestablecerContrasenaPage() {
     setSuccessMessage('Tu contraseña se actualizó correctamente.');
     setPassword('');
     setConfirmPassword('');
-
     await supabase.auth.signOut();
 
     setTimeout(() => {
@@ -141,9 +136,7 @@ export default function RestablecerContrasenaPage() {
       <section className="reset-password-card">
         <div className="reset-password-header">
           <p className="reset-password-eyebrow">INGLÉS CON LAU</p>
-
           <h1>Crea una nueva contraseña</h1>
-
           <p>
             Escribe una contraseña nueva para recuperar el acceso a tu cuenta.
           </p>
@@ -152,7 +145,6 @@ export default function RestablecerContrasenaPage() {
         <form className="reset-password-form" onSubmit={handleSubmit}>
           <div className="reset-password-field">
             <label htmlFor="new-password">Nueva contraseña</label>
-
             <div className="reset-password-input-wrapper">
               <input
                 id="new-password"
@@ -170,7 +162,6 @@ export default function RestablecerContrasenaPage() {
                 disabled={!hasValidSession || isSaving}
                 required
               />
-
               <button
                 className="reset-password-toggle"
                 type="button"
@@ -191,7 +182,6 @@ export default function RestablecerContrasenaPage() {
             <label htmlFor="confirm-password">
               Confirma tu nueva contraseña
             </label>
-
             <div className="reset-password-input-wrapper">
               <input
                 id="confirm-password"
@@ -209,7 +199,6 @@ export default function RestablecerContrasenaPage() {
                 disabled={!hasValidSession || isSaving}
                 required
               />
-
               <button
                 className="reset-password-toggle"
                 type="button"
@@ -218,8 +207,8 @@ export default function RestablecerContrasenaPage() {
                 }
                 aria-label={
                   showConfirmPassword
-                    ? 'Ocultar contraseña'
-                    : 'Mostrar contraseña'
+                    ? 'Ocultar confirmación de contraseña'
+                    : 'Mostrar confirmación de contraseña'
                 }
                 disabled={!hasValidSession || isSaving}
               >

@@ -323,7 +323,6 @@ function formatDisplayDate(value: string) {
 
 export default function CompletarPerfilPage() {
   const router = useRouter();
-  const supabase = useMemo(() => createClient(), []);
   const datePickerRef = useRef<HTMLDivElement>(null);
   const countryPickerRef = useRef<HTMLDivElement>(null);
 
@@ -393,6 +392,8 @@ export default function CompletarPerfilPage() {
 
   useEffect(() => {
     async function loadUserAndProfile() {
+      const supabase = createClient();
+
       setIsLoading(true);
       setErrorMessage('');
 
@@ -451,7 +452,7 @@ export default function CompletarPerfilPage() {
     }
 
     void loadUserAndProfile();
-  }, [router, supabase]);
+  }, [router]);
 
   function updateField(field: keyof Profile, value: string) {
     setProfile((currentProfile) => ({
@@ -536,6 +537,8 @@ export default function CompletarPerfilPage() {
     }
 
     setIsSaving(true);
+
+    const supabase = createClient();
 
     const { error } = await supabase.from('profiles').upsert(
       {
