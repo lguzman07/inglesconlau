@@ -85,7 +85,7 @@ export default function LeccionesPage() {
           </p>
 
           <Link href="/inicio" className={styles.backButton}>
-            Volver a mi inicio
+            Volver a al dashboard
           </Link>
         </section>
 
