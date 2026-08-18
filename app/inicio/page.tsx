@@ -2,12 +2,11 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import StudentNavbar from '@/components/StudentNavbar/StudentNavbar';
 import styles from './Inicio.module.css';
 
 export default function InicioPage() {
-  const router = useRouter();
   const [indicatedLevel, setIndicatedLevel] = useState('');
   const [studentName, setStudentName] = useState('');
   const [gender, setGender] = useState('');
@@ -22,7 +21,6 @@ export default function InicioPage() {
   const [isCancellingReservation, setIsCancellingReservation] = useState(false);
   const [reservationError, setReservationError] = useState('');
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const loadReadingAvailability = useCallback(async () => {
     const supabase = createClient();
@@ -200,16 +198,6 @@ export default function InicioPage() {
     void loadProfile();
   }, []);
 
-  async function handleLogout() {
-    setIsLoggingOut(true);
-
-    const supabase = createClient();
-    await supabase.auth.signOut();
-
-    router.replace('/');
-    router.refresh();
-  }
-
   async function handleCancelReservation() {
     if (!clubSessionId || isCancellingReservation) return;
 
@@ -259,26 +247,7 @@ export default function InicioPage() {
 
   return (
     <main className={styles.main}>
-      <header className={styles.navbar}>
-        <Link href="/" className={styles.logo}>
-          Inglés Con Lau
-        </Link>
-
-        <nav className={styles.navigation} aria-label="Navegación principal">
-          <Link href="/inicio" className={styles.activeLink}>Inicio</Link>
-          <Link href="/lecciones" className={styles.navLink}>Lecciones</Link>
-          <Link href="/completar-perfil" className={styles.navLink}>Mi perfil</Link>
-
-          <button
-            type="button"
-            className={styles.logoutButton}
-            onClick={handleLogout}
-            disabled={isLoggingOut}
-          >
-            {isLoggingOut ? 'Cerrando sesión...' : 'Cerrar sesión'}
-          </button>
-        </nav>
-      </header>
+      <StudentNavbar />
 
       <div className={styles.container}>
         <section className={styles.welcome}>
@@ -317,7 +286,7 @@ export default function InicioPage() {
             </div>
 
             <Link href="/lecciones" className={styles.lessonButton}>
-              Comenzar lección
+              Continuar la lección
             </Link>
           </article>
 

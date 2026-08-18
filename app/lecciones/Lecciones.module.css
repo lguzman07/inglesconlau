@@ -88,18 +88,36 @@
   line-height: 1.7;
 }
 
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.continueButton,
 .backButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: 28px;
+  min-height: 50px;
   padding: 13px 20px;
-  color: var(--surface);
   font-weight: 700;
   text-decoration: none;
-  background: var(--primary);
   border-radius: 999px;
   transition: var(--transition);
+}
+
+.continueButton {
+  color: var(--surface);
+  background: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.backButton {
+  color: var(--primary);
+  background: transparent;
+  border: 1px solid var(--primary);
 }
 
 .infoCard {
@@ -230,15 +248,23 @@
   border-color: var(--primary);
 }
 
+.continueButton:hover,
+.continueButton:focus-visible {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
 .backButton:hover,
 .backButton:focus-visible {
-  background: var(--primary-hover);
+  color: var(--surface);
+  background: var(--primary);
 }
 
 .logo:focus-visible,
 .navLink:focus-visible,
 .activeLink:focus-visible,
 .logoutButton:focus-visible,
+.continueButton:focus-visible,
 .backButton:focus-visible {
   outline: 3px solid var(--primary-light);
   outline-offset: 3px;
@@ -281,6 +307,15 @@
 
   .hero {
     padding: 30px 24px;
+  }
+
+  .heroActions {
+    flex-direction: column;
+  }
+
+  .continueButton,
+  .backButton {
+    width: 100%;
   }
 
   .infoCard {

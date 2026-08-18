@@ -49,30 +49,6 @@ const levels = [
 export default function LeccionesPage() {
   return (
     <main className={styles.main}>
-      <header className={styles.navbar}>
-        <Link href="/" className={styles.logo}>
-          Inglés Con Lau
-        </Link>
-
-        <nav className={styles.navigation} aria-label="Navegación principal">
-          <Link href="/inicio" className={styles.navLink}>
-            Inicio
-          </Link>
-
-          <Link href="/lecciones" className={styles.activeLink}>
-            Lecciones
-          </Link>
-
-          <Link href="/completar-perfil" className={styles.navLink}>
-            Mi perfil
-          </Link>
-
-          <Link href="/" className={styles.logoutButton}>
-            Cerrar sesión
-          </Link>
-        </nav>
-      </header>
-
       <div className={styles.container}>
         <section className={styles.hero}>
           <p className={styles.eyebrow}>TU RUTA DE APRENDIZAJE</p>
@@ -84,9 +60,15 @@ export default function LeccionesPage() {
             necesites. No hay contenido bloqueado.
           </p>
 
-          <Link href="/inicio" className={styles.backButton}>
-            Volver a al dashboard
-          </Link>
+          <div className={styles.heroActions}>
+            <Link href="/lecciones" className={styles.continueButton}>
+              Continuar la lección
+            </Link>
+
+            <Link href="/inicio" className={styles.backButton}>
+              Volver al dashboard
+            </Link>
+          </div>
         </section>
 
         <section className={styles.infoCard} aria-label="Información de acceso">
@@ -95,7 +77,10 @@ export default function LeccionesPage() {
           </div>
 
           <div>
-            <h2 className={styles.infoTitle}>Todo el contenido está disponible</h2>
+            <h2 className={styles.infoTitle}>
+              Todo el contenido está disponible
+            </h2>
+
             <p className={styles.infoText}>
               Puedes repasar una lección anterior, comenzar desde el inicio o
               explorar un tema que quieras reforzar.
@@ -107,7 +92,10 @@ export default function LeccionesPage() {
           <div className={styles.sectionHeading}>
             <div>
               <p className={styles.eyebrow}>NIVELES</p>
-              <h2 className={styles.sectionTitle}>Elige por dónde continuar</h2>
+
+              <h2 className={styles.sectionTitle}>
+                Elige por dónde continuar
+              </h2>
             </div>
 
             <p className={styles.sectionNote}>

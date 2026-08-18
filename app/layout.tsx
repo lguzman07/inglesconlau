@@ -5,6 +5,7 @@ import ScrollToTop from '@/components/ScrollToTop/ScrollToTop';
 import Footer from '@/components/Footer/Footer';
 import RevealOnScroll from '@/components/RevealOnScroll/RevealOnScroll';
 import ScrollProgress from '@/components/ScrollProgress/ScrollProgress';
+import StudentNavbar from '@/components/StudentNavbar/StudentNavbar';
 import './globals.css';
 
 const lexend = Lexend({
@@ -81,6 +82,7 @@ export default function RootLayout({
 
       <body className={lexend.className}>
         <ScrollProgress />
+        <StudentNavbar />
         <RevealOnScroll />
 
         {children}
