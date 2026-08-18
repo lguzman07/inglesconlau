@@ -1,32 +1,46 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import styles from '../registro/page.module.css';
-
-const KEEP_SESSION_KEY = 'inglesconlau-keep-session';
 
 export default function IniciarSesionPage() {
   const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [keepSession, setKeepSession] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSendingRecovery, setIsSendingRecovery] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
-  useEffect(() => {
-    const savedPreference =
-      window.localStorage.getItem(KEEP_SESSION_KEY);
+  const isBusy =
+    isLoading || isSendingRecovery || isGoogleLoading;
 
-    if (savedPreference !== null) {
-      setKeepSession(savedPreference !== 'false');
+  async function handleGoogleSignIn() {
+    setMessage('');
+    setIsGoogleLoading(true);
+
+    const supabase = createClient();
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      setMessage(
+        'No pudimos continuar con Google. Inténtalo nuevamente.'
+      );
+      setIsGoogleLoading(false);
     }
-  }, []);
+  }
 
   async function handlePasswordRecovery() {
     setMessage('');
@@ -70,7 +84,7 @@ export default function IniciarSesionPage() {
     setIsLoading(true);
 
     window.localStorage.setItem(
-      KEEP_SESSION_KEY,
+      'inglesconlau-keep-session',
       keepSession ? 'true' : 'false'
     );
 
@@ -108,11 +122,11 @@ export default function IniciarSesionPage() {
 
     const profileIsComplete = Boolean(
       profile?.full_name?.trim() &&
-        profile?.birth_date &&
-        profile?.country?.trim() &&
-        profile?.gender &&
-        profile?.english_level &&
-        profile?.learning_goal
+      profile?.birth_date &&
+      profile?.country?.trim() &&
+      profile?.gender &&
+      profile?.english_level &&
+      profile?.learning_goal
     );
 
     if (profileIsComplete) {
@@ -137,12 +151,51 @@ export default function IniciarSesionPage() {
           <h1 id="login-title">Inicia sesión</h1>
 
           <p>
-            Accede a tu ruta de aprendizaje y continúa desde donde te
-            quedaste.
+            Accede a tu ruta de aprendizaje y continúa desde donde te quedaste.
           </p>
         </div>
 
         <form className={styles.form} onSubmit={handleSubmit}>
+          <button
+            className={styles.googleButton}
+            type="button"
+            onClick={handleGoogleSignIn}
+            disabled={isBusy}
+          >
+            <svg
+              className={styles.googleIcon}
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="#4285F4"
+                d="M21.35 12.23c0-.71-.06-1.39-.18-2.05H12v3.88h5.25a4.49 4.49 0 0 1-1.95 2.95v2.52h3.15c1.84-1.69 2.9-4.18 2.9-7.3Z"
+              />
+              <path
+                fill="#34A853"
+                d="M12 21.5c2.63 0 4.84-.87 6.45-2.35l-3.15-2.52c-.87.59-1.99.94-3.3.94-2.54 0-4.7-1.72-5.47-4.03H3.27v2.6A9.75 9.75 0 0 0 12 21.5Z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M6.53 13.54a5.86 5.86 0 0 1 0-3.08v-2.6H3.27a9.74 9.74 0 0 0 0 8.28l3.26-2.6Z"
+              />
+              <path
+                fill="#EA4335"
+                d="M12 6.43c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.83 3.52 14.63 2.5 12 2.5a9.75 9.75 0 0 0-8.73 5.36l3.26 2.6C7.3 8.15 9.46 6.43 12 6.43Z"
+              />
+            </svg>
+
+            {isGoogleLoading
+              ? 'Conectando con Google...'
+              : 'Continuar con Google'}
+          </button>
+
+          <div className={styles.authDivider} aria-hidden="true">
+            <span />
+            <p>o continúa con tu correo</p>
+            <span />
+          </div>
+
           <div className={styles.field}>
             <label htmlFor="email">Correo electrónico</label>
 
@@ -157,7 +210,7 @@ export default function IniciarSesionPage() {
                 setMessage('');
               }}
               placeholder="nombre@ejemplo.com"
-              disabled={isLoading || isSendingRecovery}
+              disabled={isBusy}
               required
             />
           </div>
@@ -176,23 +229,19 @@ export default function IniciarSesionPage() {
                   setPassword(event.target.value);
                   setMessage('');
                 }}
-                disabled={isLoading || isSendingRecovery}
+                disabled={isBusy}
                 required
               />
 
               <button
                 className={styles.passwordToggle}
                 type="button"
-                onClick={() =>
-                  setShowPassword((current) => !current)
-                }
+                onClick={() => setShowPassword((current) => !current)}
                 aria-label={
-                  showPassword
-                    ? 'Ocultar contraseña'
-                    : 'Mostrar contraseña'
+                  showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
                 }
                 aria-pressed={showPassword}
-                disabled={isLoading || isSendingRecovery}
+                disabled={isBusy}
               >
                 {showPassword ? 'Ocultar' : 'Ver'}
               </button>
@@ -203,20 +252,18 @@ export default function IniciarSesionPage() {
             <input
               type="checkbox"
               checked={keepSession}
-              onChange={(event) =>
-                setKeepSession(event.target.checked)
-              }
-              disabled={isLoading || isSendingRecovery}
+              onChange={(event) => setKeepSession(event.target.checked)}
+              disabled={isBusy}
             />
 
             <span>Mantener sesión iniciada</span>
           </label>
 
           <button
-            className={styles.recoveryButton}
             type="button"
+            className={styles.recoveryButton}
             onClick={handlePasswordRecovery}
-            disabled={isLoading || isSendingRecovery}
+            disabled={isBusy}
           >
             {isSendingRecovery
               ? 'Enviando correo...'
@@ -232,7 +279,7 @@ export default function IniciarSesionPage() {
           <button
             className={styles.submitButton}
             type="submit"
-            disabled={isLoading || isSendingRecovery}
+            disabled={isBusy}
           >
             {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
           </button>
