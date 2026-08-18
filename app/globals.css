@@ -88,42 +88,6 @@ body {
   text-align: right;
 }
 
-@media (max-width: 1400px) {
-  .navbar {
-    top: 0;
-  }
-}
-
-@media (max-width: 1200px) {
-  .theme-selector {
-    width: 100%;
-  }
-
-  .theme-trigger {
-    display: flex;
-    width: 100%;
-    height: 46px;
-    padding: 0 0.9rem;
-    justify-content: flex-start;
-    gap: 0.65rem;
-    border-radius: 12px;
-  }
-
-  .theme-trigger-label {
-    display: inline;
-    font-size: 0.95rem;
-    font-weight: 700;
-  }
-
-  .theme-menu {
-    position: static;
-    width: 100%;
-    margin-top: 0.5rem;
-    box-sizing: border-box;
-    box-shadow: none;
-  }
-}
-
 :root {
   /* Fondos */
   --background: #f1ede5;

@@ -4,53 +4,6 @@
   color: var(--text);
 }
 
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-  padding: 22px 6%;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-}
-
-.logo {
-  color: var(--text);
-  font-size: 1.25rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.navigation {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.navLink,
-.activeLink {
-  color: var(--text-light);
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.activeLink {
-  color: var(--text);
-}
-
-.logoutButton {
-  padding: 10px 16px;
-  color: var(--text-light);
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-decoration: none;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  transition: var(--transition);
-}
-
 .container {
   width: min(1120px, 88%);
   margin: 0 auto;
@@ -67,9 +20,9 @@
 .eyebrow {
   margin: 0 0 12px;
   color: var(--primary);
-  font-size: 0.85rem;
+  font-size: .85rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: .12em;
 }
 
 .title {
@@ -182,7 +135,7 @@
   max-width: 330px;
   margin: 0;
   color: var(--text-light);
-  font-size: 0.92rem;
+  font-size: .92rem;
   line-height: 1.6;
   text-align: right;
 }
@@ -194,12 +147,27 @@
 }
 
 .levelCard {
+  display: block;
   min-height: 222px;
   padding: 26px;
+  color: inherit;
+  text-decoration: none;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 20px;
   box-shadow: var(--shadow);
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.levelCard:hover {
+  border-color: var(--primary-light);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .1);
+  transform: translateY(-3px);
+}
+
+.levelCard:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 3px;
 }
 
 .levelTop {
@@ -216,17 +184,17 @@
   min-width: 50px;
   padding: 8px 11px;
   color: var(--primary);
-  font-size: 0.92rem;
+  font-size: .92rem;
   font-weight: 800;
   background: var(--surface-soft);
   border: 1px solid var(--primary-light);
   border-radius: 999px;
 }
 
-.comingSoon {
-  color: var(--text-light);
-  font-size: 0.78rem;
-  font-weight: 700;
+.openLevel {
+  color: var(--primary);
+  font-size: .78rem;
+  font-weight: 800;
 }
 
 .levelTitle {
@@ -238,14 +206,8 @@
 .levelDescription {
   margin: 12px 0 0;
   color: var(--text-light);
-  font-size: 0.93rem;
+  font-size: .93rem;
   line-height: 1.65;
-}
-
-.logoutButton:hover,
-.logoutButton:focus-visible {
-  color: var(--text);
-  border-color: var(--primary);
 }
 
 .continueButton:hover,
@@ -260,10 +222,6 @@
   background: var(--primary);
 }
 
-.logo:focus-visible,
-.navLink:focus-visible,
-.activeLink:focus-visible,
-.logoutButton:focus-visible,
 .continueButton:focus-visible,
 .backButton:focus-visible {
   outline: 3px solid var(--primary-light);
@@ -277,17 +235,6 @@
 }
 
 @media (max-width: 800px) {
-  .navbar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .navigation {
-    width: 100%;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
   .sectionHeading {
     align-items: flex-start;
     flex-direction: column;
