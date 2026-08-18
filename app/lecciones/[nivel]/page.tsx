@@ -62,13 +62,23 @@ export default async function NivelPage({ params }: { params: Promise<{ nivel: s
             {Array.from({ length: level.lessonCount }, (_, index) => {
               const number = index + 1;
               return (
-                <li key={number} className={styles.lessonCard}>
-                  <span className={styles.lessonNumber}>{String(number).padStart(2, '0')}</span>
-                  <div className={styles.lessonContent}>
-                    <h3>{lessonLabel(number)}</h3>
-                    <p>El título, video y ejercicios de esta lección se añadirán aquí.</p>
-                  </div>
-                  <span className={styles.status}>Próximamente</span>
+                <li key={number}>
+                  <Link
+                    href={`/lecciones/${nivel}/${number}`}
+                    className={styles.lessonCard}
+                    aria-label={`Abrir ${lessonLabel(number)} de ${level.code}`}
+                  >
+                    <span className={styles.lessonNumber}>
+                      {String(number).padStart(2, '0')}
+                    </span>
+
+                    <div className={styles.lessonContent}>
+                      <h3>{lessonLabel(number)}</h3>
+                      <p>Abre la lección para ver su video, ejercicios y progreso.</p>
+                    </div>
+
+                    <span className={styles.openLesson}>Abrir lección <span aria-hidden="true">→</span></span>
+                  </Link>
                 </li>
               );
             })}

@@ -135,10 +135,20 @@
     align-items: center;
     gap: 20px;
     padding: 20px 24px;
+    color: var(--text);
+    text-decoration: none;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px;
     box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.lessonCard:hover,
+.lessonCard:focus-visible {
+    border-color: var(--primary);
+    background: var(--surface-soft);
+    transform: translateY(-2px);
 }
 
 .lessonNumber {
@@ -169,15 +179,25 @@
     line-height: 1.5;
 }
 
-.status {
-    padding: 7px 10px;
-    color: var(--text-light);
-    font-size: .78rem;
-    font-weight: 700;
-    background: var(--surface-soft);
-    border: 1px solid var(--border);
-    border-radius: 999px;
+.openLesson {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    color: var(--primary);
+    font-size: .84rem;
+    font-weight: 800;
     white-space: nowrap;
+}
+
+.openLesson span {
+    font-size: 1.1rem;
+    transition: transform var(--transition);
+}
+
+.lessonCard:hover .openLesson span,
+.lessonCard:focus-visible .openLesson span {
+    transform: translateX(3px);
 }
 
 .backLink:hover,
@@ -214,7 +234,7 @@
         padding: 18px;
     }
 
-    .status {
+    .openLesson {
         display: none;
     }
 
