@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import StudentNavbar from '@/components/StudentNavbar/StudentNavbar';
 import styles from './Inicio.module.css';
 
 export default function InicioPage() {
@@ -247,8 +246,6 @@ export default function InicioPage() {
 
   return (
     <main className={styles.main}>
-      <StudentNavbar />
-
       <div className={styles.container}>
         <section className={styles.welcome}>
           <div className={styles.welcomeTop}>
