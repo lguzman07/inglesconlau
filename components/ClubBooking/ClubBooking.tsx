@@ -62,6 +62,15 @@ function getSessionCountdown(startsAt: string, endsAt: string) {
   }`;
 }
 
+function isSessionLive(startsAt: string, endsAt: string) {
+  const now = Date.now();
+
+  return (
+    now >= new Date(startsAt).getTime() &&
+    now < new Date(endsAt).getTime()
+  );
+}
+
 export default function ClubBooking({
   session,
   isAdmin,
@@ -70,6 +79,7 @@ export default function ClubBooking({
     useState<ReadingReservation | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
   const [message, setMessage] = useState('');
   const [countdown, setCountdown] = useState(() =>
     getSessionCountdown(session.startsAt, session.endsAt)
@@ -81,6 +91,8 @@ export default function ClubBooking({
     month: 'long',
     timeZone: 'America/Santo_Domingo',
   }).format(new Date(session.startsAt));
+
+  const sessionIsLive = isSessionLive(session.startsAt, session.endsAt);
 
   async function loadCurrentReservation() {
     const supabase = createClient();
@@ -185,6 +197,13 @@ export default function ClubBooking({
     setIsSaving(false);
   }
 
+  function joinRoom() {
+    setIsJoining(true);
+    window.location.assign(
+      `/club-de-lectura/sala?sessionId=${encodeURIComponent(session.id)}`
+    );
+  }
+
   return (
     <section className={styles.card}>
       <p className={styles.eyebrow}>LECTURA EN VIVO</p>
@@ -203,9 +222,20 @@ export default function ClubBooking({
       </div>
 
       {isAdmin ? (
-        <p className={styles.hostNote}>
-          Eres la anfitriona. Pronto verás aquí la lista de los 10 lectores.
-        </p>
+        <>
+          <p className={styles.hostNote}>
+            Eres la anfitriona. Puedes entrar a la sala en cualquier momento.
+          </p>
+
+          <button
+            type="button"
+            className={styles.primaryButton}
+            onClick={joinRoom}
+            disabled={isJoining}
+          >
+            {isJoining ? 'Abriendo la sala...' : 'Entrar como anfitriona'}
+          </button>
+        </>
       ) : (
         <div className={styles.reservationArea}>
           <h2 className={styles.reservationTitle}>Reserva tu turno para leer</h2>
@@ -232,6 +262,17 @@ export default function ClubBooking({
               >
                 {isSaving ? 'Cancelando...' : 'Cancelar mi turno'}
               </button>
+
+              {sessionIsLive && (
+                <button
+                  type="button"
+                  className={styles.primaryButton}
+                  onClick={joinRoom}
+                  disabled={isJoining}
+                >
+                  {isJoining ? 'Abriendo la sala...' : 'Unirme al club'}
+                </button>
+              )}
             </div>
           ) : (
             <button
@@ -253,7 +294,11 @@ export default function ClubBooking({
       )}
 
       <p className={styles.roomNote}>
-        La sala en vivo estará disponible aquí antes de comenzar la sesión.
+        {isAdmin
+          ? 'La sala se creará al entrar por primera vez a esta sesión.'
+          : sessionIsLive
+            ? 'Tu turno está reservado: ya puedes entrar a la sala.'
+            : 'La sala estará disponible cuando comience la sesión.'}
       </p>
     </section>
   );

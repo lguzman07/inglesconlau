@@ -71,7 +71,7 @@ export default function ClubDeLecturaPage() {
         .from('club_sessions')
         .select('id, title, starts_at, ends_at, max_readers')
         .eq('is_published', true)
-        .gte('starts_at', new Date().toISOString())
+        .gte('ends_at', new Date().toISOString())
         .order('starts_at', { ascending: true })
         .limit(1);
 
@@ -80,7 +80,7 @@ export default function ClubDeLecturaPage() {
       setIsLoading(false);
     }
 
-    loadClub();
+    void loadClub();
   }, [router]);
 
   if (isLoading) {
