@@ -2,15 +2,21 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-type DisplayPreference = 'auto' | 'normal' | 'dark' | 'contrast';
-type AppliedTheme = 'normal' | 'dark' | 'contrast';
+type DisplayPreference = 'auto' | 'normal' | 'dark' | 'contrast' | 'chic';
+type AppliedTheme = Exclude<DisplayPreference, 'auto'>;
+
 const STORAGE_KEY = 'display-mode-v2';
 
-const options: Array<{ value: DisplayPreference; icon: string; label: string }> = [
+const options: Array<{
+  value: DisplayPreference;
+  icon: string;
+  label: string;
+}> = [
   { value: 'auto', icon: '◑', label: 'Automático' },
   { value: 'normal', icon: '☀️', label: 'Claro' },
   { value: 'dark', icon: '🌙', label: 'Oscuro' },
   { value: 'contrast', icon: '◐', label: 'Alto contraste' },
+  { value: 'chic', icon: '✦', label: 'Chic' },
 ];
 
 function isDisplayPreference(value: string | null): value is DisplayPreference {
@@ -24,47 +30,65 @@ function getSystemTheme(): AppliedTheme {
 }
 
 export default function ThemeControls() {
-  const [displayPreference, setDisplayPreference] = useState<DisplayPreference>('auto');
+  const [displayPreference, setDisplayPreference] =
+    useState<DisplayPreference>('auto');
   const [isOpen, setIsOpen] = useState(false);
   const selectorRef = useRef<HTMLDivElement>(null);
 
-  const applyDisplayPreference = useCallback((preference: DisplayPreference) => {
-    const theme = preference === 'auto' ? getSystemTheme() : preference;
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem(STORAGE_KEY, preference);
-    setDisplayPreference(preference);
-  }, []);
+  const applyDisplayPreference = useCallback(
+    (preference: DisplayPreference) => {
+      const theme = preference === 'auto' ? getSystemTheme() : preference;
+
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem(STORAGE_KEY, preference);
+      setDisplayPreference(preference);
+    },
+    [],
+  );
 
   useEffect(() => {
     const savedPreference = localStorage.getItem(STORAGE_KEY);
+
     applyDisplayPreference(
-      isDisplayPreference(savedPreference) ? savedPreference : 'auto'
+      isDisplayPreference(savedPreference) ? savedPreference : 'auto',
     );
   }, [applyDisplayPreference]);
 
   useEffect(() => {
     const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+
     function handleSystemThemeChange() {
       if (displayPreference === 'auto') {
         document.documentElement.setAttribute(
           'data-theme',
-          systemTheme.matches ? 'dark' : 'normal'
+          systemTheme.matches ? 'dark' : 'normal',
         );
       }
     }
+
     systemTheme.addEventListener('change', handleSystemThemeChange);
-    return () => systemTheme.removeEventListener('change', handleSystemThemeChange);
+
+    return () => {
+      systemTheme.removeEventListener('change', handleSystemThemeChange);
+    };
   }, [displayPreference]);
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
-      if (!selectorRef.current?.contains(event.target as Node)) setIsOpen(false);
+      if (!selectorRef.current?.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
     }
+
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') setIsOpen(false);
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
     }
+
     document.addEventListener('mousedown', handlePointerDown);
     document.addEventListener('keydown', handleKeyDown);
+
     return () => {
       document.removeEventListener('mousedown', handlePointerDown);
       document.removeEventListener('keydown', handleKeyDown);
@@ -97,7 +121,9 @@ export default function ThemeControls() {
               type="button"
               role="menuitemradio"
               aria-checked={displayPreference === option.value}
-              className={`theme-option ${displayPreference === option.value ? 'active' : ''}`}
+              className={`theme-option ${
+                displayPreference === option.value ? 'active' : ''
+              }`}
               key={option.value}
               onClick={() => selectPreference(option.value)}
             >

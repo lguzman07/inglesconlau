@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import FillInTheBlanks, {
-  type FillInTheBlanksQuestion,
-} from '@/components/FillInTheBlanks/FillInTheBlanks';
+import FillInTheBlanks from '@/components/FillInTheBlanks/FillInTheBlanks';
 import LessonOpenedTracker from '@/components/LessonOpenedTracker/LessonOpenedTracker';
+import LessonVideo from '@/components/LessonVideo/LessonVideo';
+import { getLessonContent } from '@/content/lecciones';
 import styles from './Leccion.module.css';
 
 type Level = {
@@ -22,110 +22,6 @@ const levels: Record<string, Level> = {
   c1: { code: 'C1', title: 'Avanzado', lessonCount: 27 },
 };
 
-const firstLessonQuestions: FillInTheBlanksQuestion[] = [
-  {
-    id: 1,
-    before: [{ word: 'I', translation: 'yo' }],
-    after: [
-      { word: 'a', translation: 'un / una' },
-      { word: 'teacher.', translation: 'profesor / profesora' },
-    ],
-    answer: 'am',
-    sentenceTranslation: 'Soy profesor o profesora.',
-  },
-  {
-    id: 2,
-    before: [{ word: 'I', translation: 'yo' }],
-    after: [{ word: 'Dominican.', translation: 'dominicano / dominicana' }],
-    answer: 'am',
-    sentenceTranslation: 'Soy dominicano o dominicana.',
-  },
-  {
-    id: 3,
-    before: [
-      { word: 'My', translation: 'mi' },
-      { word: 'name', translation: 'nombre' },
-    ],
-    after: [{ word: 'Ana.', translation: 'Ana' }],
-    answer: 'is',
-    sentenceTranslation: 'Mi nombre es Ana.',
-  },
-  {
-    id: 4,
-    before: [{ word: 'I', translation: 'yo' }],
-    after: [
-      { word: 'a', translation: 'un / una' },
-      { word: 'student.', translation: 'estudiante' },
-    ],
-    answer: 'am',
-    sentenceTranslation: 'Soy estudiante.',
-  },
-  {
-    id: 5,
-    before: [
-      { word: 'My', translation: 'mi' },
-      { word: 'name', translation: 'nombre' },
-    ],
-    after: [{ word: 'Carlos.', translation: 'Carlos' }],
-    answer: 'is',
-    sentenceTranslation: 'Mi nombre es Carlos.',
-  },
-  {
-    id: 6,
-    before: [{ word: 'I', translation: 'yo' }],
-    after: [
-      { word: 'from', translation: 'de' },
-      { word: 'the', translation: 'el / la' },
-      {
-        word: 'Dominican Republic.',
-        translation: 'República Dominicana',
-      },
-    ],
-    answer: 'am',
-    sentenceTranslation: 'Soy de República Dominicana.',
-  },
-  {
-    id: 7,
-    before: [
-      { word: 'My', translation: 'mi' },
-      { word: 'name', translation: 'nombre' },
-    ],
-    after: [{ word: 'María.', translation: 'María' }],
-    answer: 'is',
-    sentenceTranslation: 'Mi nombre es María.',
-  },
-  {
-    id: 8,
-    before: [{ word: 'I', translation: 'yo' }],
-    after: [
-      { word: 'a', translation: 'un / una' },
-      { word: 'doctor.', translation: 'médico / médica' },
-    ],
-    answer: 'am',
-    sentenceTranslation: 'Soy médico o médica.',
-  },
-  {
-    id: 9,
-    before: [{ word: 'I', translation: 'yo' }],
-    after: [
-      { word: 'from', translation: 'de' },
-      { word: 'Santo Domingo.', translation: 'Santo Domingo' },
-    ],
-    answer: 'am',
-    sentenceTranslation: 'Soy de Santo Domingo.',
-  },
-  {
-    id: 10,
-    before: [
-      { word: 'My', translation: 'mi' },
-      { word: 'name', translation: 'nombre' },
-    ],
-    after: [{ word: 'Daniel.', translation: 'Daniel' }],
-    answer: 'is',
-    sentenceTranslation: 'Mi nombre es Daniel.',
-  },
-];
-
 function getLessonNumber(value: string) {
   if (!/^\d+$/.test(value)) return null;
 
@@ -139,25 +35,24 @@ export default async function LeccionPage({
   params: Promise<{ nivel: string; leccion: string }>;
 }) {
   const { nivel, leccion } = await params;
-  const level = levels[nivel.toLowerCase()];
+  const normalizedLevel = nivel.toLowerCase();
+  const level = levels[normalizedLevel];
   const lessonNumber = getLessonNumber(leccion);
 
   if (!level || !lessonNumber || lessonNumber > level.lessonCount) {
     notFound();
   }
 
-  const isFirstLesson = nivel.toLowerCase() === 'a0' && lessonNumber === 1;
+  const lessonKey = `${normalizedLevel}/${lessonNumber}`;
+  const lesson = getLessonContent(normalizedLevel, lessonNumber);
+  const firstExercise = lesson?.exercises[0];
   const previousLesson = lessonNumber > 1 ? lessonNumber - 1 : null;
   const nextLesson = lessonNumber < level.lessonCount ? lessonNumber + 1 : null;
-  const lessonKey = `${nivel.toLowerCase()}/${lessonNumber}`;
 
-  const lessonTitle = isFirstLesson
-    ? 'Presentarte: I am / My name is'
-    : `Lección ${lessonNumber}`;
-
-  const lessonDescription = isFirstLesson
-    ? 'Aprende a decir quién eres, de dónde eres y cómo decir tu nombre en inglés.'
-    : 'Esta página será tu guía completa: video, práctica y avance de la lección en un mismo lugar.';
+  const lessonTitle = lesson?.title ?? `Lección ${lessonNumber}`;
+  const lessonSubtitle =
+    lesson?.subtitle ??
+    'Esta página será tu guía completa: video, práctica y avance de la lección en un mismo lugar.';
 
   return (
     <main className={styles.main}>
@@ -174,7 +69,7 @@ export default async function LeccionPage({
               {level.code} · {level.title}
             </p>
             <h1 id="lesson-title">{lessonTitle}</h1>
-            <p className={styles.description}>{lessonDescription}</p>
+            <p className={styles.description}>{lessonSubtitle}</p>
           </div>
 
           <span className={styles.lessonPosition}>
@@ -187,27 +82,28 @@ export default async function LeccionPage({
           className={styles.videoSection}
           aria-labelledby="video-heading"
         >
-          <div className={styles.videoPlaceholder}>
-            <div className={styles.playIcon} aria-hidden="true">
-              ▶
+          {lesson?.videoSrc ? (
+            <LessonVideo src={lesson.videoSrc} title={lesson.title} />
+          ) : (
+            <div className={styles.videoPlaceholder}>
+              <div className={styles.playIcon} aria-hidden="true">
+                ▶
+              </div>
+              <p>Tu video aparecerá aquí</p>
+              <span>
+                Cuando grabes esta lección, añadiremos el video en este espacio.
+              </span>
             </div>
-            <p>Tu video aparecerá aquí</p>
-            <span>
-              Cuando grabes esta lección, añadiremos el video en este espacio.
-            </span>
-          </div>
+          )}
 
           <div className={styles.videoDetails}>
             <p className={styles.eyebrow}>VIDEO DE LA LECCIÓN</p>
             <h2 id="video-heading">
-              {isFirstLesson
-                ? 'Preséntate en inglés'
-                : 'Aprende paso a paso'}
+              {lesson?.videoTitle ?? 'Aprende paso a paso'}
             </h2>
             <p>
-              {isFirstLesson
-                ? 'En este video aprenderás a usar “I am” y “My name is” para hablar de ti.'
-                : 'Aquí explicarás el tema con ejemplos claros. Las estudiantes podrán pausar, volver a ver el video y seguir a su propio ritmo.'}
+              {lesson?.videoDescription ??
+                'Aquí explicarás el tema con ejemplos claros. Las estudiantes podrán pausar, volver a ver el video y seguir a su propio ritmo.'}
             </p>
           </div>
         </section>
@@ -222,14 +118,13 @@ export default async function LeccionPage({
           <div>
             <p className={styles.eyebrow}>OBJETIVO</p>
             <h2 id="objective-heading">
-              {isFirstLesson
+              {lesson
                 ? 'Presentarte con oraciones sencillas.'
                 : 'Lo que lograrás en esta lección'}
             </h2>
             <p>
-              {isFirstLesson
-                ? 'Al terminar, podrás decir tu nombre, tu profesión, tu nacionalidad y de dónde eres.'
-                : 'Añadiremos el objetivo específico cuando definamos el contenido de esta lección.'}
+              {lesson?.objective ??
+                'Añadiremos el objetivo específico cuando definamos el contenido de esta lección.'}
             </p>
           </div>
         </section>
@@ -243,17 +138,20 @@ export default async function LeccionPage({
               <p className={styles.eyebrow}>PRÁCTICA</p>
               <h2 id="practice-heading">Ejercicios</h2>
             </div>
-            {isFirstLesson && (
-              <span className={styles.exerciseCount}>1 de 1</span>
+
+            {firstExercise && (
+              <span className={styles.exerciseCount}>
+                1 de {lesson.exercises.length}
+              </span>
             )}
           </div>
 
-          {isFirstLesson ? (
+          {firstExercise ? (
             <FillInTheBlanks
-              title="Completa los espacios"
-              instructions="Escribe am o is en cada espacio. Toca una palabra si quieres ver su traducción."
+              title={firstExercise.title}
+              instructions={firstExercise.instructions}
               lessonKey={lessonKey}
-              questions={firstLessonQuestions}
+              questions={firstExercise.questions}
               nextLessonHref={
                 nextLesson ? `/lecciones/${nivel}/${nextLesson}` : undefined
               }

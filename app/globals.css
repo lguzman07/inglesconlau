@@ -175,6 +175,100 @@ html[data-theme='contrast'] {
   --shadow-hover: 0 0 0 4px #000000;
 }
 
+html[data-theme='chic'] {
+  --background: #fff6fb;
+  --surface: rgba(255, 250, 253, 0.97);
+  --surface-solid: #fffafd;
+  --surface-soft: #f9e3f1;
+
+  --primary: #a44a7b;
+  --primary-hover: #873a66;
+  --primary-light: #f2cce2;
+  --accent: #8d3f6c;
+
+  --secondary: #efd4e4;
+  --secondary-hover: #e7bdd5;
+
+  --text: #4d3142;
+  --text-light: #78596a;
+
+  --border: #e7b9d2;
+  --focus: #6e2754;
+
+  --shadow: 0 10px 28px rgb(125 56 95 / 12%);
+  --shadow-hover: 0 14px 30px rgb(125 56 95 / 18%);
+}
+
+html[data-theme='colorful'] {
+  --background: #fff8ed;
+  --surface: rgba(255, 253, 248, 0.97);
+  --surface-solid: #fffdf8;
+  --surface-soft: #e8f5f8;
+
+  --primary: #6a50a7;
+  --primary-hover: #513b86;
+  --primary-light: #e4dcf7;
+  --accent: #c3547d;
+
+  --secondary: #ffd7c6;
+  --secondary-hover: #ffc0a5;
+
+  --text: #302c43;
+  --text-light: #625d76;
+
+  --border: #d4ccea;
+  --focus: #c13c70;
+
+  --shadow: 0 10px 28px rgb(76 61 135 / 12%);
+  --shadow-hover: 0 14px 30px rgb(76 61 135 / 18%);
+}
+
+html[data-theme='chic'] .theme-trigger {
+  background: linear-gradient(135deg, #fff1f8, #f0e5ff);
+  border-color: #d99abb;
+}
+
+html[data-theme='colorful'] .theme-trigger {
+  background: linear-gradient(135deg, #ffe2d2, #e4dcff, #d9f5f1);
+  border-color: #bbaee3;
+}
+
+html[data-theme='chic'] .theme-option.active {
+  color: #8d3f6c;
+  background: #fdebf5;
+}
+
+html[data-theme='colorful'] {
+  --background: #fff8ee;
+  --surface: #fffdf9;
+  --surface-solid: #fffdf9;
+  --surface-soft: #f0e6ff;
+
+  --primary: #7046a8;
+  --primary-hover: #56338a;
+  --primary-light: #e3d5ff;
+  --accent: #d55d86;
+
+  --secondary: #d9f4e2;
+  --secondary-hover: #bfeacb;
+
+  --text: #352d43;
+  --text-light: #675f76;
+
+  --border: #d6c8e7;
+  --focus: #c94275;
+
+  --shadow: 0 10px 28px rgb(102 70 157 / 13%);
+  --shadow-hover: 0 14px 30px rgb(213 93 134 / 18%);
+
+  --colorful-pink: #ffe0eb;
+  --colorful-coral: #ffd5c5;
+  --colorful-yellow: #fff0b6;
+  --colorful-green: #daf4df;
+  --colorful-blue: #d9efff;
+  --colorful-purple: #f0e6ff;
+}
+
 /* ==========================================
    Controles globales del tema
 ========================================== */
@@ -2029,4 +2123,40 @@ html[data-theme='contrast'] .complete-profile-button:hover:not(:disabled) {
   .carousel-card { transition: none; }
   .faq-answer-wrapper,
   .faq-answer { transition: none; }
+}
+
+html[data-theme='colorful'] .theme-trigger {
+  background: #ffe0eb;
+  border-color: #d99abb;
+}
+
+html[data-theme='colorful'] .theme-option.active {
+  color: #56338a;
+  background: #f0e6ff;
+}
+
+/* Dashboard: cada bloque tiene un color coordinado. */
+html[data-theme='colorful'] [class*='currentLesson'] {
+  background: var(--colorful-purple) !important;
+  border-color: #cdaee9 !important;
+}
+
+html[data-theme='colorful'] [class*='readingClub'] {
+  background: var(--colorful-blue) !important;
+  border-color: #a8d3ee !important;
+}
+
+html[data-theme='colorful'] [class*='summaryCard']:nth-child(1) {
+  background: var(--colorful-green) !important;
+  border-color: #a8dcb5 !important;
+}
+
+html[data-theme='colorful'] [class*='summaryCard']:nth-child(2) {
+  background: var(--colorful-yellow) !important;
+  border-color: #e7ce76 !important;
+}
+
+html[data-theme='colorful'] [class*='summaryCard']:nth-child(3) {
+  background: var(--colorful-pink) !important;
+  border-color: #e5a7c0 !important;
 }
