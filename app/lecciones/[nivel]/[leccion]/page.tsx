@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import DragAndDrop from '@/components/DragAndDrop/DragAndDrop';
 import FillInTheBlanks from '@/components/FillInTheBlanks/FillInTheBlanks';
 import LessonOpenedTracker from '@/components/LessonOpenedTracker/LessonOpenedTracker';
 import LessonVideo from '@/components/LessonVideo/LessonVideo';
@@ -13,43 +14,94 @@ type Level = {
 };
 
 const levels: Record<string, Level> = {
-  a0: { code: 'A0', title: 'Primeros pasos', lessonCount: 16 },
-  a1: { code: 'A1', title: 'Principiante', lessonCount: 27 },
-  a2: { code: 'A2', title: 'Básico', lessonCount: 26 },
-  b1: { code: 'B1', title: 'Intermedio', lessonCount: 25 },
-  'b1+': { code: 'B1+', title: 'Intermedio alto', lessonCount: 25 },
-  b2: { code: 'B2', title: 'Intermedio avanzado', lessonCount: 25 },
-  c1: { code: 'C1', title: 'Avanzado', lessonCount: 27 },
+  a0: {
+    code: 'A0',
+    title: 'Primeros pasos',
+    lessonCount: 16,
+  },
+  a1: {
+    code: 'A1',
+    title: 'Principiante',
+    lessonCount: 27,
+  },
+  a2: {
+    code: 'A2',
+    title: 'Básico',
+    lessonCount: 26,
+  },
+  b1: {
+    code: 'B1',
+    title: 'Intermedio',
+    lessonCount: 25,
+  },
+  'b1+': {
+    code: 'B1+',
+    title: 'Intermedio alto',
+    lessonCount: 25,
+  },
+  b2: {
+    code: 'B2',
+    title: 'Intermedio avanzado',
+    lessonCount: 25,
+  },
+  c1: {
+    code: 'C1',
+    title: 'Avanzado',
+    lessonCount: 27,
+  },
 };
 
 function getLessonNumber(value: string) {
   if (!/^\d+$/.test(value)) return null;
 
   const number = Number(value);
-  return Number.isSafeInteger(number) && number > 0 ? number : null;
+
+  return Number.isSafeInteger(number) && number > 0
+    ? number
+    : null;
 }
 
 export default async function LeccionPage({
   params,
 }: {
-  params: Promise<{ nivel: string; leccion: string }>;
+  params: Promise<{
+    nivel: string;
+    leccion: string;
+  }>;
 }) {
   const { nivel, leccion } = await params;
   const normalizedLevel = nivel.toLowerCase();
   const level = levels[normalizedLevel];
   const lessonNumber = getLessonNumber(leccion);
 
-  if (!level || !lessonNumber || lessonNumber > level.lessonCount) {
+  if (
+    !level ||
+    !lessonNumber ||
+    lessonNumber > level.lessonCount
+  ) {
     notFound();
   }
 
   const lessonKey = `${normalizedLevel}/${lessonNumber}`;
-  const lesson = getLessonContent(normalizedLevel, lessonNumber);
+  const lesson = getLessonContent(
+    normalizedLevel,
+    lessonNumber,
+  );
   const firstExercise = lesson?.exercises[0];
-  const previousLesson = lessonNumber > 1 ? lessonNumber - 1 : null;
-  const nextLesson = lessonNumber < level.lessonCount ? lessonNumber + 1 : null;
+  const previousLesson =
+    lessonNumber > 1 ? lessonNumber - 1 : null;
+  const nextLesson =
+    lessonNumber < level.lessonCount
+      ? lessonNumber + 1
+      : null;
 
-  const lessonTitle = lesson?.title ?? `Lección ${lessonNumber}`;
+  const nextLessonHref = nextLesson
+    ? `/lecciones/${nivel}/${nextLesson}`
+    : undefined;
+
+  const lessonTitle =
+    lesson?.title ?? `Lección ${lessonNumber}`;
+
   const lessonSubtitle =
     lesson?.subtitle ??
     'Esta página será tu guía completa: video, práctica y avance de la lección en un mismo lugar.';
@@ -59,17 +111,27 @@ export default async function LeccionPage({
       <LessonOpenedTracker lessonKey={lessonKey} />
 
       <div className={styles.container}>
-        <Link href={`/lecciones/${nivel}`} className={styles.backLink}>
+        <Link
+          href={`/lecciones/${nivel}`}
+          className={styles.backLink}
+        >
           ← Volver a {level.code}
         </Link>
 
-        <section className={styles.heading} aria-labelledby="lesson-title">
+        <section
+          className={styles.heading}
+          aria-labelledby="lesson-title"
+        >
           <div>
             <p className={styles.eyebrow}>
               {level.code} · {level.title}
             </p>
+
             <h1 id="lesson-title">{lessonTitle}</h1>
-            <p className={styles.description}>{lessonSubtitle}</p>
+
+            <p className={styles.description}>
+              {lessonSubtitle}
+            </p>
           </div>
 
           <span className={styles.lessonPosition}>
@@ -83,24 +145,38 @@ export default async function LeccionPage({
           aria-labelledby="video-heading"
         >
           {lesson?.videoSrc ? (
-            <LessonVideo src={lesson.videoSrc} title={lesson.title} />
+            <LessonVideo
+              src={lesson.videoSrc}
+              title={lesson.title}
+            />
           ) : (
             <div className={styles.videoPlaceholder}>
-              <div className={styles.playIcon} aria-hidden="true">
+              <div
+                className={styles.playIcon}
+                aria-hidden="true"
+              >
                 ▶
               </div>
+
               <p>Tu video aparecerá aquí</p>
+
               <span>
-                Cuando grabes esta lección, añadiremos el video en este espacio.
+                Cuando grabes esta lección, añadiremos el
+                video en este espacio.
               </span>
             </div>
           )}
 
           <div className={styles.videoDetails}>
-            <p className={styles.eyebrow}>VIDEO DE LA LECCIÓN</p>
+            <p className={styles.eyebrow}>
+              VIDEO DE LA LECCIÓN
+            </p>
+
             <h2 id="video-heading">
-              {lesson?.videoTitle ?? 'Aprende paso a paso'}
+              {lesson?.videoTitle ??
+                'Aprende paso a paso'}
             </h2>
+
             <p>
               {lesson?.videoDescription ??
                 'Aquí explicarás el tema con ejemplos claros. Las estudiantes podrán pausar, volver a ver el video y seguir a su propio ritmo.'}
@@ -112,16 +188,22 @@ export default async function LeccionPage({
           className={styles.objectiveCard}
           aria-labelledby="objective-heading"
         >
-          <div className={styles.objectiveIcon} aria-hidden="true">
+          <div
+            className={styles.objectiveIcon}
+            aria-hidden="true"
+          >
             ◎
           </div>
+
           <div>
             <p className={styles.eyebrow}>OBJETIVO</p>
+
             <h2 id="objective-heading">
               {lesson
-                ? 'Presentarte con oraciones sencillas.'
+                ? 'Usar este contenido en oraciones sencillas.'
                 : 'Lo que lograrás en esta lección'}
             </h2>
+
             <p>
               {lesson?.objective ??
                 'Añadiremos el objetivo específico cuando definamos el contenido de esta lección.'}
@@ -139,7 +221,7 @@ export default async function LeccionPage({
               <h2 id="practice-heading">Ejercicios</h2>
             </div>
 
-            {firstExercise && (
+            {firstExercise && lesson && (
               <span className={styles.exerciseCount}>
                 1 de {lesson.exercises.length}
               </span>
@@ -147,23 +229,36 @@ export default async function LeccionPage({
           </div>
 
           {firstExercise ? (
-            <FillInTheBlanks
-              title={firstExercise.title}
-              instructions={firstExercise.instructions}
-              lessonKey={lessonKey}
-              questions={firstExercise.questions}
-              nextLessonHref={
-                nextLesson ? `/lecciones/${nivel}/${nextLesson}` : undefined
-              }
-            />
+            firstExercise.type ===
+            'fill-in-the-blanks' ? (
+              <FillInTheBlanks
+                title={firstExercise.title}
+                instructions={firstExercise.instructions}
+                lessonKey={lessonKey}
+                questions={firstExercise.questions}
+                nextLessonHref={nextLessonHref}
+              />
+            ) : (
+              <DragAndDrop
+                title={firstExercise.title}
+                instructions={firstExercise.instructions}
+                lessonKey={lessonKey}
+                questions={firstExercise.questions}
+                nextLessonHref={nextLessonHref}
+              />
+            )
           ) : (
             <div className={styles.practiceCard}>
-              <span className={styles.practiceNumber}>1</span>
+              <span className={styles.practiceNumber}>
+                1
+              </span>
+
               <div>
                 <h3>Comprueba lo que aprendiste</h3>
+
                 <p>
-                  Los ejercicios interactivos con corrección inmediata aparecerán
-                  aquí después del video.
+                  Los ejercicios interactivos con corrección
+                  inmediata aparecerán aquí después del video.
                 </p>
               </div>
             </div>

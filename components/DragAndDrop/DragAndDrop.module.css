@@ -1,0 +1,419 @@
+.exercise {
+  padding: 32px;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.exerciseHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.exerciseHeader h3 {
+  margin: 6px 0 8px;
+  color: var(--text);
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+}
+
+.exerciseHeader p {
+  max-width: 680px;
+  margin: 0;
+  color: var(--text-light);
+  line-height: 1.65;
+}
+
+.exerciseType {
+  color: var(--primary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.clickHelp {
+  margin-top: 5px !important;
+  font-size: 0.88rem;
+}
+
+.totalQuestions {
+  flex: 0 0 auto;
+  padding: 8px 13px;
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 800;
+  background: var(--primary-light);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.questions {
+  display: grid;
+  gap: 20px;
+}
+
+.questionCard {
+  position: relative;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 18px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 4px);
+}
+
+.questionNumber {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 800;
+  background: var(--primary);
+  border-radius: 50%;
+}
+
+.questionContent {
+  min-width: 0;
+}
+
+.questionInstruction {
+  margin: 5px 0 14px;
+  color: var(--text);
+  font-weight: 750;
+}
+
+.wordBank,
+.answerZone {
+  display: flex;
+  min-height: 64px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 14px;
+}
+
+.wordBank {
+  margin-bottom: 12px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+}
+
+.answerZone {
+  background: var(--surface-solid);
+  border: 2px dashed var(--border);
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.answerZone:hover {
+  border-color: var(--primary);
+}
+
+.wordChip,
+.selectedChip {
+  min-height: 42px;
+  padding: 9px 15px;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 750;
+  border-radius: 11px;
+  cursor: grab;
+  touch-action: manipulation;
+  transition:
+    transform 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.wordChip {
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 10px rgb(0 0 0 / 6%);
+}
+
+.selectedChip {
+  color: #fff;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  box-shadow: 0 5px 12px rgb(0 0 0 / 12%);
+}
+
+.wordChip:hover,
+.wordChip:focus-visible {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.selectedChip:hover,
+.selectedChip:focus-visible {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.wordChip:active,
+.selectedChip:active {
+  cursor: grabbing;
+  transform: scale(0.97);
+}
+
+.wordChip:disabled,
+.selectedChip:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.wordChip:focus-visible,
+.selectedChip:focus-visible,
+.checkButton:focus-visible,
+.retryButton:focus-visible,
+.nextButton:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.emptyBank,
+.answerPlaceholder {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.correctZone {
+  background: rgb(28 145 82 / 9%);
+  border-color: #1c9152;
+}
+
+.incorrectZone {
+  background: rgb(210 63 78 / 8%);
+  border-color: #d23f4e;
+}
+
+.correctFeedback,
+.incorrectFeedback {
+  margin: 12px 0 0;
+  line-height: 1.55;
+}
+
+.correctFeedback {
+  color: #157344;
+}
+
+.incorrectFeedback {
+  color: #b42334;
+}
+
+.correctFeedback p,
+.incorrectFeedback p {
+  margin: 0;
+}
+
+.incorrectFeedback strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--text);
+}
+
+.translation {
+  margin-top: 7px !important;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.checkButton {
+  display: block;
+  width: min(100%, 310px);
+  margin: 28px auto 0;
+  padding: 14px 22px;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 13px;
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    background 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.checkButton:hover:not(:disabled) {
+  background: var(--primary-hover);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.checkButton:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.resultCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 24px;
+  padding: 24px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.resultCard h4 {
+  margin: 4px 0 7px;
+  color: var(--text);
+  font-size: 1.15rem;
+}
+
+.resultCard p {
+  margin: 0;
+  color: var(--text-light);
+  line-height: 1.55;
+}
+
+.resultLabel {
+  color: var(--primary) !important;
+  font-size: 0.75rem;
+  font-weight: 850;
+  letter-spacing: 0.11em;
+}
+
+.resultActions {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.retryButton,
+.nextButton {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 17px;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    background 150ms ease,
+    border-color 150ms ease;
+}
+
+.retryButton {
+  color: var(--text);
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+}
+
+.nextButton {
+  color: #fff;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.retryButton:hover:not(:disabled),
+.nextButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.retryButton:hover:not(:disabled) {
+  border-color: var(--primary);
+}
+
+.nextButton:hover:not(:disabled) {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.retryButton:disabled,
+.nextButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+@media (max-width: 760px) {
+  .exercise {
+    padding: 22px 16px;
+  }
+
+  .exerciseHeader {
+    flex-direction: column;
+  }
+
+  .questionCard {
+    grid-template-columns: 1fr;
+    padding: 18px 15px;
+  }
+
+  .questionNumber {
+    width: 34px;
+    height: 34px;
+  }
+
+  .resultCard {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .resultActions {
+    width: 100%;
+  }
+
+  .retryButton,
+  .nextButton {
+    flex: 1;
+  }
+}
+
+@media (max-width: 460px) {
+  .wordChip,
+  .selectedChip {
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  .wordBank,
+  .answerZone {
+    min-height: 60px;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .resultActions {
+    flex-direction: column;
+  }
+
+  .retryButton,
+  .nextButton {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wordChip,
+  .selectedChip,
+  .checkButton,
+  .retryButton,
+  .nextButton,
+  .answerZone {
+    transition: none;
+  }
+}

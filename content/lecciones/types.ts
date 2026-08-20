@@ -18,6 +18,30 @@ export type FillInTheBlanksExercise = {
   questions: FillInTheBlanksQuestion[];
 };
 
+export type DragAndDropToken = {
+  id: string;
+  word: string;
+  translation: string;
+};
+
+export type DragAndDropQuestion = {
+  id: number;
+  tokens: DragAndDropToken[];
+  correctOrder: string[];
+  sentenceTranslation: string;
+};
+
+export type DragAndDropExercise = {
+  type: 'drag-and-drop';
+  title: string;
+  instructions: string;
+  questions: DragAndDropQuestion[];
+};
+
+export type LessonExercise =
+  | FillInTheBlanksExercise
+  | DragAndDropExercise;
+
 export type LessonContent = {
   level: string;
   number: number;
@@ -27,5 +51,5 @@ export type LessonContent = {
   videoTitle: string;
   videoDescription: string;
   objective: string;
-  exercises: FillInTheBlanksExercise[];
+  exercises: LessonExercise[];
 };
