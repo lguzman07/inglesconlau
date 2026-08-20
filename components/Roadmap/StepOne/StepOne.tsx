@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import Text from './Text';
 import styles from '../Roadmap/Roadmap.module.css';
 
@@ -23,7 +24,9 @@ export default function StepOne() {
             height={810}
           />
 
-          <span className={styles.lessonPdfLabel}>Ver la lección en PDF →</span>
+          <span className={styles.lessonPdfLabel}>
+            Ver la lección en PDF →
+          </span>
         </a>
       </div>
 
@@ -36,9 +39,9 @@ export default function StepOne() {
           Empieza hoy y aprende inglés con confianza.
         </p>
 
-        <a href="/plan" className={styles.ctaButton}>
+        <Link href="/plan" className={styles.ctaButton}>
           Ver el plan →
-        </a>
+        </Link>
       </div>
     </section>
   );

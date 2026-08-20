@@ -532,25 +532,22 @@ export default function FillInTheBlanks({
               </p>
             </div>
 
-            {!passedCurrentAttempt && (
-              <div className={styles.resultActions}>
-                <button
-                  type="button"
-                  className={styles.retryButton}
-                  onClick={handleRetry}
-                >
-                  Repetir ejercicio
-                </button>
-              </div>
-            )}
+            <div className={styles.resultActions}>
+              <button
+                type="button"
+                className={styles.retryButton}
+                disabled={isSavingProgress}
+                onClick={handleRetry}
+              >
+                Repetir ejercicio
+              </button>
 
-            {passedCurrentAttempt && nextLessonHref && (
-              <div className={styles.resultActions}>
+              {passedCurrentAttempt && nextLessonHref && (
                 <Link href={nextLessonHref} className={styles.nextButton}>
                   Siguiente lección →
                 </Link>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
       </section>

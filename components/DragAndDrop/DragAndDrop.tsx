@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import AudioPlayer from '@/components/AudioPlayer/AudioPlayer';
 import { createClient } from '@/lib/supabase/client';
 import type {
   DragAndDropQuestion,
@@ -657,6 +658,17 @@ export default function DragAndDrop({
                       <p className={styles.translation}>
                         {question.sentenceTranslation}
                       </p>
+
+                      <div className={styles.sentenceAudio}>
+                        <span className={styles.sentenceAudioLabel}>
+                          Escuchar oración
+                        </span>
+
+                        <AudioPlayer
+                          text={getCorrectSentence(question)}
+                          language="en"
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
@@ -694,28 +706,25 @@ export default function DragAndDrop({
               </p>
             </div>
 
-            {!passedCurrentAttempt && (
-              <div className={styles.resultActions}>
-                <button
-                  type="button"
-                  className={styles.retryButton}
-                  onClick={handleRetry}
-                >
-                  Repetir ejercicio
-                </button>
-              </div>
-            )}
+            <div className={styles.resultActions}>
+              <button
+                type="button"
+                className={styles.retryButton}
+                disabled={isSavingProgress}
+                onClick={handleRetry}
+              >
+                Repetir ejercicio
+              </button>
 
-            {passedCurrentAttempt && nextLessonHref && (
-              <div className={styles.resultActions}>
+              {passedCurrentAttempt && nextLessonHref && (
                 <Link
                   href={nextLessonHref}
                   className={styles.nextButton}
                 >
                   Siguiente lección →
                 </Link>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
       </section>

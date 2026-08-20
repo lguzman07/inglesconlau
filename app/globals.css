@@ -140,11 +140,125 @@ body {
 }
 
 .theme-color-swatch {
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--surface-solid);
+  width: 22px;
+  height: 22px;
+  opacity: 1 !important;
+  background-image: none !important;
+  border: 2px solid #ffffff;
   border-radius: 50%;
-  box-shadow: 0 0 0 1px var(--border);
+  box-shadow:
+    0 0 0 1px rgb(38 42 50 / 35%),
+    0 2px 5px rgb(38 42 50 / 18%);
+  filter: none !important;
+  mix-blend-mode: normal;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(1)
+  .theme-color-swatch {
+  background-color: #e63956 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(2)
+  .theme-color-swatch {
+  background-color: #ff725e !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(3)
+  .theme-color-swatch {
+  background-color: #ff7a1a !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(4)
+  .theme-color-swatch {
+  background-color: #ffd400 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(5)
+  .theme-color-swatch {
+  background-color: #f2b705 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(6)
+  .theme-color-swatch {
+  background-color: #f1d58a !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(7)
+  .theme-color-swatch {
+  background-color: #a8d600 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(8)
+  .theme-color-swatch {
+  background-color: #1fb968 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(9)
+  .theme-color-swatch {
+  background-color: #42d6a4 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(10)
+  .theme-color-swatch {
+  background-color: #20c9c3 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(11)
+  .theme-color-swatch {
+  background-color: #38bdf8 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(12)
+  .theme-color-swatch {
+  background-color: #6f9fc4 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(13)
+  .theme-color-swatch {
+  background-color: #9b5de5 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(14)
+  .theme-color-swatch {
+  background-color: #c77dff !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(15)
+  .theme-color-swatch {
+  background-color: #ff8fc4 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(16)
+  .theme-color-swatch {
+  background-color: #f72585 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(17)
+  .theme-color-swatch {
+  background-color: #a97155 !important;
+}
+
+.theme-color-options
+  .theme-color-option:nth-child(18)
+  .theme-color-swatch {
+  background-color: #aeb4bf !important;
 }
 
 .theme-option:focus-visible,
@@ -277,6 +391,78 @@ html[data-theme='chic'] .theme-option.active {
 /* ==========================================
    Paletas de color elegibles
 ========================================== */
+
+html[data-theme='red'] {
+  --background: #fff6f6;
+  --surface: rgb(255 251 251 / 97%);
+  --surface-solid: #fffbfb;
+  --surface-soft: #f9dede;
+
+  --primary: #b3262e;
+  --primary-hover: #8e1d24;
+  --primary-light: #efb9bd;
+  --accent: #9d2028;
+
+  --secondary: #f2cbce;
+  --secondary-hover: #e9b2b6;
+
+  --text: #452e30;
+  --text-light: #76575a;
+
+  --border: #e3a8ad;
+  --focus: #71151c;
+
+  --shadow: 0 10px 28px rgb(179 38 46 / 11%);
+  --shadow-hover: 0 14px 30px rgb(179 38 46 / 17%);
+}
+
+html[data-theme='coral'] {
+  --background: #fff7f5;
+  --surface: rgb(255 252 251 / 97%);
+  --surface-solid: #fffcfb;
+  --surface-soft: #fbe0dc;
+
+  --primary: #ad463d;
+  --primary-hover: #89362f;
+  --primary-light: #f1beb8;
+  --accent: #973d35;
+
+  --secondary: #f5cec9;
+  --secondary-hover: #ebb5ae;
+
+  --text: #46312f;
+  --text-light: #765a57;
+
+  --border: #e5aaa3;
+  --focus: #6d2924;
+
+  --shadow: 0 10px 28px rgb(173 70 61 / 11%);
+  --shadow-hover: 0 14px 30px rgb(173 70 61 / 17%);
+}
+
+html[data-theme='pink'] {
+  --background: #fff7fb;
+  --surface: rgb(255 251 253 / 97%);
+  --surface-solid: #fffbfd;
+  --surface-soft: #f9deec;
+
+  --primary: #b23c72;
+  --primary-hover: #8e2e5a;
+  --primary-light: #efbbd3;
+  --accent: #9c3464;
+
+  --secondary: #f3cade;
+  --secondary-hover: #eab1cd;
+
+  --text: #472f3b;
+  --text-light: #765766;
+
+  --border: #e3a6c3;
+  --focus: #702047;
+
+  --shadow: 0 10px 28px rgb(178 60 114 / 11%);
+  --shadow-hover: 0 14px 30px rgb(178 60 114 / 17%);
+}
 
 html[data-theme='fuchsia'] {
   --background: #fff5fb;
@@ -542,6 +728,54 @@ html[data-theme='purple'] {
   --shadow-hover: 0 14px 30px rgb(112 64 160 / 17%);
 }
 
+html[data-theme='lilac'] {
+  --background: #fbf8ff;
+  --surface: rgb(254 252 255 / 97%);
+  --surface-solid: #fefcff;
+  --surface-soft: #eee4fb;
+
+  --primary: #6f4d98;
+  --primary-hover: #573a79;
+  --primary-light: #dac7ee;
+  --accent: #604186;
+
+  --secondary: #e4d5f3;
+  --secondary-hover: #d2bce8;
+
+  --text: #3d3347;
+  --text-light: #6d5f79;
+
+  --border: #cab3df;
+  --focus: #472c68;
+
+  --shadow: 0 10px 28px rgb(111 77 152 / 11%);
+  --shadow-hover: 0 14px 30px rgb(111 77 152 / 17%);
+}
+
+html[data-theme='teal'] {
+  --background: #f2fbfb;
+  --surface: rgb(249 255 255 / 97%);
+  --surface-solid: #f9ffff;
+  --surface-soft: #d6f0ef;
+
+  --primary: #197a78;
+  --primary-hover: #125f5d;
+  --primary-light: #aee0dd;
+  --accent: #156b69;
+
+  --secondary: #c7e9e7;
+  --secondary-hover: #a9ddda;
+
+  --text: #273e3e;
+  --text-light: #557171;
+
+  --border: #9fd3d0;
+  --focus: #0d4f4d;
+
+  --shadow: 0 10px 28px rgb(25 122 120 / 11%);
+  --shadow-hover: 0 14px 30px rgb(25 122 120 / 17%);
+}
+
 html[data-theme='golden'] {
   --background: #fffaf0;
   --surface: rgb(255 253 248 / 97%);
@@ -566,6 +800,9 @@ html[data-theme='golden'] {
   --shadow-hover: 0 14px 30px rgb(138 101 0 / 17%);
 }
 
+html[data-theme='red'] .theme-trigger,
+html[data-theme='coral'] .theme-trigger,
+html[data-theme='pink'] .theme-trigger,
 html[data-theme='fuchsia'] .theme-trigger,
 html[data-theme='sky-blue'] .theme-trigger,
 html[data-theme='navy-blue'] .theme-trigger,
@@ -577,6 +814,8 @@ html[data-theme='grayscale'] .theme-trigger,
 html[data-theme='orange'] .theme-trigger,
 html[data-theme='yellow'] .theme-trigger,
 html[data-theme='purple'] .theme-trigger,
+html[data-theme='lilac'] .theme-trigger,
+html[data-theme='teal'] .theme-trigger,
 html[data-theme='golden'] .theme-trigger {
   background: var(--primary-light);
   border-color: var(--primary);

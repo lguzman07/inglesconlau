@@ -231,6 +231,26 @@
   font-size: 0.9rem;
 }
 
+.sentenceAudio {
+  display: flex;
+  max-width: 360px;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  color: var(--text);
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.sentenceAudioLabel {
+  flex: 0 0 auto;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
 .checkButton {
   display: block;
   width: min(100%, 310px);
@@ -395,6 +415,11 @@
     min-height: 60px;
     gap: 8px;
     padding: 10px;
+  }
+
+  .sentenceAudio {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .resultActions {

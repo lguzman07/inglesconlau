@@ -10,7 +10,7 @@ import styles from './StudentNavbar.module.css';
 const navigationItems = [
   { href: '/inicio', label: 'Inicio' },
   { href: '/lecciones', label: 'Lecciones' },
-  { href: '/completar-perfil', label: 'Mi perfil' },
+  { href: '/configuracion', label: 'Configuración' },
 ];
 
 export default function StudentNavbar() {
@@ -19,7 +19,9 @@ export default function StudentNavbar() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const isStudentArea =
-    pathname === '/inicio' || pathname.startsWith('/lecciones');
+    pathname === '/inicio' ||
+    pathname.startsWith('/lecciones') ||
+    pathname.startsWith('/configuracion');
 
   if (!isStudentArea) {
     return null;
@@ -41,25 +43,30 @@ export default function StudentNavbar() {
         Inglés con Lau
       </Link>
 
-      <nav className={styles.navigation} aria-label="Navegación principal">
+      <nav
+        className={styles.navigation}
+        aria-label="Navegación principal"
+      >
         {navigationItems.map((item) => {
           const isActive =
             item.href === '/lecciones'
               ? pathname.startsWith('/lecciones')
-              : pathname === item.href;
+              : pathname.startsWith(item.href);
 
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={isActive ? styles.activeLink : styles.navLink}
+              className={
+                isActive ? styles.activeLink : styles.navLink
+              }
             >
               {item.label}
             </Link>
           );
         })}
 
-        <ThemeControls />
+        {!pathname.startsWith('/configuracion') && <ThemeControls />}
 
         <button
           type="button"

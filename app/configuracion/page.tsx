@@ -1,0 +1,648 @@
+'use client';
+
+import { FormEvent, useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import ThemeControls from '@/components/ThemeControls/ThemeControls';
+import { createClient } from '@/lib/supabase/client';
+import styles from './page.module.css';
+
+type ProfileForm = {
+  full_name: string;
+  birth_date: string;
+  country: string;
+  gender: string;
+  english_level: string;
+  learning_goal: string;
+};
+
+type SubscriptionInfo = {
+  status: string;
+  current_period_end: string | null;
+};
+
+const EMPTY_PROFILE: ProfileForm = {
+  full_name: '',
+  birth_date: '',
+  country: '',
+  gender: '',
+  english_level: '',
+  learning_goal: '',
+};
+
+const GENDERS = [
+  'Femenino',
+  'Masculino',
+  'Prefiero no decirlo',
+];
+
+const ENGLISH_LEVELS = [
+  'A1',
+  'A2',
+  'B1',
+  'B2',
+  'C1',
+  'No lo sé',
+];
+
+const LEARNING_GOALS = [
+  'Conversar con confianza',
+  'Conseguir empleo o crecer profesionalmente',
+  'Viajar y comunicarme con facilidad',
+  'Estudiar o prepararme académicamente',
+  'Mejorar mi inglés general',
+];
+
+const MAXIMUM_BIRTH_DATE = (() => {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() - 18);
+  return date.toISOString().slice(0, 10);
+})();
+
+function formatSubscriptionDate(value: string | null) {
+  if (!value) return 'No disponible';
+
+  return new Intl.DateTimeFormat('es-DO', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'America/Santo_Domingo',
+  }).format(new Date(value));
+}
+
+export default function ConfiguracionPage() {
+  const router = useRouter();
+
+  const [email, setEmail] = useState('');
+  const [profile, setProfile] = useState<ProfileForm>(EMPTY_PROFILE);
+  const [subscription, setSubscription] =
+    useState<SubscriptionInfo | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [newEmail, setNewEmail] = useState('');
+  const [isEmailFormOpen, setIsEmailFormOpen] = useState(false);
+  const [isChangingEmail, setIsChangingEmail] = useState(false);
+  const [isSendingPasswordEmail, setIsSendingPasswordEmail] =
+    useState(false);
+  const [profileMessage, setProfileMessage] = useState('');
+  const [emailMessage, setEmailMessage] = useState('');
+  const [securityMessage, setSecurityMessage] = useState('');
+
+  useEffect(() => {
+    async function loadSettings() {
+      const supabase = createClient();
+
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        router.replace('/iniciar-sesion');
+        return;
+      }
+
+      setEmail(user.email ?? '');
+
+      const [profileResult, subscriptionResult] = await Promise.all([
+        supabase
+          .from('profiles')
+          .select(
+            'full_name, birth_date, country, gender, english_level, learning_goal',
+          )
+          .eq('id', user.id)
+          .maybeSingle(),
+        supabase
+          .from('subscriptions')
+          .select('status, current_period_end')
+          .eq('user_id', user.id)
+          .maybeSingle(),
+      ]);
+
+      if (profileResult.data) {
+        setProfile({
+          full_name: profileResult.data.full_name ?? '',
+          birth_date: profileResult.data.birth_date ?? '',
+          country: profileResult.data.country ?? '',
+          gender: profileResult.data.gender ?? '',
+          english_level: profileResult.data.english_level ?? '',
+          learning_goal: profileResult.data.learning_goal ?? '',
+        });
+      }
+
+      if (subscriptionResult.data) {
+        setSubscription(subscriptionResult.data);
+      }
+
+      setIsLoading(false);
+    }
+
+    void loadSettings();
+  }, [router]);
+
+  function updateProfileField(
+    field: keyof ProfileForm,
+    value: string,
+  ) {
+    setProfile((current) => ({
+      ...current,
+      [field]: value,
+    }));
+    setProfileMessage('');
+  }
+
+  async function handleSaveProfile(
+    event: FormEvent<HTMLFormElement>,
+  ) {
+    event.preventDefault();
+    setProfileMessage('');
+
+    if (
+      !profile.full_name.trim() ||
+      !profile.birth_date ||
+      !profile.country.trim() ||
+      !profile.gender ||
+      !profile.english_level ||
+      !profile.learning_goal
+    ) {
+      setProfileMessage('Completa todos los campos del perfil.');
+      return;
+    }
+
+    if (profile.birth_date > MAXIMUM_BIRTH_DATE) {
+      setProfileMessage('Debes tener al menos 18 años.');
+      return;
+    }
+
+    setIsSaving(true);
+
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      setProfileMessage('Tu sesión terminó. Inicia sesión nuevamente.');
+      setIsSaving(false);
+      return;
+    }
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({
+        full_name: profile.full_name.trim(),
+        birth_date: profile.birth_date,
+        country: profile.country.trim(),
+        gender: profile.gender,
+        english_level: profile.english_level,
+        learning_goal: profile.learning_goal,
+      })
+      .eq('id', user.id);
+
+    setIsSaving(false);
+
+    if (error) {
+      setProfileMessage('No pudimos guardar los cambios del perfil.');
+      return;
+    }
+
+    setProfile((current) => ({
+      ...current,
+      full_name: current.full_name.trim(),
+      country: current.country.trim(),
+    }));
+    setProfileMessage('Tu perfil se actualizó correctamente.');
+  }
+
+  async function handlePasswordReset() {
+    if (!email || isSendingPasswordEmail) return;
+
+    setIsSendingPasswordEmail(true);
+    setSecurityMessage('');
+
+    const supabase = createClient();
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/restablecer-contrasena`,
+    });
+
+    setIsSendingPasswordEmail(false);
+
+    if (error) {
+      setSecurityMessage(
+        'No pudimos enviar el correo para cambiar la contraseña.',
+      );
+      return;
+    }
+
+    setSecurityMessage(
+      'Te enviamos un correo para cambiar tu contraseña.',
+    );
+  }
+
+  async function handleEmailChange(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const normalizedEmail = newEmail.trim().toLowerCase();
+    setEmailMessage('');
+
+    if (!normalizedEmail) {
+      setEmailMessage('Escribe el correo electrónico nuevo.');
+      return;
+    }
+
+    if (normalizedEmail === email.trim().toLowerCase()) {
+      setEmailMessage('Ese ya es el correo electrónico de tu cuenta.');
+      return;
+    }
+
+    setIsChangingEmail(true);
+
+    const supabase = createClient();
+    const { error } = await supabase.auth.updateUser(
+      { email: normalizedEmail },
+      {
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=/configuracion`,
+      },
+    );
+
+    setIsChangingEmail(false);
+
+    if (error) {
+      setEmailMessage(
+        'No pudimos solicitar el cambio de correo. Inténtalo nuevamente.',
+      );
+      return;
+    }
+
+    setNewEmail('');
+    setEmailMessage(
+      'Revisa tu correo actual y el correo nuevo. El cambio se completará cuando confirmes los mensajes enviados por Supabase.',
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <main className={styles.page}>
+        <p className={styles.loading}>Cargando tu configuración...</p>
+      </main>
+    );
+  }
+
+  const subscriptionIsActive = subscription?.status === 'active';
+
+  return (
+    <main className={styles.page}>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <div>
+            <p className={styles.eyebrow}>TU CUENTA</p>
+            <h1>Configuración</h1>
+            <p>
+              Administra tu perfil, visualización, suscripción y seguridad.
+            </p>
+          </div>
+
+          <Link href="/inicio" className={styles.backLink}>
+            ← Volver al inicio
+          </Link>
+        </header>
+
+        <nav className={styles.sectionNavigation} aria-label="Configuración">
+          <a href="#perfil">Perfil</a>
+          <a href="#visualizacion">Visualización</a>
+          <a href="#suscripcion">Suscripción</a>
+          <a href="#pago">Pago</a>
+          <a href="#seguridad">Seguridad</a>
+        </nav>
+
+        <section id="perfil" className={styles.card}>
+          <div className={styles.cardHeading}>
+            <div>
+              <p className={styles.cardLabel}>PERFIL</p>
+              <h2>Información personal</h2>
+            </div>
+            <span className={styles.statusBadge}>Editable</span>
+          </div>
+
+          <form className={styles.form} onSubmit={handleSaveProfile}>
+            <div className={styles.fieldGrid}>
+              <label className={styles.field}>
+                <span>Nombre completo</span>
+                <input
+                  type="text"
+                  value={profile.full_name}
+                  onChange={(event) =>
+                    updateProfileField('full_name', event.target.value)
+                  }
+                  autoComplete="name"
+                  required
+                />
+              </label>
+
+              <label className={styles.field}>
+                <span>Correo electrónico</span>
+                <input type="email" value={email} disabled />
+              </label>
+
+              <label className={styles.field}>
+                <span>Fecha de nacimiento</span>
+                <input
+                  type="date"
+                  value={profile.birth_date}
+                  max={MAXIMUM_BIRTH_DATE}
+                  onChange={(event) =>
+                    updateProfileField('birth_date', event.target.value)
+                  }
+                  required
+                />
+              </label>
+
+              <label className={styles.field}>
+                <span>País</span>
+                <input
+                  type="text"
+                  value={profile.country}
+                  onChange={(event) =>
+                    updateProfileField('country', event.target.value)
+                  }
+                  autoComplete="country-name"
+                  required
+                />
+              </label>
+
+              <label className={styles.field}>
+                <span>Género</span>
+                <select
+                  value={profile.gender}
+                  onChange={(event) =>
+                    updateProfileField('gender', event.target.value)
+                  }
+                  required
+                >
+                  <option value="" disabled>
+                    Selecciona una opción
+                  </option>
+                  {GENDERS.map((gender) => (
+                    <option value={gender} key={gender}>
+                      {gender}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className={styles.field}>
+                <span>Nivel de inglés</span>
+                <select
+                  value={profile.english_level}
+                  onChange={(event) =>
+                    updateProfileField('english_level', event.target.value)
+                  }
+                  required
+                >
+                  <option value="" disabled>
+                    Selecciona tu nivel
+                  </option>
+                  {ENGLISH_LEVELS.map((level) => (
+                    <option value={level} key={level}>
+                      {level}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <label className={styles.field}>
+              <span>Objetivo principal</span>
+              <select
+                value={profile.learning_goal}
+                onChange={(event) =>
+                  updateProfileField('learning_goal', event.target.value)
+                }
+                required
+              >
+                <option value="" disabled>
+                  Selecciona tu objetivo
+                </option>
+                {LEARNING_GOALS.map((goal) => (
+                  <option value={goal} key={goal}>
+                    {goal}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            {profileMessage && (
+              <p className={styles.message} role="status">
+                {profileMessage}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className={styles.primaryButton}
+              disabled={isSaving}
+            >
+              {isSaving ? 'Guardando...' : 'Guardar cambios'}
+            </button>
+          </form>
+        </section>
+
+        <section id="visualizacion" className={styles.card}>
+          <div className={styles.cardHeading}>
+            <div>
+              <p className={styles.cardLabel}>VISUALIZACIÓN</p>
+              <h2>Apariencia predeterminada</h2>
+            </div>
+            <span className={styles.statusBadge}>Sincronizada</span>
+          </div>
+
+          <p className={styles.cardDescription}>
+            La opción que selecciones se guardará en tu cuenta y se aplicará
+            cuando inicies sesión desde otro dispositivo.
+          </p>
+
+          <div className={styles.themeControlWrapper}>
+            <ThemeControls />
+          </div>
+        </section>
+
+        <section id="suscripcion" className={styles.card}>
+          <div className={styles.cardHeading}>
+            <div>
+              <p className={styles.cardLabel}>SUSCRIPCIÓN</p>
+              <h2>Plan Inglés con Lau</h2>
+            </div>
+            <span
+              className={`${styles.subscriptionBadge} ${
+                subscriptionIsActive ? styles.activeBadge : styles.inactiveBadge
+              }`}
+            >
+              {subscriptionIsActive ? 'Activa' : 'Inactiva'}
+            </span>
+          </div>
+
+          <div className={styles.subscriptionDetails}>
+            <div>
+              <span>Precio</span>
+              <strong>RD$1,200 al mes</strong>
+            </div>
+
+            {subscriptionIsActive && (
+              <div>
+                <span>Próximo cobro</span>
+                <strong>
+                  {formatSubscriptionDate(
+                    subscription?.current_period_end ?? null,
+                  )}
+                </strong>
+              </div>
+            )}
+          </div>
+
+          {subscriptionIsActive ? (
+            <button type="button" className={styles.secondaryButton} disabled>
+              Cancelar suscripción
+            </button>
+          ) : (
+            <Link href="/plan" className={styles.primaryButton}>
+              Empezar el plan
+            </Link>
+          )}
+
+          <p className={styles.pendingNote}>
+            La cancelación automática se habilitará al conectar Pagos
+            Recurrentes de Azul. Hasta entonces este botón no realizará cambios.
+          </p>
+        </section>
+
+        <section id="pago" className={styles.card}>
+          <div className={styles.cardHeading}>
+            <div>
+              <p className={styles.cardLabel}>MÉTODO DE PAGO</p>
+              <h2>Tarjeta y facturación</h2>
+            </div>
+            <span className={styles.statusBadge}>Pendiente de Azul</span>
+          </div>
+
+          <p className={styles.cardDescription}>
+            Los datos completos de la tarjeta nunca se guardarán en Inglés con
+            Lau. Azul procesará y protegerá esa información.
+          </p>
+
+          <button type="button" className={styles.secondaryButton} disabled>
+            Agregar o cambiar método de pago
+          </button>
+        </section>
+
+        <section id="seguridad" className={styles.card}>
+          <div className={styles.cardHeading}>
+            <div>
+              <p className={styles.cardLabel}>SEGURIDAD</p>
+              <h2>Contraseña y cuenta</h2>
+            </div>
+          </div>
+
+          <div className={styles.securityAction}>
+            <div>
+              <h3>Cambiar correo electrónico</h3>
+              <p>Tu correo actual es {email}.</p>
+            </div>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => {
+                setIsEmailFormOpen((current) => !current);
+                setEmailMessage('');
+                setNewEmail('');
+              }}
+              aria-expanded={isEmailFormOpen}
+              aria-controls="email-change-form"
+            >
+              {isEmailFormOpen ? 'Cerrar' : 'Cambiar correo'}
+            </button>
+          </div>
+
+          {isEmailFormOpen && (
+            <form
+              id="email-change-form"
+              className={styles.emailChangeForm}
+              onSubmit={handleEmailChange}
+            >
+              <label className={styles.field}>
+                <span>Correo electrónico nuevo</span>
+                <input
+                  type="email"
+                  value={newEmail}
+                  onChange={(event) => {
+                    setNewEmail(event.target.value);
+                    setEmailMessage('');
+                  }}
+                  autoComplete="email"
+                  placeholder="nuevo@ejemplo.com"
+                  disabled={isChangingEmail}
+                  required
+                />
+              </label>
+
+              <button
+                type="submit"
+                className={styles.primaryButton}
+                disabled={isChangingEmail}
+              >
+                {isChangingEmail
+                  ? 'Enviando confirmación...'
+                  : 'Confirmar correo nuevo'}
+              </button>
+            </form>
+          )}
+
+          {emailMessage && (
+            <p className={styles.message} role="status">
+              {emailMessage}
+            </p>
+          )}
+
+          <div className={styles.securityAction}>
+            <div>
+              <h3>Cambiar contraseña</h3>
+              <p>Recibirás un enlace seguro en {email}.</p>
+            </div>
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={() => void handlePasswordReset()}
+              disabled={isSendingPasswordEmail}
+            >
+              {isSendingPasswordEmail
+                ? 'Enviando...'
+                : 'Enviar enlace'}
+            </button>
+          </div>
+
+          {securityMessage && (
+            <p className={styles.message} role="status">
+              {securityMessage}
+            </p>
+          )}
+
+          <div className={`${styles.securityAction} ${styles.dangerAction}`}>
+            <div>
+              <h3>Eliminar cuenta</h3>
+              <p>
+                Esta acción será permanente y requerirá verificar tu identidad.
+              </p>
+            </div>
+            <button type="button" className={styles.dangerButton} disabled>
+              Eliminar mi cuenta
+            </button>
+          </div>
+
+          <p className={styles.pendingNote}>
+            La eliminación se habilitará junto con la cancelación segura de la
+            suscripción en Azul para impedir cobros después de borrar una cuenta.
+          </p>
+        </section>
+      </div>
+    </main>
+  );
+}

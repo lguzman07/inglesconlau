@@ -1,0 +1,403 @@
+.page {
+  min-height: 100vh;
+  padding: 56px 0 90px;
+  color: var(--text);
+  background: var(--background);
+}
+
+.container {
+  width: min(1040px, 90%);
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 26px;
+}
+
+.header h1 {
+  margin: 6px 0 10px;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  line-height: 1.05;
+}
+
+.header p:not(.eyebrow) {
+  max-width: 650px;
+  margin: 0;
+  color: var(--text-light);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.eyebrow,
+.cardLabel {
+  margin: 0;
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.13em;
+}
+
+.backLink,
+.sectionNavigation a,
+.primaryButton,
+.secondaryButton,
+.dangerButton {
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.backLink {
+  flex: 0 0 auto;
+  padding: 11px 17px;
+  color: var(--primary);
+  font-weight: 750;
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+}
+
+.backLink:hover {
+  color: var(--surface-solid);
+  background: var(--primary);
+}
+
+.sectionNavigation {
+  position: sticky;
+  z-index: 5;
+  top: 12px;
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  margin-bottom: 26px;
+  padding: 10px;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+.sectionNavigation a {
+  flex: 0 0 auto;
+  padding: 9px 13px;
+  color: var(--text-light);
+  font-size: 0.88rem;
+  font-weight: 750;
+  border-radius: 10px;
+}
+
+.sectionNavigation a:hover {
+  color: var(--primary);
+  background: var(--surface-soft);
+}
+
+.card {
+  scroll-margin-top: 96px;
+  margin-top: 22px;
+  padding: 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.cardHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: 22px;
+}
+
+.cardHeading h2 {
+  margin: 6px 0 0;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+}
+
+.statusBadge,
+.subscriptionBadge {
+  flex: 0 0 auto;
+  padding: 7px 11px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  border-radius: 999px;
+}
+
+.statusBadge {
+  color: var(--primary);
+  background: var(--primary-light);
+  border: 1px solid var(--border);
+}
+
+.activeBadge {
+  color: #12633a;
+  background: #d9f5e5;
+  border: 1px solid #8dd5aa;
+}
+
+.inactiveBadge {
+  color: #9a2637;
+  background: #fde2e6;
+  border: 1px solid #edabb5;
+}
+
+.cardDescription,
+.pendingNote {
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+.cardDescription {
+  max-width: 760px;
+  margin: 0 0 20px;
+}
+
+.pendingNote {
+  margin: 14px 0 0;
+  font-size: 0.86rem;
+}
+
+.form {
+  display: grid;
+  gap: 20px;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field > span {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  min-height: 50px;
+  padding: 11px 13px;
+  color: var(--text);
+  font: inherit;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--focus);
+  outline: 3px solid var(--primary-light);
+  outline-offset: 2px;
+}
+
+.field input:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}
+
+.themeControlWrapper {
+  display: inline-flex;
+  padding: 14px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.subscriptionDetails {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.subscriptionDetails > div {
+  display: grid;
+  gap: 6px;
+  padding: 17px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.subscriptionDetails span {
+  color: var(--text-light);
+  font-size: 0.82rem;
+}
+
+.subscriptionDetails strong {
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.primaryButton,
+.secondaryButton,
+.dangerButton {
+  display: inline-flex;
+  min-height: 47px;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 18px;
+  font: inherit;
+  font-weight: 800;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.primaryButton {
+  width: fit-content;
+  color: var(--surface-solid);
+  background: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.secondaryButton {
+  width: fit-content;
+  color: var(--primary);
+  background: var(--surface-solid);
+  border: 1px solid var(--primary);
+}
+
+.secondaryButton:hover:not(:disabled) {
+  color: var(--surface-solid);
+  background: var(--primary);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.dangerButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.message {
+  margin: 0;
+  padding: 12px 14px;
+  color: var(--text);
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  line-height: 1.55;
+}
+
+.securityAction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 0;
+  border-top: 1px solid var(--border);
+}
+
+.securityAction h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.securityAction p {
+  margin: 0;
+  color: var(--text-light);
+  line-height: 1.55;
+}
+
+.emailChangeForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 14px;
+  margin: 0 0 18px;
+  padding: 18px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.dangerAction {
+  margin-top: 20px;
+  border-top-color: #e7a8b1;
+}
+
+.dangerButton {
+  width: fit-content;
+  color: #a62638;
+  background: #fff7f8;
+  border: 1px solid #c83b4f;
+}
+
+.loading {
+  width: min(520px, 88%);
+  margin: 120px auto;
+  padding: 30px;
+  color: var(--text);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.backLink:focus-visible,
+.sectionNavigation a:focus-visible,
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible,
+.dangerButton:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .page {
+    padding-top: 34px;
+  }
+
+  .header,
+  .cardHeading,
+  .securityAction {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .backLink,
+  .primaryButton,
+  .secondaryButton,
+  .dangerButton {
+    width: 100%;
+  }
+
+  .fieldGrid,
+  .subscriptionDetails {
+    grid-template-columns: 1fr;
+  }
+
+  .emailChangeForm {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 23px 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backLink,
+  .sectionNavigation a,
+  .primaryButton,
+  .secondaryButton,
+  .dangerButton {
+    transition: none;
+  }
+}
