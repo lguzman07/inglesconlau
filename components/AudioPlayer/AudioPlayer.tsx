@@ -1,25 +1,66 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './AudioPlayer.module.css';
 import { getAudio, saveAudio } from '@/lib/audio/audioCache';
 
 type AudioPlayerProps = {
   text: string;
-  language: string;
+  language: 'en' | 'en-GB' | 'es';
 };
 
-export default function AudioPlayer({ text, language }: AudioPlayerProps) {
-  console.log('AUDIO PLAYER LANGUAGE:', language);
+export default function AudioPlayer({
+  text,
+  language,
+}: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioUrlRef = useRef<string | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [hasPlayed, setHasPlayed] = useState(false);
 
+  function clearAudio() {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.removeAttribute('src');
+      audioRef.current.load();
+      audioRef.current = null;
+    }
+
+    if (audioUrlRef.current) {
+      URL.revokeObjectURL(audioUrlRef.current);
+      audioUrlRef.current = null;
+    }
+
+    setIsPlaying(false);
+    setProgress(0);
+    setHasPlayed(false);
+  }
+
+  useEffect(() => {
+    clearAudio();
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.removeAttribute('src');
+        audioRef.current.load();
+        audioRef.current = null;
+      }
+
+      if (audioUrlRef.current) {
+        URL.revokeObjectURL(audioUrlRef.current);
+        audioUrlRef.current = null;
+      }
+    };
+  }, [text, language]);
+
   const prepareAudio = async () => {
-    if (audioRef.current) return audioRef.current;
+    if (audioRef.current) {
+      return audioRef.current;
+    }
 
     setIsLoading(true);
 
@@ -48,23 +89,36 @@ export default function AudioPlayer({ text, language }: AudioPlayerProps) {
           });
 
           throw new Error(
-            `Failed to generate audio: ${response.status} ${response.statusText}`
+            `Failed to generate audio: ${response.status} ${response.statusText}`,
           );
         }
 
         blob = await response.blob();
 
-        await saveAudio(text, language, blob);
+        await saveAudio(
+          text,
+          language,
+          blob,
+        );
       }
 
       const url = URL.createObjectURL(blob);
 
+      audioUrlRef.current = url;
+
       const audio = new Audio(url);
 
-      audio.ontimeupdate = () => {
-        if (!audio.duration) return;
+      audio.preload = 'auto';
 
-        setProgress((audio.currentTime / audio.duration) * 100);
+      audio.ontimeupdate = () => {
+        if (!audio.duration) {
+          return;
+        }
+
+        setProgress(
+          (audio.currentTime / audio.duration) *
+            100,
+        );
       };
 
       audio.onended = () => {
@@ -83,6 +137,18 @@ export default function AudioPlayer({ text, language }: AudioPlayerProps) {
         setIsPlaying(true);
       };
 
+      audio.onerror = () => {
+        setIsPlaying(false);
+
+        console.error(
+          'Audio playback failed:',
+          {
+            text,
+            language,
+          },
+        );
+      };
+
       audioRef.current = audio;
 
       return audio;
@@ -92,43 +158,83 @@ export default function AudioPlayer({ text, language }: AudioPlayerProps) {
   };
 
   const handleClick = async () => {
-    if (isLoading) return;
-
-    const audio = await prepareAudio();
-
-    if (!audio) return;
-
-    if (hasPlayed) {
-      audio.currentTime = 0;
-      setProgress(0);
-      setHasPlayed(false);
-      await audio.play();
+    if (isLoading) {
       return;
     }
 
-    if (isPlaying) {
-      audio.pause();
-    } else {
-      await audio.play();
+    try {
+      const audio =
+        await prepareAudio();
+
+      if (!audio) {
+        return;
+      }
+
+      if (hasPlayed) {
+        audio.currentTime = 0;
+
+        setProgress(0);
+        setHasPlayed(false);
+
+        await audio.play();
+
+        return;
+      }
+
+      if (isPlaying) {
+        audio.pause();
+      } else {
+        await audio.play();
+      }
+    } catch (error) {
+      console.error(
+        'AudioPlayer error:',
+        error,
+      );
+
+      setIsPlaying(false);
     }
   };
 
   return (
-    <button className={styles.audioPlayer} onClick={handleClick}>
+    <button
+      type="button"
+      className={styles.audioPlayer}
+      onClick={handleClick}
+      aria-label={
+        isPlaying
+          ? 'Pausar audio'
+          : hasPlayed
+            ? 'Repetir audio'
+            : 'Reproducir audio'
+      }
+    >
       {isLoading ? (
-        <span className={styles.icon}>⏳</span>
+        <span className={styles.icon}>
+          ⏳
+        </span>
       ) : hasPlayed ? (
-        <span className={styles.icon}>↻</span>
+        <span className={styles.icon}>
+          ↻
+        </span>
       ) : isPlaying ? (
-        <span className={styles.icon}>❚❚</span>
+        <span className={styles.icon}>
+          ❚❚
+        </span>
       ) : (
-        <span className={styles.icon}>▶</span>
+        <span className={styles.icon}>
+          ▶
+        </span>
       )}
 
       <div className={styles.progress}>
         <div
-          className={styles.progressFill}
-          style={{ width: `${progress}%` }}
+          className={
+            styles.progressFill
+          }
+          style={{
+            width: `${progress}%`,
+          }}
         />
       </div>
     </button>
