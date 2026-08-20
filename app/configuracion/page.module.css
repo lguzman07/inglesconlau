@@ -175,7 +175,7 @@
   gap: 8px;
 }
 
-.field > span {
+.field>span {
   color: var(--text);
   font-size: 0.9rem;
   font-weight: 750;
@@ -206,11 +206,19 @@
 }
 
 .themeControlWrapper {
-  display: inline-flex;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  overflow: visible;
   padding: 14px;
   background: var(--surface-soft);
   border: 1px solid var(--border);
   border-radius: 16px;
+}
+
+.themeControlWrapper :global(.theme-selector) {
+  margin-left: auto;
+  margin-right: 0;
 }
 
 .subscriptionDetails {
@@ -220,7 +228,7 @@
   margin-bottom: 20px;
 }
 
-.subscriptionDetails > div {
+.subscriptionDetails>div {
   display: grid;
   gap: 6px;
   padding: 17px;
@@ -390,9 +398,12 @@
   .card {
     padding: 23px 18px;
   }
+
+
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .backLink,
   .sectionNavigation a,
   .primaryButton,

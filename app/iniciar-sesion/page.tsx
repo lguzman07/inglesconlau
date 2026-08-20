@@ -22,7 +22,15 @@ function getOrCreateDeviceId() {
     return existingDeviceId;
   }
 
-  const newDeviceId = crypto.randomUUID();
+  const newDeviceId =
+    typeof crypto !== 'undefined' &&
+    typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random()
+          .toString(36)
+          .slice(2)}-${Math.random()
+          .toString(36)
+          .slice(2)}`;
 
   window.localStorage.setItem(
     DEVICE_ID_STORAGE_KEY,
@@ -67,8 +75,10 @@ export default function IniciarSesionPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isSendingRecovery, setIsSendingRecovery] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isSendingRecovery, setIsSendingRecovery] =
+    useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] =
+    useState(false);
 
   const isBusy =
     isLoading ||
@@ -217,10 +227,7 @@ export default function IniciarSesionPage() {
       password,
     });
 
-    if (
-      signInError ||
-      !authData.user
-    ) {
+    if (signInError || !authData.user) {
       setMessage(
         'No pudimos iniciar sesión. Revisa tu correo y contraseña e inténtalo nuevamente.',
       );
@@ -230,21 +237,17 @@ export default function IniciarSesionPage() {
       return;
     }
 
-    const deviceId =
-      getOrCreateDeviceId();
+    const deviceId = getOrCreateDeviceId();
+    const deviceName = getDeviceName();
 
-    const deviceName =
-      getDeviceName();
-
-    const {
-      error: deviceError,
-    } = await supabase.rpc(
-      'register_current_device',
-      {
-        p_device_id: deviceId,
-        p_device_name: deviceName,
-      },
-    );
+    const { error: deviceError } =
+      await supabase.rpc(
+        'register_current_device',
+        {
+          p_device_id: deviceId,
+          p_device_name: deviceName,
+        },
+      );
 
     if (deviceError) {
       await supabase.auth.signOut();
@@ -254,9 +257,7 @@ export default function IniciarSesionPage() {
       const reachedDeviceLimit =
         deviceError.message
           .toLowerCase()
-          .includes(
-            '2 dispositivos activos',
-          );
+          .includes('2 dispositivos activos');
 
       setMessage(
         reachedDeviceLimit
@@ -294,15 +295,14 @@ export default function IniciarSesionPage() {
       return;
     }
 
-    const profileIsComplete =
-      Boolean(
-        profile?.full_name?.trim() &&
-          profile?.birth_date &&
-          profile?.country?.trim() &&
-          profile?.gender &&
-          profile?.english_level &&
-          profile?.learning_goal,
-      );
+    const profileIsComplete = Boolean(
+      profile?.full_name?.trim() &&
+        profile?.birth_date &&
+        profile?.country?.trim() &&
+        profile?.gender &&
+        profile?.english_level &&
+        profile?.learning_goal,
+    );
 
     router.replace(
       profileIsComplete
@@ -336,7 +336,8 @@ export default function IniciarSesionPage() {
           </h1>
 
           <p>
-            Accede a tu ruta de aprendizaje y continúa desde donde te quedaste.
+            Accede a tu ruta de aprendizaje y continúa desde
+            donde te quedaste.
           </p>
         </div>
 
@@ -386,11 +387,7 @@ export default function IniciarSesionPage() {
             aria-hidden="true"
           >
             <span />
-
-            <p>
-              o continúa con tu correo
-            </p>
-
+            <p>o continúa con tu correo</p>
             <span />
           </div>
 
@@ -421,9 +418,7 @@ export default function IniciarSesionPage() {
             </label>
 
             <div
-              className={
-                styles.passwordWrapper
-              }
+              className={styles.passwordWrapper}
             >
               <input
                 id="password"
@@ -436,10 +431,7 @@ export default function IniciarSesionPage() {
                 autoComplete="current-password"
                 value={password}
                 onChange={(event) => {
-                  setPassword(
-                    event.target.value,
-                  );
-
+                  setPassword(event.target.value);
                   setMessage('');
                 }}
                 disabled={isBusy}
@@ -447,14 +439,11 @@ export default function IniciarSesionPage() {
               />
 
               <button
-                className={
-                  styles.passwordToggle
-                }
+                className={styles.passwordToggle}
                 type="button"
                 onClick={() =>
                   setShowPassword(
-                    (current) =>
-                      !current,
+                    (current) => !current,
                   )
                 }
                 aria-label={
@@ -462,9 +451,7 @@ export default function IniciarSesionPage() {
                     ? 'Ocultar contraseña'
                     : 'Mostrar contraseña'
                 }
-                aria-pressed={
-                  showPassword
-                }
+                aria-pressed={showPassword}
                 disabled={isBusy}
               >
                 {showPassword
@@ -475,9 +462,7 @@ export default function IniciarSesionPage() {
           </div>
 
           <label
-            className={
-              styles.sessionCheckbox
-            }
+            className={styles.sessionCheckbox}
           >
             <input
               type="checkbox"
@@ -497,12 +482,8 @@ export default function IniciarSesionPage() {
 
           <button
             type="button"
-            className={
-              styles.recoveryButton
-            }
-            onClick={
-              handlePasswordRecovery
-            }
+            className={styles.recoveryButton}
+            onClick={handlePasswordRecovery}
             disabled={isBusy}
           >
             {isSendingRecovery
@@ -512,9 +493,7 @@ export default function IniciarSesionPage() {
 
           {message && (
             <div
-              className={
-                styles.errorMessage
-              }
+              className={styles.errorMessage}
               role="status"
             >
               {message}
@@ -522,9 +501,7 @@ export default function IniciarSesionPage() {
           )}
 
           <button
-            className={
-              styles.submitButton
-            }
+            className={styles.submitButton}
             type="submit"
             disabled={isBusy}
           >
@@ -534,11 +511,7 @@ export default function IniciarSesionPage() {
           </button>
         </form>
 
-        <p
-          className={
-            styles.loginText
-          }
-        >
+        <p className={styles.loginText}>
           ¿Todavía no tienes una cuenta?{' '}
           <Link href="/registro">
             Crea tu cuenta
