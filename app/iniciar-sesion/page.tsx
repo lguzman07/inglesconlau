@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -10,6 +10,53 @@ import {
   saveKeepSessionPreference,
 } from '@/lib/supabase/client';
 import styles from '../registro/page.module.css';
+
+const DEVICE_ID_STORAGE_KEY = 'ingles-con-lau-device-id';
+
+function getOrCreateDeviceId() {
+  const existingDeviceId = window.localStorage.getItem(
+    DEVICE_ID_STORAGE_KEY,
+  );
+
+  if (existingDeviceId) {
+    return existingDeviceId;
+  }
+
+  const newDeviceId = crypto.randomUUID();
+
+  window.localStorage.setItem(
+    DEVICE_ID_STORAGE_KEY,
+    newDeviceId,
+  );
+
+  return newDeviceId;
+}
+
+function getDeviceName() {
+  const userAgent = navigator.userAgent;
+
+  if (/iPad/i.test(userAgent)) {
+    return 'iPad';
+  }
+
+  if (/iPhone/i.test(userAgent)) {
+    return 'iPhone';
+  }
+
+  if (/Android/i.test(userAgent)) {
+    return 'Android';
+  }
+
+  if (/Macintosh|Mac OS X/i.test(userAgent)) {
+    return 'Mac';
+  }
+
+  if (/Windows/i.test(userAgent)) {
+    return 'Windows PC';
+  }
+
+  return 'Dispositivo';
+}
 
 export default function IniciarSesionPage() {
   const router = useRouter();
@@ -23,7 +70,44 @@ export default function IniciarSesionPage() {
   const [isSendingRecovery, setIsSendingRecovery] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
-  const isBusy = isLoading || isSendingRecovery || isGoogleLoading;
+  const isBusy =
+    isLoading ||
+    isSendingRecovery ||
+    isGoogleLoading;
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(
+      window.location.search,
+    );
+
+    const error = searchParams.get('error');
+
+    if (error === 'device_limit') {
+      setMessage(
+        'Ya tienes tu cuenta abierta en 2 dispositivos. Cierra sesión en uno de ellos para poder entrar desde este dispositivo.',
+      );
+
+      window.history.replaceState(
+        {},
+        '',
+        '/iniciar-sesion',
+      );
+
+      return;
+    }
+
+    if (error === 'oauth_callback') {
+      setMessage(
+        'No pudimos completar el inicio de sesión con Google. Inténtalo nuevamente.',
+      );
+
+      window.history.replaceState(
+        {},
+        '',
+        '/iniciar-sesion',
+      );
+    }
+  }, []);
 
   async function handleGoogleSignIn() {
     setMessage('');
@@ -32,17 +116,44 @@ export default function IniciarSesionPage() {
     saveKeepSessionPreference(keepSession);
     clearStoredSupabaseSessions();
 
+    const deviceId = getOrCreateDeviceId();
+    const deviceName = getDeviceName();
+
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?keep_session=${keepSession}`,
-      },
-    });
+    const callbackUrl = new URL(
+      '/auth/callback',
+      window.location.origin,
+    );
+
+    callbackUrl.searchParams.set(
+      'keep_session',
+      String(keepSession),
+    );
+
+    callbackUrl.searchParams.set(
+      'device_id',
+      deviceId,
+    );
+
+    callbackUrl.searchParams.set(
+      'device_name',
+      deviceName,
+    );
+
+    const { error } =
+      await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: callbackUrl.toString(),
+        },
+      });
 
     if (error) {
-      setMessage('No pudimos continuar con Google. Inténtalo nuevamente.');
+      setMessage(
+        'No pudimos continuar con Google. Inténtalo nuevamente.',
+      );
+
       setIsGoogleLoading(false);
     }
   }
@@ -54,6 +165,7 @@ export default function IniciarSesionPage() {
       setMessage(
         'Escribe tu correo electrónico primero para poder restablecer tu contraseña.',
       );
+
       return;
     }
 
@@ -61,9 +173,13 @@ export default function IniciarSesionPage() {
 
     const supabase = createClient();
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: `${window.location.origin}/restablecer-contrasena`,
-    });
+    const { error } =
+      await supabase.auth.resetPasswordForEmail(
+        email.trim(),
+        {
+          redirectTo: `${window.location.origin}/restablecer-contrasena`,
+        },
+      );
 
     setIsSendingRecovery(false);
 
@@ -71,6 +187,7 @@ export default function IniciarSesionPage() {
       setMessage(
         'No pudimos enviar el correo de recuperación. Inténtalo nuevamente.',
       );
+
       return;
     }
 
@@ -79,7 +196,9 @@ export default function IniciarSesionPage() {
     );
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
 
     setMessage('');
@@ -90,17 +209,63 @@ export default function IniciarSesionPage() {
 
     const supabase = createClient();
 
-    const { data: authData, error: signInError } =
-      await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password,
-      });
+    const {
+      data: authData,
+      error: signInError,
+    } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
 
-    if (signInError || !authData.user) {
+    if (
+      signInError ||
+      !authData.user
+    ) {
       setMessage(
         'No pudimos iniciar sesión. Revisa tu correo y contraseña e inténtalo nuevamente.',
       );
+
       setIsLoading(false);
+
+      return;
+    }
+
+    const deviceId =
+      getOrCreateDeviceId();
+
+    const deviceName =
+      getDeviceName();
+
+    const {
+      error: deviceError,
+    } = await supabase.rpc(
+      'register_current_device',
+      {
+        p_device_id: deviceId,
+        p_device_name: deviceName,
+      },
+    );
+
+    if (deviceError) {
+      await supabase.auth.signOut();
+
+      clearStoredSupabaseSessions();
+
+      const reachedDeviceLimit =
+        deviceError.message
+          .toLowerCase()
+          .includes(
+            '2 dispositivos activos',
+          );
+
+      setMessage(
+        reachedDeviceLimit
+          ? 'Ya tienes tu cuenta abierta en 2 dispositivos. Cierra sesión en uno de ellos para poder entrar desde este dispositivo.'
+          : 'No pudimos registrar este dispositivo. Inténtalo nuevamente.',
+      );
+
+      setIsLoading(false);
+
       return;
     }
 
@@ -108,7 +273,10 @@ export default function IniciarSesionPage() {
       makeSupabaseCookiesSessionOnly();
     }
 
-    const { data: profile, error: profileError } = await supabase
+    const {
+      data: profile,
+      error: profileError,
+    } = await supabase
       .from('profiles')
       .select(
         'full_name, birth_date, country, gender, english_level, learning_goal',
@@ -120,39 +288,62 @@ export default function IniciarSesionPage() {
       setMessage(
         'Iniciaste sesión, pero no pudimos comprobar tu perfil. Inténtalo nuevamente.',
       );
+
       setIsLoading(false);
+
       return;
     }
 
-    const profileIsComplete = Boolean(
-      profile?.full_name?.trim() &&
-        profile?.birth_date &&
-        profile?.country?.trim() &&
-        profile?.gender &&
-        profile?.english_level &&
-        profile?.learning_goal,
+    const profileIsComplete =
+      Boolean(
+        profile?.full_name?.trim() &&
+          profile?.birth_date &&
+          profile?.country?.trim() &&
+          profile?.gender &&
+          profile?.english_level &&
+          profile?.learning_goal,
+      );
+
+    router.replace(
+      profileIsComplete
+        ? '/inicio'
+        : '/completar-perfil',
     );
 
-    router.replace(profileIsComplete ? '/inicio' : '/completar-perfil');
     router.refresh();
   }
 
   return (
     <main className={styles.page}>
-      <Link className={styles.backLink} href="/">
+      <Link
+        className={styles.backLink}
+        href="/"
+      >
         ← Volver al inicio
       </Link>
 
-      <section className={styles.card} aria-labelledby="login-title">
+      <section
+        className={styles.card}
+        aria-labelledby="login-title"
+      >
         <div className={styles.header}>
-          <p className={styles.eyebrow}>INGLÉS CON LAU</p>
-          <h1 id="login-title">Inicia sesión</h1>
+          <p className={styles.eyebrow}>
+            INGLÉS CON LAU
+          </p>
+
+          <h1 id="login-title">
+            Inicia sesión
+          </h1>
+
           <p>
             Accede a tu ruta de aprendizaje y continúa desde donde te quedaste.
           </p>
         </div>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form
+          className={styles.form}
+          onSubmit={handleSubmit}
+        >
           <button
             className={styles.googleButton}
             type="button"
@@ -168,14 +359,17 @@ export default function IniciarSesionPage() {
                 fill="#4285F4"
                 d="M21.35 12.23c0-.71-.06-1.39-.18-2.05H12v3.88h5.25a4.49 4.49 0 0 1-1.95 2.95v2.52h3.15c1.84-1.69 2.9-4.18 2.9-7.3Z"
               />
+
               <path
                 fill="#34A853"
                 d="M12 21.5c2.63 0 4.84-.87 6.45-2.35l-3.15-2.52c-.87.59-1.99.94-3.3.94-2.54 0-4.7-1.72-5.47-4.03H3.27v2.6A9.75 9.75 0 0 0 12 21.5Z"
               />
+
               <path
                 fill="#FBBC05"
                 d="M6.53 13.54a5.86 5.86 0 0 1 0-3.08v-2.6H3.27a9.74 9.74 0 0 0 0 8.28l3.26-2.6Z"
               />
+
               <path
                 fill="#EA4335"
                 d="M12 6.43c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.83 3.52 14.63 2.5 12 2.5a9.75 9.75 0 0 0-8.73 5.36l3.26 2.6C7.3 8.15 9.46 6.43 12 6.43Z"
@@ -187,14 +381,24 @@ export default function IniciarSesionPage() {
               : 'Continuar con Google'}
           </button>
 
-          <div className={styles.authDivider} aria-hidden="true">
+          <div
+            className={styles.authDivider}
+            aria-hidden="true"
+          >
             <span />
-            <p>o continúa con tu correo</p>
+
+            <p>
+              o continúa con tu correo
+            </p>
+
             <span />
           </div>
 
           <div className={styles.field}>
-            <label htmlFor="email">Correo electrónico</label>
+            <label htmlFor="email">
+              Correo electrónico
+            </label>
+
             <input
               id="email"
               name="email"
@@ -212,17 +416,30 @@ export default function IniciarSesionPage() {
           </div>
 
           <div className={styles.field}>
-            <label htmlFor="password">Contraseña</label>
+            <label htmlFor="password">
+              Contraseña
+            </label>
 
-            <div className={styles.passwordWrapper}>
+            <div
+              className={
+                styles.passwordWrapper
+              }
+            >
               <input
                 id="password"
                 name="password"
-                type={showPassword ? 'text' : 'password'}
+                type={
+                  showPassword
+                    ? 'text'
+                    : 'password'
+                }
                 autoComplete="current-password"
                 value={password}
                 onChange={(event) => {
-                  setPassword(event.target.value);
+                  setPassword(
+                    event.target.value,
+                  );
+
                   setMessage('');
                 }}
                 disabled={isBusy}
@@ -230,34 +447,62 @@ export default function IniciarSesionPage() {
               />
 
               <button
-                className={styles.passwordToggle}
-                type="button"
-                onClick={() => setShowPassword((current) => !current)}
-                aria-label={
-                  showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'
+                className={
+                  styles.passwordToggle
                 }
-                aria-pressed={showPassword}
+                type="button"
+                onClick={() =>
+                  setShowPassword(
+                    (current) =>
+                      !current,
+                  )
+                }
+                aria-label={
+                  showPassword
+                    ? 'Ocultar contraseña'
+                    : 'Mostrar contraseña'
+                }
+                aria-pressed={
+                  showPassword
+                }
                 disabled={isBusy}
               >
-                {showPassword ? 'Ocultar' : 'Ver'}
+                {showPassword
+                  ? 'Ocultar'
+                  : 'Ver'}
               </button>
             </div>
           </div>
 
-          <label className={styles.sessionCheckbox}>
+          <label
+            className={
+              styles.sessionCheckbox
+            }
+          >
             <input
               type="checkbox"
               checked={keepSession}
-              onChange={(event) => setKeepSession(event.target.checked)}
+              onChange={(event) =>
+                setKeepSession(
+                  event.target.checked,
+                )
+              }
               disabled={isBusy}
             />
-            <span>Mantener sesión iniciada</span>
+
+            <span>
+              Mantener sesión iniciada
+            </span>
           </label>
 
           <button
             type="button"
-            className={styles.recoveryButton}
-            onClick={handlePasswordRecovery}
+            className={
+              styles.recoveryButton
+            }
+            onClick={
+              handlePasswordRecovery
+            }
             disabled={isBusy}
           >
             {isSendingRecovery
@@ -266,22 +511,38 @@ export default function IniciarSesionPage() {
           </button>
 
           {message && (
-            <div className={styles.errorMessage} role="status">
+            <div
+              className={
+                styles.errorMessage
+              }
+              role="status"
+            >
               {message}
             </div>
           )}
 
           <button
-            className={styles.submitButton}
+            className={
+              styles.submitButton
+            }
             type="submit"
             disabled={isBusy}
           >
-            {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
+            {isLoading
+              ? 'Iniciando sesión...'
+              : 'Iniciar sesión'}
           </button>
         </form>
 
-        <p className={styles.loginText}>
-          ¿Todavía no tienes una cuenta? <Link href="/registro">Crea tu cuenta</Link>
+        <p
+          className={
+            styles.loginText
+          }
+        >
+          ¿Todavía no tienes una cuenta?{' '}
+          <Link href="/registro">
+            Crea tu cuenta
+          </Link>
         </p>
       </section>
     </main>

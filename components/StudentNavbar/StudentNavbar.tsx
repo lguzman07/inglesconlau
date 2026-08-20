@@ -7,6 +7,8 @@ import { createClient } from '@/lib/supabase/client';
 import ThemeControls from '@/components/ThemeControls/ThemeControls';
 import styles from './StudentNavbar.module.css';
 
+const DEVICE_ID_STORAGE_KEY = 'ingles-con-lau-device-id';
+
 const navigationItems = [
   { href: '/inicio', label: 'Inicio' },
   { href: '/lecciones', label: 'Lecciones' },
@@ -31,6 +33,27 @@ export default function StudentNavbar() {
     setIsLoggingOut(true);
 
     const supabase = createClient();
+
+    const deviceId = window.localStorage.getItem(
+      DEVICE_ID_STORAGE_KEY,
+    );
+
+    if (deviceId) {
+      const { error: deviceError } = await supabase.rpc(
+        'deactivate_current_device',
+        {
+          p_device_id: deviceId,
+        },
+      );
+
+      if (deviceError) {
+        console.error(
+          'Error deactivating device:',
+          deviceError.message,
+        );
+      }
+    }
+
     await supabase.auth.signOut();
 
     router.replace('/');
@@ -66,7 +89,9 @@ export default function StudentNavbar() {
           );
         })}
 
-        {!pathname.startsWith('/configuracion') && <ThemeControls />}
+        {!pathname.startsWith('/configuracion') && (
+          <ThemeControls />
+        )}
 
         <button
           type="button"
@@ -74,7 +99,9 @@ export default function StudentNavbar() {
           onClick={handleLogout}
           disabled={isLoggingOut}
         >
-          {isLoggingOut ? 'Cerrando sesión...' : 'Cerrar sesión'}
+          {isLoggingOut
+            ? 'Cerrando sesión...'
+            : 'Cerrar sesión'}
         </button>
       </nav>
     </header>

@@ -4,6 +4,8 @@ import { FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
+const DEVICE_ID_STORAGE_KEY = 'ingles-con-lau-device-id';
+
 export default function RestablecerContrasenaPage() {
   const router = useRouter();
 
@@ -24,7 +26,10 @@ export default function RestablecerContrasenaPage() {
       setIsCheckingSession(true);
       setErrorMessage('');
 
-      const searchParams = new URLSearchParams(window.location.search);
+      const searchParams = new URLSearchParams(
+        window.location.search,
+      );
+
       const code = searchParams.get('code');
 
       if (code) {
@@ -34,7 +39,7 @@ export default function RestablecerContrasenaPage() {
         if (exchangeError) {
           setHasValidSession(false);
           setErrorMessage(
-            'El enlace de recuperación no es válido o ha expirado. Solicita uno nuevo.'
+            'El enlace de recuperación no es válido o ha expirado. Solicita uno nuevo.',
           );
           setIsCheckingSession(false);
           return;
@@ -49,7 +54,7 @@ export default function RestablecerContrasenaPage() {
       if (sessionError || !session) {
         setHasValidSession(false);
         setErrorMessage(
-          'El enlace de recuperación no es válido o ha expirado. Solicita uno nuevo.'
+          'El enlace de recuperación no es válido o ha expirado. Solicita uno nuevo.',
         );
         setIsCheckingSession(false);
         return;
@@ -62,56 +67,101 @@ export default function RestablecerContrasenaPage() {
     void checkRecoverySession();
   }, []);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
+
     setErrorMessage('');
     setSuccessMessage('');
 
     if (!hasValidSession) {
       setErrorMessage(
-        'El enlace de recuperación no es válido o ha expirado. Solicita uno nuevo.'
+        'El enlace de recuperación no es válido o ha expirado. Solicita uno nuevo.',
       );
       return;
     }
 
     if (!password || !confirmPassword) {
-      setErrorMessage('Por favor, completa ambos campos.');
+      setErrorMessage(
+        'Por favor, completa ambos campos.',
+      );
       return;
     }
 
     if (password.length < 8) {
-      setErrorMessage('La contraseña debe tener al menos 8 caracteres.');
+      setErrorMessage(
+        'La contraseña debe tener al menos 8 caracteres.',
+      );
       return;
     }
 
     if (password !== confirmPassword) {
-      setErrorMessage('Las contraseñas no coinciden.');
+      setErrorMessage(
+        'Las contraseñas no coinciden.',
+      );
       return;
     }
 
     setIsSaving(true);
+
     const supabase = createClient();
-    const { error } = await supabase.auth.updateUser({ password });
+
+    const { error } =
+      await supabase.auth.updateUser({
+        password,
+      });
 
     if (error) {
       setIsSaving(false);
 
-      if (error.message.toLowerCase().includes('different')) {
+      if (
+        error.message
+          .toLowerCase()
+          .includes('different')
+      ) {
         setErrorMessage(
-          'La nueva contraseña debe ser diferente de la contraseña anterior.'
+          'La nueva contraseña debe ser diferente de la contraseña anterior.',
         );
         return;
       }
 
       setErrorMessage(
-        'No pudimos actualizar tu contraseña. Solicita un nuevo enlace e inténtalo otra vez.'
+        'No pudimos actualizar tu contraseña. Solicita un nuevo enlace e inténtalo otra vez.',
       );
       return;
     }
 
-    setSuccessMessage('Tu contraseña se actualizó correctamente.');
+    const deviceId =
+      window.localStorage.getItem(
+        DEVICE_ID_STORAGE_KEY,
+      );
+
+    if (deviceId) {
+      const {
+        error: deviceError,
+      } = await supabase.rpc(
+        'deactivate_current_device',
+        {
+          p_device_id: deviceId,
+        },
+      );
+
+      if (deviceError) {
+        console.error(
+          'Error deactivating device after password reset:',
+          deviceError.message,
+        );
+      }
+    }
+
+    setSuccessMessage(
+      'Tu contraseña se actualizó correctamente.',
+    );
+
     setPassword('');
     setConfirmPassword('');
+
     await supabase.auth.signOut();
 
     setTimeout(() => {
@@ -135,45 +185,77 @@ export default function RestablecerContrasenaPage() {
     <main className="reset-password-page">
       <section className="reset-password-card">
         <div className="reset-password-header">
-          <p className="reset-password-eyebrow">INGLÉS CON LAU</p>
-          <h1>Crea una nueva contraseña</h1>
+          <p className="reset-password-eyebrow">
+            INGLÉS CON LAU
+          </p>
+
+          <h1>
+            Crea una nueva contraseña
+          </h1>
+
           <p>
             Escribe una contraseña nueva para recuperar el acceso a tu cuenta.
           </p>
         </div>
 
-        <form className="reset-password-form" onSubmit={handleSubmit}>
+        <form
+          className="reset-password-form"
+          onSubmit={handleSubmit}
+        >
           <div className="reset-password-field">
-            <label htmlFor="new-password">Nueva contraseña</label>
+            <label htmlFor="new-password">
+              Nueva contraseña
+            </label>
+
             <div className="reset-password-input-wrapper">
               <input
                 id="new-password"
                 name="newPassword"
-                type={showPassword ? 'text' : 'password'}
+                type={
+                  showPassword
+                    ? 'text'
+                    : 'password'
+                }
                 value={password}
                 onChange={(event) => {
-                  setPassword(event.target.value);
+                  setPassword(
+                    event.target.value,
+                  );
                   setErrorMessage('');
                   setSuccessMessage('');
                 }}
                 placeholder="Mínimo 8 caracteres"
                 autoComplete="new-password"
                 minLength={8}
-                disabled={!hasValidSession || isSaving}
+                disabled={
+                  !hasValidSession ||
+                  isSaving
+                }
                 required
               />
+
               <button
                 className="reset-password-toggle"
                 type="button"
-                onClick={() => setShowPassword((current) => !current)}
+                onClick={() =>
+                  setShowPassword(
+                    (current) =>
+                      !current,
+                  )
+                }
                 aria-label={
                   showPassword
                     ? 'Ocultar contraseña'
                     : 'Mostrar contraseña'
                 }
-                disabled={!hasValidSession || isSaving}
+                disabled={
+                  !hasValidSession ||
+                  isSaving
+                }
               >
-                {showPassword ? 'Ocultar' : 'Ver'}
+                {showPassword
+                  ? 'Ocultar'
+                  : 'Ver'}
               </button>
             </div>
           </div>
@@ -182,37 +264,56 @@ export default function RestablecerContrasenaPage() {
             <label htmlFor="confirm-password">
               Confirma tu nueva contraseña
             </label>
+
             <div className="reset-password-input-wrapper">
               <input
                 id="confirm-password"
                 name="confirmPassword"
-                type={showConfirmPassword ? 'text' : 'password'}
+                type={
+                  showConfirmPassword
+                    ? 'text'
+                    : 'password'
+                }
                 value={confirmPassword}
                 onChange={(event) => {
-                  setConfirmPassword(event.target.value);
+                  setConfirmPassword(
+                    event.target.value,
+                  );
                   setErrorMessage('');
                   setSuccessMessage('');
                 }}
                 placeholder="Escribe la contraseña nuevamente"
                 autoComplete="new-password"
                 minLength={8}
-                disabled={!hasValidSession || isSaving}
+                disabled={
+                  !hasValidSession ||
+                  isSaving
+                }
                 required
               />
+
               <button
                 className="reset-password-toggle"
                 type="button"
                 onClick={() =>
-                  setShowConfirmPassword((current) => !current)
+                  setShowConfirmPassword(
+                    (current) =>
+                      !current,
+                  )
                 }
                 aria-label={
                   showConfirmPassword
                     ? 'Ocultar confirmación de contraseña'
                     : 'Mostrar confirmación de contraseña'
                 }
-                disabled={!hasValidSession || isSaving}
+                disabled={
+                  !hasValidSession ||
+                  isSaving
+                }
               >
-                {showConfirmPassword ? 'Ocultar' : 'Ver'}
+                {showConfirmPassword
+                  ? 'Ocultar'
+                  : 'Ver'}
               </button>
             </div>
           </div>
@@ -238,7 +339,10 @@ export default function RestablecerContrasenaPage() {
           <button
             className="reset-password-submit"
             type="submit"
-            disabled={!hasValidSession || isSaving}
+            disabled={
+              !hasValidSession ||
+              isSaving
+            }
           >
             {isSaving
               ? 'Actualizando...'
