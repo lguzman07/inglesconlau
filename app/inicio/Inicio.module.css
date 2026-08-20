@@ -137,12 +137,19 @@
 
 .primaryGrid {
   display: grid;
+  align-items: start;
   grid-template-columns: 1.7fr 1fr;
   gap: 20px;
   margin-top: 24px;
 }
 
+.learningColumn {
+  display: grid;
+  gap: 20px;
+}
+
 .currentLesson,
+.progressLesson,
 .readingClub,
 .summaryCard {
   padding: 28px;
@@ -152,14 +159,23 @@
   box-shadow: var(--shadow);
 }
 
-.currentLesson {
+.currentLesson,
+.progressLesson {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 32px;
   min-height: 220px;
+}
+
+.currentLesson {
   background: var(--surface-soft);
   border-color: var(--primary-light);
+}
+
+.progressLesson {
+  background: var(--surface);
+  border-color: var(--border);
 }
 
 .lessonTitle {
@@ -169,21 +185,39 @@
   line-height: 1.2;
 }
 
-.lessonButton {
+.lessonDescription {
+  max-width: 46ch;
+  margin: 14px 0 0;
+  color: var(--text-light);
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+
+.lessonButton,
+.progressLessonButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   padding: 14px 22px;
-  color: var(--surface);
   font: inherit;
   font-weight: 700;
   text-decoration: none;
-  background: var(--primary);
-  border: 0;
   border-radius: 999px;
   cursor: pointer;
   transition: var(--transition);
+}
+
+.lessonButton {
+  color: var(--surface);
+  background: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.progressLessonButton {
+  color: var(--primary);
+  background: transparent;
+  border: 1px solid var(--primary);
 }
 
 .readingClub {
@@ -409,7 +443,9 @@
 }
 
 .exploreButton:hover,
-.exploreButton:focus-visible {
+.exploreButton:focus-visible,
+.progressLessonButton:hover,
+.progressLessonButton:focus-visible {
   color: var(--surface);
   background: var(--primary);
 }
@@ -425,6 +461,7 @@
 .joinButton:hover,
 .joinButton:focus-visible {
   background: var(--primary-hover);
+  border-color: var(--primary-hover);
 }
 
 .cancelReservationButton:hover,
@@ -438,6 +475,7 @@
 .logo:focus-visible,
 .logoutButton:focus-visible,
 .lessonButton:focus-visible,
+.progressLessonButton:focus-visible,
 .exploreButton:focus-visible {
   outline: 3px solid var(--primary-light);
   outline-offset: 3px;
@@ -460,12 +498,14 @@
     grid-template-columns: 1fr;
   }
 
-  .currentLesson {
+  .currentLesson,
+  .progressLesson {
     align-items: flex-start;
     flex-direction: column;
   }
 
-  .lessonButton {
+  .lessonButton,
+  .progressLessonButton {
     width: 100%;
   }
 }
@@ -493,12 +533,14 @@
   }
 
   .currentLesson,
+  .progressLesson,
   .readingClub,
   .summaryCard {
     padding: 24px;
   }
 
-  .currentLesson {
+  .currentLesson,
+  .progressLesson {
     min-height: 0;
   }
 }
