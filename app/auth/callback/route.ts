@@ -5,6 +5,8 @@ import { cookies } from 'next/headers';
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
+  const keepSession =
+    requestUrl.searchParams.get('keep_session') !== 'false';
   const loginUrl = new URL('/iniciar-sesion', requestUrl.origin);
 
   if (!code) {
@@ -25,11 +27,19 @@ export async function GET(request: NextRequest) {
 
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => {
-            cookieStore.set(name, value, options);
+            if (keepSession) {
+              cookieStore.set(name, value, options);
+              return;
+            }
+
+            const { expires: _expires, maxAge: _maxAge, ...sessionOptions } =
+              options;
+
+            cookieStore.set(name, value, sessionOptions);
           });
         },
       },
-    }
+    },
   );
 
   const { error: exchangeError } =
@@ -52,7 +62,7 @@ export async function GET(request: NextRequest) {
   const { data: profile } = await supabase
     .from('profiles')
     .select(
-      'full_name, birth_date, country, gender, english_level, learning_goal'
+      'full_name, birth_date, country, gender, english_level, learning_goal',
     )
     .eq('id', user.id)
     .maybeSingle();
@@ -63,12 +73,13 @@ export async function GET(request: NextRequest) {
       profile?.country?.trim() &&
       profile?.gender &&
       profile?.english_level &&
-      profile?.learning_goal
+      profile?.learning_goal,
   );
 
-  const destination = profileIsComplete
-    ? '/inicio'
-    : '/completar-perfil';
-
-  return NextResponse.redirect(new URL(destination, requestUrl.origin));
+  return NextResponse.redirect(
+    new URL(
+      profileIsComplete ? '/inicio' : '/completar-perfil',
+      requestUrl.origin,
+    ),
+  );
 }

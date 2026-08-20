@@ -3,7 +3,12 @@
 import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import {
+  clearStoredSupabaseSessions,
+  createClient,
+  makeSupabaseCookiesSessionOnly,
+  saveKeepSessionPreference,
+} from '@/lib/supabase/client';
 import styles from '../registro/page.module.css';
 
 export default function IniciarSesionPage() {
@@ -18,26 +23,26 @@ export default function IniciarSesionPage() {
   const [isSendingRecovery, setIsSendingRecovery] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
-  const isBusy =
-    isLoading || isSendingRecovery || isGoogleLoading;
+  const isBusy = isLoading || isSendingRecovery || isGoogleLoading;
 
   async function handleGoogleSignIn() {
     setMessage('');
     setIsGoogleLoading(true);
+
+    saveKeepSessionPreference(keepSession);
+    clearStoredSupabaseSessions();
 
     const supabase = createClient();
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?keep_session=${keepSession}`,
       },
     });
 
     if (error) {
-      setMessage(
-        'No pudimos continuar con Google. Inténtalo nuevamente.'
-      );
+      setMessage('No pudimos continuar con Google. Inténtalo nuevamente.');
       setIsGoogleLoading(false);
     }
   }
@@ -47,7 +52,7 @@ export default function IniciarSesionPage() {
 
     if (!email.trim()) {
       setMessage(
-        'Escribe tu correo electrónico primero para poder restablecer tu contraseña.'
+        'Escribe tu correo electrónico primero para poder restablecer tu contraseña.',
       );
       return;
     }
@@ -56,24 +61,21 @@ export default function IniciarSesionPage() {
 
     const supabase = createClient();
 
-    const { error } = await supabase.auth.resetPasswordForEmail(
-      email.trim(),
-      {
-        redirectTo: `${window.location.origin}/restablecer-contrasena`,
-      }
-    );
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${window.location.origin}/restablecer-contrasena`,
+    });
 
     setIsSendingRecovery(false);
 
     if (error) {
       setMessage(
-        'No pudimos enviar el correo de recuperación. Inténtalo nuevamente.'
+        'No pudimos enviar el correo de recuperación. Inténtalo nuevamente.',
       );
       return;
     }
 
     setMessage(
-      'Te enviamos un correo para restablecer tu contraseña. Revisa también la carpeta de correo no deseado.'
+      'Te enviamos un correo para restablecer tu contraseña. Revisa también la carpeta de correo no deseado.',
     );
   }
 
@@ -83,10 +85,8 @@ export default function IniciarSesionPage() {
     setMessage('');
     setIsLoading(true);
 
-    window.localStorage.setItem(
-      'inglesconlau-keep-session',
-      keepSession ? 'true' : 'false'
-    );
+    saveKeepSessionPreference(keepSession);
+    clearStoredSupabaseSessions();
 
     const supabase = createClient();
 
@@ -98,23 +98,27 @@ export default function IniciarSesionPage() {
 
     if (signInError || !authData.user) {
       setMessage(
-        'No pudimos iniciar sesión. Revisa tu correo y contraseña e inténtalo nuevamente.'
+        'No pudimos iniciar sesión. Revisa tu correo y contraseña e inténtalo nuevamente.',
       );
       setIsLoading(false);
       return;
     }
 
+    if (!keepSession) {
+      makeSupabaseCookiesSessionOnly();
+    }
+
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select(
-        'full_name, birth_date, country, gender, english_level, learning_goal'
+        'full_name, birth_date, country, gender, english_level, learning_goal',
       )
       .eq('id', authData.user.id)
       .maybeSingle();
 
     if (profileError) {
       setMessage(
-        'Iniciaste sesión, pero no pudimos comprobar tu perfil. Inténtalo nuevamente.'
+        'Iniciaste sesión, pero no pudimos comprobar tu perfil. Inténtalo nuevamente.',
       );
       setIsLoading(false);
       return;
@@ -122,19 +126,14 @@ export default function IniciarSesionPage() {
 
     const profileIsComplete = Boolean(
       profile?.full_name?.trim() &&
-      profile?.birth_date &&
-      profile?.country?.trim() &&
-      profile?.gender &&
-      profile?.english_level &&
-      profile?.learning_goal
+        profile?.birth_date &&
+        profile?.country?.trim() &&
+        profile?.gender &&
+        profile?.english_level &&
+        profile?.learning_goal,
     );
 
-    if (profileIsComplete) {
-      router.replace('/inicio');
-    } else {
-      router.replace('/completar-perfil');
-    }
-
+    router.replace(profileIsComplete ? '/inicio' : '/completar-perfil');
     router.refresh();
   }
 
@@ -147,9 +146,7 @@ export default function IniciarSesionPage() {
       <section className={styles.card} aria-labelledby="login-title">
         <div className={styles.header}>
           <p className={styles.eyebrow}>INGLÉS CON LAU</p>
-
           <h1 id="login-title">Inicia sesión</h1>
-
           <p>
             Accede a tu ruta de aprendizaje y continúa desde donde te quedaste.
           </p>
@@ -198,7 +195,6 @@ export default function IniciarSesionPage() {
 
           <div className={styles.field}>
             <label htmlFor="email">Correo electrónico</label>
-
             <input
               id="email"
               name="email"
@@ -255,7 +251,6 @@ export default function IniciarSesionPage() {
               onChange={(event) => setKeepSession(event.target.checked)}
               disabled={isBusy}
             />
-
             <span>Mantener sesión iniciada</span>
           </label>
 
@@ -286,8 +281,7 @@ export default function IniciarSesionPage() {
         </form>
 
         <p className={styles.loginText}>
-          ¿Todavía no tienes una cuenta?{' '}
-          <Link href="/registro">Crea tu cuenta</Link>
+          ¿Todavía no tienes una cuenta? <Link href="/registro">Crea tu cuenta</Link>
         </p>
       </section>
     </main>

@@ -2,21 +2,30 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import styles from './Inicio.module.css';
 
 export default function InicioPage() {
+  const router = useRouter();
+
   const [indicatedLevel, setIndicatedLevel] = useState('');
   const [studentName, setStudentName] = useState('');
   const [gender, setGender] = useState('');
   const [role, setRole] = useState('student');
   const [subscriptionStatus, setSubscriptionStatus] = useState('inactive');
-  const [subscriptionEndsAt, setSubscriptionEndsAt] = useState<string | null>(null);
+  const [subscriptionEndsAt, setSubscriptionEndsAt] = useState<string | null>(
+    null,
+  );
   const [readingClubDate, setReadingClubDate] = useState('Jueves');
   const [clubCountdown, setClubCountdown] = useState('Calculando...');
-  const [availableReadingSlots, setAvailableReadingSlots] = useState<number | null>(null);
+  const [availableReadingSlots, setAvailableReadingSlots] = useState<
+    number | null
+  >(null);
   const [clubSessionId, setClubSessionId] = useState<string | null>(null);
-  const [readingReservationSlot, setReadingReservationSlot] = useState<number | null>(null);
+  const [readingReservationSlot, setReadingReservationSlot] = useState<
+    number | null
+  >(null);
   const [isCancellingReservation, setIsCancellingReservation] = useState(false);
   const [reservationError, setReservationError] = useState('');
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
@@ -61,7 +70,9 @@ export default function InicioPage() {
         : Promise.resolve({ data: null }),
     ]);
 
-    setAvailableReadingSlots(typeof availability === 'number' ? availability : 0);
+    setAvailableReadingSlots(
+      typeof availability === 'number' ? availability : 0,
+    );
     setReadingReservationSlot(reservation?.slot_number ?? null);
   }, []);
 
@@ -82,8 +93,8 @@ export default function InicioPage() {
           dominicanNow.getUTCDate() + daysUntilThursday,
           23,
           0,
-          0
-        )
+          0,
+        ),
       );
 
       if (
@@ -98,8 +109,8 @@ export default function InicioPage() {
             dominicanNow.getUTCDate() + daysUntilThursday,
             23,
             0,
-            0
-          )
+            0,
+          ),
         );
       }
 
@@ -111,7 +122,7 @@ export default function InicioPage() {
       }).format(sessionStart);
 
       setReadingClubDate(
-        formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
+        formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1),
       );
 
       const timeUntilSession = sessionStart.getTime() - now.getTime();
@@ -128,7 +139,7 @@ export default function InicioPage() {
 
       if (days > 0) {
         setClubCountdown(
-          `Comienza en ${days} ${days === 1 ? 'día' : 'días'} y ${hours} h`
+          `Comienza en ${days} ${days === 1 ? 'día' : 'días'} y ${hours} h`,
         );
       } else if (hours > 0) {
         setClubCountdown(`Comienza en ${hours} h y ${minutes} min`);
@@ -156,7 +167,7 @@ export default function InicioPage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        setIsLoadingProfile(false);
+        router.replace('/iniciar-sesion');
         return;
       }
 
@@ -195,7 +206,7 @@ export default function InicioPage() {
     }
 
     void loadProfile();
-  }, []);
+  }, [router]);
 
   async function handleCancelReservation() {
     if (!clubSessionId || isCancellingReservation) return;
@@ -340,7 +351,8 @@ export default function InicioPage() {
               ) : (
                 <>
                   <p className={styles.reservationPrompt}>
-                    ¿Quieres leer en vivo? Reserva tu turno antes de que se agoten.
+                    ¿Quieres leer en vivo? Reserva tu turno antes de que se
+                    agoten.
                   </p>
 
                   {availableReadingSlots === null ? (
