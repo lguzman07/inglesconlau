@@ -35,6 +35,7 @@ type DragAndDropProps = {
   lessonKey: string;
   questions: DragAndDropQuestion[];
   nextLessonHref?: string;
+  englishVariant?: 'en' | 'en-GB';
 };
 
 function shuffle<T>(items: T[]) {
@@ -96,6 +97,7 @@ export default function DragAndDrop({
   lessonKey,
   questions,
   nextLessonHref,
+  englishVariant = 'en',
 }: DragAndDropProps) {
   const supabaseRef = useRef<ReturnType<typeof createClient> | null>(
     null,
@@ -142,11 +144,16 @@ export default function DragAndDrop({
   ).length;
 
   const passingScore = Math.ceil(questions.length * 0.7);
+
   const passedCurrentAttempt =
     hasChecked && correctAnswers >= passingScore;
+
   const canMarkManually = !hasAttempted && !isCompleted;
+
   const canRestoreCompletion =
-    !isCompleted && hasPassedAttempt && completionSource === null;
+    !isCompleted &&
+    hasPassedAttempt &&
+    completionSource === null;
 
   function randomizeExercise() {
     setQuestionOrder(
@@ -167,6 +174,7 @@ export default function DragAndDrop({
     setHasAttempted(progress.has_attempted);
     setIsCompleted(progress.is_completed);
     setCompletionSource(progress.completion_source);
+
     setHasPassedAttempt(
       progress.score !== null &&
         progress.score * 10 >= progress.total_questions * 7,
@@ -175,6 +183,7 @@ export default function DragAndDrop({
 
   useEffect(() => {
     randomizeExercise();
+
     // La mezcla solo debe ejecutarse al abrir la lección.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -230,13 +239,17 @@ export default function DragAndDrop({
     };
 
     event.dataTransfer.effectAllowed = 'move';
+
     event.dataTransfer.setData(
       'application/json',
       JSON.stringify(draggedToken),
     );
   }
 
-  function addTokenToAnswer(questionId: number, tokenId: string) {
+  function addTokenToAnswer(
+    questionId: number,
+    tokenId: string,
+  ) {
     if (hasChecked || isSavingProgress) return;
 
     setAnswers((current) => {
@@ -276,6 +289,7 @@ export default function DragAndDrop({
 
     setAnswers((current) => {
       const currentAnswer = current[questionId] ?? [];
+
       const withoutDraggedToken = currentAnswer.filter(
         (tokenId) => tokenId !== draggedTokenId,
       );
@@ -295,7 +309,11 @@ export default function DragAndDrop({
 
       const nextAnswer = [...withoutDraggedToken];
 
-      nextAnswer.splice(destinationIndex, 0, draggedTokenId);
+      nextAnswer.splice(
+        destinationIndex,
+        0,
+        draggedTokenId,
+      );
 
       return {
         ...current,
@@ -313,7 +331,10 @@ export default function DragAndDrop({
 
     const draggedToken = getDraggedToken(event);
 
-    if (!draggedToken || draggedToken.questionId !== questionId) {
+    if (
+      !draggedToken ||
+      draggedToken.questionId !== questionId
+    ) {
       return;
     }
 
@@ -323,13 +344,17 @@ export default function DragAndDrop({
         draggedToken.tokenId,
         destinationTokenId,
       );
+
       return;
     }
 
     setAnswers((current) => {
       const withoutDraggedToken = (
         current[questionId] ?? []
-      ).filter((tokenId) => tokenId !== draggedToken.tokenId);
+      ).filter(
+        (tokenId) =>
+          tokenId !== draggedToken.tokenId,
+      );
 
       return {
         ...current,
@@ -341,16 +366,25 @@ export default function DragAndDrop({
     });
   }
 
-  function dropInsideBank(event: DragEvent, questionId: number) {
+  function dropInsideBank(
+    event: DragEvent,
+    questionId: number,
+  ) {
     event.preventDefault();
 
     const draggedToken = getDraggedToken(event);
 
-    if (!draggedToken || draggedToken.questionId !== questionId) {
+    if (
+      !draggedToken ||
+      draggedToken.questionId !== questionId
+    ) {
       return;
     }
 
-    removeTokenFromAnswer(questionId, draggedToken.tokenId);
+    removeTokenFromAnswer(
+      questionId,
+      draggedToken.tokenId,
+    );
   }
 
   async function handleCheckAnswers() {
@@ -379,11 +413,14 @@ export default function DragAndDrop({
         error?.message ??
           'No se pudo guardar tu resultado. Inténtalo de nuevo.',
       );
+
       setIsSavingProgress(false);
+
       return;
     }
 
     applyProgress(data as ProgressRow);
+
     setHasChecked(true);
     setIsSavingProgress(false);
   }
@@ -391,10 +428,13 @@ export default function DragAndDrop({
   function handleRetry() {
     setAnswers({});
     setHasChecked(false);
+
     randomizeExercise();
   }
 
-  async function setCompletion(completed: boolean) {
+  async function setCompletion(
+    completed: boolean,
+  ) {
     setIsSavingProgress(true);
     setProgressError(null);
 
@@ -411,17 +451,23 @@ export default function DragAndDrop({
         error?.message ??
           'No se pudo actualizar el progreso. Inténtalo de nuevo.',
       );
+
       setIsSavingProgress(false);
+
       return;
     }
 
     applyProgress(data as ProgressRow);
+
     setIsSavingProgress(false);
   }
 
   if (isLoadingProgress) {
     return (
-      <section className={styles.exercise} aria-live="polite">
+      <section
+        className={styles.exercise}
+        aria-live="polite"
+      >
         Cargando tu último intento...
       </section>
     );
@@ -438,8 +484,13 @@ export default function DragAndDrop({
             <span className={styles.exerciseType}>
               DRAG AND DROP
             </span>
-            <h3 id="drag-exercise-title">{title}</h3>
+
+            <h3 id="drag-exercise-title">
+              {title}
+            </h3>
+
             <p>{instructions}</p>
+
             <p className={styles.clickHelp}>
               También puedes tocar una palabra para moverla.
             </p>
@@ -451,230 +502,313 @@ export default function DragAndDrop({
         </div>
 
         {progressError && (
-          <p className={styles.incorrectFeedback} role="alert">
+          <p
+            className={styles.incorrectFeedback}
+            role="alert"
+          >
             {progressError}
           </p>
         )}
 
         <div className={styles.questions}>
-          {questionOrder.map((questionId, visibleIndex) => {
-            const question = questions.find(
-              (item) => item.id === questionId,
-            );
+          {questionOrder.map(
+            (questionId, visibleIndex) => {
+              const question = questions.find(
+                (item) => item.id === questionId,
+              );
 
-            if (!question) return null;
+              if (!question) return null;
 
-            const selectedTokenIds =
-              answers[question.id] ?? [];
+              const selectedTokenIds =
+                answers[question.id] ?? [];
 
-            const availableTokenIds = (
-              bankOrder[question.id] ??
-              question.tokens.map((token) => token.id)
-            ).filter(
-              (tokenId) =>
-                !selectedTokenIds.includes(tokenId),
-            );
+              const availableTokenIds = (
+                bankOrder[question.id] ??
+                question.tokens.map(
+                  (token) => token.id,
+                )
+              ).filter(
+                (tokenId) =>
+                  !selectedTokenIds.includes(
+                    tokenId,
+                  ),
+              );
 
-            const answerIsCorrect = arraysAreEqual(
-              selectedTokenIds,
-              question.correctOrder,
-            );
+              const answerIsCorrect =
+                arraysAreEqual(
+                  selectedTokenIds,
+                  question.correctOrder,
+                );
 
-            return (
-              <article
-                className={styles.questionCard}
-                key={question.id}
-              >
-                <span className={styles.questionNumber}>
-                  {visibleIndex + 1}
-                </span>
-
-                <div className={styles.questionContent}>
-                  <p className={styles.questionInstruction}>
-                    Forma la oración correcta.
-                  </p>
+              return (
+                <article
+                  className={styles.questionCard}
+                  key={question.id}
+                >
+                  <span
+                    className={
+                      styles.questionNumber
+                    }
+                  >
+                    {visibleIndex + 1}
+                  </span>
 
                   <div
-                    className={styles.wordBank}
-                    onDragOver={(event) =>
-                      event.preventDefault()
+                    className={
+                      styles.questionContent
                     }
-                    onDrop={(event) =>
-                      dropInsideBank(event, question.id)
-                    }
-                    aria-label={`Palabras disponibles para la pregunta ${
-                      visibleIndex + 1
-                    }`}
                   >
-                    {availableTokenIds.map((tokenId) => {
-                      const token = getToken(
-                        question,
-                        tokenId,
-                      );
-
-                      if (!token) return null;
-
-                      return (
-                        <button
-                          type="button"
-                          className={styles.wordChip}
-                          draggable={
-                            !hasChecked &&
-                            !isSavingProgress
-                          }
-                          disabled={
-                            hasChecked ||
-                            isSavingProgress
-                          }
-                          key={token.id}
-                          onClick={() =>
-                            addTokenToAnswer(
-                              question.id,
-                              token.id,
-                            )
-                          }
-                          onDragStart={(event) =>
-                            startDragging(
-                              event,
-                              question.id,
-                              token.id,
-                            )
-                          }
-                          title={token.translation}
-                        >
-                          {token.word}
-                        </button>
-                      );
-                    })}
-
-                    {availableTokenIds.length === 0 && (
-                      <span className={styles.emptyBank}>
-                        Todas las palabras están abajo.
-                      </span>
-                    )}
-                  </div>
-
-                  <div
-                    className={`${styles.answerZone} ${
-                      hasChecked
-                        ? answerIsCorrect
-                          ? styles.correctZone
-                          : styles.incorrectZone
-                        : ''
-                    }`}
-                    onDragOver={(event) =>
-                      event.preventDefault()
-                    }
-                    onDrop={(event) =>
-                      dropInsideAnswer(
-                        event,
-                        question.id,
-                      )
-                    }
-                    aria-label={`Tu respuesta para la pregunta ${
-                      visibleIndex + 1
-                    }`}
-                  >
-                    {selectedTokenIds.length === 0 ? (
-                      <span className={styles.answerPlaceholder}>
-                        Arrastra las palabras aquí
-                      </span>
-                    ) : (
-                      selectedTokenIds.map((tokenId) => {
-                        const token = getToken(
-                          question,
-                          tokenId,
-                        );
-
-                        if (!token) return null;
-
-                        return (
-                          <button
-                            type="button"
-                            className={styles.selectedChip}
-                            draggable={
-                              !hasChecked &&
-                              !isSavingProgress
-                            }
-                            disabled={
-                              hasChecked ||
-                              isSavingProgress
-                            }
-                            key={token.id}
-                            onClick={() =>
-                              removeTokenFromAnswer(
-                                question.id,
-                                token.id,
-                              )
-                            }
-                            onDragOver={(event) =>
-                              event.preventDefault()
-                            }
-                            onDragStart={(event) =>
-                              startDragging(
-                                event,
-                                question.id,
-                                token.id,
-                              )
-                            }
-                            onDrop={(event) => {
-                              event.stopPropagation();
-                              dropInsideAnswer(
-                                event,
-                                question.id,
-                                token.id,
-                              );
-                            }}
-                            title={`${token.translation}. Toca para devolverla.`}
-                          >
-                            {token.word}
-                          </button>
-                        );
-                      })
-                    )}
-                  </div>
-
-                  {hasChecked && (
-                    <div
+                    <p
                       className={
-                        answerIsCorrect
-                          ? styles.correctFeedback
-                          : styles.incorrectFeedback
+                        styles.questionInstruction
                       }
                     >
-                      {answerIsCorrect ? (
-                        <p>✓ Correcto</p>
-                      ) : (
-                        <>
-                          <p>
-                            La respuesta correcta es:
-                          </p>
-                          <strong>
-                            {getCorrectSentence(question)}
-                          </strong>
-                        </>
+                      Forma la oración correcta.
+                    </p>
+
+                    <div
+                      className={styles.wordBank}
+                      onDragOver={(event) =>
+                        event.preventDefault()
+                      }
+                      onDrop={(event) =>
+                        dropInsideBank(
+                          event,
+                          question.id,
+                        )
+                      }
+                      aria-label={`Palabras disponibles para la pregunta ${
+                        visibleIndex + 1
+                      }`}
+                    >
+                      {availableTokenIds.map(
+                        (tokenId) => {
+                          const token =
+                            getToken(
+                              question,
+                              tokenId,
+                            );
+
+                          if (!token) {
+                            return null;
+                          }
+
+                          return (
+                            <button
+                              type="button"
+                              className={
+                                styles.wordChip
+                              }
+                              draggable={
+                                !hasChecked &&
+                                !isSavingProgress
+                              }
+                              disabled={
+                                hasChecked ||
+                                isSavingProgress
+                              }
+                              key={token.id}
+                              onClick={() =>
+                                addTokenToAnswer(
+                                  question.id,
+                                  token.id,
+                                )
+                              }
+                              onDragStart={(
+                                event,
+                              ) =>
+                                startDragging(
+                                  event,
+                                  question.id,
+                                  token.id,
+                                )
+                              }
+                              title={
+                                token.translation
+                              }
+                            >
+                              {token.word}
+                            </button>
+                          );
+                        },
                       )}
 
-                      <p className={styles.translation}>
-                        {question.sentenceTranslation}
-                      </p>
-
-                      <div className={styles.sentenceAudio}>
-                        <span className={styles.sentenceAudioLabel}>
-                          Escuchar oración
+                      {availableTokenIds.length ===
+                        0 && (
+                        <span
+                          className={
+                            styles.emptyBank
+                          }
+                        >
+                          Todas las palabras están
+                          abajo.
                         </span>
-
-                        <AudioPlayer
-                          text={getCorrectSentence(question)}
-                          language="en"
-                        />
-                      </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </article>
-            );
-          })}
+
+                    <div
+                      className={`${styles.answerZone} ${
+                        hasChecked
+                          ? answerIsCorrect
+                            ? styles.correctZone
+                            : styles.incorrectZone
+                          : ''
+                      }`}
+                      onDragOver={(event) =>
+                        event.preventDefault()
+                      }
+                      onDrop={(event) =>
+                        dropInsideAnswer(
+                          event,
+                          question.id,
+                        )
+                      }
+                      aria-label={`Tu respuesta para la pregunta ${
+                        visibleIndex + 1
+                      }`}
+                    >
+                      {selectedTokenIds.length ===
+                      0 ? (
+                        <span
+                          className={
+                            styles.answerPlaceholder
+                          }
+                        >
+                          Arrastra las palabras aquí
+                        </span>
+                      ) : (
+                        selectedTokenIds.map(
+                          (tokenId) => {
+                            const token =
+                              getToken(
+                                question,
+                                tokenId,
+                              );
+
+                            if (!token) {
+                              return null;
+                            }
+
+                            return (
+                              <button
+                                type="button"
+                                className={
+                                  styles.selectedChip
+                                }
+                                draggable={
+                                  !hasChecked &&
+                                  !isSavingProgress
+                                }
+                                disabled={
+                                  hasChecked ||
+                                  isSavingProgress
+                                }
+                                key={token.id}
+                                onClick={() =>
+                                  removeTokenFromAnswer(
+                                    question.id,
+                                    token.id,
+                                  )
+                                }
+                                onDragOver={(
+                                  event,
+                                ) =>
+                                  event.preventDefault()
+                                }
+                                onDragStart={(
+                                  event,
+                                ) =>
+                                  startDragging(
+                                    event,
+                                    question.id,
+                                    token.id,
+                                  )
+                                }
+                                onDrop={(
+                                  event,
+                                ) => {
+                                  event.stopPropagation();
+
+                                  dropInsideAnswer(
+                                    event,
+                                    question.id,
+                                    token.id,
+                                  );
+                                }}
+                                title={`${token.translation}. Toca para devolverla.`}
+                              >
+                                {token.word}
+                              </button>
+                            );
+                          },
+                        )
+                      )}
+                    </div>
+
+                    {hasChecked && (
+                      <div
+                        className={
+                          answerIsCorrect
+                            ? styles.correctFeedback
+                            : styles.incorrectFeedback
+                        }
+                      >
+                        {answerIsCorrect ? (
+                          <p>✓ Correcto</p>
+                        ) : (
+                          <>
+                            <p>
+                              La respuesta correcta
+                              es:
+                            </p>
+
+                            <strong>
+                              {getCorrectSentence(
+                                question,
+                              )}
+                            </strong>
+                          </>
+                        )}
+
+                        <p
+                          className={
+                            styles.translation
+                          }
+                        >
+                          {
+                            question.sentenceTranslation
+                          }
+                        </p>
+
+                        <div
+                          className={
+                            styles.sentenceAudio
+                          }
+                        >
+                          <span
+                            className={
+                              styles.sentenceAudioLabel
+                            }
+                          >
+                            Escuchar oración
+                          </span>
+
+                          <AudioPlayer
+                            text={getCorrectSentence(
+                              question,
+                            )}
+                            language={
+                              englishVariant
+                            }
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </article>
+              );
+            },
+          )}
         </div>
 
         {!hasChecked && (
@@ -682,7 +816,9 @@ export default function DragAndDrop({
             type="button"
             className={styles.checkButton}
             disabled={isSavingProgress}
-            onClick={() => void handleCheckAnswers()}
+            onClick={() =>
+              void handleCheckAnswers()
+            }
           >
             {isSavingProgress
               ? 'Guardando...'
@@ -691,14 +827,24 @@ export default function DragAndDrop({
         )}
 
         {hasChecked && (
-          <div className={styles.resultCard} aria-live="polite">
+          <div
+            className={styles.resultCard}
+            aria-live="polite"
+          >
             <div>
-              <p className={styles.resultLabel}>
+              <p
+                className={
+                  styles.resultLabel
+                }
+              >
                 TU RESULTADO
               </p>
+
               <h4>
-                {correctAnswers} de {questions.length} correctas
+                {correctAnswers} de{' '}
+                {questions.length} correctas
               </h4>
+
               <p>
                 {passedCurrentAttempt
                   ? '¡Muy bien! Aprobaste este ejercicio.'
@@ -706,94 +852,145 @@ export default function DragAndDrop({
               </p>
             </div>
 
-            <div className={styles.resultActions}>
+            <div
+              className={
+                styles.resultActions
+              }
+            >
               <button
                 type="button"
-                className={styles.retryButton}
-                disabled={isSavingProgress}
-                onClick={handleRetry}
+                className={
+                  styles.retryButton
+                }
+                disabled={
+                  isSavingProgress
+                }
+                onClick={
+                  handleRetry
+                }
               >
                 Repetir ejercicio
               </button>
 
-              {passedCurrentAttempt && nextLessonHref && (
-                <Link
-                  href={nextLessonHref}
-                  className={styles.nextButton}
-                >
-                  Siguiente lección →
-                </Link>
-              )}
+              {passedCurrentAttempt &&
+                nextLessonHref && (
+                  <Link
+                    href={
+                      nextLessonHref
+                    }
+                    className={
+                      styles.nextButton
+                    }
+                  >
+                    Siguiente lección →
+                  </Link>
+                )}
             </div>
           </div>
         )}
       </section>
 
-      <section className={styles.resultCard} aria-live="polite">
+      <section
+        className={styles.resultCard}
+        aria-live="polite"
+      >
         <div>
-          <p className={styles.resultLabel}>TU PROGRESO</p>
+          <p
+            className={
+              styles.resultLabel
+            }
+          >
+            TU PROGRESO
+          </p>
 
           {isCompleted &&
-          completionSource === 'automatic' ? (
+          completionSource ===
+            'automatic' ? (
             <>
               <h4>
-                ¡La lección se completó automáticamente!
+                ¡La lección se completó
+                automáticamente!
               </h4>
+
               <p>
-                Aprobaste el ejercicio con 7 de 10 o más
-                respuestas correctas.
+                Aprobaste el ejercicio con 7
+                de 10 o más respuestas
+                correctas.
               </p>
             </>
           ) : isCompleted &&
-            completionSource === 'manual' ? (
+            completionSource ===
+              'manual' ? (
             <>
               <h4>
-                Marcaste esta lección como completada.
+                Marcaste esta lección como
+                completada.
               </h4>
+
               <p>
-                La marcaste sin hacer el ejercicio porque ya
-                dominabas el tema.
+                La marcaste sin hacer el
+                ejercicio porque ya dominabas
+                el tema.
               </p>
             </>
           ) : canRestoreCompletion ? (
             <>
               <h4>
-                Desmarcaste esta lección como completada.
+                Desmarcaste esta lección como
+                completada.
               </h4>
+
               <p>
-                Ya habías aprobado el ejercicio y puedes
-                volver a marcarla.
+                Ya habías aprobado el ejercicio
+                y puedes volver a marcarla.
               </p>
             </>
           ) : hasAttempted ? (
             <>
               <h4>
-                Esta lección todavía no está completada.
+                Esta lección todavía no está
+                completada.
               </h4>
+
               <p>
-                Ya hiciste un intento. Para completarla
-                necesitas obtener al menos 7 de 10
-                respuestas correctas.
+                Ya hiciste un intento. Para
+                completarla necesitas obtener
+                al menos 7 de 10 respuestas
+                correctas.
               </p>
             </>
           ) : (
             <>
-              <h4>¿Ya dominas este tema?</h4>
+              <h4>
+                ¿Ya dominas este tema?
+              </h4>
+
               <p>
-                Puedes marcar esta lección como completada
-                sin hacer el ejercicio.
+                Puedes marcar esta lección como
+                completada sin hacer el
+                ejercicio.
               </p>
             </>
           )}
         </div>
 
-        <div className={styles.resultActions}>
+        <div
+          className={
+            styles.resultActions
+          }
+        >
           {isCompleted && (
             <button
               type="button"
-              className={styles.retryButton}
-              disabled={isSavingProgress}
-              onClick={() => void setCompletion(false)}
+              className={
+                styles.retryButton
+              }
+              disabled={
+                isSavingProgress
+              }
+              onClick={() =>
+                void setCompletion(false)
+              }
             >
               Desmarcar como completada
             </button>
@@ -802,9 +999,15 @@ export default function DragAndDrop({
           {canMarkManually && (
             <button
               type="button"
-              className={styles.nextButton}
-              disabled={isSavingProgress}
-              onClick={() => void setCompletion(true)}
+              className={
+                styles.nextButton
+              }
+              disabled={
+                isSavingProgress
+              }
+              onClick={() =>
+                void setCompletion(true)
+              }
             >
               Marcar como completada
             </button>
@@ -813,9 +1016,15 @@ export default function DragAndDrop({
           {canRestoreCompletion && (
             <button
               type="button"
-              className={styles.nextButton}
-              disabled={isSavingProgress}
-              onClick={() => void setCompletion(true)}
+              className={
+                styles.nextButton
+              }
+              disabled={
+                isSavingProgress
+              }
+              onClick={() =>
+                void setCompletion(true)
+              }
             >
               Volver a marcar como completada
             </button>

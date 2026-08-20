@@ -54,11 +54,14 @@ const levels: Record<string, Level> = {
 };
 
 function getLessonNumber(value: string) {
-  if (!/^\d+$/.test(value)) return null;
+  if (!/^\d+$/.test(value)) {
+    return null;
+  }
 
   const number = Number(value);
 
-  return Number.isSafeInteger(number) && number > 0
+  return Number.isSafeInteger(number) &&
+    number > 0
     ? number
     : null;
 }
@@ -71,10 +74,17 @@ export default async function LeccionPage({
     leccion: string;
   }>;
 }) {
-  const { nivel, leccion } = await params;
-  const normalizedLevel = nivel.toLowerCase();
-  const level = levels[normalizedLevel];
-  const lessonNumber = getLessonNumber(leccion);
+  const { nivel, leccion } =
+    await params;
+
+  const normalizedLevel =
+    nivel.toLowerCase();
+
+  const level =
+    levels[normalizedLevel];
+
+  const lessonNumber =
+    getLessonNumber(leccion);
 
   if (
     !level ||
@@ -84,72 +94,97 @@ export default async function LeccionPage({
     notFound();
   }
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseUrl =
+    process.env.NEXT_PUBLIC_SUPABASE_URL;
 
   const supabaseKey =
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    process.env
+      .NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
+    process.env
+      .NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  let englishVariant: 'en' | 'en-GB' = 'en';
+  let englishVariant:
+    | 'en'
+    | 'en-GB' = 'en';
 
-  if (supabaseUrl && supabaseKey) {
-    const cookieStore = await cookies();
+  if (
+    supabaseUrl &&
+    supabaseKey
+  ) {
+    const cookieStore =
+      await cookies();
 
-    const supabase = createServerClient(
-      supabaseUrl,
-      supabaseKey,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll();
-          },
+    const supabase =
+      createServerClient(
+        supabaseUrl,
+        supabaseKey,
+        {
+          cookies: {
+            getAll() {
+              return cookieStore.getAll();
+            },
 
-          setAll() {
-            // Esta página solamente necesita leer la sesión actual.
+            setAll() {
+              // Esta página solamente necesita leer la sesión actual.
+            },
           },
         },
-      },
-    );
+      );
 
     const {
       data: { user },
-    } = await supabase.auth.getUser();
+    } =
+      await supabase.auth.getUser();
 
     if (user) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('english_pronunciation')
-        .eq('id', user.id)
-        .maybeSingle();
+      const { data: profile } =
+        await supabase
+          .from('profiles')
+          .select(
+            'english_pronunciation',
+          )
+          .eq('id', user.id)
+          .maybeSingle();
 
       englishVariant =
-        profile?.english_pronunciation === 'british'
+        profile?.english_pronunciation ===
+        'british'
           ? 'en-GB'
           : 'en';
     }
   }
 
-  const lessonKey = `${normalizedLevel}/${lessonNumber}`;
-  const lesson = getLessonContent(
-    normalizedLevel,
-    lessonNumber,
-  );
-  const firstExercise = lesson?.exercises[0];
+  const lessonKey =
+    `${normalizedLevel}/${lessonNumber}`;
+
+  const lesson =
+    getLessonContent(
+      normalizedLevel,
+      lessonNumber,
+    );
+
+  const firstExercise =
+    lesson?.exercises[0];
 
   const previousLesson =
-    lessonNumber > 1 ? lessonNumber - 1 : null;
+    lessonNumber > 1
+      ? lessonNumber - 1
+      : null;
 
   const nextLesson =
-    lessonNumber < level.lessonCount
+    lessonNumber <
+    level.lessonCount
       ? lessonNumber + 1
       : null;
 
-  const nextLessonHref = nextLesson
-    ? `/lecciones/${nivel}/${nextLesson}`
-    : undefined;
+  const nextLessonHref =
+    nextLesson
+      ? `/lecciones/${nivel}/${nextLesson}`
+      : undefined;
 
   const lessonTitle =
-    lesson?.title ?? `Lección ${lessonNumber}`;
+    lesson?.title ??
+    `Lección ${lessonNumber}`;
 
   const lessonSubtitle =
     lesson?.subtitle ??
@@ -157,9 +192,15 @@ export default async function LeccionPage({
 
   return (
     <main className={styles.main}>
-      <LessonOpenedTracker lessonKey={lessonKey} />
+      <LessonOpenedTracker
+        lessonKey={lessonKey}
+      />
 
-      <div className={styles.container}>
+      <div
+        className={
+          styles.container
+        }
+      >
         <Link
           href={`/lecciones/${nivel}`}
           className={styles.backLink}
@@ -168,56 +209,107 @@ export default async function LeccionPage({
         </Link>
 
         <section
-          className={styles.heading}
+          className={
+            styles.heading
+          }
           aria-labelledby="lesson-title"
         >
           <div>
-            <p className={styles.eyebrow}>
-              {level.code} · {level.title}
+            <p
+              className={
+                styles.eyebrow
+              }
+            >
+              {level.code} ·{' '}
+              {level.title}
             </p>
 
-            <h1 id="lesson-title">{lessonTitle}</h1>
+            <h1 id="lesson-title">
+              {lessonTitle}
+            </h1>
 
-            <p className={styles.description}>
+            <p
+              className={
+                styles.description
+              }
+            >
               {lessonSubtitle}
             </p>
           </div>
 
-          <span className={styles.lessonPosition}>
-            {String(lessonNumber).padStart(2, '0')} /{' '}
-            {String(level.lessonCount).padStart(2, '0')}
+          <span
+            className={
+              styles.lessonPosition
+            }
+          >
+            {String(
+              lessonNumber,
+            ).padStart(
+              2,
+              '0',
+            )}{' '}
+            /{' '}
+            {String(
+              level.lessonCount,
+            ).padStart(
+              2,
+              '0',
+            )}
           </span>
         </section>
 
         <section
-          className={styles.videoSection}
+          className={
+            styles.videoSection
+          }
           aria-labelledby="video-heading"
         >
           {lesson?.videoSrc ? (
             <LessonVideo
-              src={lesson.videoSrc}
-              title={lesson.title}
+              src={
+                lesson.videoSrc
+              }
+              title={
+                lesson.title
+              }
             />
           ) : (
-            <div className={styles.videoPlaceholder}>
+            <div
+              className={
+                styles.videoPlaceholder
+              }
+            >
               <div
-                className={styles.playIcon}
+                className={
+                  styles.playIcon
+                }
                 aria-hidden="true"
               >
                 ▶
               </div>
 
-              <p>Tu video aparecerá aquí</p>
+              <p>
+                Tu video aparecerá aquí
+              </p>
 
               <span>
-                Cuando grabes esta lección, añadiremos el
+                Cuando grabes esta
+                lección, añadiremos el
                 video en este espacio.
               </span>
             </div>
           )}
 
-          <div className={styles.videoDetails}>
-            <p className={styles.eyebrow}>
+          <div
+            className={
+              styles.videoDetails
+            }
+          >
+            <p
+              className={
+                styles.eyebrow
+              }
+            >
               VIDEO DE LA LECCIÓN
             </p>
 
@@ -234,18 +326,28 @@ export default async function LeccionPage({
         </section>
 
         <section
-          className={styles.objectiveCard}
+          className={
+            styles.objectiveCard
+          }
           aria-labelledby="objective-heading"
         >
           <div
-            className={styles.objectiveIcon}
+            className={
+              styles.objectiveIcon
+            }
             aria-hidden="true"
           >
             ◎
           </div>
 
           <div>
-            <p className={styles.eyebrow}>OBJETIVO</p>
+            <p
+              className={
+                styles.eyebrow
+              }
+            >
+              OBJETIVO
+            </p>
 
             <h2 id="objective-heading">
               {lesson
@@ -261,54 +363,118 @@ export default async function LeccionPage({
         </section>
 
         <section
-          className={styles.practiceSection}
+          className={
+            styles.practiceSection
+          }
           aria-labelledby="practice-heading"
         >
-          <div className={styles.sectionHeader}>
+          <div
+            className={
+              styles.sectionHeader
+            }
+          >
             <div>
-              <p className={styles.eyebrow}>PRÁCTICA</p>
-              <h2 id="practice-heading">Ejercicios</h2>
+              <p
+                className={
+                  styles.eyebrow
+                }
+              >
+                PRÁCTICA
+              </p>
+
+              <h2 id="practice-heading">
+                Ejercicios
+              </h2>
             </div>
 
-            {firstExercise && lesson && (
-              <span className={styles.exerciseCount}>
-                1 de {lesson.exercises.length}
-              </span>
-            )}
+            {firstExercise &&
+              lesson && (
+                <span
+                  className={
+                    styles.exerciseCount
+                  }
+                >
+                  1 de{' '}
+                  {
+                    lesson
+                      .exercises
+                      .length
+                  }
+                </span>
+              )}
           </div>
 
           {firstExercise ? (
             firstExercise.type ===
             'fill-in-the-blanks' ? (
               <FillInTheBlanks
-                title={firstExercise.title}
-                instructions={firstExercise.instructions}
-                lessonKey={lessonKey}
-                questions={firstExercise.questions}
-                nextLessonHref={nextLessonHref}
-                englishVariant={englishVariant}
+                title={
+                  firstExercise.title
+                }
+                instructions={
+                  firstExercise.instructions
+                }
+                lessonKey={
+                  lessonKey
+                }
+                questions={
+                  firstExercise.questions
+                }
+                nextLessonHref={
+                  nextLessonHref
+                }
+                englishVariant={
+                  englishVariant
+                }
               />
             ) : (
               <DragAndDrop
-                title={firstExercise.title}
-                instructions={firstExercise.instructions}
-                lessonKey={lessonKey}
-                questions={firstExercise.questions}
-                nextLessonHref={nextLessonHref}
+                title={
+                  firstExercise.title
+                }
+                instructions={
+                  firstExercise.instructions
+                }
+                lessonKey={
+                  lessonKey
+                }
+                questions={
+                  firstExercise.questions
+                }
+                nextLessonHref={
+                  nextLessonHref
+                }
+                englishVariant={
+                  englishVariant
+                }
               />
             )
           ) : (
-            <div className={styles.practiceCard}>
-              <span className={styles.practiceNumber}>
+            <div
+              className={
+                styles.practiceCard
+              }
+            >
+              <span
+                className={
+                  styles.practiceNumber
+                }
+              >
                 1
               </span>
 
               <div>
-                <h3>Comprueba lo que aprendiste</h3>
+                <h3>
+                  Comprueba lo que
+                  aprendiste
+                </h3>
 
                 <p>
-                  Los ejercicios interactivos con corrección
-                  inmediata aparecerán aquí después del video.
+                  Los ejercicios
+                  interactivos con
+                  corrección inmediata
+                  aparecerán aquí
+                  después del video.
                 </p>
               </div>
             </div>
@@ -316,36 +482,66 @@ export default async function LeccionPage({
         </section>
 
         <nav
-          className={styles.lessonNavigation}
+          className={
+            styles.lessonNavigation
+          }
           aria-label="Navegación entre lecciones"
         >
           {previousLesson ? (
             <Link
               href={`/lecciones/${nivel}/${previousLesson}`}
-              className={styles.navigationLink}
+              className={
+                styles.navigationLink
+              }
             >
-              <span>← Anterior</span>
-              <strong>Lección {previousLesson}</strong>
+              <span>
+                ← Anterior
+              </span>
+
+              <strong>
+                Lección{' '}
+                {previousLesson}
+              </strong>
             </Link>
           ) : (
-            <span className={styles.navigationSpacer} />
+            <span
+              className={
+                styles.navigationSpacer
+              }
+            />
           )}
 
           {nextLesson ? (
             <Link
               href={`/lecciones/${nivel}/${nextLesson}`}
-              className={styles.navigationLink}
+              className={
+                styles.navigationLink
+              }
             >
-              <span>Siguiente →</span>
-              <strong>Lección {nextLesson}</strong>
+              <span>
+                Siguiente →
+              </span>
+
+              <strong>
+                Lección{' '}
+                {nextLesson}
+              </strong>
             </Link>
           ) : (
             <Link
               href={`/lecciones/${nivel}`}
-              className={styles.navigationLink}
+              className={
+                styles.navigationLink
+              }
             >
-              <span>Final del nivel</span>
-              <strong>Volver a {level.code}</strong>
+              <span>
+                Final del nivel
+              </span>
+
+              <strong>
+                Volver a{' '}
+                {level.code}
+              </strong>
             </Link>
           )}
         </nav>
