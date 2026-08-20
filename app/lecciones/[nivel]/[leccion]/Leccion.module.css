@@ -89,7 +89,11 @@
   padding: 36px;
   color: var(--text-light);
   text-align: center;
-  background: linear-gradient(135deg, var(--surface-soft), var(--primary-light));
+  background: linear-gradient(
+    135deg,
+    var(--surface-soft),
+    var(--primary-light)
+  );
 }
 
 .playIcon {
@@ -188,6 +192,7 @@
   font-size: clamp(1.65rem, 3vw, 2.15rem);
 }
 
+.exerciseCount,
 .comingSoon {
   padding: 7px 10px;
   color: var(--text-light);
