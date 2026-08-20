@@ -19,7 +19,7 @@ const levels: Record<string, Level> = {
   a0: {
     code: 'A0',
     title: 'Primeros pasos',
-    lessonCount: 16,
+    lessonCount: 80,
   },
   a1: {
     code: 'A1',

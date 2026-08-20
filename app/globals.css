@@ -46,7 +46,8 @@ body {
 .theme-menu {
   position: absolute;
   top: calc(100% + 0.75rem);
-  right: 0;
+  left: 0;
+  right: auto;
   z-index: 10000;
   width: 280px;
   max-height: min(78vh, 680px);

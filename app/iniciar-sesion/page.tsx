@@ -73,17 +73,29 @@ export default function IniciarSesionPage() {
   const [password, setPassword] = useState('');
   const [keepSession, setKeepSession] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+
   const [message, setMessage] = useState('');
+  const [isDeviceLimit, setIsDeviceLimit] =
+    useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
+
   const [isSendingRecovery, setIsSendingRecovery] =
     useState(false);
+
   const [isGoogleLoading, setIsGoogleLoading] =
     useState(false);
+
+  const [
+    isSendingCloseSessionsEmail,
+    setIsSendingCloseSessionsEmail,
+  ] = useState(false);
 
   const isBusy =
     isLoading ||
     isSendingRecovery ||
-    isGoogleLoading;
+    isGoogleLoading ||
+    isSendingCloseSessionsEmail;
 
   useEffect(() => {
     const searchParams = new URLSearchParams(
@@ -93,6 +105,8 @@ export default function IniciarSesionPage() {
     const error = searchParams.get('error');
 
     if (error === 'device_limit') {
+      setIsDeviceLimit(true);
+
       setMessage(
         'Ya tienes tu cuenta abierta en 2 dispositivos. Cierra sesión en uno de ellos para poder entrar desde este dispositivo.',
       );
@@ -121,6 +135,7 @@ export default function IniciarSesionPage() {
 
   async function handleGoogleSignIn() {
     setMessage('');
+    setIsDeviceLimit(false);
     setIsGoogleLoading(true);
 
     saveKeepSessionPreference(keepSession);
@@ -170,6 +185,7 @@ export default function IniciarSesionPage() {
 
   async function handlePasswordRecovery() {
     setMessage('');
+    setIsDeviceLimit(false);
 
     if (!email.trim()) {
       setMessage(
@@ -206,12 +222,58 @@ export default function IniciarSesionPage() {
     );
   }
 
+  async function handleCloseAllSessionsEmail() {
+    const normalizedEmail = email.trim();
+
+    if (!normalizedEmail) {
+      setMessage(
+        'Escribe el correo electrónico de tu cuenta para enviarte el enlace de seguridad.',
+      );
+
+      return;
+    }
+
+    setIsSendingCloseSessionsEmail(true);
+
+    const supabase = createClient();
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email: normalizedEmail,
+      options: {
+        shouldCreateUser: false,
+        emailRedirectTo: `${window.location.origin}/cerrar-sesiones`,
+      },
+    });
+
+    setIsSendingCloseSessionsEmail(false);
+
+    if (error) {
+      console.error(
+        'Error sending close sessions email:',
+        error,
+      );
+
+      setMessage(
+        'No pudimos enviar el enlace de seguridad. Inténtalo nuevamente.',
+      );
+
+      return;
+    }
+
+    setMessage(
+      'Te enviamos un enlace de seguridad a tu correo. Ábrelo para cerrar todas las sesiones de tu cuenta.',
+    );
+
+    setIsDeviceLimit(false);
+  }
+
   async function handleSubmit(
     event: FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
 
     setMessage('');
+    setIsDeviceLimit(false);
     setIsLoading(true);
 
     saveKeepSessionPreference(keepSession);
@@ -258,6 +320,8 @@ export default function IniciarSesionPage() {
         deviceError.message
           .toLowerCase()
           .includes('2 dispositivos activos');
+
+      setIsDeviceLimit(reachedDeviceLimit);
 
       setMessage(
         reachedDeviceLimit
@@ -405,6 +469,7 @@ export default function IniciarSesionPage() {
               onChange={(event) => {
                 setEmail(event.target.value);
                 setMessage('');
+                setIsDeviceLimit(false);
               }}
               placeholder="nombre@ejemplo.com"
               disabled={isBusy}
@@ -433,6 +498,7 @@ export default function IniciarSesionPage() {
                 onChange={(event) => {
                   setPassword(event.target.value);
                   setMessage('');
+                  setIsDeviceLimit(false);
                 }}
                 disabled={isBusy}
                 required
@@ -498,6 +564,21 @@ export default function IniciarSesionPage() {
             >
               {message}
             </div>
+          )}
+
+          {isDeviceLimit && (
+            <button
+              type="button"
+              className={styles.secondaryButton}
+              onClick={
+                handleCloseAllSessionsEmail
+              }
+              disabled={isBusy}
+            >
+              {isSendingCloseSessionsEmail
+                ? 'Enviando enlace...'
+                : 'Cerrar todas mis sesiones'}
+            </button>
           )}
 
           <button
