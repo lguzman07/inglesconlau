@@ -14,6 +14,7 @@ type ProfileForm = {
   gender: string;
   english_level: string;
   learning_goal: string;
+  english_pronunciation: string;
 };
 
 type SubscriptionInfo = {
@@ -28,6 +29,7 @@ const EMPTY_PROFILE: ProfileForm = {
   gender: '',
   english_level: '',
   learning_goal: '',
+  english_pronunciation: 'american',
 };
 
 const GENDERS = [
@@ -51,6 +53,19 @@ const LEARNING_GOALS = [
   'Viajar y comunicarme con facilidad',
   'Estudiar o prepararme académicamente',
   'Mejorar mi inglés general',
+];
+
+const ENGLISH_PRONUNCIATION_OPTIONS = [
+  {
+    value: 'american',
+    label: 'American English',
+    description: 'Usa la voz principal en inglés.',
+  },
+  {
+    value: 'british',
+    label: 'British English',
+    description: 'Usa la voz británica de ElevenLabs.',
+  },
 ];
 
 const MAXIMUM_BIRTH_DATE = (() => {
@@ -108,7 +123,7 @@ export default function ConfiguracionPage() {
         supabase
           .from('profiles')
           .select(
-            'full_name, birth_date, country, gender, english_level, learning_goal',
+            'full_name, birth_date, country, gender, english_level, learning_goal, english_pronunciation',
           )
           .eq('id', user.id)
           .maybeSingle(),
@@ -127,6 +142,8 @@ export default function ConfiguracionPage() {
           gender: profileResult.data.gender ?? '',
           english_level: profileResult.data.english_level ?? '',
           learning_goal: profileResult.data.learning_goal ?? '',
+          english_pronunciation:
+            profileResult.data.english_pronunciation ?? 'american',
         });
       }
 
@@ -163,7 +180,8 @@ export default function ConfiguracionPage() {
       !profile.country.trim() ||
       !profile.gender ||
       !profile.english_level ||
-      !profile.learning_goal
+      !profile.learning_goal ||
+      !profile.english_pronunciation
     ) {
       setProfileMessage('Completa todos los campos del perfil.');
       return;
@@ -196,6 +214,7 @@ export default function ConfiguracionPage() {
         gender: profile.gender,
         english_level: profile.english_level,
         learning_goal: profile.learning_goal,
+        english_pronunciation: profile.english_pronunciation,
       })
       .eq('id', user.id);
 
@@ -258,6 +277,7 @@ export default function ConfiguracionPage() {
     setIsChangingEmail(true);
 
     const supabase = createClient();
+
     const { error } = await supabase.auth.updateUser(
       { email: normalizedEmail },
       {
@@ -310,6 +330,7 @@ export default function ConfiguracionPage() {
         <nav className={styles.sectionNavigation} aria-label="Configuración">
           <a href="#perfil">Perfil</a>
           <a href="#visualizacion">Visualización</a>
+          <a href="#aprendizaje">Aprendizaje</a>
           <a href="#suscripcion">Suscripción</a>
           <a href="#pago">Pago</a>
           <a href="#seguridad">Seguridad</a>
@@ -431,6 +452,31 @@ export default function ConfiguracionPage() {
               </select>
             </label>
 
+            <label className={styles.field}>
+              <span>Pronunciación en inglés</span>
+              <select
+                value={profile.english_pronunciation}
+                onChange={(event) =>
+                  updateProfileField(
+                    'english_pronunciation',
+                    event.target.value,
+                  )
+                }
+                required
+              >
+                {ENGLISH_PRONUNCIATION_OPTIONS.map((option) => (
+                  <option value={option.value} key={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <p className={styles.pendingNote}>
+              El audio no se reproducirá automáticamente. Solo sonará cuando
+              presiones Escuchar.
+            </p>
+
             {profileMessage && (
               <p className={styles.message} role="status">
                 {profileMessage}
@@ -466,6 +512,61 @@ export default function ConfiguracionPage() {
           </div>
         </section>
 
+        <section id="aprendizaje" className={styles.card}>
+          <div className={styles.cardHeading}>
+            <div>
+              <p className={styles.cardLabel}>APRENDIZAJE</p>
+              <h2>Audio y pronunciación</h2>
+            </div>
+            <span className={styles.statusBadge}>Personalizable</span>
+          </div>
+
+          <p className={styles.cardDescription}>
+            Esta preferencia se usará cuando escuches oraciones en inglés
+            dentro de las lecciones y ejercicios.
+          </p>
+
+          <form className={styles.form} onSubmit={handleSaveProfile}>
+            <label className={styles.field}>
+              <span>Pronunciación en inglés</span>
+              <select
+                value={profile.english_pronunciation}
+                onChange={(event) =>
+                  updateProfileField(
+                    'english_pronunciation',
+                    event.target.value,
+                  )
+                }
+                required
+              >
+                {ENGLISH_PRONUNCIATION_OPTIONS.map((option) => (
+                  <option value={option.value} key={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <p className={styles.pendingNote}>
+              Usa la pronunciación que prefieras cuando escuches las oraciones en inglés.
+            </p>
+
+            {profileMessage && (
+              <p className={styles.message} role="status">
+                {profileMessage}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className={styles.primaryButton}
+              disabled={isSaving}
+            >
+              {isSaving ? 'Guardando...' : 'Guardar pronunciación'}
+            </button>
+          </form>
+        </section>
+
         <section id="suscripcion" className={styles.card}>
           <div className={styles.cardHeading}>
             <div>
@@ -473,9 +574,8 @@ export default function ConfiguracionPage() {
               <h2>Plan Inglés con Lau</h2>
             </div>
             <span
-              className={`${styles.subscriptionBadge} ${
-                subscriptionIsActive ? styles.activeBadge : styles.inactiveBadge
-              }`}
+              className={`${styles.subscriptionBadge} ${subscriptionIsActive ? styles.activeBadge : styles.inactiveBadge
+                }`}
             >
               {subscriptionIsActive ? 'Activa' : 'Inactiva'}
             </span>

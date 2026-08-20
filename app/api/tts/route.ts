@@ -12,6 +12,7 @@ export async function POST(request: NextRequest) {
 
     const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
     const englishVoiceId = process.env.ELEVENLABS_ENGLISH_VOICE_ID;
+    const britishVoiceId = process.env.ELEVENLABS_BRITISH_VOICE_ID;
     const spanishVoiceId = process.env.ELEVENLABS_SPANISH_VOICE_ID;
 
     if (
@@ -19,6 +20,7 @@ export async function POST(request: NextRequest) {
       !supabaseKey ||
       !elevenLabsApiKey ||
       !englishVoiceId ||
+      !britishVoiceId ||
       !spanishVoiceId
     ) {
       console.error('TTS configuration is incomplete:', {
@@ -26,6 +28,7 @@ export async function POST(request: NextRequest) {
         hasSupabaseKey: Boolean(supabaseKey),
         hasElevenLabsApiKey: Boolean(elevenLabsApiKey),
         hasEnglishVoiceId: Boolean(englishVoiceId),
+        hasBritishVoiceId: Boolean(britishVoiceId),
         hasSpanishVoiceId: Boolean(spanishVoiceId),
       });
 
@@ -56,7 +59,7 @@ export async function POST(request: NextRequest) {
       typeof text !== 'string' ||
       !text.trim() ||
       text.trim().length > 500 ||
-      (language !== 'en' && language !== 'es')
+      (language !== 'en' && language !== 'en-GB' && language !== 'es')
     ) {
       return Response.json(
         { error: 'Solicitud no válida.' },
@@ -66,21 +69,17 @@ export async function POST(request: NextRequest) {
 
     const cookieStore = await cookies();
 
-    const supabase = createServerClient(
-      supabaseUrl,
-      supabaseKey,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll();
-          },
+    const supabase = createServerClient(supabaseUrl, supabaseKey, {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
 
-          setAll() {
-            // Esta ruta solamente necesita leer la sesión actual.
-          },
+        setAll() {
+          // Esta ruta solamente necesita leer la sesión actual.
         },
       },
-    );
+    });
 
     const {
       data: { user },
@@ -190,7 +189,11 @@ export async function POST(request: NextRequest) {
     const voiceId =
       language === 'es'
         ? spanishVoiceId
-        : englishVoiceId;
+        : language === 'en-GB'
+          ? britishVoiceId
+          : englishVoiceId;
+
+    const languageCode = language === 'es' ? 'es' : 'en';
 
     const elevenLabsResponse = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
@@ -204,6 +207,7 @@ export async function POST(request: NextRequest) {
         body: JSON.stringify({
           text: cleanText,
           model_id: 'eleven_multilingual_v2',
+          language_code: languageCode,
           voice_settings: {
             stability: 0.5,
             similarity_boost: 0.75,
@@ -215,8 +219,7 @@ export async function POST(request: NextRequest) {
     );
 
     if (!elevenLabsResponse.ok) {
-      const elevenLabsError =
-        await elevenLabsResponse.text();
+      const elevenLabsError = await elevenLabsResponse.text();
 
       console.error('ElevenLabs error:', {
         status: elevenLabsResponse.status,
