@@ -35,6 +35,7 @@ type FillInTheBlanksProps = {
   lessonKey: string;
   questions: FillInTheBlanksQuestion[];
   nextLessonHref?: string;
+  englishVariant?: 'en' | 'en-GB';
 };
 
 function normalizeAnswer(value: string) {
@@ -72,6 +73,7 @@ export default function FillInTheBlanks({
   lessonKey,
   questions,
   nextLessonHref,
+  englishVariant = 'en',
 }: FillInTheBlanksProps) {
   const supabaseRef = useRef<ReturnType<typeof createClient> | null>(null);
 
@@ -273,7 +275,10 @@ export default function FillInTheBlanks({
       const response = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, language: 'en' }),
+        body: JSON.stringify({
+          text,
+          language: englishVariant,
+        }),
       });
 
       if (!response.ok) {
@@ -559,17 +564,23 @@ export default function FillInTheBlanks({
           {isCompleted && completionSource === 'automatic' ? (
             <>
               <h4>¡La lección se completó automáticamente!</h4>
-              <p>Aprobaste el ejercicio con 7 de 10 o más respuestas correctas.</p>
+              <p>
+                Aprobaste el ejercicio con 7 de 10 o más respuestas correctas.
+              </p>
             </>
           ) : isCompleted && completionSource === 'manual' ? (
             <>
               <h4>Marcaste esta lección como completada.</h4>
-              <p>La marcaste sin hacer el ejercicio porque ya dominabas el tema.</p>
+              <p>
+                La marcaste sin hacer el ejercicio porque ya dominabas el tema.
+              </p>
             </>
           ) : canRestoreCompletion ? (
             <>
               <h4>Desmarcaste esta lección como completada.</h4>
-              <p>Ya habías aprobado el ejercicio y puedes volver a marcarla.</p>
+              <p>
+                Ya habías aprobado el ejercicio y puedes volver a marcarla.
+              </p>
             </>
           ) : hasAttempted ? (
             <>
@@ -582,7 +593,9 @@ export default function FillInTheBlanks({
           ) : (
             <>
               <h4>¿Ya dominas este tema?</h4>
-              <p>Puedes marcar esta lección como completada sin hacer el ejercicio.</p>
+              <p>
+                Puedes marcar esta lección como completada sin hacer el ejercicio.
+              </p>
             </>
           )}
         </div>

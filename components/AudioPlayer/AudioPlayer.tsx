@@ -10,6 +10,7 @@ type AudioPlayerProps = {
 };
 
 export default function AudioPlayer({ text, language }: AudioPlayerProps) {
+  console.log('AUDIO PLAYER LANGUAGE:', language);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -23,7 +24,7 @@ export default function AudioPlayer({ text, language }: AudioPlayerProps) {
     setIsLoading(true);
 
     try {
-      let blob = await getAudio(text);
+      let blob = await getAudio(text, language);
 
       if (!blob) {
         const response = await fetch('/api/tts', {
@@ -53,7 +54,7 @@ export default function AudioPlayer({ text, language }: AudioPlayerProps) {
 
         blob = await response.blob();
 
-        await saveAudio(text, blob);
+        await saveAudio(text, language, blob);
       }
 
       const url = URL.createObjectURL(blob);

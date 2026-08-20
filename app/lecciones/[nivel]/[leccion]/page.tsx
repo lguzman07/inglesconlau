@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { cookies } from 'next/headers';
+import { createServerClient } from '@supabase/ssr';
 import DragAndDrop from '@/components/DragAndDrop/DragAndDrop';
 import FillInTheBlanks from '@/components/FillInTheBlanks/FillInTheBlanks';
 import LessonOpenedTracker from '@/components/LessonOpenedTracker/LessonOpenedTracker';
@@ -82,14 +84,61 @@ export default async function LeccionPage({
     notFound();
   }
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+  const supabaseKey =
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  let englishVariant: 'en' | 'en-GB' = 'en';
+
+  if (supabaseUrl && supabaseKey) {
+    const cookieStore = await cookies();
+
+    const supabase = createServerClient(
+      supabaseUrl,
+      supabaseKey,
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll();
+          },
+
+          setAll() {
+            // Esta página solamente necesita leer la sesión actual.
+          },
+        },
+      },
+    );
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('english_pronunciation')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      englishVariant =
+        profile?.english_pronunciation === 'british'
+          ? 'en-GB'
+          : 'en';
+    }
+  }
+
   const lessonKey = `${normalizedLevel}/${lessonNumber}`;
   const lesson = getLessonContent(
     normalizedLevel,
     lessonNumber,
   );
   const firstExercise = lesson?.exercises[0];
+
   const previousLesson =
     lessonNumber > 1 ? lessonNumber - 1 : null;
+
   const nextLesson =
     lessonNumber < level.lessonCount
       ? lessonNumber + 1
@@ -237,6 +286,7 @@ export default async function LeccionPage({
                 lessonKey={lessonKey}
                 questions={firstExercise.questions}
                 nextLessonHref={nextLessonHref}
+                englishVariant={englishVariant}
               />
             ) : (
               <DragAndDrop

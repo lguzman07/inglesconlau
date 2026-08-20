@@ -20,17 +20,25 @@ function openDB(): Promise<IDBDatabase> {
   });
 }
 
-export async function getAudio(text: string): Promise<Blob | null> {
+function getCacheKey(text: string, language: string) {
+  return `${language}:${text.trim().toLowerCase()}`;
+}
+
+export async function getAudio(
+  text: string,
+  language: string
+): Promise<Blob | null> {
   const db = await openDB();
 
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readonly');
     const store = transaction.objectStore(STORE_NAME);
 
-    const request = store.get(text.toLowerCase());
+    const cacheKey = getCacheKey(text, language);
+    const request = store.get(cacheKey);
 
     request.onsuccess = () => {
-      console.log('CACHE GET:', text.toLowerCase(), request.result);
+      console.log('CACHE GET:', cacheKey, request.result);
       resolve(request.result ?? null);
     };
 
@@ -38,21 +46,25 @@ export async function getAudio(text: string): Promise<Blob | null> {
   });
 }
 
-export async function saveAudio(text: string, blob: Blob) {
+export async function saveAudio(
+  text: string,
+  language: string,
+  blob: Blob
+): Promise<void> {
   const db = await openDB();
 
-  return new Promise<void>((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readwrite');
     const store = transaction.objectStore(STORE_NAME);
 
-    store.put(blob, text.toLowerCase());
+    const cacheKey = getCacheKey(text, language);
+
+    store.put(blob, cacheKey);
 
     transaction.oncomplete = () => {
-      console.log('CACHE SAVE:', text.toLowerCase());
+      console.log('CACHE SAVE:', cacheKey);
       resolve();
     };
-
-    transaction.oncomplete = () => resolve();
 
     transaction.onerror = () => reject(transaction.error);
   });
