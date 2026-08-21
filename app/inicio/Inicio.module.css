@@ -370,7 +370,7 @@
 
 .summaryGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
 
@@ -390,6 +390,28 @@
 
 .cardNote {
   font-size: 0.85rem;
+}
+
+.flashcardsLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 18px;
+  padding: 10px 16px;
+  color: var(--primary);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+  transition: var(--transition);
+}
+
+.flashcardsLink:hover,
+.flashcardsLink:focus-visible {
+  color: var(--surface);
+  background: var(--primary);
 }
 
 .progressTrack {
@@ -476,9 +498,16 @@
 .logoutButton:focus-visible,
 .lessonButton:focus-visible,
 .progressLessonButton:focus-visible,
-.exploreButton:focus-visible {
+.exploreButton:focus-visible,
+.flashcardsLink:focus-visible {
   outline: 3px solid var(--primary-light);
   outline-offset: 3px;
+}
+
+@media (max-width: 1050px) {
+  .summaryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 800px) {
@@ -493,8 +522,7 @@
     gap: 16px;
   }
 
-  .primaryGrid,
-  .summaryGrid {
+  .primaryGrid {
     grid-template-columns: 1fr;
   }
 
@@ -513,6 +541,10 @@
 @media (max-width: 600px) {
   .navbar {
     padding: 22px 6%;
+  }
+
+  .summaryGrid {
+    grid-template-columns: 1fr;
   }
 }
 

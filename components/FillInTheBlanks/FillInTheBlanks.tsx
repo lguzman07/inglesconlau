@@ -113,6 +113,16 @@ export default function FillInTheBlanks({
   const [playingText, setPlayingText] = useState<string | null>(null);
   const [audioError, setAudioError] = useState<string | null>(null);
 
+  const [savedFlashcardWords, setSavedFlashcardWords] = useState<
+    Set<string>
+  >(new Set());
+
+  const [savingFlashcardWord, setSavingFlashcardWord] =
+    useState<string | null>(null);
+
+  const [flashcardError, setFlashcardError] =
+    useState<string | null>(null);
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioUrlRef = useRef<string | null>(null);
   const audioRequestIdRef = useRef(0);
@@ -177,6 +187,36 @@ export default function FillInTheBlanks({
 
     void loadProgress();
   }, [lessonKey, supabase]);
+
+  useEffect(() => {
+    async function loadSavedFlashcards() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('user_flashcards')
+        .select('word')
+        .eq('user_id', user.id);
+
+      if (error) {
+        setFlashcardError('No pudimos cargar tus flashcards.');
+        return;
+      }
+
+      setSavedFlashcardWords(
+        new Set(
+          (data ?? []).map((item) =>
+            String(item.word).trim().toLocaleLowerCase(),
+          ),
+        ),
+      );
+    }
+
+    void loadSavedFlashcards();
+  }, [supabase]);
 
   useEffect(() => {
     function closeBubble(event: MouseEvent) {
@@ -463,6 +503,70 @@ export default function FillInTheBlanks({
     }
   }
 
+  async function addToFlashcards(
+    item: TranslatableWord,
+    questionId: number,
+  ) {
+    const normalizedWord = item.word
+      .trim()
+      .toLocaleLowerCase();
+
+    if (
+      savedFlashcardWords.has(normalizedWord) ||
+      savingFlashcardWord === normalizedWord
+    ) {
+      return;
+    }
+
+    setFlashcardError(null);
+    setSavingFlashcardWord(normalizedWord);
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      setFlashcardError(
+        'Tu sesión terminó. Inicia sesión nuevamente.',
+      );
+      setSavingFlashcardWord(null);
+      return;
+    }
+
+    const question = questions.find(
+      (itemQuestion) => itemQuestion.id === questionId,
+    );
+
+    const { error } = await supabase
+      .from('user_flashcards')
+      .insert({
+        user_id: user.id,
+        word: item.word.trim(),
+        translation: item.translation.trim(),
+        example_sentence: question
+          ? getSentence(question)
+          : null,
+        lesson_key: lessonKey,
+      });
+
+    if (error && error.code !== '23505') {
+      setFlashcardError(
+        'No pudimos añadir esta palabra a tus flashcards.',
+      );
+      setSavingFlashcardWord(null);
+      return;
+    }
+
+    setSavedFlashcardWords((current) => {
+      const next = new Set(current);
+      next.add(normalizedWord);
+      return next;
+    });
+
+    setSavingFlashcardWord(null);
+  }
+
   function renderWord(
     item: TranslatableWord,
     questionId: number,
@@ -473,6 +577,16 @@ export default function FillInTheBlanks({
       activeBubble.questionId === questionId &&
       activeBubble.wordIndex === wordIndex;
 
+    const normalizedWord = item.word
+      .trim()
+      .toLocaleLowerCase();
+
+    const isSaved =
+      savedFlashcardWords.has(normalizedWord);
+
+    const isSaving =
+      savingFlashcardWord === normalizedWord;
+
     return (
       <span
         className={styles.translationAnchor}
@@ -481,6 +595,7 @@ export default function FillInTheBlanks({
         <button
           type="button"
           className={styles.wordButton}
+          tabIndex={-1}
           onClick={() =>
             setActiveBubble(
               isOpen
@@ -500,17 +615,38 @@ export default function FillInTheBlanks({
           <span className={styles.translationBubble}>
             <span>{item.translation}</span>
 
-            <button
-              type="button"
-              className={styles.audioButton}
-              onClick={() =>
-                void playAudio(item.word)
-              }
-            >
-              {playingText === item.word
-                ? 'Detener audio'
-                : '🔊 Escuchar'}
-            </button>
+            <div className={styles.wordBubbleActions}>
+              <button
+                type="button"
+                className={styles.audioButton}
+                tabIndex={-1}
+                onClick={() =>
+                  void playAudio(item.word)
+                }
+              >
+                {playingText === item.word
+                  ? 'Detener audio'
+                  : '🔊 Escuchar'}
+              </button>
+
+              <button
+                type="button"
+                className={`${styles.flashcardButton} ${
+                  isSaved ? styles.flashcardButtonSaved : ''
+                }`}
+                tabIndex={-1}
+                disabled={isSaved || isSaving}
+                onClick={() =>
+                  void addToFlashcards(item, questionId)
+                }
+              >
+                {isSaved
+                  ? '✓ Added'
+                  : isSaving
+                    ? 'Adding...'
+                    : '+ Add to flashcards'}
+              </button>
+            </div>
           </span>
         )}
       </span>
@@ -556,6 +692,15 @@ export default function FillInTheBlanks({
             role="alert"
           >
             {audioError}
+          </p>
+        )}
+
+        {flashcardError && (
+          <p
+            className={styles.incorrectFeedback}
+            role="alert"
+          >
+            {flashcardError}
           </p>
         )}
 
@@ -664,6 +809,7 @@ export default function FillInTheBlanks({
                         className={
                           styles.translateSentenceButton
                         }
+                        tabIndex={-1}
                         onClick={() =>
                           setActiveBubble(
                             sentenceBubbleOpen
@@ -694,6 +840,7 @@ export default function FillInTheBlanks({
                             className={
                               styles.audioButton
                             }
+                            tabIndex={-1}
                             onClick={() =>
                               void playAudio(
                                 sentence,

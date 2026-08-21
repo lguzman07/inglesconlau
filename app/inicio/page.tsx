@@ -125,6 +125,9 @@ export default function InicioPage() {
   const [completedLessons, setCompletedLessons] =
     useState(0);
 
+  const [savedFlashcards, setSavedFlashcards] =
+    useState(0);
+
   const [lastLessonKey, setLastLessonKey] =
     useState('a0/1');
 
@@ -445,6 +448,20 @@ export default function InicioPage() {
 
       setCompletedLessons(
         completedLessonsCount ?? 0,
+      );
+
+      const {
+        count: savedFlashcardsCount,
+      } = await supabase
+        .from('user_flashcards')
+        .select('id', {
+          count: 'exact',
+          head: true,
+        })
+        .eq('user_id', user.id);
+
+      setSavedFlashcards(
+        savedFlashcardsCount ?? 0,
       );
 
       const { data: openedLessons } =
@@ -1097,6 +1114,37 @@ export default function InicioPage() {
                 )}{' '}
                 lecciones
               </p>
+            </article>
+
+            <article
+              className={styles.summaryCard}
+            >
+              <p
+                className={styles.cardLabel}
+              >
+                Vocabulary Building
+              </p>
+
+              <p
+                className={styles.cardValue}
+              >
+                {savedFlashcards}
+              </p>
+
+              <p
+                className={styles.cardText}
+              >
+                {savedFlashcards === 1
+                  ? 'palabra guardada'
+                  : 'palabras guardadas'}
+              </p>
+
+              <Link
+                href="/flashcards"
+                className={styles.flashcardsLink}
+              >
+                Repasar flashcards →
+              </Link>
             </article>
           </div>
         </section>

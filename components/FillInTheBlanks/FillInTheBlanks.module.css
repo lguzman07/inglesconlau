@@ -194,7 +194,7 @@
   left: 50%;
   display: grid;
   width: max-content;
-  max-width: min(260px, 78vw);
+  max-width: min(290px, 82vw);
   gap: 9px;
   padding: 12px;
   color: var(--text);
@@ -235,6 +235,14 @@
   transform: rotate(45deg);
 }
 
+.wordBubbleActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 2px;
+}
+
 .audioButton {
   position: relative;
   z-index: 1;
@@ -253,6 +261,40 @@
 .audioButton:focus-visible {
   color: var(--primary-hover);
   text-decoration: underline;
+}
+
+.flashcardButton {
+  position: relative;
+  z-index: 1;
+  min-height: 31px;
+  padding: 5px 10px;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.flashcardButton:hover:not(:disabled),
+.flashcardButton:focus-visible:not(:disabled) {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.flashcardButton:disabled {
+  cursor: default;
+}
+
+.flashcardButtonSaved {
+  color: var(--primary);
+  background: var(--primary-light);
+  border-color: var(--primary-light);
 }
 
 .correctFeedback,
@@ -339,6 +381,7 @@
 .wordButton:focus-visible,
 .translateSentenceButton:focus-visible,
 .audioButton:focus-visible,
+.flashcardButton:focus-visible,
 .checkButton:focus-visible,
 .retryButton:focus-visible,
 .nextButton:focus-visible {
