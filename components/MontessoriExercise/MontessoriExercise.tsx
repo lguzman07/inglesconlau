@@ -144,41 +144,23 @@ const selectedSymbolStyle: CSSProperties = {
 const actionsStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: '18px',
+  gap: '14px',
   flexWrap: 'wrap',
   marginTop: '32px',
 };
 
 const checkButtonStyle: CSSProperties = {
   display: 'inline-flex',
-  width: '192px',
-  height: '72px',
+  minHeight: '58px',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '0 28px',
+  padding: '14px 28px',
   color: '#fff',
   font: 'inherit',
   fontWeight: 850,
   lineHeight: 1,
-  background: '#d84b4c',
-  border: '1px solid #d84b4c',
-  borderRadius: '999px',
-  cursor: 'pointer',
-};
-
-const retryButtonStyle: CSSProperties = {
-  display: 'inline-flex',
-  width: '192px',
-  height: '72px',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: '0 28px',
-  color: '#d84b4c',
-  font: 'inherit',
-  fontWeight: 850,
-  lineHeight: 1,
-  background: 'var(--surface-solid)',
-  border: '1px solid #d84b4c',
+  background: 'var(--primary)',
+  border: '1px solid var(--primary)',
   borderRadius: '999px',
   cursor: 'pointer',
 };
@@ -431,12 +413,6 @@ export default function MontessoriExercise({
     setHasChecked(true);
   }
 
-  function resetExercise() {
-    setAnswers({});
-    setSelectedSymbol(null);
-    setHasChecked(false);
-  }
-
   return (
     <section
       className={styles.exercise}
@@ -613,16 +589,7 @@ export default function MontessoriExercise({
           disabled={!allQuestionsComplete}
           onClick={checkExercise}
         >
-          Corregir
-        </button>
-
-        <button
-          type="button"
-          className={styles.retryButton}
-          style={retryButtonStyle}
-          onClick={resetExercise}
-        >
-          Reintentar
+          Corregir ejercicio
         </button>
       </div>
 
