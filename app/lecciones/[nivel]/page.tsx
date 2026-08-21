@@ -359,17 +359,26 @@ export default async function NivelPage({
                           </span>
                         </span>
 
-                        {isCompleted && (
-                          <span
-                            className={
-                              styles.completedCheck
-                            }
-                            aria-label="Lección completada"
-                            title="Lección completada"
-                          >
-                            ✓
-                          </span>
-                        )}
+                        <span
+                          className={`${styles.completedCheck} ${
+                            isCompleted
+                              ? styles.completedCheckActive
+                              : ''
+                          }`}
+                          aria-label={
+                            isCompleted
+                              ? 'Lección completada'
+                              : 'Lección pendiente'
+                          }
+                          title={
+                            isCompleted
+                              ? 'Lección completada'
+                              : 'Lección pendiente'
+                          }
+                          aria-hidden="true"
+                        >
+                          {isCompleted ? '✓' : ''}
+                        </span>
                       </Link>
                     ) : (
                       <div
@@ -421,17 +430,26 @@ export default async function NivelPage({
                           suscripción
                         </span>
 
-                        {isCompleted && (
-                          <span
-                            className={
-                              styles.completedCheck
-                            }
-                            aria-label="Lección completada"
-                            title="Lección completada"
-                          >
-                            ✓
-                          </span>
-                        )}
+                        <span
+                          className={`${styles.completedCheck} ${
+                            isCompleted
+                              ? styles.completedCheckActive
+                              : ''
+                          }`}
+                          aria-label={
+                            isCompleted
+                              ? 'Lección completada'
+                              : 'Lección pendiente'
+                          }
+                          title={
+                            isCompleted
+                              ? 'Lección completada'
+                              : 'Lección pendiente'
+                          }
+                          aria-hidden="true"
+                        >
+                          {isCompleted ? '✓' : ''}
+                        </span>
                       </div>
                     )}
                   </li>
