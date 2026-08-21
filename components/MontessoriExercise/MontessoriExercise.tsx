@@ -23,20 +23,55 @@ type SelectedSymbol = {
   symbolId: string;
 } | null;
 
+function getWordId(word: MontessoriQuestion['words'][number], index: number) {
+  return 'id' in word && typeof word.id === 'string'
+    ? word.id
+    : String(index);
+}
+
+function getCorrectPlacement(
+  question: MontessoriQuestion,
+  wordId: string,
+  wordIndex: number,
+) {
+  const placements = question.correctPlacements as unknown;
+
+  if (Array.isArray(placements)) {
+    return typeof placements[wordIndex] === 'string'
+      ? placements[wordIndex]
+      : undefined;
+  }
+
+  if (placements && typeof placements === 'object') {
+    const placementMap = placements as Record<string, string>;
+
+    return placementMap[wordId] ?? placementMap[String(wordIndex)];
+  }
+
+  return undefined;
+}
+
 function questionIsComplete(
   question: MontessoriQuestion,
   answers: Record<string, string> | undefined,
 ) {
-  return question.words.every((word) => answers?.[word.id]);
+  return question.words.every((word, index) => {
+    const wordId = getWordId(word, index);
+    return Boolean(answers?.[wordId]);
+  });
 }
 
 function questionIsCorrect(
   question: MontessoriQuestion,
   answers: Record<string, string> | undefined,
 ) {
-  return question.words.every(
-    (word) => answers?.[word.id] === question.correctPlacements[word.id],
-  );
+  return question.words.every((word, index) => {
+    const wordId = getWordId(word, index);
+
+    return (
+      answers?.[wordId] === getCorrectPlacement(question, wordId, index)
+    );
+  });
 }
 
 function getSymbol(
@@ -238,14 +273,20 @@ export default function MontessoriExercise({
               </div>
 
               <div className={styles.sentenceBoard}>
-                {question.words.map((word) => {
+                {question.words.map((word, wordIndex) => {
+                  const wordId = getWordId(word, wordIndex);
+                  const correctPlacement = getCorrectPlacement(
+                    question,
+                    wordId,
+                    wordIndex,
+                  );
                   const placedSymbol = getSymbol(
                     question,
-                    currentAnswers[word.id],
+                    currentAnswers[wordId],
                   );
 
                   return (
-                    <div className={styles.wordColumn} key={word.id}>
+                    <div className={styles.wordColumn} key={wordId}>
                       <strong className={styles.wordText}>
                         {word.word}
                       </strong>
@@ -259,24 +300,22 @@ export default function MontessoriExercise({
                             ? styles.activeDropZone
                             : '',
                           isChecked &&
-                          currentAnswers[word.id] ===
-                            question.correctPlacements[word.id]
+                          currentAnswers[wordId] === correctPlacement
                             ? styles.correctDropZone
                             : '',
                           isChecked &&
-                          currentAnswers[word.id] !==
-                            question.correctPlacements[word.id]
+                          currentAnswers[wordId] !== correctPlacement
                             ? styles.incorrectDropZone
                             : '',
                         ]
                           .filter(Boolean)
                           .join(' ')}
                         onClick={() =>
-                          handleDropZoneClick(question.id, word.id)
+                          handleDropZoneClick(question.id, wordId)
                         }
                         onDragOver={(event) => event.preventDefault()}
                         onDrop={(event) =>
-                          handleDrop(event, question.id, word.id)
+                          handleDrop(event, question.id, wordId)
                         }
                         aria-label={`Colocar símbolo en ${word.word}`}
                       >
