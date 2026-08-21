@@ -220,11 +220,7 @@
 
 .completedCheckActive {
     color: #ffffff;
-    background: color-mix(
-        in srgb,
-        var(--primary-light) 58%,
-        var(--primary) 42%
-    );
+    background: var(--primary);
     border-color: var(--primary);
 }
 
