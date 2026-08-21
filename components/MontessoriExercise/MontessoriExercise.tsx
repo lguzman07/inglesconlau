@@ -151,11 +151,11 @@ const actionsStyle: CSSProperties = {
 
 const checkButtonStyle: CSSProperties = {
   display: 'inline-flex',
-  minWidth: '154px',
-  minHeight: '58px',
+  width: '192px',
+  height: '72px',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '14px 28px',
+  padding: '0 28px',
   color: '#fff',
   font: 'inherit',
   fontWeight: 850,
@@ -168,11 +168,11 @@ const checkButtonStyle: CSSProperties = {
 
 const retryButtonStyle: CSSProperties = {
   display: 'inline-flex',
-  minWidth: '154px',
-  minHeight: '58px',
+  width: '192px',
+  height: '72px',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '14px 28px',
+  padding: '0 28px',
   color: '#d84b4c',
   font: 'inherit',
   fontWeight: 850,
