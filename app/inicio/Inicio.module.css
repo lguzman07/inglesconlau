@@ -153,6 +153,7 @@
 .progressLesson,
 .readingClub,
 .summaryCard {
+  min-width: 0;
   padding: 28px;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -162,19 +163,11 @@
 
 .currentLesson,
 .progressLesson {
-  display: flex;
-  min-width: 0;
-  min-height: 220px;
-  align-items: flex-start;
-  flex-direction: column;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 24px;
-}
-
-.currentLesson > div,
-.progressLesson > div {
-  width: 100%;
-  min-width: 0;
+  min-height: 220px;
+  align-content: start;
 }
 
 .currentLesson {
@@ -185,6 +178,19 @@
 .progressLesson {
   background: var(--surface);
   border-color: var(--border);
+}
+
+.currentLesson > div,
+.progressLesson > div {
+  min-width: 0;
+}
+
+.lessonCardContent {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .lessonTitle {
@@ -207,11 +213,12 @@
 .lessonButton,
 .progressLessonButton {
   display: inline-flex;
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
   align-items: center;
   justify-content: center;
-  align-self: flex-start;
-  max-width: 100%;
-  margin-top: auto;
+  margin-top: 22px;
   padding: 14px 22px;
   font: inherit;
   font-weight: 700;
@@ -222,6 +229,7 @@
   border-radius: 999px;
   cursor: pointer;
   transition: var(--transition);
+  box-sizing: border-box;
 }
 
 .lessonButton {
@@ -292,6 +300,7 @@
   background: var(--surface-soft);
   border: 1px solid var(--primary-light);
   border-radius: 16px;
+  box-sizing: border-box;
 }
 
 .reservationConfirmedTitle {
@@ -334,6 +343,7 @@
   text-decoration: none;
   border-radius: 999px;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .joinButton {
@@ -541,11 +551,6 @@
     width: 100%;
     flex-wrap: wrap;
     gap: 16px;
-  }
-
-  .lessonButton,
-  .progressLessonButton {
-    width: 100%;
   }
 }
 

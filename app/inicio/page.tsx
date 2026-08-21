@@ -690,7 +690,7 @@ export default function InicioPage() {
                 styles.currentLesson
               }
             >
-              <div>
+              <div className={styles.lessonCardContent}>
                 <p
                   className={
                     styles.cardLabel
@@ -717,16 +717,16 @@ export default function InicioPage() {
                   incluso si entraste
                   solamente para repasar.
                 </p>
-              </div>
 
-              <Link
-                href={`/lecciones/${lastLessonKey}`}
-                className={
-                  styles.lessonButton
-                }
-              >
-                Continuar última lección
-              </Link>
+                <Link
+                  href={`/lecciones/${lastLessonKey}`}
+                  className={
+                    styles.lessonButton
+                  }
+                >
+                  Continuar última lección
+                </Link>
+              </div>
             </article>
 
             <article
@@ -734,7 +734,7 @@ export default function InicioPage() {
                 styles.progressLesson
               }
             >
-              <div>
+              <div className={styles.lessonCardContent}>
                 <p
                   className={
                     styles.cardLabel
@@ -761,16 +761,16 @@ export default function InicioPage() {
                   para continuar tu recorrido
                   desde el punto más lejano.
                 </p>
-              </div>
 
-              <Link
-                href={`/lecciones/${furthestLessonKey}`}
-                className={
-                  styles.progressLessonButton
-                }
-              >
-                Continuar con mi progreso
-              </Link>
+                <Link
+                  href={`/lecciones/${furthestLessonKey}`}
+                  className={
+                    styles.progressLessonButton
+                  }
+                >
+                  Continuar con mi progreso
+                </Link>
+              </div>
             </article>
           </div>
 
