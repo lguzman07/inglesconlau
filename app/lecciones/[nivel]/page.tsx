@@ -104,6 +104,7 @@ export default async function NivelPage({
   const [
     profileResult,
     subscriptionResult,
+    progressResult,
   ] = await Promise.all([
     supabase
       .from('profiles')
@@ -118,6 +119,12 @@ export default async function NivelPage({
       )
       .eq('user_id', user.id)
       .maybeSingle(),
+
+    supabase
+      .from('lesson_progress')
+      .select('lesson_key, is_completed')
+      .eq('user_id', user.id)
+      .eq('is_completed', true),
   ]);
 
   const isAdmin =
@@ -139,6 +146,12 @@ export default async function NivelPage({
   const hasLessonAccess =
     isAdmin ||
     hasCurrentSubscription;
+
+  const completedLessonKeys = new Set(
+    (progressResult.data ?? []).map(
+      (progress) => progress.lesson_key,
+    ),
+  );
 
   return (
     <main className={styles.main}>
@@ -280,6 +293,14 @@ export default async function NivelPage({
                   hasLessonAccess ||
                   number <= 3;
 
+                const lessonKey =
+                  `${normalizedLevel}-${number}`;
+
+                const isCompleted =
+                  completedLessonKeys.has(
+                    lessonKey,
+                  );
+
                 return (
                   <li key={number}>
                     {canOpenLesson ? (
@@ -295,12 +316,14 @@ export default async function NivelPage({
                             styles.lessonNumber
                           }
                         >
-                          {String(
-                            number,
-                          ).padStart(
-                            2,
-                            '0',
-                          )}
+                          {isCompleted
+                            ? '✓'
+                            : String(
+                                number,
+                              ).padStart(
+                                2,
+                                '0',
+                              )}
                         </span>
 
                         <div
@@ -350,12 +373,14 @@ export default async function NivelPage({
                             styles.lessonNumber
                           }
                         >
-                          {String(
-                            number,
-                          ).padStart(
-                            2,
-                            '0',
-                          )}
+                          {isCompleted
+                            ? '✓'
+                            : String(
+                                number,
+                              ).padStart(
+                                2,
+                                '0',
+                              )}
                         </span>
 
                         <div
