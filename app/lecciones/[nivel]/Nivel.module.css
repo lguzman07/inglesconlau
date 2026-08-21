@@ -206,24 +206,26 @@
     height: 40px;
     flex: 0 0 auto;
     place-items: center;
-    color: var(--primary);
+    color: transparent;
     font-size: 1.15rem;
     font-weight: 900;
     background: color-mix(
         in srgb,
-        var(--primary-light) 72%,
-        var(--primary) 28%
+        var(--primary-light) 90%,
+        var(--surface) 10%
     );
     border: 2px solid var(--primary);
     border-radius: 50%;
 }
 
 .completedCheckActive {
+    color: #ffffff;
     background: color-mix(
         in srgb,
         var(--primary-light) 58%,
         var(--primary) 42%
     );
+    border-color: var(--primary);
 }
 
 .backLink:hover,
