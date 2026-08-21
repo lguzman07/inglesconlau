@@ -1,27 +1,51 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { getLessonTitle } from '@/content/lecciones/catalog';
 import styles from './Inicio.module.css';
 
-const TOTAL_LESSONS = 1000;
-const LAST_LESSON_STORAGE_KEY = 'inglesconlau-last-opened-lesson';
-const LEVEL_ORDER = ['a0', 'a1', 'a2', 'b1', 'b1+', 'b2', 'c1'];
+const TOTAL_LESSONS = 1037;
+
+const LAST_LESSON_STORAGE_KEY =
+  'inglesconlau-last-opened-lesson';
+
+const LEVEL_ORDER = [
+  'a0',
+  'a1',
+  'a2',
+  'b1',
+  'b1+',
+  'b2',
+  'c1',
+];
 
 function getValidLessonKey(value: string | null) {
-  if (!value || !/^[a-z0-9+]+\/\d+$/i.test(value)) {
+  if (
+    !value ||
+    !/^[a-z0-9+]+\/\d+$/i.test(value)
+  ) {
     return null;
   }
 
   return value.toLowerCase();
 }
 
-function compareLessonKeys(firstKey: string, secondKey: string) {
-  const [firstLevel, firstLesson] = firstKey.split('/');
-  const [secondLevel, secondLesson] = secondKey.split('/');
+function compareLessonKeys(
+  firstKey: string,
+  secondKey: string,
+) {
+  const [firstLevel, firstLesson] =
+    firstKey.split('/');
+
+  const [secondLevel, secondLesson] =
+    secondKey.split('/');
 
   const levelDifference =
     LEVEL_ORDER.indexOf(firstLevel) -
@@ -37,49 +61,73 @@ function compareLessonKeys(firstKey: string, secondKey: string) {
 function formatLessonLabel(lessonKey: string) {
   const [level, lessonNumber] = lessonKey.split('/');
 
-  const title = getLessonTitle(
-    level,
-    Number(lessonNumber),
-  );
+  const number = Number(lessonNumber);
 
-  return `${level.toUpperCase()} · ${title}`;
+  return `${level.toUpperCase()} · ${getLessonTitle(
+    level,
+    number,
+  )}`;
 }
 
 export default function InicioPage() {
   const pathname = usePathname();
 
-  const [indicatedLevel, setIndicatedLevel] = useState('');
-  const [studentName, setStudentName] = useState('');
+  const [indicatedLevel, setIndicatedLevel] =
+    useState('');
+
+  const [studentName, setStudentName] =
+    useState('');
+
   const [gender, setGender] = useState('');
+
   const [role, setRole] = useState('student');
-  const [subscriptionStatus, setSubscriptionStatus] =
-    useState('inactive');
-  const [subscriptionEndsAt, setSubscriptionEndsAt] =
-    useState<string | null>(null);
+
+  const [
+    subscriptionStatus,
+    setSubscriptionStatus,
+  ] = useState('inactive');
+
+  const [
+    subscriptionEndsAt,
+    setSubscriptionEndsAt,
+  ] = useState<string | null>(null);
+
   const [readingClubDate, setReadingClubDate] =
     useState('Jueves');
+
   const [clubCountdown, setClubCountdown] =
     useState('Calculando...');
-  const [availableReadingSlots, setAvailableReadingSlots] =
-    useState<number | null>(null);
+
+  const [
+    availableReadingSlots,
+    setAvailableReadingSlots,
+  ] = useState<number | null>(null);
+
   const [clubSessionId, setClubSessionId] =
     useState<string | null>(null);
+
   const [
     readingReservationSlot,
     setReadingReservationSlot,
   ] = useState<number | null>(null);
+
   const [
     isCancellingReservation,
     setIsCancellingReservation,
   ] = useState(false);
+
   const [reservationError, setReservationError] =
     useState('');
+
   const [isLoadingProfile, setIsLoadingProfile] =
     useState(true);
+
   const [completedLessons, setCompletedLessons] =
     useState(0);
+
   const [lastLessonKey, setLastLessonKey] =
     useState('a0/1');
+
   const [furthestLessonKey, setFurthestLessonKey] =
     useState('a0/1');
 
@@ -110,10 +158,12 @@ export default function InicioPage() {
       'focus',
       syncLastOpenedLesson,
     );
+
     window.addEventListener(
       'pageshow',
       syncLastOpenedLesson,
     );
+
     document.addEventListener(
       'visibilitychange',
       handleVisibilityChange,
@@ -124,10 +174,12 @@ export default function InicioPage() {
         'focus',
         syncLastOpenedLesson,
       );
+
       window.removeEventListener(
         'pageshow',
         syncLastOpenedLesson,
       );
+
       document.removeEventListener(
         'visibilitychange',
         handleVisibilityChange,
@@ -171,6 +223,7 @@ export default function InicioPage() {
             p_session_id: session.id,
           },
         ),
+
         user
           ? supabase
               .from('reading_reservations')
@@ -194,8 +247,11 @@ export default function InicioPage() {
     }, []);
 
   useEffect(() => {
-    const dominicanOffset = 4 * 60 * 60 * 1000;
-    const sessionDuration = 2 * 60 * 60 * 1000;
+    const dominicanOffset =
+      4 * 60 * 60 * 1000;
+
+    const sessionDuration =
+      2 * 60 * 60 * 1000;
 
     function updateClubSession() {
       const now = new Date();
@@ -204,7 +260,8 @@ export default function InicioPage() {
         now.getTime() - dominicanOffset,
       );
 
-      const currentDay = dominicanNow.getUTCDay();
+      const currentDay =
+        dominicanNow.getUTCDay();
 
       let daysUntilThursday =
         (4 - currentDay + 7) % 7;
@@ -257,8 +314,7 @@ export default function InicioPage() {
       );
 
       const timeUntilSession =
-        sessionStart.getTime() -
-        now.getTime();
+        sessionStart.getTime() - now.getTime();
 
       if (
         timeUntilSession <= 0 &&
@@ -283,8 +339,7 @@ export default function InicioPage() {
         (totalMinutes % 1440) / 60,
       );
 
-      const minutes =
-        totalMinutes % 60;
+      const minutes = totalMinutes % 60;
 
       if (days > 0) {
         setClubCountdown(
@@ -305,11 +360,10 @@ export default function InicioPage() {
 
     updateClubSession();
 
-    const intervalId =
-      window.setInterval(
-        updateClubSession,
-        60000,
-      );
+    const intervalId = window.setInterval(
+      updateClubSession,
+      60000,
+    );
 
     return () =>
       window.clearInterval(intervalId);
@@ -361,9 +415,7 @@ export default function InicioPage() {
         user.user_metadata?.first_name ||
         '';
 
-      if (
-        typeof accountName === 'string'
-      ) {
+      if (typeof accountName === 'string') {
         setStudentName(
           accountName
             .trim()
@@ -405,9 +457,7 @@ export default function InicioPage() {
         openedLessons ?? []
       )
         .map((item) =>
-          getValidLessonKey(
-            item.lesson_key,
-          ),
+          getValidLessonKey(item.lesson_key),
         )
         .filter(
           (
@@ -422,17 +472,16 @@ export default function InicioPage() {
         furthestLesson ?? 'a0/1',
       );
 
-      const {
-        data: lastOpenedLesson,
-      } = await supabase
-        .from('lesson_progress')
-        .select('lesson_key')
-        .eq('user_id', user.id)
-        .order('updated_at', {
-          ascending: false,
-        })
-        .limit(1)
-        .maybeSingle();
+      const { data: lastOpenedLesson } =
+        await supabase
+          .from('lesson_progress')
+          .select('lesson_key')
+          .eq('user_id', user.id)
+          .order('updated_at', {
+            ascending: false,
+          })
+          .limit(1)
+          .maybeSingle();
 
       const databaseLessonKey =
         getValidLessonKey(
@@ -542,25 +591,19 @@ export default function InicioPage() {
 
   const generalProgress = Math.min(
     100,
-    (completedLessons /
-      TOTAL_LESSONS) *
+    (completedLessons / TOTAL_LESSONS) *
       100,
   );
 
   const generalProgressLabel =
     completedLessons === 0
       ? '0%'
-      : `${generalProgress.toFixed(
-          2,
-        )}%`;
+      : `${generalProgress.toFixed(2)}%`;
 
   const visibleProgressWidth =
     completedLessons === 0
       ? 0
-      : Math.max(
-          generalProgress,
-          0.8,
-        );
+      : Math.max(generalProgress, 0.8);
 
   const currentLessonTitle =
     formatLessonLabel(lastLessonKey);
@@ -598,9 +641,7 @@ export default function InicioPage() {
                   aria-hidden="true"
                 />
 
-                <span>
-                  {accessLabel}
-                </span>
+                <span>{accessLabel}</span>
               </div>
             )}
           </div>
@@ -612,9 +653,7 @@ export default function InicioPage() {
           </h1>
 
           <p
-            className={
-              styles.description
-            }
+            className={styles.description}
           >
             Sigue avanzando a tu ritmo.
             Cada paso cuenta.
@@ -658,8 +697,8 @@ export default function InicioPage() {
                 >
                   Regresa exactamente a la
                   última lección que abriste,
-                  incluso si entraste solamente
-                  para repasar.
+                  incluso si entraste
+                  solamente para repasar.
                 </p>
               </div>
 
@@ -700,10 +739,10 @@ export default function InicioPage() {
                     styles.lessonDescription
                   }
                 >
-                  Ve a la lección más avanzada
-                  que has alcanzado para
-                  continuar tu recorrido desde
-                  el punto más lejano.
+                  Ve a la lección más
+                  avanzada que has alcanzado
+                  para continuar tu recorrido
+                  desde el punto más lejano.
                 </p>
               </div>
 
@@ -719,14 +758,10 @@ export default function InicioPage() {
           </div>
 
           <aside
-            className={
-              styles.readingClub
-            }
+            className={styles.readingClub}
           >
             <p
-              className={
-                styles.cardLabel
-              }
+              className={styles.cardLabel}
             >
               LECTURA EN VIVO
             </p>
@@ -740,17 +775,13 @@ export default function InicioPage() {
             </h2>
 
             <p
-              className={
-                styles.clubDay
-              }
+              className={styles.clubDay}
             >
               {readingClubDate}
             </p>
 
             <p
-              className={
-                styles.cardText
-              }
+              className={styles.cardText}
             >
               7:00 p. m. – 9:00 p. m.
               <br />
@@ -780,7 +811,8 @@ export default function InicioPage() {
                         styles.reservationConfirmedTitle
                       }
                     >
-                      Tu reserva está confirmada
+                      Tu reserva está
+                      confirmada
                     </p>
 
                     <p
@@ -948,60 +980,44 @@ export default function InicioPage() {
           }
         >
           <h2
-            className={
-              styles.summaryTitle
-            }
+            className={styles.summaryTitle}
           >
             Tu progreso
           </h2>
 
           <div
-            className={
-              styles.summaryGrid
-            }
+            className={styles.summaryGrid}
           >
             <article
-              className={
-                styles.summaryCard
-              }
+              className={styles.summaryCard}
             >
               <p
-                className={
-                  styles.cardLabel
-                }
+                className={styles.cardLabel}
               >
                 Nivel actual
               </p>
 
               <p
-                className={
-                  styles.cardValue
-                }
+                className={styles.cardValue}
               >
                 A1
               </p>
 
               <p
-                className={
-                  styles.cardText
-                }
+                className={styles.cardText}
               >
                 Principiante
               </p>
 
               <p
-                className={
-                  styles.cardNote
-                }
+                className={styles.cardNote}
               >
-                Calculado según las
-                lecciones completadas.
+                Calculado según las lecciones
+                completadas.
               </p>
 
               <p
-                className={
-                  styles.cardText
-                }
+                className={styles.cardText}
               >
                 Nivel indicado al
                 registrarte:{' '}
@@ -1015,22 +1031,16 @@ export default function InicioPage() {
             </article>
 
             <article
-              className={
-                styles.summaryCard
-              }
+              className={styles.summaryCard}
             >
               <p
-                className={
-                  styles.cardLabel
-                }
+                className={styles.cardLabel}
               >
                 Progreso general
               </p>
 
               <p
-                className={
-                  styles.cardValue
-                }
+                className={styles.cardValue}
               >
                 {generalProgressLabel}
               </p>
@@ -1064,30 +1074,22 @@ export default function InicioPage() {
             </article>
 
             <article
-              className={
-                styles.summaryCard
-              }
+              className={styles.summaryCard}
             >
               <p
-                className={
-                  styles.cardLabel
-                }
+                className={styles.cardLabel}
               >
                 Lecciones completadas
               </p>
 
               <p
-                className={
-                  styles.cardValue
-                }
+                className={styles.cardValue}
               >
                 {completedLessons}
               </p>
 
               <p
-                className={
-                  styles.cardText
-                }
+                className={styles.cardText}
               >
                 de{' '}
                 {TOTAL_LESSONS.toLocaleString(
@@ -1105,9 +1107,7 @@ export default function InicioPage() {
           }
         >
           <p
-            className={
-              styles.exploreText
-            }
+            className={styles.exploreText}
           >
             ¿Quieres ver más?
           </p>

@@ -23,62 +23,58 @@ const levels: Record<string, Level> = {
     title: 'Principiante',
     description:
       'Frases y vocabulario para comunicarte en situaciones cotidianas.',
-    lessonCount: 27,
+    lessonCount: 266,
   },
   a2: {
     code: 'A2',
     title: 'Básico',
     description:
       'Más confianza para hablar de experiencias, planes y situaciones frecuentes.',
-    lessonCount: 26,
+    lessonCount: 170,
   },
   b1: {
     code: 'B1',
     title: 'Intermedio',
     description:
       'Comunica ideas, opiniones y experiencias con mayor independencia.',
-    lessonCount: 25,
+    lessonCount: 155,
   },
   'b1+': {
     code: 'B1+',
     title: 'Intermedio alto',
     description:
       'Refuerza fluidez y precisión al expresar ideas más detalladas.',
-    lessonCount: 25,
+    lessonCount: 74,
   },
   b2: {
     code: 'B2',
     title: 'Intermedio avanzado',
     description:
       'Comprende contenido más complejo y argumenta con confianza.',
-    lessonCount: 25,
+    lessonCount: 134,
   },
   c1: {
     code: 'C1',
     title: 'Avanzado',
     description:
       'Comunícate con precisión y naturalidad en contextos complejos.',
-    lessonCount: 27,
+    lessonCount: 158,
   },
 };
 
-export default async function NivelPage({
+export default function NivelPage({
   params,
 }: {
-  params: Promise<{ nivel: string }>;
+  params: {
+    nivel: string;
+  };
 }) {
-  const { nivel } = await params;
-
-  const normalizedLevel = nivel.toLowerCase();
-
+  const normalizedLevel = params.nivel.toLowerCase();
   const level = levels[normalizedLevel];
 
   if (!level) {
     notFound();
   }
-
-  const firstLessonTitle =
-    getLessonTitle(normalizedLevel, 1);
 
   return (
     <main className={styles.main}>
@@ -114,7 +110,8 @@ export default async function NivelPage({
               </p>
 
               <h2>
-                Empieza por: {firstLessonTitle}
+                Empieza por:{' '}
+                {getLessonTitle(normalizedLevel, 1)}
               </h2>
 
               <p>
@@ -155,23 +152,20 @@ export default async function NivelPage({
               (_, index) => {
                 const number = index + 1;
 
-                const title =
-                  getLessonTitle(
-                    normalizedLevel,
-                    number,
-                  );
+                const lessonTitle = getLessonTitle(
+                  normalizedLevel,
+                  number,
+                );
 
                 return (
                   <li key={number}>
                     <Link
-                      href={`/lecciones/${nivel}/${number}`}
+                      href={`/lecciones/${params.nivel}/${number}`}
                       className={styles.lessonCard}
-                      aria-label={`Abrir ${title} de ${level.code}`}
+                      aria-label={`Abrir ${lessonTitle} de ${level.code}`}
                     >
                       <span
-                        className={
-                          styles.lessonNumber
-                        }
+                        className={styles.lessonNumber}
                       >
                         {String(number).padStart(
                           2,
@@ -180,23 +174,18 @@ export default async function NivelPage({
                       </span>
 
                       <div
-                        className={
-                          styles.lessonContent
-                        }
+                        className={styles.lessonContent}
                       >
-                        <h3>{title}</h3>
+                        <h3>{lessonTitle}</h3>
 
                         <p>
-                          Abre la lección para ver
-                          su video, ejercicios y
-                          progreso.
+                          Abre la lección para ver su video,
+                          ejercicios y progreso.
                         </p>
                       </div>
 
                       <span
-                        className={
-                          styles.openLesson
-                        }
+                        className={styles.openLesson}
                       >
                         Abrir lección{' '}
                         <span aria-hidden="true">
