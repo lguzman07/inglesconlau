@@ -294,7 +294,7 @@ export default async function NivelPage({
                   number <= 3;
 
                 const lessonKey =
-                  `${normalizedLevel}-${number}`;
+                  `${normalizedLevel}/${number}`;
 
                 const isCompleted =
                   completedLessonKeys.has(
