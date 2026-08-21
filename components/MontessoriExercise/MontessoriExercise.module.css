@@ -1,0 +1,337 @@
+.exercise {
+  width: 100%;
+}
+
+.heading {
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.heading h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.6rem, 3vw, 2rem);
+}
+
+.heading > p:not(.eyebrow) {
+  max-width: 650px;
+  margin: 12px 0 0;
+  color: var(--text-light);
+  line-height: 1.65;
+}
+
+.questions {
+  display: grid;
+  gap: 22px;
+}
+
+.questionCard {
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.questionNumber {
+  margin: 0 0 24px;
+  color: var(--primary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.sentence {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 34px;
+  padding: 28px 20px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+
+.wordColumn {
+  display: flex;
+  min-width: 90px;
+  align-items: center;
+  flex-direction: column;
+}
+
+.word {
+  color: var(--text);
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.translation {
+  margin-top: 9px;
+  color: var(--text-light);
+  font-size: 0.78rem;
+}
+
+.dropZone {
+  display: grid;
+  width: 70px;
+  height: 70px;
+  margin-top: 14px;
+  padding: 0;
+  place-items: center;
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.dropZone:hover,
+.dropZone:focus-visible {
+  border-color: var(--primary);
+}
+
+.emptyDropZone {
+  width: 16px;
+  height: 16px;
+  background: var(--primary-light);
+  border-radius: 50%;
+}
+
+.symbolSection {
+  margin-top: 24px;
+}
+
+.symbolLabel {
+  margin: 0 0 12px;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.symbolOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.symbolButton {
+  display: inline-flex;
+  min-height: 58px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  background: var(--surface-soft);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.symbolButton:hover,
+.symbolButton:focus-visible,
+.selectedSymbol {
+  border-color: var(--primary);
+}
+
+.selectedSymbol {
+  background: var(--primary-light);
+}
+
+.symbolShape {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+}
+
+/* Formas */
+
+.circle {
+  border-radius: 50%;
+}
+
+.small-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-right: 19px solid transparent;
+  border-bottom: 34px solid currentColor;
+  border-left: 19px solid transparent;
+}
+
+.small-triangle {
+  width: 0;
+  height: 0;
+  border-right: 13px solid transparent;
+  border-bottom: 23px solid currentColor;
+  border-left: 13px solid transparent;
+}
+
+.bar {
+  width: 38px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.crescent {
+  border-radius: 50%;
+  box-shadow: 9px 0 0 0 var(--surface);
+}
+
+.keyhole {
+  width: 22px;
+  height: 34px;
+  border-radius: 12px 12px 5px 5px;
+}
+
+/* Colores */
+
+.red {
+  color: #d74b4b;
+  background: #d74b4b;
+}
+
+.black {
+  color: #30363a;
+  background: #30363a;
+}
+
+.blue {
+  color: #4169a8;
+  background: #4169a8;
+}
+
+.light-blue {
+  color: #77a9d4;
+  background: #77a9d4;
+}
+
+.purple {
+  color: #80599e;
+  background: #80599e;
+}
+
+.green {
+  color: #4f8c67;
+  background: #4f8c67;
+}
+
+.pink {
+  color: #c97891;
+  background: #c97891;
+}
+
+.orange {
+  color: #d98243;
+  background: #d98243;
+}
+
+.yellow {
+  color: #d6aa36;
+  background: #d6aa36;
+}
+
+/*
+ * Los triángulos se dibujan con bordes.
+ * Quitamos su fondo para conservar la forma.
+ */
+
+.triangle,
+.small-triangle {
+  background: transparent;
+}
+
+.correct {
+  border-color: var(--primary);
+}
+
+.incorrect {
+  border-color: #b42318;
+}
+
+.checkButton {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  padding: 12px 24px;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 800;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.checkButton:hover:not(:disabled),
+.checkButton:focus-visible:not(:disabled) {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.checkButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 18px;
+  padding: 15px 18px;
+  border-radius: 14px;
+}
+
+.feedbackCorrect {
+  color: var(--text);
+  background: var(--primary-light);
+}
+
+.feedbackIncorrect {
+  color: #8a1c14;
+  background: #fff1f0;
+}
+
+@media (max-width: 600px) {
+  .questionCard {
+    padding: 22px;
+  }
+
+  .sentence {
+    gap: 18px;
+    padding: 22px 14px;
+  }
+
+  .wordColumn {
+    min-width: 72px;
+  }
+
+  .dropZone {
+    width: 60px;
+    height: 60px;
+  }
+
+  .symbolButton {
+    width: 100%;
+  }
+}

@@ -38,18 +38,93 @@ export type DragAndDropExercise = {
   questions: DragAndDropQuestion[];
 };
 
+/*
+ * ==========================================
+ * Montessori
+ * ==========================================
+ */
+
+export type MontessoriShape =
+  | 'circle'
+  | 'triangle'
+  | 'small-circle'
+  | 'small-triangle'
+  | 'crescent'
+  | 'bar'
+  | 'keyhole';
+
+export type MontessoriColor =
+  | 'red'
+  | 'black'
+  | 'blue'
+  | 'light-blue'
+  | 'purple'
+  | 'green'
+  | 'pink'
+  | 'orange'
+  | 'yellow';
+
+export type MontessoriWord = {
+  id: string;
+  word: string;
+  translation: string;
+};
+
+export type MontessoriSymbol = {
+  id: string;
+  shape: MontessoriShape;
+  color: MontessoriColor;
+  label: string;
+};
+
+export type MontessoriPlacement = {
+  wordId: string;
+  symbolId: string;
+};
+
+export type MontessoriQuestion = {
+  id: number;
+
+  words: MontessoriWord[];
+
+  symbols: MontessoriSymbol[];
+
+  correctPlacements: MontessoriPlacement[];
+
+  sentenceTranslation: string;
+};
+
+export type MontessoriExercise = {
+  type: 'montessori';
+
+  title: string;
+
+  instructions: string;
+
+  questions: MontessoriQuestion[];
+};
+
 export type LessonExercise =
   | FillInTheBlanksExercise
-  | DragAndDropExercise;
+  | DragAndDropExercise
+  | MontessoriExercise;
 
 export type LessonContent = {
   level: string;
+
   number: number;
+
   title: string;
+
   subtitle: string;
+
   videoSrc?: string;
+
   videoTitle: string;
+
   videoDescription: string;
+
   objective: string;
+
   exercises: LessonExercise[];
 };

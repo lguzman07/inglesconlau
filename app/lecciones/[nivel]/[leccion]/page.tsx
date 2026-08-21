@@ -6,6 +6,7 @@ import DragAndDrop from '@/components/DragAndDrop/DragAndDrop';
 import FillInTheBlanks from '@/components/FillInTheBlanks/FillInTheBlanks';
 import LessonOpenedTracker from '@/components/LessonOpenedTracker/LessonOpenedTracker';
 import LessonVideo from '@/components/LessonVideo/LessonVideo';
+import MontessoriExercise from '@/components/MontessoriExercise/MontessoriExercise';
 
 import { getLessonContent } from '@/content/lecciones';
 import { getLessonTitle } from '@/content/lecciones/catalog';
@@ -481,7 +482,8 @@ export default async function LeccionPage({
                   englishVariant
                 }
               />
-            ) : (
+            ) : firstExercise.type ===
+              'drag-and-drop' ? (
               <DragAndDrop
                 title={
                   firstExercise.title
@@ -496,6 +498,10 @@ export default async function LeccionPage({
                 nextLessonHref={
                   nextLessonHref
                 }
+              />
+            ) : (
+              <MontessoriExercise
+                exercise={firstExercise}
               />
             )
           ) : (
