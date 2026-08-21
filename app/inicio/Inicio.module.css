@@ -531,7 +531,7 @@
   outline-offset: 3px;
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1180px) {
   .primaryGrid {
     grid-template-columns: 1fr;
   }
