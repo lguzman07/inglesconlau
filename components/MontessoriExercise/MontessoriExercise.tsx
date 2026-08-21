@@ -23,6 +23,159 @@ type SelectedSymbol = {
   symbolId: string;
 } | null;
 
+const cardStyle: CSSProperties = {
+  padding: '34px',
+  background: 'var(--surface-solid)',
+  border: '1px solid var(--border)',
+  borderRadius: '18px',
+  boxShadow: 'var(--shadow)',
+};
+
+const boardStyle: CSSProperties = {
+  width: '100%',
+  margin: '28px 0 26px',
+  padding: '42px 32px',
+  background: 'var(--surface-soft)',
+  border: '1px solid var(--border)',
+  borderRadius: '18px',
+};
+
+const wordGridStyle: CSSProperties = {
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'center',
+  gap: '64px',
+  flexWrap: 'wrap',
+};
+
+const wordColumnStyle: CSSProperties = {
+  display: 'grid',
+  minWidth: '90px',
+  justifyItems: 'center',
+  gap: '10px',
+};
+
+const wordTextStyle: CSSProperties = {
+  color: 'var(--text)',
+  fontSize: '1.35rem',
+  fontWeight: 850,
+  lineHeight: 1.1,
+};
+
+const translationStyle: CSSProperties = {
+  color: 'var(--text-light)',
+  fontSize: '0.94rem',
+  lineHeight: 1.2,
+};
+
+const slotStyle: CSSProperties = {
+  display: 'grid',
+  width: '74px',
+  height: '74px',
+  placeItems: 'center',
+  background: 'var(--surface-solid)',
+  border: '2px dashed var(--border)',
+  borderRadius: '14px',
+  cursor: 'pointer',
+};
+
+const activeSlotStyle: CSSProperties = {
+  borderColor: 'var(--primary)',
+  boxShadow: '0 0 0 4px var(--primary-light)',
+};
+
+const correctSlotStyle: CSSProperties = {
+  borderColor: '#14804a',
+  background: 'rgb(20 128 74 / 10%)',
+};
+
+const incorrectSlotStyle: CSSProperties = {
+  borderColor: '#b42318',
+  background: 'rgb(180 35 24 / 10%)',
+};
+
+const emptyDotStyle: CSSProperties = {
+  width: '16px',
+  height: '16px',
+  background: 'var(--border)',
+  borderRadius: '50%',
+};
+
+const helperStyle: CSSProperties = {
+  margin: '0 0 16px',
+  color: 'var(--text)',
+  fontSize: '1rem',
+  fontWeight: 800,
+  lineHeight: 1.5,
+};
+
+const symbolBankStyle: CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '14px',
+  flexWrap: 'wrap',
+};
+
+const symbolOptionStyle: CSSProperties = {
+  display: 'inline-flex',
+  minWidth: '136px',
+  minHeight: '62px',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '14px',
+  padding: '12px 18px',
+  color: 'var(--text)',
+  font: 'inherit',
+  fontSize: '1rem',
+  fontWeight: 850,
+  background: 'var(--surface-soft)',
+  border: '1px solid var(--border)',
+  borderRadius: '14px',
+  cursor: 'grab',
+};
+
+const selectedSymbolStyle: CSSProperties = {
+  borderColor: 'var(--primary)',
+  boxShadow: '0 0 0 4px var(--primary-light)',
+};
+
+const actionsStyle: CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px',
+  flexWrap: 'wrap',
+  marginTop: '28px',
+};
+
+const checkButtonStyle: CSSProperties = {
+  minHeight: '52px',
+  padding: '12px 24px',
+  color: '#fff',
+  font: 'inherit',
+  fontWeight: 850,
+  background: 'var(--primary)',
+  border: '1px solid var(--primary)',
+  borderRadius: '999px',
+  cursor: 'pointer',
+};
+
+const retryButtonStyle: CSSProperties = {
+  minHeight: '52px',
+  padding: '12px 22px',
+  color: 'var(--primary)',
+  font: 'inherit',
+  fontWeight: 850,
+  background: 'var(--surface-solid)',
+  border: '1px solid var(--primary)',
+  borderRadius: '999px',
+  cursor: 'pointer',
+};
+
+const disabledButtonStyle: CSSProperties = {
+  cursor: 'not-allowed',
+  opacity: 0.55,
+};
+
 function getWordId(word: MontessoriQuestion['words'][number], index: number) {
   return 'id' in word && typeof word.id === 'string'
     ? word.id
@@ -89,26 +242,77 @@ function getSymbolLabel(symbol: MontessoriSymbol) {
   return symbol.id.charAt(0).toUpperCase() + symbol.id.slice(1);
 }
 
-function SymbolShape({
-  symbol,
-  isGhost = false,
-}: {
-  symbol: MontessoriSymbol;
-  isGhost?: boolean;
-}) {
-  const className = [
-    styles.symbolShape,
-    styles[symbol.shape],
-    isGhost ? styles.ghostSymbol : '',
-  ]
-    .filter(Boolean)
-    .join(' ');
+function SymbolShape({ symbol }: { symbol: MontessoriSymbol }) {
+  const color = symbol.color;
+  const shape = symbol.shape;
+
+  if (shape.includes('triangle')) {
+    return (
+      <span
+        aria-hidden="true"
+        style={{
+          width: 0,
+          height: 0,
+          borderLeft: '18px solid transparent',
+          borderRight: '18px solid transparent',
+          borderBottom: `34px solid ${color}`,
+        }}
+      />
+    );
+  }
+
+  if (shape.includes('rectangle')) {
+    return (
+      <span
+        aria-hidden="true"
+        style={{
+          width: '42px',
+          height: '24px',
+          background: color,
+          borderRadius: '7px',
+        }}
+      />
+    );
+  }
+
+  if (shape.includes('square')) {
+    return (
+      <span
+        aria-hidden="true"
+        style={{
+          width: '34px',
+          height: '34px',
+          background: color,
+          borderRadius: '7px',
+        }}
+      />
+    );
+  }
+
+  if (shape.includes('diamond')) {
+    return (
+      <span
+        aria-hidden="true"
+        style={{
+          width: '32px',
+          height: '32px',
+          background: color,
+          borderRadius: '6px',
+          transform: 'rotate(45deg)',
+        }}
+      />
+    );
+  }
 
   return (
     <span
-      className={className}
-      style={{ '--symbol-color': symbol.color } as CSSProperties}
       aria-hidden="true"
+      style={{
+        width: shape.includes('small') ? '18px' : '38px',
+        height: shape.includes('small') ? '18px' : '38px',
+        background: color,
+        borderRadius: '50%',
+      }}
     />
   );
 }
@@ -271,13 +475,17 @@ export default function MontessoriExercise({
           const canCheck = questionIsComplete(question, currentAnswers);
 
           return (
-            <article className={styles.questionCard} key={question.id}>
+            <article
+              className={styles.questionCard}
+              style={cardStyle}
+              key={question.id}
+            >
               <p className={styles.questionLabel}>
                 Ejercicio {question.id}
               </p>
 
-              <div className={styles.montessoriBoard}>
-                <div className={styles.wordGrid}>
+              <div className={styles.montessoriBoard} style={boardStyle}>
+                <div className={styles.wordGrid} style={wordGridStyle}>
                   {question.words.map((word, wordIndex) => {
                     const wordId = getWordId(word, wordIndex);
                     const correctPlacement = getCorrectPlacement(
@@ -291,30 +499,36 @@ export default function MontessoriExercise({
                     );
 
                     return (
-                      <div className={styles.wordColumn} key={wordId}>
-                        <strong className={styles.wordText}>
+                      <div
+                        className={styles.wordColumn}
+                        style={wordColumnStyle}
+                        key={wordId}
+                      >
+                        <strong
+                          className={styles.wordText}
+                          style={wordTextStyle}
+                        >
                           {word.word}
                         </strong>
 
                         <button
                           type="button"
-                          className={[
-                            styles.symbolSlot,
-                            placedSymbol ? styles.filledSlot : '',
-                            selectedSymbol?.questionId === question.id
-                              ? styles.activeSlot
-                              : '',
-                            isChecked &&
+                          className={styles.symbolSlot}
+                          style={{
+                            ...slotStyle,
+                            ...(placedSymbol ? activeSlotStyle : {}),
+                            ...(selectedSymbol?.questionId === question.id
+                              ? activeSlotStyle
+                              : {}),
+                            ...(isChecked &&
                             currentAnswers[wordId] === correctPlacement
-                              ? styles.correctSlot
-                              : '',
-                            isChecked &&
+                              ? correctSlotStyle
+                              : {}),
+                            ...(isChecked &&
                             currentAnswers[wordId] !== correctPlacement
-                              ? styles.incorrectSlot
-                              : '',
-                          ]
-                            .filter(Boolean)
-                            .join(' ')}
+                              ? incorrectSlotStyle
+                              : {}),
+                          }}
                           onClick={() =>
                             handleDropZoneClick(question.id, wordId)
                           }
@@ -327,11 +541,14 @@ export default function MontessoriExercise({
                           {placedSymbol ? (
                             <SymbolShape symbol={placedSymbol} />
                           ) : (
-                            <span className={styles.emptyDot} />
+                            <span style={emptyDotStyle} />
                           )}
                         </button>
 
-                        <span className={styles.translation}>
+                        <span
+                          className={styles.translation}
+                          style={translationStyle}
+                        >
                           {word.translation}
                         </span>
                       </div>
@@ -340,12 +557,12 @@ export default function MontessoriExercise({
                 </div>
               </div>
 
-              <p className={styles.helperText}>
+              <p className={styles.helperText} style={helperStyle}>
                 Arrastra un símbolo o selecciónalo y luego toca el espacio
                 correspondiente.
               </p>
 
-              <div className={styles.symbolBank}>
+              <div className={styles.symbolBank} style={symbolBankStyle}>
                 {question.symbols.map((symbol) => {
                   const isSelected =
                     selectedSymbol?.questionId === question.id &&
@@ -354,12 +571,11 @@ export default function MontessoriExercise({
                   return (
                     <button
                       type="button"
-                      className={[
-                        styles.symbolOption,
-                        isSelected ? styles.selectedSymbol : '',
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
+                      className={styles.symbolOption}
+                      style={{
+                        ...symbolOptionStyle,
+                        ...(isSelected ? selectedSymbolStyle : {}),
+                      }}
                       key={symbol.id}
                       draggable
                       onClick={() =>
@@ -372,17 +588,21 @@ export default function MontessoriExercise({
                         );
                       }}
                     >
-                      <SymbolShape symbol={symbol} isGhost={false} />
+                      <SymbolShape symbol={symbol} />
                       <span>{getSymbolLabel(symbol)}</span>
                     </button>
                   );
                 })}
               </div>
 
-              <div className={styles.actions}>
+              <div className={styles.actions} style={actionsStyle}>
                 <button
                   type="button"
                   className={styles.checkButton}
+                  style={{
+                    ...checkButtonStyle,
+                    ...(!canCheck ? disabledButtonStyle : {}),
+                  }}
                   disabled={!canCheck}
                   onClick={() => checkQuestion(question)}
                 >
@@ -392,6 +612,7 @@ export default function MontessoriExercise({
                 <button
                   type="button"
                   className={styles.retryButton}
+                  style={retryButtonStyle}
                   onClick={() => resetQuestion(question.id)}
                 >
                   Reintentar
