@@ -184,7 +184,7 @@ export default function MontessoriExercise({
   function handleSymbolClick(questionId: number, symbolId: string) {
     setSelectedSymbol((current) =>
       current?.questionId === questionId &&
-      current.symbolId === symbolId
+        current.symbolId === symbolId
         ? null
         : { questionId, symbolId },
     );
@@ -300,11 +300,11 @@ export default function MontessoriExercise({
                             ? styles.activeDropZone
                             : '',
                           isChecked &&
-                          currentAnswers[wordId] === correctPlacement
+                            currentAnswers[wordId] === correctPlacement
                             ? styles.correctDropZone
                             : '',
                           isChecked &&
-                          currentAnswers[wordId] !== correctPlacement
+                            currentAnswers[wordId] !== correctPlacement
                             ? styles.incorrectDropZone
                             : '',
                         ]
@@ -368,9 +368,6 @@ export default function MontessoriExercise({
                     >
                       <SymbolShape symbol={symbol} isSmall />
                       <span>{symbol.label}</span>
-                      {symbol.helperText && (
-                        <small>{symbol.helperText}</small>
-                      )}
                     </button>
                   );
                 })}
