@@ -316,14 +316,12 @@ export default async function NivelPage({
                             styles.lessonNumber
                           }
                         >
-                          {isCompleted
-                            ? '✓'
-                            : String(
-                                number,
-                              ).padStart(
-                                2,
-                                '0',
-                              )}
+                          {String(
+                            number,
+                          ).padStart(
+                            2,
+                            '0',
+                          )}
                         </span>
 
                         <div
@@ -360,6 +358,18 @@ export default async function NivelPage({
                             →
                           </span>
                         </span>
+
+                        {isCompleted && (
+                          <span
+                            className={
+                              styles.completedCheck
+                            }
+                            aria-label="Lección completada"
+                            title="Lección completada"
+                          >
+                            ✓
+                          </span>
+                        )}
                       </Link>
                     ) : (
                       <div
@@ -373,14 +383,12 @@ export default async function NivelPage({
                             styles.lessonNumber
                           }
                         >
-                          {isCompleted
-                            ? '✓'
-                            : String(
-                                number,
-                              ).padStart(
-                                2,
-                                '0',
-                              )}
+                          {String(
+                            number,
+                          ).padStart(
+                            2,
+                            '0',
+                          )}
                         </span>
 
                         <div
@@ -412,6 +420,18 @@ export default async function NivelPage({
                           🔒 Requiere
                           suscripción
                         </span>
+
+                        {isCompleted && (
+                          <span
+                            className={
+                              styles.completedCheck
+                            }
+                            aria-label="Lección completada"
+                            title="Lección completada"
+                          >
+                            ✓
+                          </span>
+                        )}
                       </div>
                     )}
                   </li>

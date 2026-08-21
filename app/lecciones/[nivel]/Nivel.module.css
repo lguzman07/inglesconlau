@@ -158,7 +158,6 @@
     flex: 0 0 auto;
     place-items: center;
     color: var(--primary);
-    font-size: 1rem;
     font-weight: 800;
     background: var(--surface-soft);
     border-radius: 50%;
@@ -201,6 +200,20 @@
     transform: translateX(3px);
 }
 
+.completedCheck {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 auto;
+    place-items: center;
+    color: var(--primary);
+    font-size: 1.15rem;
+    font-weight: 900;
+    background: var(--surface-soft);
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+}
+
 .backLink:hover,
 .backLink:focus-visible {
     color: var(--primary-hover);
@@ -237,6 +250,11 @@
 
     .openLesson {
         display: none;
+    }
+
+    .completedCheck {
+        width: 36px;
+        height: 36px;
     }
 
     .sectionHeading {
