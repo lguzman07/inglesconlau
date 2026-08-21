@@ -682,7 +682,7 @@ export const lessonTitles: Record<string, Record<number, string>> = {
     155: 'Proyecto final B1: defender una opinión',
   },
 
-  'b1+': {
+  'b1-plus': {
     1: 'Consolidación de tiempos verbales',
     2: 'Present perfect continuous en profundidad',
     3: 'Past perfect continuous: introducción',

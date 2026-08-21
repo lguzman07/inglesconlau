@@ -47,7 +47,7 @@ const levels: Record<string, Level> = {
     lessonCount: 155,
   },
 
-  'b1+': {
+  'b1-plus': {
     code: 'B1+',
     title: 'Intermedio alto',
     description:
@@ -462,3 +462,4 @@ export default async function NivelPage({
     </main>
   );
 }
+

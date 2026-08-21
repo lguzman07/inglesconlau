@@ -19,7 +19,7 @@ const levels: Record<string, Level> = {
   a1: { code: 'A1', title: 'Principiante', lessonCount: 27 },
   a2: { code: 'A2', title: 'Básico', lessonCount: 26 },
   b1: { code: 'B1', title: 'Intermedio', lessonCount: 25 },
-  'b1+': { code: 'B1+', title: 'Intermedio alto', lessonCount: 25 },
+  'b1-plus': { code: 'B1+', title: 'Intermedio alto', lessonCount: 25 },
   b2: { code: 'B2', title: 'Intermedio avanzado', lessonCount: 25 },
   c1: { code: 'C1', title: 'Avanzado', lessonCount: 27 },
 };

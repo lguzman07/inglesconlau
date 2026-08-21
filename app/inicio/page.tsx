@@ -21,7 +21,7 @@ const LEVEL_ORDER = [
   'a1',
   'a2',
   'b1',
-  'b1+',
+  'b1-plus',
   'b2',
   'c1',
 ];
