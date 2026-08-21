@@ -138,13 +138,14 @@
 .primaryGrid {
   display: grid;
   align-items: start;
-  grid-template-columns: 1.7fr 1fr;
+  grid-template-columns: minmax(0, 1.7fr) minmax(300px, 1fr);
   gap: 20px;
   margin-top: 24px;
 }
 
 .learningColumn {
   display: grid;
+  min-width: 0;
   gap: 20px;
 }
 
@@ -162,10 +163,18 @@
 .currentLesson,
 .progressLesson {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
+  min-width: 0;
   min-height: 220px;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 24px;
+}
+
+.currentLesson > div,
+.progressLesson > div {
+  width: 100%;
+  min-width: 0;
 }
 
 .currentLesson {
@@ -179,10 +188,12 @@
 }
 
 .lessonTitle {
+  max-width: 100%;
   margin: 0;
   color: var(--text);
   font-size: clamp(1.6rem, 3vw, 2.2rem);
   line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .lessonDescription {
@@ -198,11 +209,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  align-self: flex-start;
+  max-width: 100%;
+  margin-top: auto;
   padding: 14px 22px;
   font: inherit;
   font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
   text-decoration: none;
+  white-space: normal;
   border-radius: 999px;
   cursor: pointer;
   transition: var(--transition);
@@ -222,6 +238,7 @@
 
 .readingClub {
   display: flex;
+  min-width: 0;
   align-items: flex-start;
   flex-direction: column;
   background: var(--surface);
@@ -505,6 +522,10 @@
 }
 
 @media (max-width: 1050px) {
+  .primaryGrid {
+    grid-template-columns: 1fr;
+  }
+
   .summaryGrid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -520,16 +541,6 @@
     width: 100%;
     flex-wrap: wrap;
     gap: 16px;
-  }
-
-  .primaryGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .currentLesson,
-  .progressLesson {
-    align-items: flex-start;
-    flex-direction: column;
   }
 
   .lessonButton,
