@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "generate:lessons": "node scripts/generate-lesson-index.mjs",
+    "predev": "npm run generate:lessons",
     "dev": "next dev",
+    "prebuild": "npm run generate:lessons",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

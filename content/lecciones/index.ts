@@ -1,18 +1,15 @@
-import lessonA001 from './a0/01';
-import lessonA002 from './a0/02';
+import { generatedLessons } from './generated';
 import type { LessonContent } from './types';
-
-const lessons: Record<string, LessonContent> = {
-  'a0/1': lessonA001,
-  'a0/2': lessonA002,
-};
 
 export function getLessonContent(
   level: string,
   lessonNumber: number,
 ): LessonContent | null {
+  const lessonKey =
+    `${level.toLowerCase()}/${lessonNumber}`;
+
   return (
-    lessons[`${level.toLowerCase()}/${lessonNumber}`] ??
+    generatedLessons[lessonKey] ??
     null
   );
 }
