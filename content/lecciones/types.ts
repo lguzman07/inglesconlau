@@ -38,12 +38,6 @@ export type DragAndDropExercise = {
   questions: DragAndDropQuestion[];
 };
 
-/*
- * ==========================================
- * Montessori
- * ==========================================
- */
-
 export type MontessoriShape =
   | 'circle'
   | 'triangle'
@@ -84,23 +78,16 @@ export type MontessoriPlacement = {
 
 export type MontessoriQuestion = {
   id: number;
-
   words: MontessoriWord[];
-
   symbols: MontessoriSymbol[];
-
   correctPlacements: MontessoriPlacement[];
-
   sentenceTranslation: string;
 };
 
 export type MontessoriExercise = {
   type: 'montessori';
-
   title: string;
-
   instructions: string;
-
   questions: MontessoriQuestion[];
 };
 
@@ -111,20 +98,12 @@ export type LessonExercise =
 
 export type LessonContent = {
   level: string;
-
   number: number;
-
   title: string;
-
   subtitle: string;
-
   videoSrc?: string;
-
   videoTitle: string;
-
   videoDescription: string;
-
   objective: string;
-
   exercises: LessonExercise[];
 };
