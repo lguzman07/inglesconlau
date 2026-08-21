@@ -1,42 +1,13 @@
 'use client';
 
-import { DragEvent, useMemo, useState } from 'react';
+import type { CSSProperties, DragEvent } from 'react';
+import { useMemo, useState } from 'react';
+import type {
+  MontessoriExercise as MontessoriExerciseContent,
+  MontessoriQuestion,
+  MontessoriSymbol,
+} from '@/content/lecciones/types';
 import styles from './MontessoriExercise.module.css';
-
-export type MontessoriShape =
-  | 'circle'
-  | 'triangle'
-  | 'square'
-  | 'diamond'
-  | 'rectangle';
-
-export type MontessoriSymbol = {
-  id: string;
-  label: string;
-  helperText?: string;
-  shape: MontessoriShape;
-  color: string;
-};
-
-export type MontessoriWord = {
-  id: string;
-  word: string;
-  translation: string;
-};
-
-export type MontessoriQuestion = {
-  id: number;
-  words: MontessoriWord[];
-  symbols: MontessoriSymbol[];
-  correctPlacements: Record<string, string>;
-  sentenceTranslation: string;
-};
-
-export type MontessoriExerciseContent = {
-  title: string;
-  instructions: string;
-  questions: MontessoriQuestion[];
-};
 
 type MontessoriExerciseProps = {
   exercise?: MontessoriExerciseContent;
@@ -51,13 +22,6 @@ type SelectedSymbol = {
   questionId: number;
   symbolId: string;
 } | null;
-
-function arraysHaveSameValues(first: string[], second: string[]) {
-  return (
-    first.length === second.length &&
-    first.every((value, index) => value === second[index])
-  );
-}
 
 function questionIsComplete(
   question: MontessoriQuestion,
@@ -81,9 +45,7 @@ function getSymbol(
 ) {
   if (!symbolId) return null;
 
-  return (
-    question.symbols.find((symbol) => symbol.id === symbolId) ?? null
-  );
+  return question.symbols.find((symbol) => symbol.id === symbolId) ?? null;
 }
 
 function SymbolShape({
@@ -104,7 +66,7 @@ function SymbolShape({
   return (
     <span
       className={className}
-      style={{ '--symbol-color': symbol.color } as React.CSSProperties}
+      style={{ '--symbol-color': symbol.color } as CSSProperties}
       aria-hidden="true"
     />
   );
@@ -118,6 +80,7 @@ export default function MontessoriExercise({
 }: MontessoriExerciseProps) {
   const resolvedExercise = useMemo<MontessoriExerciseContent>(
     () => ({
+      type: 'montessori',
       title: exercise?.title ?? title ?? 'Ordena con símbolos',
       instructions:
         exercise?.instructions ??
