@@ -2495,8 +2495,29 @@ html[data-theme='contrast'] .complete-profile-button:hover:not(:disabled) {
     grid-template-columns: 1fr;
   }
 }
-/* Aparición suave del contenido al entrar en pantalla */
+/* ==========================================
+   Fade-in SOLO en el landing page
+   ========================================== */
+
+/*
+ * Por defecto, cualquier elemento con .scroll-reveal
+ * aparece inmediatamente. Esto evita animaciones de
+ * entrada en lecciones, ejercicios, dashboard,
+ * configuración y demás páginas internas.
+ */
 .scroll-reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+  will-change: auto;
+}
+
+/*
+ * El landing contiene .landing-intro.
+ * Solo cuando esa estructura existe en la página
+ * activamos el efecto scroll-reveal.
+ */
+body:has(.landing-intro) .scroll-reveal {
   opacity: 0;
   transform: translateY(28px);
   transition:
@@ -2506,16 +2527,17 @@ html[data-theme='contrast'] .complete-profile-button:hover:not(:disabled) {
   will-change: opacity, transform;
 }
 
-.scroll-reveal.is-visible {
+body:has(.landing-intro) .scroll-reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scroll-reveal {
+  body:has(.landing-intro) .scroll-reveal {
     opacity: 1;
     transform: none;
     transition: none;
+    will-change: auto;
   }
 }
 

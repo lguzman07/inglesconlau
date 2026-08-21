@@ -1,21 +1,39 @@
 'use client';
 
-import { useState } from 'react';
+import {
+  DragEvent,
+  useEffect,
+  useState,
+} from 'react';
+
 import type {
   MontessoriExercise as MontessoriExerciseType,
   MontessoriQuestion,
   MontessoriSymbol,
 } from '@/content/lecciones/types';
+
 import styles from './MontessoriExercise.module.css';
 
 type Props = {
   exercise: MontessoriExerciseType;
 };
 
-type Answers = Record<
-  number,
-  Record<string, string>
->;
+type QuestionAnswers = Record<string, string>;
+
+function getSymbolExplanation(
+  label: string,
+) {
+  switch (label) {
+    case 'Noun':
+      return 'Sustantivo (nombre)';
+
+    case 'Verb':
+      return 'Verbo (acción)';
+
+    default:
+      return label;
+  }
+}
 
 function SymbolShape({
   symbol,
@@ -40,63 +58,166 @@ function MontessoriQuestionCard({
   questionNumber: number;
 }) {
   const [answers, setAnswers] =
-    useState<Answers>({});
+    useState<QuestionAnswers>({});
 
-  const [selectedSymbol, setSelectedSymbol] =
-    useState<string | null>(null);
+  const [
+    selectedSymbol,
+    setSelectedSymbol,
+  ] = useState<string | null>(null);
+
+  const [
+    draggedSymbol,
+    setDraggedSymbol,
+  ] = useState<string | null>(null);
+
+  const [
+    activeDropZone,
+    setActiveDropZone,
+  ] = useState<string | null>(null);
 
   const [checked, setChecked] =
     useState(false);
 
-  const questionAnswers =
-    answers[question.id] ?? {};
+  useEffect(() => {
+    setAnswers({});
+    setSelectedSymbol(null);
+    setDraggedSymbol(null);
+    setActiveDropZone(null);
+    setChecked(false);
+  }, [question.id]);
 
-  function selectSymbol(symbolId: string) {
-    setSelectedSymbol(symbolId);
+  function selectSymbol(
+    symbolId: string,
+  ) {
+    setSelectedSymbol((current) =>
+      current === symbolId
+        ? null
+        : symbolId,
+    );
+
     setChecked(false);
   }
 
-  function placeSymbol(wordId: string) {
-    if (!selectedSymbol) {
-      return;
-    }
-
+  function setSymbolForWord(
+    wordId: string,
+    symbolId: string,
+  ) {
     setAnswers((current) => ({
       ...current,
-      [question.id]: {
-        ...(current[question.id] ?? {}),
-        [wordId]: selectedSymbol,
-      },
+      [wordId]: symbolId,
     }));
 
     setSelectedSymbol(null);
     setChecked(false);
   }
 
-  function removeSymbol(wordId: string) {
+  function placeSelectedSymbol(
+    wordId: string,
+  ) {
+    if (!selectedSymbol) {
+      return;
+    }
+
+    setSymbolForWord(
+      wordId,
+      selectedSymbol,
+    );
+  }
+
+  function removeSymbol(
+    wordId: string,
+  ) {
     setAnswers((current) => {
-      const currentQuestion = {
-        ...(current[question.id] ?? {}),
-      };
-
-      delete currentQuestion[wordId];
-
-      return {
+      const next = {
         ...current,
-        [question.id]: currentQuestion,
       };
+
+      delete next[wordId];
+
+      return next;
     });
 
     setChecked(false);
   }
 
-  function getSymbol(symbolId?: string) {
+  function handleSymbolDragStart(
+    event: DragEvent<HTMLButtonElement>,
+    symbolId: string,
+  ) {
+    event.dataTransfer.setData(
+      'text/plain',
+      symbolId,
+    );
+
+    event.dataTransfer.effectAllowed =
+      'copy';
+
+    setDraggedSymbol(symbolId);
+    setSelectedSymbol(null);
+    setChecked(false);
+  }
+
+  function handleSymbolDragEnd() {
+    setDraggedSymbol(null);
+    setActiveDropZone(null);
+  }
+
+  function handleDropZoneDragOver(
+    event: DragEvent<HTMLButtonElement>,
+    wordId: string,
+  ) {
+    event.preventDefault();
+
+    event.dataTransfer.dropEffect =
+      'copy';
+
+    setActiveDropZone(wordId);
+  }
+
+  function handleDropZoneDragLeave(
+    wordId: string,
+  ) {
+    setActiveDropZone((current) =>
+      current === wordId
+        ? null
+        : current,
+    );
+  }
+
+  function handleDrop(
+    event: DragEvent<HTMLButtonElement>,
+    wordId: string,
+  ) {
+    event.preventDefault();
+
+    const symbolId =
+      event.dataTransfer.getData(
+        'text/plain',
+      ) || draggedSymbol;
+
+    if (!symbolId) {
+      return;
+    }
+
+    setSymbolForWord(
+      wordId,
+      symbolId,
+    );
+
+    setDraggedSymbol(null);
+    setActiveDropZone(null);
+  }
+
+  function getSymbol(
+    symbolId?: string,
+  ) {
     if (!symbolId) {
       return undefined;
     }
 
     return question.symbols.find(
-      (symbol) => symbol.id === symbolId,
+      (symbol) =>
+        symbol.id === symbolId,
     );
   }
 
@@ -111,61 +232,79 @@ function MontessoriQuestionCard({
       );
 
     return (
-      correctPlacement?.symbolId === symbolId
+      correctPlacement?.symbolId ===
+      symbolId
     );
   }
 
   const allAnswered =
     question.words.every(
-      (word) => questionAnswers[word.id],
+      (word) =>
+        Boolean(answers[word.id]),
     );
 
   const allCorrect =
-    question.words.every((word) =>
-      isCorrect(
-        word.id,
-        questionAnswers[word.id],
-      ),
+    question.words.every(
+      (word) =>
+        isCorrect(
+          word.id,
+          answers[word.id],
+        ),
     );
 
   return (
-    <article className={styles.questionCard}>
-      <p className={styles.questionNumber}>
+    <article
+      className={styles.questionCard}
+    >
+      <p
+        className={styles.questionNumber}
+      >
         EJERCICIO {questionNumber}
       </p>
 
       <div className={styles.sentence}>
         {question.words.map((word) => {
-          const placedSymbol = getSymbol(
-            questionAnswers[word.id],
-          );
+          const placedSymbol =
+            getSymbol(
+              answers[word.id],
+            );
 
           const correct =
             checked &&
             isCorrect(
               word.id,
-              questionAnswers[word.id],
+              answers[word.id],
             );
 
           const incorrect =
             checked &&
+            Boolean(answers[word.id]) &&
             !isCorrect(
               word.id,
-              questionAnswers[word.id],
+              answers[word.id],
             );
+
+          const isActiveDropZone =
+            activeDropZone === word.id;
 
           return (
             <div
               key={word.id}
-              className={styles.wordColumn}
+              className={
+                styles.wordColumn
+              }
             >
-              <span className={styles.word}>
+              <span
+                className={styles.word}
+              >
                 {word.word}
               </span>
 
               <button
                 type="button"
-                className={`${styles.dropZone} ${
+                className={`${
+                  styles.dropZone
+                } ${
                   correct
                     ? styles.correct
                     : ''
@@ -173,24 +312,54 @@ function MontessoriQuestionCard({
                   incorrect
                     ? styles.incorrect
                     : ''
+                } ${
+                  isActiveDropZone
+                    ? styles.dropZoneActive
+                    : ''
                 }`}
                 onClick={() => {
-                  if (placedSymbol) {
-                    removeSymbol(word.id);
+                  if (selectedSymbol) {
+                    placeSelectedSymbol(
+                      word.id,
+                    );
+
                     return;
                   }
 
-                  placeSymbol(word.id);
+                  if (placedSymbol) {
+                    removeSymbol(
+                      word.id,
+                    );
+                  }
                 }}
+                onDragOver={(event) =>
+                  handleDropZoneDragOver(
+                    event,
+                    word.id,
+                  )
+                }
+                onDragLeave={() =>
+                  handleDropZoneDragLeave(
+                    word.id,
+                  )
+                }
+                onDrop={(event) =>
+                  handleDrop(
+                    event,
+                    word.id,
+                  )
+                }
                 aria-label={
                   placedSymbol
-                    ? `Quitar símbolo de ${word.word}`
-                    : `Colocar símbolo debajo de ${word.word}`
+                    ? `Símbolo colocado debajo de ${word.word}.`
+                    : `Coloca un símbolo debajo de ${word.word}.`
                 }
               >
                 {placedSymbol ? (
                   <SymbolShape
-                    symbol={placedSymbol}
+                    symbol={
+                      placedSymbol
+                    }
                   />
                 ) : (
                   <span
@@ -214,55 +383,122 @@ function MontessoriQuestionCard({
         })}
       </div>
 
-      <div className={styles.symbolSection}>
-        <p className={styles.symbolLabel}>
-          Selecciona un símbolo
+      <div
+        className={
+          styles.symbolSection
+        }
+      >
+        <p
+          className={
+            styles.symbolLabel
+          }
+        >
+          Arrastra un símbolo o
+          selecciónalo y luego toca el
+          espacio correspondiente.
         </p>
 
-        <div className={styles.symbolOptions}>
-          {question.symbols.map((symbol) => {
-            const selected =
-              selectedSymbol === symbol.id;
+        <div
+          className={
+            styles.symbolOptions
+          }
+        >
+          {question.symbols.map(
+            (symbol) => {
+              const selected =
+                selectedSymbol ===
+                symbol.id;
 
-            return (
-              <button
-                key={symbol.id}
-                type="button"
-                className={`${styles.symbolButton} ${
-                  selected
-                    ? styles.selectedSymbol
-                    : ''
-                }`}
-                onClick={() =>
-                  selectSymbol(symbol.id)
-                }
-                aria-pressed={selected}
-              >
-                <SymbolShape
-                  symbol={symbol}
-                />
+              const dragging =
+                draggedSymbol ===
+                symbol.id;
 
-                <span>
-                  {symbol.label}
-                </span>
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={symbol.id}
+                  type="button"
+                  draggable
+                  className={`${
+                    styles.symbolButton
+                  } ${
+                    selected
+                      ? styles.selectedSymbol
+                      : ''
+                  } ${
+                    dragging
+                      ? styles.draggingSymbol
+                      : ''
+                  }`}
+                  onClick={() =>
+                    selectSymbol(
+                      symbol.id,
+                    )
+                  }
+                  onDragStart={(
+                    event,
+                  ) =>
+                    handleSymbolDragStart(
+                      event,
+                      symbol.id,
+                    )
+                  }
+                  onDragEnd={
+                    handleSymbolDragEnd
+                  }
+                  aria-pressed={
+                    selected
+                  }
+                  aria-label={`${symbol.label}: ${getSymbolExplanation(
+                    symbol.label,
+                  )}`}
+                >
+                  <SymbolShape
+                    symbol={symbol}
+                  />
+
+                  <span
+                    className={
+                      styles.symbolText
+                    }
+                  >
+                    {symbol.label}
+
+                    <span
+                      className={
+                        styles.symbolTooltip
+                      }
+                      role="tooltip"
+                    >
+                      {getSymbolExplanation(
+                        symbol.label,
+                      )}
+                    </span>
+                  </span>
+                </button>
+              );
+            },
+          )}
         </div>
       </div>
 
       <button
         type="button"
-        className={styles.checkButton}
+        className={
+          styles.checkButton
+        }
         disabled={!allAnswered}
-        onClick={() => setChecked(true)}
+        onClick={() =>
+          setChecked(true)
+        }
       >
         Corregir
       </button>
 
       {checked && (
         <div
-          className={`${styles.feedback} ${
+          className={`${
+            styles.feedback
+          } ${
             allCorrect
               ? styles.feedbackCorrect
               : styles.feedbackIncorrect
@@ -289,24 +525,36 @@ export default function MontessoriExercise({
   exercise,
 }: Props) {
   return (
-    <section className={styles.exercise}>
-      <div className={styles.heading}>
-        <p className={styles.eyebrow}>
+    <section
+      className={styles.exercise}
+    >
+      <div
+        className={styles.heading}
+      >
+        <p
+          className={styles.eyebrow}
+        >
           MONTESSORI
         </p>
 
         <h2>{exercise.title}</h2>
 
-        <p>{exercise.instructions}</p>
+        <p>
+          {exercise.instructions}
+        </p>
       </div>
 
-      <div className={styles.questions}>
+      <div
+        className={styles.questions}
+      >
         {exercise.questions.map(
           (question, index) => (
             <MontessoriQuestionCard
               key={question.id}
               question={question}
-              questionNumber={index + 1}
+              questionNumber={
+                index + 1
+              }
             />
           ),
         )}

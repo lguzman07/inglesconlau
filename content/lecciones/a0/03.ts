@@ -5,29 +5,29 @@ const lessonA003: LessonContent = {
 
   number: 3,
 
-  title: 'Letras A, H, J, K: familia /eɪ/',
+  title: 'A, H, J, K: familia /eɪ/',
 
   subtitle:
-    'Practica las letras A, H, J y K mientras reconoces nombres y acciones en inglés.',
+    'Practica palabras con A, H, J y K mientras reconoces nouns y verbs dentro de oraciones sencillas.',
 
   videoSrc: '/videos/a0/03-placeholder.mp4',
 
   videoTitle: 'A, H, J y K en inglés',
 
   videoDescription:
-    'En este video practicarás los nombres de las letras A, H, J y K y escucharás palabras que comienzan con ellas.',
+    'Practica las letras A, H, J y K con palabras y oraciones sencillas en inglés.',
 
   objective:
-    'Al terminar, podrás reconocer las letras A, H, J y K y relacionarlas con palabras sencillas en inglés.',
+    'Al terminar, podrás reconocer palabras relacionadas con las letras A, H, J y K y comenzar a identificar nouns y verbs dentro de una oración.',
 
   exercises: [
     {
       type: 'montessori',
 
-      title: 'Nombres y acciones con A, H, J y K',
+      title: 'Nouns y verbs en oraciones',
 
       instructions:
-        'Selecciona el círculo para los nombres y el triángulo para las acciones. Luego coloca el símbolo debajo de cada palabra.',
+        'Lee cada oración. Arrastra Noun o Verb debajo de cada palabra, o selecciona el símbolo y luego toca el espacio correspondiente.',
 
       questions: [
         {
@@ -51,13 +51,13 @@ const lessonA003: LessonContent = {
               id: 'q1-noun',
               shape: 'circle',
               color: 'red',
-              label: 'Nombre',
+              label: 'Noun',
             },
             {
               id: 'q1-verb',
               shape: 'triangle',
               color: 'red',
-              label: 'Acción',
+              label: 'Verb',
             },
           ],
 
@@ -72,7 +72,7 @@ const lessonA003: LessonContent = {
             },
           ],
 
-          sentenceTranslation: 'Ana salta.',
+          sentenceTranslation: 'Anna salta.',
         },
 
         {
@@ -80,9 +80,9 @@ const lessonA003: LessonContent = {
 
           words: [
             {
-              id: 'q2-henry',
-              word: 'Henry',
-              translation: 'Henry',
+              id: 'q2-harry',
+              word: 'Harry',
+              translation: 'Harry',
             },
             {
               id: 'q2-helps',
@@ -96,19 +96,19 @@ const lessonA003: LessonContent = {
               id: 'q2-noun',
               shape: 'circle',
               color: 'red',
-              label: 'Nombre',
+              label: 'Noun',
             },
             {
               id: 'q2-verb',
               shape: 'triangle',
               color: 'red',
-              label: 'Acción',
+              label: 'Verb',
             },
           ],
 
           correctPlacements: [
             {
-              wordId: 'q2-henry',
+              wordId: 'q2-harry',
               symbolId: 'q2-noun',
             },
             {
@@ -117,7 +117,7 @@ const lessonA003: LessonContent = {
             },
           ],
 
-          sentenceTranslation: 'Henry ayuda.',
+          sentenceTranslation: 'Harry ayuda.',
         },
 
         {
@@ -125,14 +125,14 @@ const lessonA003: LessonContent = {
 
           words: [
             {
-              id: 'q3-jack',
-              word: 'Jack',
-              translation: 'Jack',
+              id: 'q3-kate',
+              word: 'Kate',
+              translation: 'Kate',
             },
             {
-              id: 'q3-kicks',
-              word: 'kicks',
-              translation: 'patea',
+              id: 'q3-asks',
+              word: 'asks',
+              translation: 'pregunta',
             },
           ],
 
@@ -141,28 +141,28 @@ const lessonA003: LessonContent = {
               id: 'q3-noun',
               shape: 'circle',
               color: 'red',
-              label: 'Nombre',
+              label: 'Noun',
             },
             {
               id: 'q3-verb',
               shape: 'triangle',
               color: 'red',
-              label: 'Acción',
+              label: 'Verb',
             },
           ],
 
           correctPlacements: [
             {
-              wordId: 'q3-jack',
+              wordId: 'q3-kate',
               symbolId: 'q3-noun',
             },
             {
-              wordId: 'q3-kicks',
+              wordId: 'q3-asks',
               symbolId: 'q3-verb',
             },
           ],
 
-          sentenceTranslation: 'Jack patea.',
+          sentenceTranslation: 'Kate pregunta.',
         },
 
         {
@@ -170,14 +170,14 @@ const lessonA003: LessonContent = {
 
           words: [
             {
-              id: 'q4-kate',
-              word: 'Kate',
-              translation: 'Kate',
+              id: 'q4-karla',
+              word: 'Karla',
+              translation: 'Karla',
             },
             {
-              id: 'q4-asks',
-              word: 'asks',
-              translation: 'pregunta',
+              id: 'q4-jumps',
+              word: 'jumps',
+              translation: 'salta',
             },
           ],
 
@@ -186,28 +186,28 @@ const lessonA003: LessonContent = {
               id: 'q4-noun',
               shape: 'circle',
               color: 'red',
-              label: 'Nombre',
+              label: 'Noun',
             },
             {
               id: 'q4-verb',
               shape: 'triangle',
               color: 'red',
-              label: 'Acción',
+              label: 'Verb',
             },
           ],
 
           correctPlacements: [
             {
-              wordId: 'q4-kate',
+              wordId: 'q4-karla',
               symbolId: 'q4-noun',
             },
             {
-              wordId: 'q4-asks',
+              wordId: 'q4-jumps',
               symbolId: 'q4-verb',
             },
           ],
 
-          sentenceTranslation: 'Kate pregunta.',
+          sentenceTranslation: 'Karla salta.',
         },
 
         {
@@ -215,14 +215,19 @@ const lessonA003: LessonContent = {
 
           words: [
             {
-              id: 'q5-apple',
-              word: 'apple',
-              translation: 'manzana',
+              id: 'q5-anna',
+              word: 'Anna',
+              translation: 'Ana',
             },
             {
-              id: 'q5-jumps',
-              word: 'jumps',
-              translation: 'salta',
+              id: 'q5-helps',
+              word: 'helps',
+              translation: 'ayuda a',
+            },
+            {
+              id: 'q5-jack',
+              word: 'Jack',
+              translation: 'Jack',
             },
           ],
 
@@ -231,29 +236,33 @@ const lessonA003: LessonContent = {
               id: 'q5-noun',
               shape: 'circle',
               color: 'red',
-              label: 'Nombre',
+              label: 'Noun',
             },
             {
               id: 'q5-verb',
               shape: 'triangle',
               color: 'red',
-              label: 'Acción',
+              label: 'Verb',
             },
           ],
 
           correctPlacements: [
             {
-              wordId: 'q5-apple',
+              wordId: 'q5-anna',
               symbolId: 'q5-noun',
             },
             {
-              wordId: 'q5-jumps',
+              wordId: 'q5-helps',
               symbolId: 'q5-verb',
+            },
+            {
+              wordId: 'q5-jack',
+              symbolId: 'q5-noun',
             },
           ],
 
           sentenceTranslation:
-            'Apple es un nombre. Jumps es una acción.',
+            'Anna ayuda a Jack.',
         },
 
         {
@@ -261,14 +270,19 @@ const lessonA003: LessonContent = {
 
           words: [
             {
-              id: 'q6-house',
-              word: 'house',
-              translation: 'casa',
+              id: 'q6-harry',
+              word: 'Harry',
+              translation: 'Harry',
             },
             {
               id: 'q6-helps',
               word: 'helps',
-              translation: 'ayuda',
+              translation: 'ayuda a',
+            },
+            {
+              id: 'q6-kate',
+              word: 'Kate',
+              translation: 'Kate',
             },
           ],
 
@@ -277,29 +291,33 @@ const lessonA003: LessonContent = {
               id: 'q6-noun',
               shape: 'circle',
               color: 'red',
-              label: 'Nombre',
+              label: 'Noun',
             },
             {
               id: 'q6-verb',
               shape: 'triangle',
               color: 'red',
-              label: 'Acción',
+              label: 'Verb',
             },
           ],
 
           correctPlacements: [
             {
-              wordId: 'q6-house',
+              wordId: 'q6-harry',
               symbolId: 'q6-noun',
             },
             {
               wordId: 'q6-helps',
               symbolId: 'q6-verb',
             },
+            {
+              wordId: 'q6-kate',
+              symbolId: 'q6-noun',
+            },
           ],
 
           sentenceTranslation:
-            'House es un nombre. Helps es una acción.',
+            'Harry ayuda a Kate.',
         },
 
         {
@@ -307,14 +325,19 @@ const lessonA003: LessonContent = {
 
           words: [
             {
-              id: 'q7-jacket',
-              word: 'jacket',
-              translation: 'chaqueta',
+              id: 'q7-jack',
+              word: 'Jack',
+              translation: 'Jack',
             },
             {
-              id: 'q7-asks',
-              word: 'asks',
-              translation: 'pregunta',
+              id: 'q7-helps',
+              word: 'helps',
+              translation: 'ayuda a',
+            },
+            {
+              id: 'q7-karla',
+              word: 'Karla',
+              translation: 'Karla',
             },
           ],
 
@@ -323,29 +346,33 @@ const lessonA003: LessonContent = {
               id: 'q7-noun',
               shape: 'circle',
               color: 'red',
-              label: 'Nombre',
+              label: 'Noun',
             },
             {
               id: 'q7-verb',
               shape: 'triangle',
               color: 'red',
-              label: 'Acción',
+              label: 'Verb',
             },
           ],
 
           correctPlacements: [
             {
-              wordId: 'q7-jacket',
+              wordId: 'q7-jack',
               symbolId: 'q7-noun',
             },
             {
-              wordId: 'q7-asks',
+              wordId: 'q7-helps',
               symbolId: 'q7-verb',
+            },
+            {
+              wordId: 'q7-karla',
+              symbolId: 'q7-noun',
             },
           ],
 
           sentenceTranslation:
-            'Jacket es un nombre. Asks es una acción.',
+            'Jack ayuda a Karla.',
         },
 
         {
@@ -353,14 +380,19 @@ const lessonA003: LessonContent = {
 
           words: [
             {
-              id: 'q8-kitchen',
-              word: 'kitchen',
-              translation: 'cocina',
+              id: 'q8-kate',
+              word: 'Kate',
+              translation: 'Kate',
             },
             {
-              id: 'q8-kicks',
-              word: 'kicks',
-              translation: 'patea',
+              id: 'q8-likes',
+              word: 'likes',
+              translation: 'le gustan',
+            },
+            {
+              id: 'q8-apples',
+              word: 'apples',
+              translation: 'manzanas',
             },
           ],
 
@@ -369,29 +401,33 @@ const lessonA003: LessonContent = {
               id: 'q8-noun',
               shape: 'circle',
               color: 'red',
-              label: 'Nombre',
+              label: 'Noun',
             },
             {
               id: 'q8-verb',
               shape: 'triangle',
               color: 'red',
-              label: 'Acción',
+              label: 'Verb',
             },
           ],
 
           correctPlacements: [
             {
-              wordId: 'q8-kitchen',
+              wordId: 'q8-kate',
               symbolId: 'q8-noun',
             },
             {
-              wordId: 'q8-kicks',
+              wordId: 'q8-likes',
               symbolId: 'q8-verb',
+            },
+            {
+              wordId: 'q8-apples',
+              symbolId: 'q8-noun',
             },
           ],
 
           sentenceTranslation:
-            'Kitchen es un nombre. Kicks es una acción.',
+            'A Kate le gustan las manzanas.',
         },
 
         {
@@ -399,14 +435,19 @@ const lessonA003: LessonContent = {
 
           words: [
             {
-              id: 'q9-animal',
-              word: 'animal',
-              translation: 'animal',
+              id: 'q9-harry',
+              word: 'Harry',
+              translation: 'Harry',
             },
             {
-              id: 'q9-helps',
-              word: 'helps',
-              translation: 'ayuda',
+              id: 'q9-has',
+              word: 'has',
+              translation: 'tiene',
+            },
+            {
+              id: 'q9-jackets',
+              word: 'jackets',
+              translation: 'chaquetas',
             },
           ],
 
@@ -415,29 +456,33 @@ const lessonA003: LessonContent = {
               id: 'q9-noun',
               shape: 'circle',
               color: 'red',
-              label: 'Nombre',
+              label: 'Noun',
             },
             {
               id: 'q9-verb',
               shape: 'triangle',
               color: 'red',
-              label: 'Acción',
+              label: 'Verb',
             },
           ],
 
           correctPlacements: [
             {
-              wordId: 'q9-animal',
+              wordId: 'q9-harry',
               symbolId: 'q9-noun',
             },
             {
-              wordId: 'q9-helps',
+              wordId: 'q9-has',
               symbolId: 'q9-verb',
+            },
+            {
+              wordId: 'q9-jackets',
+              symbolId: 'q9-noun',
             },
           ],
 
           sentenceTranslation:
-            'Animal es un nombre. Helps es una acción.',
+            'Harry tiene chaquetas.',
         },
 
         {
@@ -445,14 +490,24 @@ const lessonA003: LessonContent = {
 
           words: [
             {
-              id: 'q10-juice',
-              word: 'juice',
-              translation: 'jugo',
+              id: 'q10-anna',
+              word: 'Anna',
+              translation: 'Ana',
             },
             {
-              id: 'q10-jumps',
-              word: 'jumps',
-              translation: 'salta',
+              id: 'q10-gives',
+              word: 'gives',
+              translation: 'le da',
+            },
+            {
+              id: 'q10-jack',
+              word: 'Jack',
+              translation: 'Jack',
+            },
+            {
+              id: 'q10-apples',
+              word: 'apples',
+              translation: 'manzanas',
             },
           ],
 
@@ -461,29 +516,37 @@ const lessonA003: LessonContent = {
               id: 'q10-noun',
               shape: 'circle',
               color: 'red',
-              label: 'Nombre',
+              label: 'Noun',
             },
             {
               id: 'q10-verb',
               shape: 'triangle',
               color: 'red',
-              label: 'Acción',
+              label: 'Verb',
             },
           ],
 
           correctPlacements: [
             {
-              wordId: 'q10-juice',
+              wordId: 'q10-anna',
               symbolId: 'q10-noun',
             },
             {
-              wordId: 'q10-jumps',
+              wordId: 'q10-gives',
               symbolId: 'q10-verb',
+            },
+            {
+              wordId: 'q10-jack',
+              symbolId: 'q10-noun',
+            },
+            {
+              wordId: 'q10-apples',
+              symbolId: 'q10-noun',
             },
           ],
 
           sentenceTranslation:
-            'Juice es un nombre. Jumps es una acción.',
+            'Anna le da manzanas a Jack.',
         },
       ],
     },

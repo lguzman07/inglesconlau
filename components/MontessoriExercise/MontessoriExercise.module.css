@@ -97,6 +97,12 @@
   border-color: var(--primary);
 }
 
+.dropZoneActive {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  transform: scale(1.04);
+}
+
 .emptyDropZone {
   width: 16px;
   height: 16px;
@@ -113,6 +119,7 @@
   color: var(--text);
   font-size: 0.9rem;
   font-weight: 800;
+  line-height: 1.5;
 }
 
 .symbolOptions {
@@ -133,8 +140,13 @@
   background: var(--surface-soft);
   border: 2px solid var(--border);
   border-radius: 14px;
-  cursor: pointer;
+  cursor: grab;
   transition: var(--transition);
+  user-select: none;
+}
+
+.symbolButton:active {
+  cursor: grabbing;
 }
 
 .symbolButton:hover,
@@ -145,6 +157,13 @@
 
 .selectedSymbol {
   background: var(--primary-light);
+  box-shadow:
+    0 0 0 3px var(--primary-light);
+}
+
+.draggingSymbol {
+  opacity: 0.55;
+  transform: scale(0.97);
 }
 
 .symbolShape {
@@ -191,7 +210,8 @@
 
 .crescent {
   border-radius: 50%;
-  box-shadow: 9px 0 0 0 var(--surface);
+  box-shadow:
+    9px 0 0 0 var(--surface);
 }
 
 .keyhole {
@@ -247,15 +267,72 @@
   background: #d6aa36;
 }
 
-/*
- * Los triángulos se dibujan con bordes.
- * Quitamos su fondo para conservar la forma.
- */
-
 .triangle,
 .small-triangle {
   background: transparent;
 }
+
+/* Tooltip */
+
+.symbolText {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.symbolTooltip {
+  position: absolute;
+  z-index: 30;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  width: max-content;
+  max-width: 220px;
+  padding: 8px 11px;
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.35;
+  white-space: nowrap;
+  pointer-events: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform:
+    translate(-50%, 5px);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.symbolTooltip::after {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  content: '';
+  background: var(--surface);
+  border-right:
+    1px solid var(--border);
+  border-bottom:
+    1px solid var(--border);
+  transform:
+    translate(-50%, -4px)
+    rotate(45deg);
+}
+
+.symbolButton:hover
+  .symbolTooltip,
+.symbolButton:focus-visible
+  .symbolTooltip {
+  opacity: 1;
+  transform:
+    translate(-50%, 0);
+}
+
+/* Corrección */
 
 .correct {
   border-color: var(--primary);
@@ -312,6 +389,14 @@
   background: #fff1f0;
 }
 
+.dropZone:focus-visible,
+.symbolButton:focus-visible,
+.checkButton:focus-visible {
+  outline:
+    3px solid var(--primary-light);
+  outline-offset: 3px;
+}
+
 @media (max-width: 600px) {
   .questionCard {
     padding: 22px;
@@ -333,5 +418,6 @@
 
   .symbolButton {
     width: 100%;
+    cursor: pointer;
   }
 }
