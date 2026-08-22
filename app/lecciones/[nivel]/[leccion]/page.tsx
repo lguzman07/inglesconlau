@@ -16,7 +16,7 @@ const levels: Record<string, Level> = {
   a1: { code: 'A1', title: 'Principiante', lessonCount: 27 },
   a2: { code: 'A2', title: 'Básico', lessonCount: 26 },
   b1: { code: 'B1', title: 'Intermedio', lessonCount: 25 },
-  'b1+': { code: 'B1+', title: 'Intermedio alto', lessonCount: 25 },
+  'b1-plus': { code: 'B1+', title: 'Intermedio alto', lessonCount: 25 },
   b2: { code: 'B2', title: 'Intermedio avanzado', lessonCount: 25 },
   c1: { code: 'C1', title: 'Avanzado', lessonCount: 27 },
 };
@@ -138,14 +138,16 @@ export default async function LeccionPage({
   params: Promise<{ nivel: string; leccion: string }>;
 }) {
   const { nivel, leccion } = await params;
-  const level = levels[nivel.toLowerCase()];
+  const normalizedLevel = nivel.toLowerCase();
+  const level = levels[normalizedLevel];
   const lessonNumber = getLessonNumber(leccion);
 
   if (!level || !lessonNumber || lessonNumber > level.lessonCount) {
     notFound();
   }
 
-  const isFirstLesson = nivel.toLowerCase() === 'a0' && lessonNumber === 1;
+  const lessonKey = `${normalizedLevel}/${lessonNumber}`;
+  const isFirstLesson = normalizedLevel === 'a0' && lessonNumber === 1;
   const previousLesson = lessonNumber > 1 ? lessonNumber - 1 : null;
   const nextLesson = lessonNumber < level.lessonCount ? lessonNumber + 1 : null;
 
@@ -239,6 +241,7 @@ export default async function LeccionPage({
               <p className={styles.eyebrow}>PRÁCTICA</p>
               <h2 id="practice-heading">Ejercicios</h2>
             </div>
+
             {isFirstLesson && (
               <span className={styles.exerciseCount}>1 de 1</span>
             )}
@@ -248,6 +251,7 @@ export default async function LeccionPage({
             <FillInTheBlanks
               title="Completa los espacios"
               instructions="Escribe am o is en cada espacio. Toca una palabra si quieres ver su traducción."
+              lessonKey={lessonKey}
               questions={firstLessonQuestions}
               nextLessonHref={
                 nextLesson ? `/lecciones/${nivel}/${nextLesson}` : undefined
@@ -265,21 +269,6 @@ export default async function LeccionPage({
               </div>
             </div>
           )}
-        </section>
-
-        <section className={styles.completionCard}>
-          <div>
-            <p className={styles.eyebrow}>TU PROGRESO</p>
-            <h2>
-              Cuando termines, podrás marcar esta lección como completada.
-            </h2>
-            <p>
-              Conectaremos este botón al progreso guardado de cada estudiante.
-            </p>
-          </div>
-          <button type="button" className={styles.completeButton} disabled>
-            Marcar como completada
-          </button>
         </section>
 
         <nav
