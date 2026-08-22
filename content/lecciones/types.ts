@@ -91,19 +91,59 @@ export type MontessoriExercise = {
   questions: MontessoriQuestion[];
 };
 
+export type ListeningChoiceOption = {
+  id: string;
+  text: string;
+};
+
+export type ListeningChoiceQuestion = {
+  id: number;
+
+  audioText: string;
+
+  language: 'en' | 'en-GB';
+
+  prompt: string;
+
+  options: ListeningChoiceOption[];
+
+  correctOptionIds: string[];
+
+  explanation?: string;
+};
+
+export type ListeningChoiceExercise = {
+  type: 'listening-choice';
+
+  title: string;
+
+  instructions: string;
+
+  questions: ListeningChoiceQuestion[];
+};
+
 export type LessonExercise =
   | FillInTheBlanksExercise
   | DragAndDropExercise
-  | MontessoriExercise;
+  | MontessoriExercise
+  | ListeningChoiceExercise;
 
 export type LessonContent = {
   level: string;
+
   number: number;
+
   title: string;
+
   subtitle: string;
+
   videoSrc?: string;
+
   videoTitle: string;
+
   videoDescription: string;
+
   objective: string;
+
   exercises: LessonExercise[];
 };

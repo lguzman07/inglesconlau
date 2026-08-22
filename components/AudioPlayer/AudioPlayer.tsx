@@ -7,11 +7,33 @@ import { getAudio, saveAudio } from '@/lib/audio/audioCache';
 type AudioPlayerProps = {
   text: string;
   language: 'en' | 'en-GB' | 'es';
+  mode?: 'normal' | 'letterName';
 };
+
+function getTtsText(
+  text: string,
+  mode: AudioPlayerProps['mode'],
+) {
+  if (mode !== 'letterName') {
+    return text;
+  }
+
+  const normalized = text.trim().toUpperCase();
+
+  const letterNames: Record<string, string> = {
+    A: 'letter A',
+    H: 'letter H',
+    J: 'letter J',
+    K: 'letter K',
+  };
+
+  return letterNames[normalized] ?? text;
+}
 
 export default function AudioPlayer({
   text,
   language,
+  mode = 'normal',
 }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioUrlRef = useRef<string | null>(null);
@@ -20,6 +42,8 @@ export default function AudioPlayer({
   const [isLoading, setIsLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [hasPlayed, setHasPlayed] = useState(false);
+
+  const ttsText = getTtsText(text, mode);
 
   function clearAudio() {
     if (audioRef.current) {
@@ -55,7 +79,7 @@ export default function AudioPlayer({
         audioUrlRef.current = null;
       }
     };
-  }, [text, language]);
+  }, [ttsText, language]);
 
   const prepareAudio = async () => {
     if (audioRef.current) {
@@ -65,7 +89,7 @@ export default function AudioPlayer({
     setIsLoading(true);
 
     try {
-      let blob = await getAudio(text, language);
+      let blob = await getAudio(ttsText, language);
 
       if (!blob) {
         const response = await fetch('/api/tts', {
@@ -74,7 +98,7 @@ export default function AudioPlayer({
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            text,
+            text: ttsText,
             language,
           }),
         });
@@ -96,7 +120,7 @@ export default function AudioPlayer({
         blob = await response.blob();
 
         await saveAudio(
-          text,
+          ttsText,
           language,
           blob,
         );
@@ -116,8 +140,7 @@ export default function AudioPlayer({
         }
 
         setProgress(
-          (audio.currentTime / audio.duration) *
-            100,
+          (audio.currentTime / audio.duration) * 100,
         );
       };
 
@@ -143,7 +166,7 @@ export default function AudioPlayer({
         console.error(
           'Audio playback failed:',
           {
-            text,
+            text: ttsText,
             language,
           },
         );
@@ -229,9 +252,7 @@ export default function AudioPlayer({
 
       <div className={styles.progress}>
         <div
-          className={
-            styles.progressFill
-          }
+          className={styles.progressFill}
           style={{
             width: `${progress}%`,
           }}

@@ -49,13 +49,13 @@ const lessonA003: LessonContent = {
           symbols: [
             {
               id: 'q1-noun',
-              shape: 'circle',
-              color: 'red',
+              shape: 'triangle',
+              color: 'black',
               label: 'Noun',
             },
             {
               id: 'q1-verb',
-              shape: 'triangle',
+              shape: 'circle',
               color: 'red',
               label: 'Verb',
             },
@@ -94,13 +94,13 @@ const lessonA003: LessonContent = {
           symbols: [
             {
               id: 'q2-noun',
-              shape: 'circle',
-              color: 'red',
+              shape: 'triangle',
+              color: 'black',
               label: 'Noun',
             },
             {
               id: 'q2-verb',
-              shape: 'triangle',
+              shape: 'circle',
               color: 'red',
               label: 'Verb',
             },
@@ -139,13 +139,13 @@ const lessonA003: LessonContent = {
           symbols: [
             {
               id: 'q3-noun',
-              shape: 'circle',
-              color: 'red',
+              shape: 'triangle',
+              color: 'black',
               label: 'Noun',
             },
             {
               id: 'q3-verb',
-              shape: 'triangle',
+              shape: 'circle',
               color: 'red',
               label: 'Verb',
             },
@@ -184,13 +184,13 @@ const lessonA003: LessonContent = {
           symbols: [
             {
               id: 'q4-noun',
-              shape: 'circle',
-              color: 'red',
+              shape: 'triangle',
+              color: 'black',
               label: 'Noun',
             },
             {
               id: 'q4-verb',
-              shape: 'triangle',
+              shape: 'circle',
               color: 'red',
               label: 'Verb',
             },
@@ -234,13 +234,13 @@ const lessonA003: LessonContent = {
           symbols: [
             {
               id: 'q5-noun',
-              shape: 'circle',
-              color: 'red',
+              shape: 'triangle',
+              color: 'black',
               label: 'Noun',
             },
             {
               id: 'q5-verb',
-              shape: 'triangle',
+              shape: 'circle',
               color: 'red',
               label: 'Verb',
             },
@@ -289,13 +289,13 @@ const lessonA003: LessonContent = {
           symbols: [
             {
               id: 'q6-noun',
-              shape: 'circle',
-              color: 'red',
+              shape: 'triangle',
+              color: 'black',
               label: 'Noun',
             },
             {
               id: 'q6-verb',
-              shape: 'triangle',
+              shape: 'circle',
               color: 'red',
               label: 'Verb',
             },
@@ -344,13 +344,13 @@ const lessonA003: LessonContent = {
           symbols: [
             {
               id: 'q7-noun',
-              shape: 'circle',
-              color: 'red',
+              shape: 'triangle',
+              color: 'black',
               label: 'Noun',
             },
             {
               id: 'q7-verb',
-              shape: 'triangle',
+              shape: 'circle',
               color: 'red',
               label: 'Verb',
             },
@@ -399,13 +399,13 @@ const lessonA003: LessonContent = {
           symbols: [
             {
               id: 'q8-noun',
-              shape: 'circle',
-              color: 'red',
+              shape: 'triangle',
+              color: 'black',
               label: 'Noun',
             },
             {
               id: 'q8-verb',
-              shape: 'triangle',
+              shape: 'circle',
               color: 'red',
               label: 'Verb',
             },
@@ -454,13 +454,13 @@ const lessonA003: LessonContent = {
           symbols: [
             {
               id: 'q9-noun',
-              shape: 'circle',
-              color: 'red',
+              shape: 'triangle',
+              color: 'black',
               label: 'Noun',
             },
             {
               id: 'q9-verb',
-              shape: 'triangle',
+              shape: 'circle',
               color: 'red',
               label: 'Verb',
             },
@@ -514,13 +514,13 @@ const lessonA003: LessonContent = {
           symbols: [
             {
               id: 'q10-noun',
-              shape: 'circle',
-              color: 'red',
+              shape: 'triangle',
+              color: 'black',
               label: 'Noun',
             },
             {
               id: 'q10-verb',
-              shape: 'triangle',
+              shape: 'circle',
               color: 'red',
               label: 'Verb',
             },
