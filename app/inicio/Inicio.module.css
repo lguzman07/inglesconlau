@@ -143,7 +143,8 @@
   margin-top: 24px;
 }
 
-.learningColumn {
+.learningColumn,
+.sideColumn {
   display: grid;
   min-width: 0;
   gap: 20px;
@@ -151,6 +152,7 @@
 
 .currentLesson,
 .progressLesson,
+.liveClass,
 .readingClub,
 .summaryCard {
   min-width: 0;
@@ -244,11 +246,20 @@
   border: 1px solid var(--primary);
 }
 
+.liveClass,
 .readingClub {
   display: flex;
   min-width: 0;
   align-items: flex-start;
   flex-direction: column;
+}
+
+.liveClass {
+  background: var(--surface-soft);
+  border-color: var(--primary-light);
+}
+
+.readingClub {
   background: var(--surface);
 }
 
@@ -256,6 +267,89 @@
   margin: 0;
   color: var(--text);
   font-size: 1.4rem;
+}
+
+.liveClassText {
+  margin: 14px 0 0;
+  color: var(--text-light);
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+
+.liveClassNotice {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 18px;
+  padding: 9px 12px;
+  color: var(--text);
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.4;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.liveIndicator {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  background: #38d878;
+  border-radius: 50%;
+  box-shadow:
+    0 0 5px rgb(56 216 120 / 80%),
+    0 0 10px rgb(56 216 120 / 45%);
+}
+
+.liveClassButton {
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 14px 22px;
+  color: var(--surface);
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+  box-sizing: border-box;
+}
+
+.liveClassButton:hover,
+.liveClassButton:focus-visible {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.liveClassButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.liveClassButton:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 3px;
+}
+
+.liveClassAccessNote {
+  margin: 10px 0 0;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.liveClassError {
+  margin: 12px 0 0;
+  color: #b42318;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.5;
 }
 
 .clubDay {
@@ -582,6 +676,7 @@
 
   .currentLesson,
   .progressLesson,
+  .liveClass,
   .readingClub,
   .summaryCard {
     padding: 24px;

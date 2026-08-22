@@ -119,6 +119,16 @@ export default function InicioPage() {
   const [reservationError, setReservationError] =
     useState('');
 
+  const [
+    isOpeningLiveClass,
+    setIsOpeningLiveClass,
+  ] = useState(false);
+
+  const [
+    liveClassError,
+    setLiveClassError,
+  ] = useState('');
+
   const [isLoadingProfile, setIsLoadingProfile] =
     useState(true);
 
@@ -535,6 +545,51 @@ export default function InicioPage() {
     void loadProfile();
   }, []);
 
+  async function handleOpenLiveClass() {
+    if (
+      isOpeningLiveClass ||
+      !hasActiveAccess
+    ) {
+      return;
+    }
+
+    setIsOpeningLiveClass(true);
+    setLiveClassError('');
+
+    try {
+      const response = await fetch(
+        '/api/clases-en-vivo',
+        {
+          method: 'GET',
+          cache: 'no-store',
+        },
+      );
+
+      const data = await response.json();
+
+      if (
+        !response.ok ||
+        !data?.roomUrl
+      ) {
+        setLiveClassError(
+          data?.error ||
+            'No pudimos abrir la clase. Inténtalo de nuevo.',
+        );
+
+        setIsOpeningLiveClass(false);
+        return;
+      }
+
+      window.location.href = data.roomUrl;
+    } catch {
+      setLiveClassError(
+        'No pudimos abrir la clase. Inténtalo de nuevo.',
+      );
+
+      setIsOpeningLiveClass(false);
+    }
+  }
+
   async function handleCancelReservation() {
     if (
       !clubSessionId ||
@@ -774,221 +829,321 @@ export default function InicioPage() {
             </article>
           </div>
 
-          <aside
-            className={styles.readingClub}
-          >
-            <p
-              className={styles.cardLabel}
+          <div className={styles.sideColumn}>
+            <aside
+              className={styles.liveClass}
             >
-              LECTURA EN VIVO
-            </p>
+              <p
+                className={styles.cardLabel}
+              >
+                CLASES EN VIVO
+              </p>
 
-            <h2
-              className={
-                styles.sectionTitle
-              }
-            >
-              Próxima sesión
-            </h2>
+              <h2
+                className={
+                  styles.sectionTitle
+                }
+              >
+                Entra a tu clase
+              </h2>
 
-            <p
-              className={styles.clubDay}
-            >
-              {readingClubDate}
-            </p>
+              <p
+                className={
+                  styles.liveClassText
+                }
+              >
+                Cuando tengas una clase
+                programada, entra a la sala
+                desde aquí.
+              </p>
 
-            <p
-              className={styles.cardText}
-            >
-              7:00 p. m. – 9:00 p. m.
-              <br />
-              Hora de República Dominicana
-              (UTC−4)
-            </p>
+              <div
+                className={
+                  styles.liveClassNotice
+                }
+              >
+                <span
+                  className={
+                    styles.liveIndicator
+                  }
+                  aria-hidden="true"
+                />
 
-            <p
-              className={
-                styles.clubCountdown
-              }
-            >
-              {clubCountdown}
-            </p>
+                <span>
+                  Sala privada de clases
+                </span>
+              </div>
 
-            {hasActiveAccess ? (
-              readingReservationSlot !==
-              null ? (
-                <>
-                  <div
-                    className={
-                      styles.reservationConfirmed
-                    }
-                  >
-                    <p
-                      className={
-                        styles.reservationConfirmedTitle
-                      }
-                    >
-                      Tu reserva está
-                      confirmada
-                    </p>
-
-                    <p
-                      className={
-                        styles.reservationTurn
-                      }
-                    >
-                      Tu turno es #
-                      {
-                        readingReservationSlot
-                      }
-                    </p>
-
-                    <p
-                      className={
-                        styles.reservationConfirmedText
-                      }
-                    >
-                      Ya tienes tu turno para
-                      leer en vivo.
-                    </p>
-                  </div>
-
-                  <div
-                    className={
-                      styles.clubActions
-                    }
-                  >
-                    <Link
-                      href="/club-de-lectura"
-                      className={
-                        styles.joinButton
-                      }
-                    >
-                      Ver mi reserva
-                    </Link>
-
-                    <button
-                      type="button"
-                      className={
-                        styles.cancelReservationButton
-                      }
-                      onClick={
-                        handleCancelReservation
-                      }
-                      disabled={
-                        isCancellingReservation
-                      }
-                    >
-                      {isCancellingReservation
-                        ? 'Cancelando...'
-                        : 'Cancelar turno'}
-                    </button>
-                  </div>
-
-                  {reservationError && (
-                    <p
-                      className={
-                        styles.reservationError
-                      }
-                      role="alert"
-                    >
-                      {reservationError}
-                    </p>
-                  )}
-                </>
-              ) : (
-                <>
-                  <p
-                    className={
-                      styles.reservationPrompt
-                    }
-                  >
-                    ¿Quieres leer en vivo?
-                    Reserva tu turno antes de
-                    que se agoten.
-                  </p>
-
-                  {availableReadingSlots ===
-                  null ? (
-                    <p
-                      className={
-                        styles.availableSlots
-                      }
-                    >
-                      Cargando turnos...
-                    </p>
-                  ) : availableReadingSlots >
-                    0 ? (
-                    <p
-                      className={
-                        styles.availableSlots
-                      }
-                    >
-                      {
-                        availableReadingSlots
-                      }{' '}
-                      {availableReadingSlots ===
-                      1
-                        ? 'turno disponible'
-                        : 'turnos disponibles'}
-                    </p>
-                  ) : (
-                    <p
-                      className={
-                        styles.availableSlots
-                      }
-                    >
-                      Los turnos para leer ya
-                      están completos.
-                    </p>
-                  )}
-
-                  {clubSessionId &&
-                    availableReadingSlots !==
-                      null &&
-                    availableReadingSlots >
-                      0 && (
-                      <div
-                        className={
-                          styles.clubActions
-                        }
-                      >
-                        <Link
-                          href="/club-de-lectura#reservar-turno"
-                          className={
-                            styles.joinButton
-                          }
-                        >
-                          Reservar mi turno
-                        </Link>
-                      </div>
-                    )}
-                </>
-              )
-            ) : (
-              <>
+              {hasActiveAccess ? (
                 <button
                   type="button"
                   className={
-                    styles.joinButton
+                    styles.liveClassButton
                   }
-                  disabled
-                  title="Requiere una suscripción activa"
+                  onClick={
+                    handleOpenLiveClass
+                  }
+                  disabled={
+                    isOpeningLiveClass
+                  }
                 >
-                  Reservar mi turno
+                  {isOpeningLiveClass
+                    ? 'Abriendo clase...'
+                    : role === 'admin'
+                      ? 'Entrar como anfitriona'
+                      : 'Entrar a clase'}
                 </button>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className={
+                      styles.liveClassButton
+                    }
+                    disabled
+                  >
+                    Entrar a clase
+                  </button>
 
+                  <p
+                    className={
+                      styles.liveClassAccessNote
+                    }
+                  >
+                    Requiere una suscripción
+                    activa.
+                  </p>
+                </>
+              )}
+
+              {liveClassError && (
                 <p
                   className={
-                    styles.clubAccessNote
+                    styles.liveClassError
                   }
+                  role="alert"
                 >
-                  Requiere una suscripción
-                  activa.
+                  {liveClassError}
                 </p>
-              </>
-            )}
-          </aside>
+              )}
+            </aside>
+
+            <aside
+              className={styles.readingClub}
+            >
+              <p
+                className={styles.cardLabel}
+              >
+                LECTURA EN VIVO
+              </p>
+
+              <h2
+                className={
+                  styles.sectionTitle
+                }
+              >
+                Próxima sesión
+              </h2>
+
+              <p
+                className={styles.clubDay}
+              >
+                {readingClubDate}
+              </p>
+
+              <p
+                className={styles.cardText}
+              >
+                7:00 p. m. – 9:00 p. m.
+                <br />
+                Hora de República Dominicana
+                (UTC−4)
+              </p>
+
+              <p
+                className={
+                  styles.clubCountdown
+                }
+              >
+                {clubCountdown}
+              </p>
+
+              {hasActiveAccess ? (
+                readingReservationSlot !==
+                null ? (
+                  <>
+                    <div
+                      className={
+                        styles.reservationConfirmed
+                      }
+                    >
+                      <p
+                        className={
+                          styles.reservationConfirmedTitle
+                        }
+                      >
+                        Tu reserva está
+                        confirmada
+                      </p>
+
+                      <p
+                        className={
+                          styles.reservationTurn
+                        }
+                      >
+                        Tu turno es #
+                        {
+                          readingReservationSlot
+                        }
+                      </p>
+
+                      <p
+                        className={
+                          styles.reservationConfirmedText
+                        }
+                      >
+                        Ya tienes tu turno para
+                        leer en vivo.
+                      </p>
+                    </div>
+
+                    <div
+                      className={
+                        styles.clubActions
+                      }
+                    >
+                      <Link
+                        href="/club-de-lectura"
+                        className={
+                          styles.joinButton
+                        }
+                      >
+                        Ver mi reserva
+                      </Link>
+
+                      <button
+                        type="button"
+                        className={
+                          styles.cancelReservationButton
+                        }
+                        onClick={
+                          handleCancelReservation
+                        }
+                        disabled={
+                          isCancellingReservation
+                        }
+                      >
+                        {isCancellingReservation
+                          ? 'Cancelando...'
+                          : 'Cancelar turno'}
+                      </button>
+                    </div>
+
+                    {reservationError && (
+                      <p
+                        className={
+                          styles.reservationError
+                        }
+                        role="alert"
+                      >
+                        {reservationError}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <p
+                      className={
+                        styles.reservationPrompt
+                      }
+                    >
+                      ¿Quieres leer en vivo?
+                      Reserva tu turno antes de
+                      que se agoten.
+                    </p>
+
+                    {availableReadingSlots ===
+                    null ? (
+                      <p
+                        className={
+                          styles.availableSlots
+                        }
+                      >
+                        Cargando turnos...
+                      </p>
+                    ) : availableReadingSlots >
+                      0 ? (
+                      <p
+                        className={
+                          styles.availableSlots
+                        }
+                      >
+                        {
+                          availableReadingSlots
+                        }{' '}
+                        {availableReadingSlots ===
+                        1
+                          ? 'turno disponible'
+                          : 'turnos disponibles'}
+                      </p>
+                    ) : (
+                      <p
+                        className={
+                          styles.availableSlots
+                        }
+                      >
+                        Los turnos para leer ya
+                        están completos.
+                      </p>
+                    )}
+
+                    {clubSessionId &&
+                      availableReadingSlots !==
+                        null &&
+                      availableReadingSlots >
+                        0 && (
+                        <div
+                          className={
+                            styles.clubActions
+                          }
+                        >
+                          <Link
+                            href="/club-de-lectura#reservar-turno"
+                            className={
+                              styles.joinButton
+                            }
+                          >
+                            Reservar mi turno
+                          </Link>
+                        </div>
+                      )}
+                  </>
+                )
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className={
+                      styles.joinButton
+                    }
+                    disabled
+                    title="Requiere una suscripción activa"
+                  >
+                    Reservar mi turno
+                  </button>
+
+                  <p
+                    className={
+                      styles.clubAccessNote
+                    }
+                  >
+                    Requiere una suscripción
+                    activa.
+                  </p>
+                </>
+              )}
+            </aside>
+          </div>
         </section>
 
         <section
