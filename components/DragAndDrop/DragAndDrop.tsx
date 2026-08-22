@@ -8,12 +8,17 @@ import {
   useRef,
   useState,
 } from 'react';
+
 import AudioPlayer from '@/components/AudioPlayer/AudioPlayer';
+import VocabularyButton from '@/components/VocabularyButton/VocabularyButton';
+
 import { createClient } from '@/lib/supabase/client';
+
 import type {
   DragAndDropQuestion,
   DragAndDropToken,
 } from '@/content/lecciones/types';
+
 import styles from './DragAndDrop.module.css';
 
 type ProgressRow = {
@@ -22,7 +27,10 @@ type ProgressRow = {
   total_questions: number;
   has_attempted: boolean;
   is_completed: boolean;
-  completion_source: 'manual' | 'automatic' | null;
+  completion_source:
+    | 'manual'
+    | 'automatic'
+    | null;
 };
 
 type DraggedToken = {
@@ -55,7 +63,10 @@ function shuffle<T>(items: T[]) {
       Math.random() * (index + 1),
     );
 
-    [result[index], result[randomIndex]] = [
+    [
+      result[index],
+      result[randomIndex],
+    ] = [
       result[randomIndex],
       result[index],
     ];
@@ -88,7 +99,9 @@ function getAnswersFromDatabase(
     return {};
   }
 
-  return Object.entries(value).reduce<
+  return Object.entries(
+    value,
+  ).reduce<
     Record<number, string[]>
   >(
     (
@@ -99,8 +112,9 @@ function getAnswersFromDatabase(
         typeof answer === 'string' &&
         answer
       ) {
-        result[Number(questionId)] =
-          answer.split('|');
+        result[
+          Number(questionId)
+        ] = answer.split('|');
       }
 
       return result;
@@ -114,7 +128,8 @@ function getToken(
   tokenId: string,
 ): DragAndDropToken | undefined {
   return question.tokens.find(
-    (token) => token.id === tokenId,
+    (token) =>
+      token.id === tokenId,
   );
 }
 
@@ -124,8 +139,10 @@ function getCorrectSentence(
   return question.correctOrder
     .map(
       (tokenId) =>
-        getToken(question, tokenId)
-          ?.word ?? '',
+        getToken(
+          question,
+          tokenId,
+        )?.word ?? '',
     )
     .filter(Boolean)
     .join(' ');
@@ -140,7 +157,9 @@ export default function DragAndDrop({
 }: DragAndDropProps) {
   const supabaseRef =
     useRef<
-      ReturnType<typeof createClient> | null
+      ReturnType<
+        typeof createClient
+      > | null
     >(null);
 
   if (!supabaseRef.current) {
@@ -163,7 +182,8 @@ export default function DragAndDrop({
     setQuestionOrder,
   ] = useState<number[]>(
     questions.map(
-      (question) => question.id,
+      (question) =>
+        question.id,
     ),
   );
 
@@ -177,8 +197,10 @@ export default function DragAndDrop({
       questions.map(
         (question) => [
           question.id,
+
           question.tokens.map(
-            (token) => token.id,
+            (token) =>
+              token.id,
           ),
         ],
       ),
@@ -225,9 +247,9 @@ export default function DragAndDrop({
   const [
     progressError,
     setProgressError,
-  ] = useState<string | null>(
-    null,
-  );
+  ] = useState<
+    string | null
+  >(null);
 
   const [
     translationDisplay,
@@ -248,16 +270,19 @@ export default function DragAndDrop({
         ),
     ).length;
 
-  const passingScore = Math.ceil(
-    questions.length * 0.7,
-  );
+  const passingScore =
+    Math.ceil(
+      questions.length * 0.7,
+    );
 
   const passedCurrentAttempt =
     hasChecked &&
-    correctAnswers >= passingScore;
+    correctAnswers >=
+      passingScore;
 
   const canMarkManually =
-    !hasAttempted && !isCompleted;
+    !hasAttempted &&
+    !isCompleted;
 
   const canRestoreCompletion =
     !isCompleted &&
@@ -268,7 +293,8 @@ export default function DragAndDrop({
     setQuestionOrder(
       shuffle(
         questions.map(
-          (question) => question.id,
+          (question) =>
+            question.id,
         ),
       ),
     );
@@ -278,6 +304,7 @@ export default function DragAndDrop({
         questions.map(
           (question) => [
             question.id,
+
             shuffle(
               question.tokens.map(
                 (token) =>
@@ -316,8 +343,8 @@ export default function DragAndDrop({
   useEffect(() => {
     randomizeExercise();
 
-    // La mezcla solo se ejecuta al
-    // abrir la lección.
+    // La mezcla solo se ejecuta
+    // al abrir la lección.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -338,16 +365,22 @@ export default function DragAndDrop({
           .select(
             'translation_display',
           )
-          .eq('id', user.id)
+          .eq(
+            'id',
+            user.id,
+          )
           .maybeSingle();
 
       const preference =
         data?.translation_display;
 
       if (
-        preference === 'always' ||
-        preference === 'hover' ||
-        preference === 'hidden'
+        preference ===
+          'always' ||
+        preference ===
+          'hover' ||
+        preference ===
+          'hidden'
       ) {
         setTranslationDisplay(
           preference,
@@ -360,7 +393,10 @@ export default function DragAndDrop({
 
   useEffect(() => {
     async function loadProgress() {
-      const { data, error } =
+      const {
+        data,
+        error,
+      } =
         await supabase
           .from(
             'lesson_progress',
@@ -460,26 +496,31 @@ export default function DragAndDrop({
       return;
     }
 
-    setAnswers((current) => {
-      const currentAnswer =
-        current[questionId] ?? [];
+    setAnswers(
+      (current) => {
+        const currentAnswer =
+          current[
+            questionId
+          ] ?? [];
 
-      if (
-        currentAnswer.includes(
-          tokenId,
-        )
-      ) {
-        return current;
-      }
+        if (
+          currentAnswer.includes(
+            tokenId,
+          )
+        ) {
+          return current;
+        }
 
-      return {
-        ...current,
-        [questionId]: [
-          ...currentAnswer,
-          tokenId,
-        ],
-      };
-    });
+        return {
+          ...current,
+
+          [questionId]: [
+            ...currentAnswer,
+            tokenId,
+          ],
+        };
+      },
+    );
   }
 
   function removeTokenFromAnswer(
@@ -493,15 +534,20 @@ export default function DragAndDrop({
       return;
     }
 
-    setAnswers((current) => ({
-      ...current,
+    setAnswers(
+      (current) => ({
+        ...current,
 
-      [questionId]: (
-        current[questionId] ?? []
-      ).filter(
-        (id) => id !== tokenId,
-      ),
-    }));
+        [questionId]: (
+          current[
+            questionId
+          ] ?? []
+        ).filter(
+          (id) =>
+            id !== tokenId,
+        ),
+      }),
+    );
   }
 
   function moveTokenBefore(
@@ -516,51 +562,57 @@ export default function DragAndDrop({
       return;
     }
 
-    setAnswers((current) => {
-      const currentAnswer =
-        current[questionId] ?? [];
+    setAnswers(
+      (current) => {
+        const currentAnswer =
+          current[
+            questionId
+          ] ?? [];
 
-      const withoutDraggedToken =
-        currentAnswer.filter(
-          (tokenId) =>
-            tokenId !==
-            draggedTokenId,
+        const withoutDraggedToken =
+          currentAnswer.filter(
+            (tokenId) =>
+              tokenId !==
+              draggedTokenId,
+          );
+
+        const destinationIndex =
+          withoutDraggedToken.indexOf(
+            destinationTokenId,
+          );
+
+        if (
+          destinationIndex ===
+          -1
+        ) {
+          return {
+            ...current,
+
+            [questionId]: [
+              ...withoutDraggedToken,
+              draggedTokenId,
+            ],
+          };
+        }
+
+        const nextAnswer = [
+          ...withoutDraggedToken,
+        ];
+
+        nextAnswer.splice(
+          destinationIndex,
+          0,
+          draggedTokenId,
         );
 
-      const destinationIndex =
-        withoutDraggedToken.indexOf(
-          destinationTokenId,
-        );
-
-      if (
-        destinationIndex === -1
-      ) {
         return {
           ...current,
 
-          [questionId]: [
-            ...withoutDraggedToken,
-            draggedTokenId,
-          ],
+          [questionId]:
+            nextAnswer,
         };
-      }
-
-      const nextAnswer = [
-        ...withoutDraggedToken,
-      ];
-
-      nextAnswer.splice(
-        destinationIndex,
-        0,
-        draggedTokenId,
-      );
-
-      return {
-        ...current,
-        [questionId]:
-          nextAnswer,
-      };
-    });
+      },
+    );
   }
 
   function dropInsideAnswer(
@@ -581,7 +633,9 @@ export default function DragAndDrop({
       return;
     }
 
-    if (destinationTokenId) {
+    if (
+      destinationTokenId
+    ) {
       moveTokenBefore(
         questionId,
         draggedToken.tokenId,
@@ -591,24 +645,29 @@ export default function DragAndDrop({
       return;
     }
 
-    setAnswers((current) => {
-      const withoutDraggedToken = (
-        current[questionId] ?? []
-      ).filter(
-        (tokenId) =>
-          tokenId !==
-          draggedToken.tokenId,
-      );
+    setAnswers(
+      (current) => {
+        const withoutDraggedToken =
+          (
+            current[
+              questionId
+            ] ?? []
+          ).filter(
+            (tokenId) =>
+              tokenId !==
+              draggedToken.tokenId,
+          );
 
-      return {
-        ...current,
+        return {
+          ...current,
 
-        [questionId]: [
-          ...withoutDraggedToken,
-          draggedToken.tokenId,
-        ],
-      };
-    });
+          [questionId]: [
+            ...withoutDraggedToken,
+            draggedToken.tokenId,
+          ],
+        };
+      },
+    );
   }
 
   function dropInsideBank(
@@ -637,10 +696,14 @@ export default function DragAndDrop({
   function handleQuestionKeyDown(
     event: KeyboardEvent<HTMLElement>,
   ) {
-    const target = event.target;
+    const target =
+      event.target;
 
     if (
-      !(target instanceof HTMLElement)
+      !(
+        target instanceof
+        HTMLElement
+      )
     ) {
       return;
     }
@@ -648,13 +711,20 @@ export default function DragAndDrop({
     const questionCard =
       event.currentTarget;
 
-    const tokenButtons = Array.from(
-      questionCard.querySelectorAll<HTMLButtonElement>(
-        '[data-keyboard-token="true"]',
-      ),
-    ).filter((button) => !button.disabled);
+    const tokenButtons =
+      Array.from(
+        questionCard.querySelectorAll<HTMLButtonElement>(
+          '[data-keyboard-token="true"]',
+        ),
+      ).filter(
+        (button) =>
+          !button.disabled,
+      );
 
-    if (tokenButtons.length === 0) {
+    if (
+      tokenButtons.length ===
+      0
+    ) {
       return;
     }
 
@@ -669,7 +739,10 @@ export default function DragAndDrop({
       index: number,
     ) => {
       const normalizedIndex =
-        ((index % tokenButtons.length) +
+        ((
+          index %
+          tokenButtons.length
+        ) +
           tokenButtons.length) %
         tokenButtons.length;
 
@@ -679,8 +752,10 @@ export default function DragAndDrop({
     };
 
     if (
-      event.key === 'ArrowRight' ||
-      event.key === 'ArrowDown'
+      event.key ===
+        'ArrowRight' ||
+      event.key ===
+        'ArrowDown'
     ) {
       event.preventDefault();
 
@@ -694,37 +769,48 @@ export default function DragAndDrop({
     }
 
     if (
-      event.key === 'ArrowLeft' ||
-      event.key === 'ArrowUp'
+      event.key ===
+        'ArrowLeft' ||
+      event.key ===
+        'ArrowUp'
     ) {
       event.preventDefault();
 
       focusToken(
         activeIndex === -1
-          ? tokenButtons.length - 1
+          ? tokenButtons.length -
+              1
           : activeIndex - 1,
       );
 
       return;
     }
 
-    if (event.key === 'Home') {
+    if (
+      event.key ===
+      'Home'
+    ) {
       event.preventDefault();
       focusToken(0);
       return;
     }
 
-    if (event.key === 'End') {
+    if (
+      event.key === 'End'
+    ) {
       event.preventDefault();
+
       focusToken(
-        tokenButtons.length - 1,
+        tokenButtons.length -
+          1,
       );
 
       return;
     }
 
     if (
-      event.key === 'Enter' &&
+      event.key ===
+        'Enter' &&
       event.currentTarget ===
         document.activeElement
     ) {
@@ -733,21 +819,31 @@ export default function DragAndDrop({
       return;
     }
 
-    if (event.key === 'Escape') {
+    if (
+      event.key ===
+      'Escape'
+    ) {
       event.preventDefault();
+
       questionCard.focus();
     }
   }
 
   async function handleCheckAnswers() {
-    setIsSavingProgress(true);
-    setProgressError(null);
+    setIsSavingProgress(
+      true,
+    );
+
+    setProgressError(
+      null,
+    );
 
     const answersForDatabase =
       Object.fromEntries(
         questions.map(
           (question) => [
             question.id,
+
             (
               answers[
                 question.id
@@ -757,7 +853,10 @@ export default function DragAndDrop({
         ),
       );
 
-    const { data, error } =
+    const {
+      data,
+      error,
+    } =
       await supabase.rpc(
         'save_lesson_attempt',
         {
@@ -795,7 +894,9 @@ export default function DragAndDrop({
       data as ProgressRow,
     );
 
-    setHasChecked(true);
+    setHasChecked(
+      true,
+    );
 
     setIsSavingProgress(
       false,
@@ -811,10 +912,18 @@ export default function DragAndDrop({
   async function setCompletion(
     completed: boolean,
   ) {
-    setIsSavingProgress(true);
-    setProgressError(null);
+    setIsSavingProgress(
+      true,
+    );
 
-    const { data, error } =
+    setProgressError(
+      null,
+    );
+
+    const {
+      data,
+      error,
+    } =
       await supabase.rpc(
         'set_lesson_completion',
         {
@@ -851,13 +960,18 @@ export default function DragAndDrop({
     );
   }
 
-  if (isLoadingProgress) {
+  if (
+    isLoadingProgress
+  ) {
     return (
       <section
-        className={styles.exercise}
+        className={
+          styles.exercise
+        }
         aria-live="polite"
       >
-        Cargando tu último intento...
+        Cargando tu último
+        intento...
       </section>
     );
   }
@@ -865,7 +979,9 @@ export default function DragAndDrop({
   return (
     <>
       <section
-        className={styles.exercise}
+        className={
+          styles.exercise
+        }
         aria-labelledby="drag-exercise-title"
       >
         <div
@@ -886,15 +1002,18 @@ export default function DragAndDrop({
               {title}
             </h3>
 
-            <p>{instructions}</p>
+            <p>
+              {instructions}
+            </p>
 
             <p
               className={
                 styles.clickHelp
               }
             >
-              También puedes tocar una
-              palabra para moverla.
+              También puedes tocar
+              una palabra para
+              moverla.
             </p>
           </div>
 
@@ -967,26 +1086,34 @@ export default function DragAndDrop({
                   question.correctOrder,
                 );
 
+              const exampleSentence =
+                getCorrectSentence(
+                  question,
+                );
+
               return (
                 <article
                   className={
                     styles.questionCard
                   }
-                  key={question.id}
+                  key={
+                    question.id
+                  }
                   tabIndex={0}
                   onKeyDown={
                     handleQuestionKeyDown
                   }
                   aria-label={`Pregunta ${
                     visibleIndex + 1
-                  }. Forma la oración correcta. Usa las flechas para recorrer las palabras y Enter para mover la palabra seleccionada.`}
+                  }. Forma la oración correcta.`}
                 >
                   <span
                     className={
                       styles.questionNumber
                     }
                   >
-                    {visibleIndex + 1}
+                    {visibleIndex +
+                      1}
                   </span>
 
                   <div
@@ -1020,10 +1147,6 @@ export default function DragAndDrop({
                           question.id,
                         )
                       }
-                      aria-label={`Palabras disponibles para la pregunta ${
-                        visibleIndex +
-                        1
-                      }`}
                     >
                       {availableTokenIds.map(
                         (tokenId) => {
@@ -1033,7 +1156,9 @@ export default function DragAndDrop({
                               tokenId,
                             );
 
-                          if (!token) {
+                          if (
+                            !token
+                          ) {
                             return null;
                           }
 
@@ -1074,13 +1199,9 @@ export default function DragAndDrop({
                                     token.id,
                                   )
                                 }
-                                aria-label={
-                                  translationDisplay ===
-                                  'hidden'
-                                    ? token.word
-                                    : `${token.word}. ${token.translation}`
+                                tabIndex={
+                                  -1
                                 }
-                                tabIndex={-1}
                                 data-keyboard-token="true"
                               >
                                 {
@@ -1114,6 +1235,28 @@ export default function DragAndDrop({
                                   }
                                 </span>
                               )}
+
+                              <AudioPlayer
+                                text={
+                                  token.word
+                                }
+                                language="en"
+                              />
+
+                              <VocabularyButton
+                                word={
+                                  token.word
+                                }
+                                translation={
+                                  token.translation
+                                }
+                                lessonKey={
+                                  lessonKey
+                                }
+                                exampleSentence={
+                                  exampleSentence
+                                }
+                              />
                             </span>
                           );
                         },
@@ -1126,8 +1269,9 @@ export default function DragAndDrop({
                             styles.emptyBank
                           }
                         >
-                          Todas las palabras
-                          están abajo.
+                          Todas las
+                          palabras están
+                          abajo.
                         </span>
                       )}
                     </div>
@@ -1153,10 +1297,6 @@ export default function DragAndDrop({
                           question.id,
                         )
                       }
-                      aria-label={`Tu respuesta para la pregunta ${
-                        visibleIndex +
-                        1
-                      }`}
                     >
                       {selectedTokenIds.length ===
                       0 ? (
@@ -1165,8 +1305,8 @@ export default function DragAndDrop({
                             styles.answerPlaceholder
                           }
                         >
-                          Arrastra las palabras
-                          aquí
+                          Arrastra las
+                          palabras aquí
                         </span>
                       ) : (
                         selectedTokenIds.map(
@@ -1236,13 +1376,9 @@ export default function DragAndDrop({
                                       token.id,
                                     );
                                   }}
-                                  aria-label={
-                                    translationDisplay ===
-                                    'hidden'
-                                      ? `${token.word}. Toca para devolverla.`
-                                      : `${token.word}. ${token.translation}. Toca para devolverla.`
+                                  tabIndex={
+                                    -1
                                   }
-                                  tabIndex={-1}
                                   data-keyboard-token="true"
                                 >
                                   {
@@ -1276,6 +1412,28 @@ export default function DragAndDrop({
                                     }
                                   </span>
                                 )}
+
+                                <AudioPlayer
+                                  text={
+                                    token.word
+                                  }
+                                  language="en"
+                                />
+
+                                <VocabularyButton
+                                  word={
+                                    token.word
+                                  }
+                                  translation={
+                                    token.translation
+                                  }
+                                  lessonKey={
+                                    lessonKey
+                                  }
+                                  exampleSentence={
+                                    exampleSentence
+                                  }
+                                />
                               </span>
                             );
                           },
@@ -1303,9 +1461,9 @@ export default function DragAndDrop({
                             </p>
 
                             <strong>
-                              {getCorrectSentence(
-                                question,
-                              )}
+                              {
+                                exampleSentence
+                              }
                             </strong>
                           </>
                         )}
@@ -1333,13 +1491,14 @@ export default function DragAndDrop({
                               styles.sentenceAudioLabel
                             }
                           >
-                            Escuchar oración
+                            Escuchar
+                            oración
                           </span>
 
                           <AudioPlayer
-                            text={getCorrectSentence(
-                              question,
-                            )}
+                            text={
+                              exampleSentence
+                            }
                             language="en"
                           />
                         </div>
@@ -1439,7 +1598,9 @@ export default function DragAndDrop({
       </section>
 
       <section
-        className={styles.resultCard}
+        className={
+          styles.resultCard
+        }
         aria-live="polite"
       >
         <div>
@@ -1456,13 +1617,15 @@ export default function DragAndDrop({
             'automatic' ? (
             <>
               <h4>
-                ¡La lección se completó
+                ¡La lección se
+                completó
                 automáticamente!
               </h4>
 
               <p>
-                Aprobaste el ejercicio con
-                7 de 10 o más respuestas
+                Aprobaste el
+                ejercicio con 7 de
+                10 o más respuestas
                 correctas.
               </p>
             </>
@@ -1471,53 +1634,63 @@ export default function DragAndDrop({
               'manual' ? (
             <>
               <h4>
-                Marcaste esta lección como
+                Marcaste esta
+                lección como
                 completada.
               </h4>
 
               <p>
-                La marcaste sin hacer el
-                ejercicio porque ya
-                dominabas el tema.
+                La marcaste sin
+                hacer el ejercicio
+                porque ya dominabas
+                el tema.
               </p>
             </>
           ) : canRestoreCompletion ? (
             <>
               <h4>
-                Desmarcaste esta lección
-                como completada.
+                Desmarcaste esta
+                lección como
+                completada.
               </h4>
 
               <p>
-                Ya habías aprobado el
-                ejercicio y puedes volver
-                a marcarla.
+                Ya habías aprobado
+                el ejercicio y
+                puedes volver a
+                marcarla.
               </p>
             </>
           ) : hasAttempted ? (
             <>
               <h4>
-                Esta lección todavía no
-                está completada.
+                Esta lección
+                todavía no está
+                completada.
               </h4>
 
               <p>
-                Ya hiciste un intento. Para
-                completarla necesitas
-                obtener al menos 7 de 10
-                respuestas correctas.
+                Ya hiciste un
+                intento. Para
+                completarla
+                necesitas obtener
+                al menos 7 de 10
+                respuestas
+                correctas.
               </p>
             </>
           ) : (
             <>
               <h4>
-                ¿Ya dominas este tema?
+                ¿Ya dominas este
+                tema?
               </h4>
 
               <p>
-                Puedes marcar esta lección
-                como completada sin hacer
-                el ejercicio.
+                Puedes marcar esta
+                lección como
+                completada sin
+                hacer el ejercicio.
               </p>
             </>
           )}
@@ -1543,7 +1716,8 @@ export default function DragAndDrop({
                 )
               }
             >
-              Desmarcar como completada
+              Desmarcar como
+              completada
             </button>
           )}
 
@@ -1562,7 +1736,8 @@ export default function DragAndDrop({
                 )
               }
             >
-              Marcar como completada
+              Marcar como
+              completada
             </button>
           )}
 
@@ -1581,7 +1756,8 @@ export default function DragAndDrop({
                 )
               }
             >
-              Volver a marcar como completada
+              Volver a marcar como
+              completada
             </button>
           )}
         </div>

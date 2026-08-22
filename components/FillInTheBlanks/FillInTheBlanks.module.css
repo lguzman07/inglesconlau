@@ -237,10 +237,10 @@
 
 .wordBubbleActions {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding-top: 2px;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
 }
 
 .audioButton {

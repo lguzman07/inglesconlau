@@ -8,7 +8,7 @@ const lessonA003: LessonContent = {
   title: 'A, H, J, K: familia /eɪ/',
 
   subtitle:
-    'Practica palabras con A, H, J y K mientras reconoces nouns y verbs dentro de oraciones sencillas.',
+    'Practica A, H, J y K al escuchar, mientras comienzas a reconocer nouns y verbs en oraciones sencillas.',
 
   videoSrc: '/videos/a0/03-placeholder.mp4',
 
@@ -18,7 +18,7 @@ const lessonA003: LessonContent = {
     'Practica las letras A, H, J y K con palabras y oraciones sencillas en inglés.',
 
   objective:
-    'Al terminar, podrás reconocer palabras relacionadas con las letras A, H, J y K y comenzar a identificar nouns y verbs dentro de una oración.',
+    'Al terminar, podrás reconocer A, H, J y K al escucharlas y comenzar a identificar nouns y verbs dentro de una oración.',
 
   exercises: [
     {
@@ -261,292 +261,154 @@ const lessonA003: LessonContent = {
             },
           ],
 
-          sentenceTranslation:
-            'Anna ayuda a Jack.',
+          sentenceTranslation: 'Anna ayuda a Jack.',
+        },
+      ],
+    },
+
+    {
+      type: 'listening-choice',
+
+      title: 'Escucha A, H, J y K',
+
+      instructions:
+        'Escucha el nombre de la letra y selecciona la letra correcta.',
+
+      questions: [
+        {
+          id: 1,
+          audioText: 'A',
+          language: 'en',
+          prompt: '¿Qué letra escuchaste?',
+          options: [
+            {
+              id: 'q1-a',
+              text: 'A',
+              translation: 'letra A',
+            },
+            {
+              id: 'q1-h',
+              text: 'H',
+              translation: 'letra H',
+            },
+            {
+              id: 'q1-j',
+              text: 'J',
+              translation: 'letra J',
+            },
+          ],
+          correctOptionIds: ['q1-a'],
+          explanation:
+            'La letra A se pronuncia /eɪ/ en inglés.',
         },
 
         {
-          id: 6,
-
-          words: [
+          id: 2,
+          audioText: 'H',
+          language: 'en',
+          prompt: '¿Qué letra escuchaste?',
+          options: [
             {
-              id: 'q6-harry',
-              word: 'Harry',
-              translation: 'Harry',
+              id: 'q2-k',
+              text: 'K',
+              translation: 'letra K',
             },
             {
-              id: 'q6-helps',
-              word: 'helps',
-              translation: 'ayuda a',
+              id: 'q2-h',
+              text: 'H',
+              translation: 'letra H',
             },
             {
-              id: 'q6-kate',
-              word: 'Kate',
-              translation: 'Kate',
-            },
-          ],
-
-          symbols: [
-            {
-              id: 'q6-noun',
-              shape: 'triangle',
-              color: 'black',
-              label: 'Noun',
-            },
-            {
-              id: 'q6-verb',
-              shape: 'circle',
-              color: 'red',
-              label: 'Verb',
+              id: 'q2-a',
+              text: 'A',
+              translation: 'letra A',
             },
           ],
-
-          correctPlacements: [
-            {
-              wordId: 'q6-harry',
-              symbolId: 'q6-noun',
-            },
-            {
-              wordId: 'q6-helps',
-              symbolId: 'q6-verb',
-            },
-            {
-              wordId: 'q6-kate',
-              symbolId: 'q6-noun',
-            },
-          ],
-
-          sentenceTranslation:
-            'Harry ayuda a Kate.',
+          correctOptionIds: ['q2-h'],
+          explanation:
+            'H se pronuncia /eɪtʃ/ en inglés.',
         },
 
         {
-          id: 7,
-
-          words: [
+          id: 3,
+          audioText: 'J',
+          language: 'en',
+          prompt: '¿Qué letra escuchaste?',
+          options: [
             {
-              id: 'q7-jack',
-              word: 'Jack',
-              translation: 'Jack',
+              id: 'q3-j',
+              text: 'J',
+              translation: 'letra J',
             },
             {
-              id: 'q7-helps',
-              word: 'helps',
-              translation: 'ayuda a',
+              id: 'q3-a',
+              text: 'A',
+              translation: 'letra A',
             },
             {
-              id: 'q7-karla',
-              word: 'Karla',
-              translation: 'Karla',
-            },
-          ],
-
-          symbols: [
-            {
-              id: 'q7-noun',
-              shape: 'triangle',
-              color: 'black',
-              label: 'Noun',
-            },
-            {
-              id: 'q7-verb',
-              shape: 'circle',
-              color: 'red',
-              label: 'Verb',
+              id: 'q3-k',
+              text: 'K',
+              translation: 'letra K',
             },
           ],
-
-          correctPlacements: [
-            {
-              wordId: 'q7-jack',
-              symbolId: 'q7-noun',
-            },
-            {
-              wordId: 'q7-helps',
-              symbolId: 'q7-verb',
-            },
-            {
-              wordId: 'q7-karla',
-              symbolId: 'q7-noun',
-            },
-          ],
-
-          sentenceTranslation:
-            'Jack ayuda a Karla.',
+          correctOptionIds: ['q3-j'],
+          explanation:
+            'J se pronuncia /dʒeɪ/ en inglés.',
         },
 
         {
-          id: 8,
-
-          words: [
+          id: 4,
+          audioText: 'K',
+          language: 'en',
+          prompt: '¿Qué letra escuchaste?',
+          options: [
             {
-              id: 'q8-kate',
-              word: 'Kate',
-              translation: 'Kate',
+              id: 'q4-h',
+              text: 'H',
+              translation: 'letra H',
             },
             {
-              id: 'q8-likes',
-              word: 'likes',
-              translation: 'le gustan',
+              id: 'q4-j',
+              text: 'J',
+              translation: 'letra J',
             },
             {
-              id: 'q8-apples',
-              word: 'apples',
-              translation: 'manzanas',
-            },
-          ],
-
-          symbols: [
-            {
-              id: 'q8-noun',
-              shape: 'triangle',
-              color: 'black',
-              label: 'Noun',
-            },
-            {
-              id: 'q8-verb',
-              shape: 'circle',
-              color: 'red',
-              label: 'Verb',
+              id: 'q4-k',
+              text: 'K',
+              translation: 'letra K',
             },
           ],
-
-          correctPlacements: [
-            {
-              wordId: 'q8-kate',
-              symbolId: 'q8-noun',
-            },
-            {
-              wordId: 'q8-likes',
-              symbolId: 'q8-verb',
-            },
-            {
-              wordId: 'q8-apples',
-              symbolId: 'q8-noun',
-            },
-          ],
-
-          sentenceTranslation:
-            'A Kate le gustan las manzanas.',
+          correctOptionIds: ['q4-k'],
+          explanation:
+            'K se pronuncia /keɪ/ en inglés.',
         },
 
         {
-          id: 9,
-
-          words: [
+          id: 5,
+          audioText: 'A',
+          language: 'en',
+          prompt:
+            'Escucha otra vez. ¿Cuál pertenece a la familia /eɪ/?',
+          options: [
             {
-              id: 'q9-harry',
-              word: 'Harry',
-              translation: 'Harry',
+              id: 'q5-a',
+              text: 'A',
+              translation: 'letra A',
             },
             {
-              id: 'q9-has',
-              word: 'has',
-              translation: 'tiene',
+              id: 'q5-e',
+              text: 'E',
+              translation: 'letra E',
             },
             {
-              id: 'q9-jackets',
-              word: 'jackets',
-              translation: 'chaquetas',
-            },
-          ],
-
-          symbols: [
-            {
-              id: 'q9-noun',
-              shape: 'triangle',
-              color: 'black',
-              label: 'Noun',
-            },
-            {
-              id: 'q9-verb',
-              shape: 'circle',
-              color: 'red',
-              label: 'Verb',
+              id: 'q5-i',
+              text: 'I',
+              translation: 'letra I',
             },
           ],
-
-          correctPlacements: [
-            {
-              wordId: 'q9-harry',
-              symbolId: 'q9-noun',
-            },
-            {
-              wordId: 'q9-has',
-              symbolId: 'q9-verb',
-            },
-            {
-              wordId: 'q9-jackets',
-              symbolId: 'q9-noun',
-            },
-          ],
-
-          sentenceTranslation:
-            'Harry tiene chaquetas.',
-        },
-
-        {
-          id: 10,
-
-          words: [
-            {
-              id: 'q10-anna',
-              word: 'Anna',
-              translation: 'Ana',
-            },
-            {
-              id: 'q10-gives',
-              word: 'gives',
-              translation: 'le da',
-            },
-            {
-              id: 'q10-jack',
-              word: 'Jack',
-              translation: 'Jack',
-            },
-            {
-              id: 'q10-apples',
-              word: 'apples',
-              translation: 'manzanas',
-            },
-          ],
-
-          symbols: [
-            {
-              id: 'q10-noun',
-              shape: 'triangle',
-              color: 'black',
-              label: 'Noun',
-            },
-            {
-              id: 'q10-verb',
-              shape: 'circle',
-              color: 'red',
-              label: 'Verb',
-            },
-          ],
-
-          correctPlacements: [
-            {
-              wordId: 'q10-anna',
-              symbolId: 'q10-noun',
-            },
-            {
-              wordId: 'q10-gives',
-              symbolId: 'q10-verb',
-            },
-            {
-              wordId: 'q10-jack',
-              symbolId: 'q10-noun',
-            },
-            {
-              wordId: 'q10-apples',
-              symbolId: 'q10-noun',
-            },
-          ],
-
-          sentenceTranslation:
-            'Anna le da manzanas a Jack.',
+          correctOptionIds: ['q5-a'],
+          explanation:
+            'A pertenece a esta familia porque su nombre se pronuncia /eɪ/.',
         },
       ],
     },

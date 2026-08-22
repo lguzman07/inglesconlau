@@ -1,11 +1,18 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import {
+  useMemo,
+  useState,
+} from 'react';
+
 import AudioPlayer from '@/components/AudioPlayer/AudioPlayer';
+import VocabularyButton from '@/components/VocabularyButton/VocabularyButton';
+
 import type {
   ListeningChoiceExercise as ListeningChoiceExerciseContent,
   ListeningChoiceQuestion,
 } from '@/content/lecciones/types';
+
 import styles from './ListeningChoice.module.css';
 
 type ListeningChoiceProps = {
@@ -13,9 +20,15 @@ type ListeningChoiceProps = {
   title?: string;
   instructions?: string;
   questions?: ListeningChoiceQuestion[];
+  lessonKey: string;
 };
 
 type Answers = Record<number, string[]>;
+
+type OpenVocabulary = {
+  questionId: number;
+  optionId: string;
+} | null;
 
 function arraysHaveSameValues(
   first: string[],
@@ -36,7 +49,9 @@ function arraysHaveSameValues(
 
 function questionIsCorrect(
   question: ListeningChoiceQuestion,
-  selectedOptionIds: string[] | undefined,
+  selectedOptionIds:
+    | string[]
+    | undefined,
 ) {
   return arraysHaveSameValues(
     selectedOptionIds ?? [],
@@ -49,19 +64,23 @@ export default function ListeningChoice({
   title,
   instructions,
   questions,
+  lessonKey,
 }: ListeningChoiceProps) {
   const resolvedExercise =
     useMemo<ListeningChoiceExerciseContent>(
       () => ({
         type: 'listening-choice',
+
         title:
           exercise?.title ??
           title ??
           'Escucha y selecciona',
+
         instructions:
           exercise?.instructions ??
           instructions ??
           'Escucha el audio y selecciona la opción que más se parece.',
+
         questions:
           exercise?.questions ??
           questions ??
@@ -78,8 +97,17 @@ export default function ListeningChoice({
   const [answers, setAnswers] =
     useState<Answers>({});
 
-  const [hasChecked, setHasChecked] =
-    useState(false);
+  const [
+    hasChecked,
+    setHasChecked,
+  ] = useState(false);
+
+  const [
+    openVocabulary,
+    setOpenVocabulary,
+  ] = useState<OpenVocabulary>(
+    null,
+  );
 
   function toggleOption(
     questionId: number,
@@ -90,14 +118,17 @@ export default function ListeningChoice({
         current[questionId] ?? [];
 
       const isSelected =
-        currentAnswers.includes(optionId);
+        currentAnswers.includes(
+          optionId,
+        );
 
       return {
         ...current,
 
         [questionId]: isSelected
           ? currentAnswers.filter(
-              (id) => id !== optionId,
+              (id) =>
+                id !== optionId,
             )
           : [
               ...currentAnswers,
@@ -109,8 +140,29 @@ export default function ListeningChoice({
     setHasChecked(false);
   }
 
+  function toggleVocabulary(
+    questionId: number,
+    optionId: string,
+  ) {
+    const isAlreadyOpen =
+      openVocabulary?.questionId ===
+        questionId &&
+      openVocabulary?.optionId ===
+        optionId;
+
+    setOpenVocabulary(
+      isAlreadyOpen
+        ? null
+        : {
+            questionId,
+            optionId,
+          },
+    );
+  }
+
   const allQuestionsAnswered =
-    resolvedExercise.questions.length > 0 &&
+    resolvedExercise.questions
+      .length > 0 &&
     resolvedExercise.questions.every(
       (question) =>
         (answers[question.id]?.length ??
@@ -132,6 +184,7 @@ export default function ListeningChoice({
     }
 
     setHasChecked(true);
+    setOpenVocabulary(null);
   }
 
   return (
@@ -140,11 +193,15 @@ export default function ListeningChoice({
       aria-labelledby="listening-choice-title"
     >
       <div
-        className={styles.exerciseHeader}
+        className={
+          styles.exerciseHeader
+        }
       >
         <div>
           <span
-            className={styles.exerciseType}
+            className={
+              styles.exerciseType
+            }
           >
             ESCUCHA
           </span>
@@ -154,7 +211,9 @@ export default function ListeningChoice({
           </h3>
 
           <p>
-            {resolvedExercise.instructions}
+            {
+              resolvedExercise.instructions
+            }
           </p>
         </div>
 
@@ -163,16 +222,22 @@ export default function ListeningChoice({
             styles.totalQuestions
           }
         >
-          {resolvedExercise.questions.length}{' '}
+          {
+            resolvedExercise.questions
+              .length
+          }{' '}
           preguntas
         </span>
       </div>
 
-      <div className={styles.questions}>
+      <div
+        className={styles.questions}
+      >
         {resolvedExercise.questions.map(
           (question) => {
             const selectedOptionIds =
-              answers[question.id] ?? [];
+              answers[question.id] ??
+              [];
 
             const isCorrect =
               hasChecked &&
@@ -182,7 +247,8 @@ export default function ListeningChoice({
               );
 
             const isIncorrect =
-              hasChecked && !isCorrect;
+              hasChecked &&
+              !isCorrect;
 
             return (
               <article
@@ -196,7 +262,8 @@ export default function ListeningChoice({
                     styles.questionLabel
                   }
                 >
-                  Ejercicio {question.id}
+                  Ejercicio{' '}
+                  {question.id}
                 </p>
 
                 <div
@@ -223,7 +290,11 @@ export default function ListeningChoice({
                   />
                 </div>
 
-                <p className={styles.prompt}>
+                <p
+                  className={
+                    styles.prompt
+                  }
+                >
                   {question.prompt}
                 </p>
 
@@ -253,39 +324,136 @@ export default function ListeningChoice({
                         isSelected &&
                         !isCorrectOption;
 
+                      const vocabularyIsOpen =
+                        openVocabulary?.questionId ===
+                          question.id &&
+                        openVocabulary?.optionId ===
+                          option.id;
+
                       return (
-                        <button
-                          key={option.id}
-                          type="button"
-                          className={[
-                            styles.option,
-
-                            isSelected
-                              ? styles.selected
-                              : '',
-
-                            showCorrect
-                              ? styles.correct
-                              : '',
-
-                            showIncorrect
-                              ? styles.incorrect
-                              : '',
-                          ]
-                            .filter(Boolean)
-                            .join(' ')}
-                          onClick={() =>
-                            toggleOption(
-                              question.id,
-                              option.id,
-                            )
+                        <div
+                          key={
+                            option.id
                           }
-                          aria-pressed={
-                            isSelected
+                          className={
+                            styles.optionWrapper
                           }
                         >
-                          {option.text}
-                        </button>
+                          <button
+                            type="button"
+                            className={[
+                              styles.option,
+
+                              isSelected
+                                ? styles.selected
+                                : '',
+
+                              showCorrect
+                                ? styles.correct
+                                : '',
+
+                              showIncorrect
+                                ? styles.incorrect
+                                : '',
+                            ]
+                              .filter(
+                                Boolean,
+                              )
+                              .join(' ')}
+                            onClick={() =>
+                              toggleOption(
+                                question.id,
+                                option.id,
+                              )
+                            }
+                            aria-pressed={
+                              isSelected
+                            }
+                          >
+                            {
+                              option.text
+                            }
+                          </button>
+
+                          {option.translation ? (
+                            <div
+                              className={
+                                styles.vocabularyArea
+                              }
+                            >
+                              <button
+                                type="button"
+                                className={
+                                  styles.vocabularyToggle
+                                }
+                                aria-expanded={
+                                  vocabularyIsOpen
+                                }
+                                onClick={() =>
+                                  toggleVocabulary(
+                                    question.id,
+                                    option.id,
+                                  )
+                                }
+                              >
+                                {vocabularyIsOpen
+                                  ? 'Cerrar'
+                                  : 'Ver palabra'}
+                              </button>
+
+                              {vocabularyIsOpen && (
+                                <div
+                                  className={
+                                    styles.vocabularyBubble
+                                  }
+                                >
+                                  <div
+                                    className={
+                                      styles.vocabularyWord
+                                    }
+                                  >
+                                    <strong>
+                                      {
+                                        option.text
+                                      }
+                                    </strong>
+
+                                    <span>
+                                      {
+                                        option.translation
+                                      }
+                                    </span>
+                                  </div>
+
+                                  <AudioPlayer
+                                    text={
+                                      option.text
+                                    }
+                                    language={
+                                      question.language
+                                    }
+                                    mode="letterName"
+                                  />
+
+                                  <VocabularyButton
+                                    word={
+                                      option.text
+                                    }
+                                    translation={
+                                      option.translation
+                                    }
+                                    lessonKey={
+                                      lessonKey
+                                    }
+                                    exampleSentence={
+                                      question.audioText
+                                    }
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          ) : null}
+                        </div>
                       );
                     },
                   )}
@@ -324,9 +492,9 @@ export default function ListeningChoice({
                     </strong>
 
                     <p>
-                      Revisa las opciones que
-                      seleccionaste e inténtalo
-                      nuevamente.
+                      Revisa las opciones
+                      que seleccionaste e
+                      inténtalo nuevamente.
                     </p>
                   </div>
                 )}
@@ -336,11 +504,17 @@ export default function ListeningChoice({
         )}
       </div>
 
-      <div className={styles.actions}>
+      <div
+        className={styles.actions}
+      >
         <button
           type="button"
-          className={styles.checkButton}
-          disabled={!allQuestionsAnswered}
+          className={
+            styles.checkButton
+          }
+          disabled={
+            !allQuestionsAnswered
+          }
           onClick={checkExercise}
         >
           Corregir ejercicio
@@ -349,11 +523,15 @@ export default function ListeningChoice({
 
       {hasChecked && (
         <div
-          className={styles.resultCard}
+          className={
+            styles.resultCard
+          }
           aria-live="polite"
         >
           <p
-            className={styles.resultLabel}
+            className={
+              styles.resultLabel
+            }
           >
             TU RESULTADO
           </p>
@@ -361,8 +539,8 @@ export default function ListeningChoice({
           <h4>
             {correctAnswers} de{' '}
             {
-              resolvedExercise.questions
-                .length
+              resolvedExercise
+                .questions.length
             }{' '}
             correctas
           </h4>

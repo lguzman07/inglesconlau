@@ -1,7 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import VocabularyButton from '@/components/VocabularyButton/VocabularyButton';
 import { createClient } from '@/lib/supabase/client';
 import styles from './FillInTheBlanks.module.css';
 
@@ -24,7 +29,10 @@ type ProgressRow = {
   total_questions: number;
   has_attempted: boolean;
   is_completed: boolean;
-  completion_source: 'manual' | 'automatic' | null;
+  completion_source:
+    | 'manual'
+    | 'automatic'
+    | null;
 };
 
 type ActiveBubble =
@@ -52,26 +60,46 @@ const SILENT_AUDIO_SRC =
   'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQQAAAAAAA==';
 
 function normalizeAnswer(value: string) {
-  return value.trim().toLocaleLowerCase();
+  return value
+    .trim()
+    .toLocaleLowerCase();
 }
 
-function getSentence(question: FillInTheBlanksQuestion) {
+function getSentence(
+  question: FillInTheBlanksQuestion,
+) {
   return [
-    ...question.before.map((item) => item.word),
+    ...question.before.map(
+      (item) => item.word,
+    ),
     question.answer,
-    ...question.after.map((item) => item.word),
+    ...question.after.map(
+      (item) => item.word,
+    ),
   ].join(' ');
 }
 
-function getAnswersFromDatabase(value: unknown) {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+function getAnswersFromDatabase(
+  value: unknown,
+) {
+  if (
+    !value ||
+    typeof value !== 'object' ||
+    Array.isArray(value)
+  ) {
     return {};
   }
 
-  return Object.entries(value).reduce<Record<number, string>>(
-    (result, [questionId, answer]) => {
+  return Object.entries(
+    value,
+  ).reduce<Record<number, string>>(
+    (
+      result,
+      [questionId, answer],
+    ) => {
       if (typeof answer === 'string') {
-        result[Number(questionId)] = answer;
+        result[Number(questionId)] =
+          answer;
       }
 
       return result;
@@ -89,163 +117,233 @@ export default function FillInTheBlanks({
   englishVariant = 'en',
 }: FillInTheBlanksProps) {
   const supabaseRef =
-    useRef<ReturnType<typeof createClient> | null>(null);
+    useRef<
+      ReturnType<typeof createClient> | null
+    >(null);
 
   if (!supabaseRef.current) {
-    supabaseRef.current = createClient();
+    supabaseRef.current =
+      createClient();
   }
 
-  const supabase = supabaseRef.current;
+  const supabase =
+    supabaseRef.current;
 
-  const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [hasChecked, setHasChecked] = useState(false);
-  const [hasAttempted, setHasAttempted] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [answers, setAnswers] =
+    useState<Record<number, string>>(
+      {},
+    );
 
-  const [completionSource, setCompletionSource] =
-    useState<'manual' | 'automatic' | null>(null);
+  const [
+    hasChecked,
+    setHasChecked,
+  ] = useState(false);
 
-  const [hasPassedAttempt, setHasPassedAttempt] = useState(false);
-  const [isLoadingProgress, setIsLoadingProgress] = useState(true);
-  const [isSavingProgress, setIsSavingProgress] = useState(false);
-  const [progressError, setProgressError] = useState<string | null>(null);
-  const [activeBubble, setActiveBubble] = useState<ActiveBubble>(null);
-  const [playingText, setPlayingText] = useState<string | null>(null);
-  const [audioError, setAudioError] = useState<string | null>(null);
+  const [
+    hasAttempted,
+    setHasAttempted,
+  ] = useState(false);
 
-  const [savedFlashcardWords, setSavedFlashcardWords] = useState<
-    Set<string>
-  >(new Set());
+  const [
+    isCompleted,
+    setIsCompleted,
+  ] = useState(false);
 
-  const [savingFlashcardWord, setSavingFlashcardWord] =
-    useState<string | null>(null);
+  const [
+    completionSource,
+    setCompletionSource,
+  ] = useState<
+    'manual' | 'automatic' | null
+  >(null);
 
-  const [flashcardError, setFlashcardError] =
-    useState<string | null>(null);
+  const [
+    hasPassedAttempt,
+    setHasPassedAttempt,
+  ] = useState(false);
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioUrlRef = useRef<string | null>(null);
-  const audioRequestIdRef = useRef(0);
+  const [
+    isLoadingProgress,
+    setIsLoadingProgress,
+  ] = useState(true);
 
-  const correctAnswers = questions.filter(
-    (question) =>
-      normalizeAnswer(answers[question.id] ?? '') ===
-      normalizeAnswer(question.answer),
-  ).length;
+  const [
+    isSavingProgress,
+    setIsSavingProgress,
+  ] = useState(false);
 
-  const passedCurrentAttempt = hasChecked && correctAnswers >= 7;
+  const [
+    progressError,
+    setProgressError,
+  ] = useState<string | null>(null);
+
+  const [
+    activeBubble,
+    setActiveBubble,
+  ] = useState<ActiveBubble>(null);
+
+  const [
+    playingText,
+    setPlayingText,
+  ] = useState<string | null>(null);
+
+  const [
+    audioError,
+    setAudioError,
+  ] = useState<string | null>(null);
+
+  const audioRef =
+    useRef<HTMLAudioElement | null>(
+      null,
+    );
+
+  const audioUrlRef =
+    useRef<string | null>(null);
+
+  const audioRequestIdRef =
+    useRef(0);
+
+  const correctAnswers =
+    questions.filter(
+      (question) =>
+        normalizeAnswer(
+          answers[question.id] ?? '',
+        ) ===
+        normalizeAnswer(
+          question.answer,
+        ),
+    ).length;
+
+  const passedCurrentAttempt =
+    hasChecked &&
+    correctAnswers >= 7;
 
   const canMarkManually =
-    !hasAttempted && !isCompleted;
+    !hasAttempted &&
+    !isCompleted;
 
   const canRestoreCompletion =
     !isCompleted &&
     hasPassedAttempt &&
     completionSource === null;
 
-  function applyProgress(progress: ProgressRow) {
-    setHasAttempted(progress.has_attempted);
-    setIsCompleted(progress.is_completed);
-    setCompletionSource(progress.completion_source);
+  function applyProgress(
+    progress: ProgressRow,
+  ) {
+    setHasAttempted(
+      progress.has_attempted,
+    );
+
+    setIsCompleted(
+      progress.is_completed,
+    );
+
+    setCompletionSource(
+      progress.completion_source,
+    );
 
     setHasPassedAttempt(
       progress.score !== null &&
-        progress.score * 10 >= progress.total_questions * 7,
+        progress.score * 10 >=
+          progress.total_questions *
+            7,
     );
   }
 
   useEffect(() => {
     async function loadProgress() {
-      const { data, error } = await supabase
-        .from('lesson_progress')
-        .select(
-          'answers, score, total_questions, has_attempted, is_completed, completion_source',
-        )
-        .eq('lesson_key', lessonKey)
-        .maybeSingle();
+      const { data, error } =
+        await supabase
+          .from('lesson_progress')
+          .select(
+            'answers, score, total_questions, has_attempted, is_completed, completion_source',
+          )
+          .eq(
+            'lesson_key',
+            lessonKey,
+          )
+          .maybeSingle();
 
       if (error) {
-        setProgressError(error.message);
-        setIsLoadingProgress(false);
+        setProgressError(
+          error.message,
+        );
+
+        setIsLoadingProgress(
+          false,
+        );
+
         return;
       }
 
       if (data) {
-        const progress = data as ProgressRow;
+        const progress =
+          data as ProgressRow;
 
         setAnswers(
-          getAnswersFromDatabase(progress.answers),
+          getAnswersFromDatabase(
+            progress.answers,
+          ),
         );
 
-        setHasChecked(progress.has_attempted);
+        setHasChecked(
+          progress.has_attempted,
+        );
 
         applyProgress(progress);
       }
 
-      setIsLoadingProgress(false);
+      setIsLoadingProgress(
+        false,
+      );
     }
 
     void loadProgress();
   }, [lessonKey, supabase]);
 
   useEffect(() => {
-    async function loadSavedFlashcards() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from('user_flashcards')
-        .select('word')
-        .eq('user_id', user.id);
-
-      if (error) {
-        setFlashcardError('No pudimos cargar tus flashcards.');
-        return;
-      }
-
-      setSavedFlashcardWords(
-        new Set(
-          (data ?? []).map((item) =>
-            String(item.word).trim().toLocaleLowerCase(),
-          ),
-        ),
-      );
-    }
-
-    void loadSavedFlashcards();
-  }, [supabase]);
-
-  useEffect(() => {
-    function closeBubble(event: MouseEvent) {
-      const target = event.target;
+    function closeBubble(
+      event: MouseEvent,
+    ) {
+      const target =
+        event.target;
 
       if (
         target instanceof Element &&
-        !target.closest(`.${styles.translationAnchor}`)
+        !target.closest(
+          `.${styles.translationAnchor}`,
+        )
       ) {
         setActiveBubble(null);
       }
     }
 
-    document.addEventListener('mousedown', closeBubble);
+    document.addEventListener(
+      'mousedown',
+      closeBubble,
+    );
 
     return () =>
-      document.removeEventListener('mousedown', closeBubble);
+      document.removeEventListener(
+        'mousedown',
+        closeBubble,
+      );
   }, []);
 
   useEffect(() => {
     return () => {
-      audioRequestIdRef.current += 1;
+      audioRequestIdRef.current +=
+        1;
 
       if (audioRef.current) {
         audioRef.current.pause();
       }
 
-      if (audioUrlRef.current) {
-        URL.revokeObjectURL(audioUrlRef.current);
+      if (
+        audioUrlRef.current
+      ) {
+        URL.revokeObjectURL(
+          audioUrlRef.current,
+        );
       }
     };
   }, []);
@@ -254,10 +352,12 @@ export default function FillInTheBlanks({
     questionId: number,
     value: string,
   ) {
-    setAnswers((currentAnswers) => ({
-      ...currentAnswers,
-      [questionId]: value,
-    }));
+    setAnswers(
+      (currentAnswers) => ({
+        ...currentAnswers,
+        [questionId]: value,
+      }),
+    );
 
     setHasChecked(false);
   }
@@ -268,20 +368,28 @@ export default function FillInTheBlanks({
 
     const answersForDatabase =
       Object.fromEntries(
-        questions.map((question) => [
-          question.id,
-          answers[question.id] ?? '',
-        ]),
+        questions.map(
+          (question) => [
+            question.id,
+            answers[
+              question.id
+            ] ?? '',
+          ],
+        ),
       );
 
     const { data, error } =
       await supabase.rpc(
         'save_lesson_attempt',
         {
-          p_lesson_key: lessonKey,
-          p_answers: answersForDatabase,
-          p_score: correctAnswers,
-          p_total_questions: questions.length,
+          p_lesson_key:
+            lessonKey,
+          p_answers:
+            answersForDatabase,
+          p_score:
+            correctAnswers,
+          p_total_questions:
+            questions.length,
         },
       );
 
@@ -291,14 +399,20 @@ export default function FillInTheBlanks({
           'No se pudo guardar tu resultado. Inténtalo de nuevo.',
       );
 
-      setIsSavingProgress(false);
+      setIsSavingProgress(
+        false,
+      );
+
       return;
     }
 
-    applyProgress(data as ProgressRow);
+    applyProgress(
+      data as ProgressRow,
+    );
 
     setHasChecked(true);
     setActiveBubble(null);
+
     setIsSavingProgress(false);
   }
 
@@ -318,8 +432,10 @@ export default function FillInTheBlanks({
       await supabase.rpc(
         'set_lesson_completion',
         {
-          p_lesson_key: lessonKey,
-          p_completed: completed,
+          p_lesson_key:
+            lessonKey,
+          p_completed:
+            completed,
         },
       );
 
@@ -329,36 +445,51 @@ export default function FillInTheBlanks({
           'No se pudo actualizar el progreso. Inténtalo de nuevo.',
       );
 
-      setIsSavingProgress(false);
+      setIsSavingProgress(
+        false,
+      );
+
       return;
     }
 
-    applyProgress(data as ProgressRow);
+    applyProgress(
+      data as ProgressRow,
+    );
 
     setIsSavingProgress(false);
   }
 
   function stopAudio() {
-    audioRequestIdRef.current += 1;
+    audioRequestIdRef.current +=
+      1;
 
     if (audioRef.current) {
       audioRef.current.pause();
 
-      audioRef.current.removeAttribute('src');
+      audioRef.current.removeAttribute(
+        'src',
+      );
+
       audioRef.current.load();
 
       audioRef.current = null;
     }
 
     if (audioUrlRef.current) {
-      URL.revokeObjectURL(audioUrlRef.current);
-      audioUrlRef.current = null;
+      URL.revokeObjectURL(
+        audioUrlRef.current,
+      );
+
+      audioUrlRef.current =
+        null;
     }
 
     setPlayingText(null);
   }
 
-  async function playAudio(text: string) {
+  async function playAudio(
+    text: string,
+  ) {
     if (playingText === text) {
       stopAudio();
       return;
@@ -369,22 +500,31 @@ export default function FillInTheBlanks({
     setAudioError(null);
 
     const requestId =
-      audioRequestIdRef.current + 1;
+      audioRequestIdRef.current +
+      1;
 
-    audioRequestIdRef.current = requestId;
+    audioRequestIdRef.current =
+      requestId;
 
     setPlayingText(text);
 
-    const audio = new Audio();
+    const audio =
+      new Audio();
 
-    audio.setAttribute('playsinline', '');
+    audio.setAttribute(
+      'playsinline',
+      '',
+    );
+
     audio.preload = 'auto';
 
     audioRef.current = audio;
 
-    audio.src = SILENT_AUDIO_SRC;
+    audio.src =
+      SILENT_AUDIO_SRC;
 
-    const unlockPromise = audio.play();
+    const unlockPromise =
+      audio.play();
 
     if (unlockPromise) {
       unlockPromise
@@ -403,21 +543,29 @@ export default function FillInTheBlanks({
     }
 
     try {
-      const response = await fetch('/api/tts', {
-        method: 'POST',
+      const response =
+        await fetch(
+          '/api/tts',
+          {
+            method: 'POST',
 
-        headers: {
-          'Content-Type': 'application/json',
-        },
+            headers: {
+              'Content-Type':
+                'application/json',
+            },
 
-        body: JSON.stringify({
-          text,
-          language: englishVariant,
-        }),
-      });
+            body:
+              JSON.stringify({
+                text,
+                language:
+                  englishVariant,
+              }),
+          },
+        );
 
       if (!response.ok) {
-        const errorText = await response.text();
+        const errorText =
+          await response.text();
 
         setPlayingText(null);
 
@@ -428,19 +576,24 @@ export default function FillInTheBlanks({
         return;
       }
 
-      const audioBlob = await response.blob();
+      const audioBlob =
+        await response.blob();
 
       if (
         !audioBlob.size ||
-        requestId !== audioRequestIdRef.current
+        requestId !==
+          audioRequestIdRef.current
       ) {
         return;
       }
 
       const audioUrl =
-        URL.createObjectURL(audioBlob);
+        URL.createObjectURL(
+          audioBlob,
+        );
 
-      audioUrlRef.current = audioUrl;
+      audioUrlRef.current =
+        audioUrl;
 
       audio.pause();
 
@@ -450,23 +603,29 @@ export default function FillInTheBlanks({
 
       audio.onended = () => {
         if (
-          requestId === audioRequestIdRef.current
+          requestId ===
+          audioRequestIdRef.current
         ) {
           setPlayingText(null);
         }
 
         if (
-          audioUrlRef.current === audioUrl
+          audioUrlRef.current ===
+          audioUrl
         ) {
-          URL.revokeObjectURL(audioUrl);
+          URL.revokeObjectURL(
+            audioUrl,
+          );
 
-          audioUrlRef.current = null;
+          audioUrlRef.current =
+            null;
         }
       };
 
       audio.onerror = () => {
         if (
-          requestId === audioRequestIdRef.current
+          requestId ===
+          audioRequestIdRef.current
         ) {
           setPlayingText(null);
 
@@ -476,11 +635,15 @@ export default function FillInTheBlanks({
         }
 
         if (
-          audioUrlRef.current === audioUrl
+          audioUrlRef.current ===
+          audioUrl
         ) {
-          URL.revokeObjectURL(audioUrl);
+          URL.revokeObjectURL(
+            audioUrl,
+          );
 
-          audioUrlRef.current = null;
+          audioUrlRef.current =
+            null;
         }
       };
 
@@ -492,7 +655,8 @@ export default function FillInTheBlanks({
           : 'Error desconocido';
 
       if (
-        requestId === audioRequestIdRef.current
+        requestId ===
+        audioRequestIdRef.current
       ) {
         setPlayingText(null);
 
@@ -503,98 +667,43 @@ export default function FillInTheBlanks({
     }
   }
 
-  async function addToFlashcards(
-    item: TranslatableWord,
-    questionId: number,
-  ) {
-    const normalizedWord = item.word
-      .trim()
-      .toLocaleLowerCase();
-
-    if (
-      savedFlashcardWords.has(normalizedWord) ||
-      savingFlashcardWord === normalizedWord
-    ) {
-      return;
-    }
-
-    setFlashcardError(null);
-    setSavingFlashcardWord(normalizedWord);
-
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      setFlashcardError(
-        'Tu sesión terminó. Inicia sesión nuevamente.',
-      );
-      setSavingFlashcardWord(null);
-      return;
-    }
-
-    const question = questions.find(
-      (itemQuestion) => itemQuestion.id === questionId,
-    );
-
-    const { error } = await supabase
-      .from('user_flashcards')
-      .insert({
-        user_id: user.id,
-        word: item.word.trim(),
-        translation: item.translation.trim(),
-        example_sentence: question
-          ? getSentence(question)
-          : null,
-        lesson_key: lessonKey,
-      });
-
-    if (error && error.code !== '23505') {
-      setFlashcardError(
-        'No pudimos añadir esta palabra a tus flashcards.',
-      );
-      setSavingFlashcardWord(null);
-      return;
-    }
-
-    setSavedFlashcardWords((current) => {
-      const next = new Set(current);
-      next.add(normalizedWord);
-      return next;
-    });
-
-    setSavingFlashcardWord(null);
-  }
-
   function renderWord(
     item: TranslatableWord,
     questionId: number,
     wordIndex: number,
   ) {
     const isOpen =
-      activeBubble?.type === 'word' &&
-      activeBubble.questionId === questionId &&
-      activeBubble.wordIndex === wordIndex;
+      activeBubble?.type ===
+        'word' &&
+      activeBubble.questionId ===
+        questionId &&
+      activeBubble.wordIndex ===
+        wordIndex;
 
-    const normalizedWord = item.word
-      .trim()
-      .toLocaleLowerCase();
+    const question =
+      questions.find(
+        (itemQuestion) =>
+          itemQuestion.id ===
+          questionId,
+      );
 
-    const isSaved =
-      savedFlashcardWords.has(normalizedWord);
-
-    const isSaving =
-      savingFlashcardWord === normalizedWord;
+    const exampleSentence =
+      question
+        ? getSentence(question)
+        : null;
 
     return (
       <span
-        className={styles.translationAnchor}
+        className={
+          styles.translationAnchor
+        }
         key={`${questionId}-${wordIndex}-${item.word}`}
       >
         <button
           type="button"
-          className={styles.wordButton}
+          className={
+            styles.wordButton
+          }
           tabIndex={-1}
           onClick={() =>
             setActiveBubble(
@@ -612,40 +721,50 @@ export default function FillInTheBlanks({
         </button>
 
         {isOpen && (
-          <span className={styles.translationBubble}>
-            <span>{item.translation}</span>
+          <span
+            className={
+              styles.translationBubble
+            }
+          >
+            <span>
+              {item.translation}
+            </span>
 
-            <div className={styles.wordBubbleActions}>
+            <div
+              className={
+                styles.wordBubbleActions
+              }
+            >
               <button
                 type="button"
-                className={styles.audioButton}
+                className={
+                  styles.audioButton
+                }
                 tabIndex={-1}
                 onClick={() =>
-                  void playAudio(item.word)
+                  void playAudio(
+                    item.word,
+                  )
                 }
               >
-                {playingText === item.word
+                {playingText ===
+                item.word
                   ? 'Detener audio'
                   : '🔊 Escuchar'}
               </button>
 
-              <button
-                type="button"
-                className={`${styles.flashcardButton} ${
-                  isSaved ? styles.flashcardButtonSaved : ''
-                }`}
-                tabIndex={-1}
-                disabled={isSaved || isSaving}
-                onClick={() =>
-                  void addToFlashcards(item, questionId)
+              <VocabularyButton
+                word={item.word}
+                translation={
+                  item.translation
                 }
-              >
-                {isSaved
-                  ? '✓ Added'
-                  : isSaving
-                    ? 'Adding...'
-                    : '+ Add to flashcards'}
-              </button>
+                lessonKey={
+                  lessonKey
+                }
+                exampleSentence={
+                  exampleSentence
+                }
+              />
             </div>
           </span>
         )}
@@ -656,10 +775,13 @@ export default function FillInTheBlanks({
   if (isLoadingProgress) {
     return (
       <section
-        className={styles.exercise}
+        className={
+          styles.exercise
+        }
         aria-live="polite"
       >
-        Cargando tu último intento...
+        Cargando tu último
+        intento...
       </section>
     );
   }
@@ -667,228 +789,299 @@ export default function FillInTheBlanks({
   return (
     <>
       <section
-        className={styles.exercise}
+        className={
+          styles.exercise
+        }
         aria-labelledby="exercise-title"
       >
-        <div className={styles.exerciseHeader}>
+        <div
+          className={
+            styles.exerciseHeader
+          }
+        >
           <div>
-            <span className={styles.exerciseType}>
+            <span
+              className={
+                styles.exerciseType
+              }
+            >
               FILL IN THE BLANKS
             </span>
 
-            <h3 id="exercise-title">{title}</h3>
+            <h3 id="exercise-title">
+              {title}
+            </h3>
 
             <p>{instructions}</p>
           </div>
 
-          <span className={styles.totalQuestions}>
-            {questions.length} preguntas
+          <span
+            className={
+              styles.totalQuestions
+            }
+          >
+            {questions.length}{' '}
+            preguntas
           </span>
         </div>
 
         {audioError && (
           <p
-            className={styles.incorrectFeedback}
+            className={
+              styles.incorrectFeedback
+            }
             role="alert"
           >
             {audioError}
           </p>
         )}
 
-        {flashcardError && (
-          <p
-            className={styles.incorrectFeedback}
-            role="alert"
-          >
-            {flashcardError}
-          </p>
-        )}
-
         {progressError && (
           <p
-            className={styles.incorrectFeedback}
+            className={
+              styles.incorrectFeedback
+            }
             role="alert"
           >
             {progressError}
           </p>
         )}
 
-        <div className={styles.questions}>
-          {questions.map((question) => {
-            const answerIsCorrect =
-              normalizeAnswer(
-                answers[question.id] ?? '',
-              ) ===
-              normalizeAnswer(question.answer);
+        <div
+          className={
+            styles.questions
+          }
+        >
+          {questions.map(
+            (question) => {
+              const answerIsCorrect =
+                normalizeAnswer(
+                  answers[
+                    question.id
+                  ] ?? '',
+                ) ===
+                normalizeAnswer(
+                  question.answer,
+                );
 
-            const inputState =
-              hasChecked
-                ? answerIsCorrect
-                  ? styles.correctInput
-                  : styles.incorrectInput
-                : '';
+              const inputState =
+                hasChecked
+                  ? answerIsCorrect
+                    ? styles.correctInput
+                    : styles.incorrectInput
+                  : '';
 
-            const sentence =
-              getSentence(question);
+              const sentence =
+                getSentence(
+                  question,
+                );
 
-            const sentenceBubbleOpen =
-              activeBubble?.type === 'sentence' &&
-              activeBubble.questionId ===
-                question.id;
+              const sentenceBubbleOpen =
+                activeBubble?.type ===
+                  'sentence' &&
+                activeBubble.questionId ===
+                  question.id;
 
-            return (
-              <article
-                className={styles.questionCard}
-                key={question.id}
-              >
-                <span
-                  className={styles.questionNumber}
+              return (
+                <article
+                  className={
+                    styles.questionCard
+                  }
+                  key={
+                    question.id
+                  }
                 >
-                  {question.id}
-                </span>
-
-                <div
-                  className={styles.questionContent}
-                >
-                  <div
-                    className={styles.sentenceRow}
+                  <span
+                    className={
+                      styles.questionNumber
+                    }
                   >
-                    <p
-                      className={styles.sentence}
-                    >
-                      {question.before.map(
-                        (item, index) =>
-                          renderWord(
-                            item,
-                            question.id,
-                            index,
-                          ),
-                      )}
+                    {question.id}
+                  </span>
 
-                      <input
-                        aria-label={`Respuesta para la pregunta ${question.id}`}
-                        autoComplete="off"
-                        className={`${styles.answerInput} ${inputState}`}
-                        disabled={
-                          hasChecked ||
-                          isSavingProgress
-                        }
-                        maxLength={40}
-                        onChange={(event) =>
-                          handleAnswerChange(
-                            question.id,
-                            event.target.value,
-                          )
-                        }
-                        placeholder="..."
-                        spellCheck={false}
-                        type="text"
-                        value={
-                          answers[question.id] ?? ''
-                        }
-                      />
-
-                      {question.after.map(
-                        (item, index) =>
-                          renderWord(
-                            item,
-                            question.id,
-                            question.before.length +
-                              index,
-                          ),
-                      )}
-                    </p>
-
-                    <span
+                  <div
+                    className={
+                      styles.questionContent
+                    }
+                  >
+                    <div
                       className={
-                        styles.translationAnchor
+                        styles.sentenceRow
                       }
                     >
-                      <button
-                        type="button"
+                      <p
                         className={
-                          styles.translateSentenceButton
-                        }
-                        tabIndex={-1}
-                        onClick={() =>
-                          setActiveBubble(
-                            sentenceBubbleOpen
-                              ? null
-                              : {
-                                  type: 'sentence',
-                                  questionId:
-                                    question.id,
-                                },
-                          )
+                          styles.sentence
                         }
                       >
-                        Traducir oración
-                      </button>
+                        {question.before.map(
+                          (
+                            item,
+                            index,
+                          ) =>
+                            renderWord(
+                              item,
+                              question.id,
+                              index,
+                            ),
+                        )}
 
-                      {sentenceBubbleOpen && (
-                        <span
-                          className={`${styles.translationBubble} ${styles.sentenceBubble}`}
+                        <input
+                          aria-label={`Respuesta para la pregunta ${question.id}`}
+                          autoComplete="off"
+                          className={`${styles.answerInput} ${inputState}`}
+                          disabled={
+                            hasChecked ||
+                            isSavingProgress
+                          }
+                          maxLength={
+                            40
+                          }
+                          onChange={(
+                            event,
+                          ) =>
+                            handleAnswerChange(
+                              question.id,
+                              event
+                                .target
+                                .value,
+                            )
+                          }
+                          placeholder="..."
+                          spellCheck={
+                            false
+                          }
+                          type="text"
+                          value={
+                            answers[
+                              question.id
+                            ] ?? ''
+                          }
+                        />
+
+                        {question.after.map(
+                          (
+                            item,
+                            index,
+                          ) =>
+                            renderWord(
+                              item,
+                              question.id,
+                              question
+                                .before
+                                .length +
+                                index,
+                            ),
+                        )}
+                      </p>
+
+                      <span
+                        className={
+                          styles.translationAnchor
+                        }
+                      >
+                        <button
+                          type="button"
+                          className={
+                            styles.translateSentenceButton
+                          }
+                          tabIndex={
+                            -1
+                          }
+                          onClick={() =>
+                            setActiveBubble(
+                              sentenceBubbleOpen
+                                ? null
+                                : {
+                                    type: 'sentence',
+                                    questionId:
+                                      question.id,
+                                  },
+                            )
+                          }
                         >
-                          <span>
-                            {
-                              question.sentenceTranslation
-                            }
-                          </span>
+                          Traducir
+                          oración
+                        </button>
 
-                          <button
-                            type="button"
-                            className={
-                              styles.audioButton
-                            }
-                            tabIndex={-1}
-                            onClick={() =>
-                              void playAudio(
-                                sentence,
-                              )
-                            }
+                        {sentenceBubbleOpen && (
+                          <span
+                            className={`${styles.translationBubble} ${styles.sentenceBubble}`}
                           >
-                            {playingText ===
-                            sentence
-                              ? 'Detener audio'
-                              : '🔊 Escuchar'}
-                          </button>
-                        </span>
-                      )}
-                    </span>
-                  </div>
+                            <span>
+                              {
+                                question.sentenceTranslation
+                              }
+                            </span>
 
-                  {hasChecked && (
-                    <p
-                      className={
-                        answerIsCorrect
-                          ? styles.correctFeedback
-                          : styles.incorrectFeedback
-                      }
-                    >
-                      {answerIsCorrect ? (
-                        <>✓ Correcto</>
-                      ) : (
-                        <>
-                          La respuesta es{' '}
-                          <strong>
-                            {question.answer}
-                          </strong>
-                          .
-                        </>
-                      )}
-                    </p>
-                  )}
-                </div>
-              </article>
-            );
-          })}
+                            <button
+                              type="button"
+                              className={
+                                styles.audioButton
+                              }
+                              tabIndex={
+                                -1
+                              }
+                              onClick={() =>
+                                void playAudio(
+                                  sentence,
+                                )
+                              }
+                            >
+                              {playingText ===
+                              sentence
+                                ? 'Detener audio'
+                                : '🔊 Escuchar'}
+                            </button>
+                          </span>
+                        )}
+                      </span>
+                    </div>
+
+                    {hasChecked && (
+                      <p
+                        className={
+                          answerIsCorrect
+                            ? styles.correctFeedback
+                            : styles.incorrectFeedback
+                        }
+                      >
+                        {answerIsCorrect ? (
+                          <>
+                            ✓
+                            Correcto
+                          </>
+                        ) : (
+                          <>
+                            La
+                            respuesta
+                            es{' '}
+                            <strong>
+                              {
+                                question.answer
+                              }
+                            </strong>
+                            .
+                          </>
+                        )}
+                      </p>
+                    )}
+                  </div>
+                </article>
+              );
+            },
+          )}
         </div>
 
         {!hasChecked && (
           <button
             type="button"
-            className={styles.checkButton}
-            disabled={isSavingProgress}
+            className={
+              styles.checkButton
+            }
+            disabled={
+              isSavingProgress
+            }
             onClick={() =>
               void handleCheckAnswers()
             }
@@ -901,17 +1094,25 @@ export default function FillInTheBlanks({
 
         {hasChecked && (
           <div
-            className={styles.resultCard}
+            className={
+              styles.resultCard
+            }
             aria-live="polite"
           >
             <div>
-              <p className={styles.resultLabel}>
+              <p
+                className={
+                  styles.resultLabel
+                }
+              >
                 TU RESULTADO
               </p>
 
               <h4>
-                {correctAnswers} de{' '}
-                {questions.length} correctas
+                {correctAnswers}{' '}
+                de{' '}
+                {questions.length}{' '}
+                correctas
               </h4>
 
               <p>
@@ -921,23 +1122,39 @@ export default function FillInTheBlanks({
               </p>
             </div>
 
-            <div className={styles.resultActions}>
+            <div
+              className={
+                styles.resultActions
+              }
+            >
               <button
                 type="button"
-                className={styles.retryButton}
-                disabled={isSavingProgress}
-                onClick={handleRetry}
+                className={
+                  styles.retryButton
+                }
+                disabled={
+                  isSavingProgress
+                }
+                onClick={
+                  handleRetry
+                }
               >
-                Repetir ejercicio
+                Repetir
+                ejercicio
               </button>
 
               {passedCurrentAttempt &&
                 nextLessonHref && (
                   <Link
-                    href={nextLessonHref}
-                    className={styles.nextButton}
+                    href={
+                      nextLessonHref
+                    }
+                    className={
+                      styles.nextButton
+                    }
                   >
-                    Siguiente lección →
+                    Siguiente
+                    lección →
                   </Link>
                 )}
             </div>
@@ -946,110 +1163,166 @@ export default function FillInTheBlanks({
       </section>
 
       <section
-        className={styles.resultCard}
+        className={
+          styles.resultCard
+        }
         aria-live="polite"
       >
         <div>
-          <p className={styles.resultLabel}>
+          <p
+            className={
+              styles.resultLabel
+            }
+          >
             TU PROGRESO
           </p>
 
           {isCompleted &&
-          completionSource === 'automatic' ? (
+          completionSource ===
+            'automatic' ? (
             <>
               <h4>
-                ¡La lección se completó automáticamente!
+                ¡La lección se
+                completó
+                automáticamente!
               </h4>
 
               <p>
-                Aprobaste el ejercicio con 7 de 10 o
-                más respuestas correctas.
+                Aprobaste el
+                ejercicio con 7 de
+                10 o más respuestas
+                correctas.
               </p>
             </>
           ) : isCompleted &&
-            completionSource === 'manual' ? (
+            completionSource ===
+              'manual' ? (
             <>
               <h4>
-                Marcaste esta lección como completada.
+                Marcaste esta
+                lección como
+                completada.
               </h4>
 
               <p>
-                La marcaste sin hacer el ejercicio
-                porque ya dominabas el tema.
+                La marcaste sin
+                hacer el ejercicio
+                porque ya dominabas
+                el tema.
               </p>
             </>
           ) : canRestoreCompletion ? (
             <>
               <h4>
-                Desmarcaste esta lección como completada.
+                Desmarcaste esta
+                lección como
+                completada.
               </h4>
 
               <p>
-                Ya habías aprobado el ejercicio y puedes
-                volver a marcarla.
+                Ya habías aprobado
+                el ejercicio y
+                puedes volver a
+                marcarla.
               </p>
             </>
           ) : hasAttempted ? (
             <>
               <h4>
-                Esta lección todavía no está completada.
+                Esta lección
+                todavía no está
+                completada.
               </h4>
 
               <p>
-                Ya hiciste un intento. Para completarla
-                necesitas obtener al menos 7 de 10
-                respuestas correctas.
+                Ya hiciste un
+                intento. Para
+                completarla
+                necesitas obtener
+                al menos 7 de 10
+                respuestas
+                correctas.
               </p>
             </>
           ) : (
             <>
-              <h4>¿Ya dominas este tema?</h4>
+              <h4>
+                ¿Ya dominas este
+                tema?
+              </h4>
 
               <p>
-                Puedes marcar esta lección como completada
-                sin hacer el ejercicio.
+                Puedes marcar esta
+                lección como
+                completada sin
+                hacer el ejercicio.
               </p>
             </>
           )}
         </div>
 
-        <div className={styles.resultActions}>
+        <div
+          className={
+            styles.resultActions
+          }
+        >
           {isCompleted && (
             <button
               type="button"
-              className={styles.retryButton}
-              disabled={isSavingProgress}
+              className={
+                styles.retryButton
+              }
+              disabled={
+                isSavingProgress
+              }
               onClick={() =>
-                void setCompletion(false)
+                void setCompletion(
+                  false,
+                )
               }
             >
-              Desmarcar como completada
+              Desmarcar como
+              completada
             </button>
           )}
 
           {canMarkManually && (
             <button
               type="button"
-              className={styles.nextButton}
-              disabled={isSavingProgress}
+              className={
+                styles.nextButton
+              }
+              disabled={
+                isSavingProgress
+              }
               onClick={() =>
-                void setCompletion(true)
+                void setCompletion(
+                  true,
+                )
               }
             >
-              Marcar como completada
+              Marcar como
+              completada
             </button>
           )}
 
           {canRestoreCompletion && (
             <button
               type="button"
-              className={styles.nextButton}
-              disabled={isSavingProgress}
+              className={
+                styles.nextButton
+              }
+              disabled={
+                isSavingProgress
+              }
               onClick={() =>
-                void setCompletion(true)
+                void setCompletion(
+                  true,
+                )
               }
             >
-              Volver a marcar como completada
+              Volver a marcar como
+              completada
             </button>
           )}
         </div>

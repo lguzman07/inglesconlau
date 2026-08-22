@@ -332,14 +332,12 @@ export default async function LeccionPage({
                   );
                 }
 
-                if (
-                  exercise.type ===
-                  'montessori'
-                ) {
+                if (exercise.type === 'montessori') {
                   return (
                     <MontessoriExercise
                       key={exerciseKey}
                       exercise={exercise}
+                      lessonKey={lessonKey}
                     />
                   );
                 }
@@ -352,6 +350,7 @@ export default async function LeccionPage({
                     <ListeningChoice
                       key={exerciseKey}
                       exercise={exercise}
+                      lessonKey={lessonKey}
                     />
                   );
                 }

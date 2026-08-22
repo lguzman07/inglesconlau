@@ -1,12 +1,23 @@
 'use client';
 
-import type { CSSProperties, DragEvent } from 'react';
-import { useMemo, useState } from 'react';
+import type {
+  CSSProperties,
+  DragEvent,
+} from 'react';
+import {
+  useMemo,
+  useState,
+} from 'react';
+
+import AudioPlayer from '@/components/AudioPlayer/AudioPlayer';
+import VocabularyButton from '@/components/VocabularyButton/VocabularyButton';
+
 import type {
   MontessoriExercise as MontessoriExerciseContent,
   MontessoriQuestion,
   MontessoriSymbol,
 } from '@/content/lecciones/types';
+
 import styles from './MontessoriExercise.module.css';
 
 type MontessoriExerciseProps = {
@@ -14,9 +25,13 @@ type MontessoriExerciseProps = {
   title?: string;
   instructions?: string;
   questions?: MontessoriQuestion[];
+  lessonKey: string;
 };
 
-type Answers = Record<number, Record<string, string>>;
+type Answers = Record<
+  number,
+  Record<string, string>
+>;
 
 type SelectedSymbol = {
   questionId: number;
@@ -81,7 +96,8 @@ const slotStyle: CSSProperties = {
 
 const activeSlotStyle: CSSProperties = {
   borderColor: 'var(--primary)',
-  boxShadow: '0 0 0 4px var(--primary-light)',
+  boxShadow:
+    '0 0 0 4px var(--primary-light)',
 };
 
 const correctSlotStyle: CSSProperties = {
@@ -136,7 +152,8 @@ const symbolOptionStyle: CSSProperties = {
 
 const selectedSymbolStyle: CSSProperties = {
   borderColor: 'var(--primary)',
-  boxShadow: '0 0 0 4px var(--primary-light)',
+  boxShadow:
+    '0 0 0 4px var(--primary-light)',
 };
 
 const actionsStyle: CSSProperties = {
@@ -168,7 +185,10 @@ const disabledButtonStyle: CSSProperties = {
   opacity: 0.55,
 };
 
-const SYMBOL_COLORS: Record<string, string> = {
+const SYMBOL_COLORS: Record<
+  string,
+  string
+> = {
   red: '#d74b4b',
   black: '#30363a',
   blue: '#4169a8',
@@ -184,9 +204,12 @@ function getWordId(
   word: MontessoriQuestion['words'][number],
   index: number,
 ) {
-  return 'id' in word && typeof word.id === 'string'
-    ? word.id
-    : String(index);
+  return (
+    'id' in word &&
+    typeof word.id === 'string'
+      ? word.id
+      : String(index)
+  );
 }
 
 function getCorrectPlacement(
@@ -194,7 +217,8 @@ function getCorrectPlacement(
   wordId: string,
   wordIndex: number,
 ) {
-  const placements = question.correctPlacements as unknown;
+  const placements =
+    question.correctPlacements as unknown;
 
   if (Array.isArray(placements)) {
     const placement = placements.find(
@@ -209,24 +233,36 @@ function getCorrectPlacement(
       placement &&
       typeof placement === 'object' &&
       'symbolId' in placement &&
-      typeof placement.symbolId === 'string'
+      typeof placement.symbolId ===
+        'string'
     ) {
       return placement.symbolId;
     }
 
-    const indexedPlacement = placements[wordIndex];
+    const indexedPlacement =
+      placements[wordIndex];
 
-    if (typeof indexedPlacement === 'string') {
+    if (
+      typeof indexedPlacement ===
+      'string'
+    ) {
       return indexedPlacement;
     }
 
     return undefined;
   }
 
-  if (placements && typeof placements === 'object') {
-    const placementMap = placements as Record<string, string>;
+  if (
+    placements &&
+    typeof placements === 'object'
+  ) {
+    const placementMap =
+      placements as Record<string, string>;
 
-    return placementMap[wordId] ?? placementMap[String(wordIndex)];
+    return (
+      placementMap[wordId] ??
+      placementMap[String(wordIndex)]
+    );
   }
 
   return undefined;
@@ -234,47 +270,87 @@ function getCorrectPlacement(
 
 function questionIsComplete(
   question: MontessoriQuestion,
-  answers: Record<string, string> | undefined,
+  answers:
+    | Record<string, string>
+    | undefined,
 ) {
-  return question.words.every((word, index) => {
-    const wordId = getWordId(word, index);
-    return Boolean(answers?.[wordId]);
-  });
+  return question.words.every(
+    (word, index) => {
+      const wordId = getWordId(
+        word,
+        index,
+      );
+
+      return Boolean(
+        answers?.[wordId],
+      );
+    },
+  );
 }
 
 function questionIsCorrect(
   question: MontessoriQuestion,
-  answers: Record<string, string> | undefined,
+  answers:
+    | Record<string, string>
+    | undefined,
 ) {
-  return question.words.every((word, index) => {
-    const wordId = getWordId(word, index);
+  return question.words.every(
+    (word, index) => {
+      const wordId = getWordId(
+        word,
+        index,
+      );
 
-    return (
-      answers?.[wordId] ===
-      getCorrectPlacement(question, wordId, index)
-    );
-  });
+      return (
+        answers?.[wordId] ===
+        getCorrectPlacement(
+          question,
+          wordId,
+          index,
+        )
+      );
+    },
+  );
 }
 
 function getSymbol(
   question: MontessoriQuestion,
   symbolId: string | undefined,
 ) {
-  if (!symbolId) return null;
+  if (!symbolId) {
+    return null;
+  }
 
   return (
-    question.symbols.find((symbol) => symbol.id === symbolId) ?? null
+    question.symbols.find(
+      (symbol) =>
+        symbol.id === symbolId,
+    ) ?? null
   );
 }
 
-function getSymbolLabel(symbol: MontessoriSymbol) {
-  if (symbol.label) return symbol.label;
+function getSymbolLabel(
+  symbol: MontessoriSymbol,
+) {
+  if (symbol.label) {
+    return symbol.label;
+  }
 
-  return symbol.id.charAt(0).toUpperCase() + symbol.id.slice(1);
+  return (
+    symbol.id
+      .charAt(0)
+      .toUpperCase() +
+    symbol.id.slice(1)
+  );
 }
 
-function getSymbolTooltip(symbol: MontessoriSymbol) {
-  const label = getSymbolLabel(symbol).toLowerCase();
+function getSymbolTooltip(
+  symbol: MontessoriSymbol,
+) {
+  const label =
+    getSymbolLabel(
+      symbol,
+    ).toLowerCase();
 
   if (label === 'noun') {
     return 'Sustantivo (nombre)';
@@ -320,12 +396,19 @@ function SymbolShape({
 }: {
   symbol: MontessoriSymbol;
 }) {
-  const shape = String(symbol.shape);
-  const color =
-    SYMBOL_COLORS[symbol.color] ?? '#30363a';
+  const shape = String(
+    symbol.shape,
+  );
 
-  if (shape.includes('triangle')) {
-    const isSmall = shape.includes('small');
+  const color =
+    SYMBOL_COLORS[symbol.color] ??
+    '#30363a';
+
+  if (
+    shape.includes('triangle')
+  ) {
+    const isSmall =
+      shape.includes('small');
 
     return (
       <span
@@ -333,9 +416,18 @@ function SymbolShape({
         style={{
           width: 0,
           height: 0,
-          borderLeft: `${isSmall ? 13 : 19}px solid transparent`,
-          borderRight: `${isSmall ? 13 : 19}px solid transparent`,
-          borderBottom: `${isSmall ? 23 : 34}px solid ${color}`,
+
+          borderLeft: `${
+            isSmall ? 13 : 19
+          }px solid transparent`,
+
+          borderRight: `${
+            isSmall ? 13 : 19
+          }px solid transparent`,
+
+          borderBottom: `${
+            isSmall ? 23 : 34
+          }px solid ${color}`,
         }}
       />
     );
@@ -375,7 +467,8 @@ function SymbolShape({
             left: '7px',
             width: '34px',
             height: '34px',
-            background: 'var(--surface-solid)',
+            background:
+              'var(--surface-solid)',
             borderRadius: '50%',
           }}
         />
@@ -405,6 +498,7 @@ function SymbolShape({
             borderRadius: '50%',
           }}
         />
+
         <span
           style={{
             position: 'absolute',
@@ -424,8 +518,14 @@ function SymbolShape({
     <span
       aria-hidden="true"
       style={{
-        width: shape.includes('small') ? '22px' : '38px',
-        height: shape.includes('small') ? '22px' : '38px',
+        width: shape.includes('small')
+          ? '22px'
+          : '38px',
+
+        height: shape.includes('small')
+          ? '22px'
+          : '38px',
+
         background: color,
         borderRadius: '50%',
       }}
@@ -438,33 +538,69 @@ export default function MontessoriExercise({
   title,
   instructions,
   questions,
+  lessonKey,
 }: MontessoriExerciseProps) {
-  const resolvedExercise = useMemo<MontessoriExerciseContent>(
-    () => ({
-      type: 'montessori',
-      title: exercise?.title ?? title ?? 'Ordena con símbolos',
-      instructions:
-        exercise?.instructions ??
-        instructions ??
-        'Arrastra un símbolo o selecciónalo y luego toca el espacio correspondiente.',
-      questions: exercise?.questions ?? questions ?? [],
-    }),
-    [exercise, instructions, questions, title],
+  const resolvedExercise =
+    useMemo<MontessoriExerciseContent>(
+      () => ({
+        type: 'montessori',
+
+        title:
+          exercise?.title ??
+          title ??
+          'Ordena con símbolos',
+
+        instructions:
+          exercise?.instructions ??
+          instructions ??
+          'Arrastra un símbolo o selecciónalo y luego toca el espacio correspondiente.',
+
+        questions:
+          exercise?.questions ??
+          questions ??
+          [],
+      }),
+      [
+        exercise,
+        instructions,
+        questions,
+        title,
+      ],
+    );
+
+  const [answers, setAnswers] =
+    useState<Answers>({});
+
+  const [
+    selectedSymbol,
+    setSelectedSymbol,
+  ] = useState<SelectedSymbol>(
+    null,
   );
 
-  const [answers, setAnswers] = useState<Answers>({});
-  const [selectedSymbol, setSelectedSymbol] =
-    useState<SelectedSymbol>(null);
-  const [hasChecked, setHasChecked] = useState(false);
+  const [
+    hasChecked,
+    setHasChecked,
+  ] = useState(false);
 
-  const correctAnswers = resolvedExercise.questions.filter((question) =>
-    questionIsCorrect(question, answers[question.id]),
-  ).length;
+  const correctAnswers =
+    resolvedExercise.questions.filter(
+      (question) =>
+        questionIsCorrect(
+          question,
+          answers[question.id],
+        ),
+    ).length;
 
   const allQuestionsComplete =
-    resolvedExercise.questions.length > 0 &&
-    resolvedExercise.questions.every((question) =>
-      questionIsComplete(question, answers[question.id]),
+    resolvedExercise.questions
+      .length > 0 &&
+    resolvedExercise.questions.every(
+      (question) =>
+        questionIsComplete(
+          question,
+          answers[question.id],
+        ),
     );
 
   function placeSymbol(
@@ -474,8 +610,11 @@ export default function MontessoriExercise({
   ) {
     setAnswers((current) => ({
       ...current,
+
       [questionId]: {
-        ...(current[questionId] ?? {}),
+        ...(current[questionId] ??
+          {}),
+
         [wordId]: symbolId,
       },
     }));
@@ -490,14 +629,19 @@ export default function MontessoriExercise({
   ) {
     setAnswers((current) => {
       const nextQuestionAnswers = {
-        ...(current[questionId] ?? {}),
+        ...(current[questionId] ??
+          {}),
       };
 
-      delete nextQuestionAnswers[wordId];
+      delete nextQuestionAnswers[
+        wordId
+      ];
 
       return {
         ...current,
-        [questionId]: nextQuestionAnswers,
+
+        [questionId]:
+          nextQuestionAnswers,
       };
     });
 
@@ -509,10 +653,14 @@ export default function MontessoriExercise({
     symbolId: string,
   ) {
     setSelectedSymbol((current) =>
-      current?.questionId === questionId &&
+      current?.questionId ===
+        questionId &&
       current.symbolId === symbolId
         ? null
-        : { questionId, symbolId },
+        : {
+            questionId,
+            symbolId,
+          },
     );
   }
 
@@ -524,7 +672,9 @@ export default function MontessoriExercise({
     event.preventDefault();
 
     const symbolId =
-      event.dataTransfer.getData('text/plain');
+      event.dataTransfer.getData(
+        'text/plain',
+      );
 
     if (symbolId) {
       placeSymbol(
@@ -541,9 +691,14 @@ export default function MontessoriExercise({
   ) {
     if (
       !selectedSymbol ||
-      selectedSymbol.questionId !== questionId
+      selectedSymbol.questionId !==
+        questionId
     ) {
-      removeSymbol(questionId, wordId);
+      removeSymbol(
+        questionId,
+        wordId,
+      );
+
       return;
     }
 
@@ -567,9 +722,17 @@ export default function MontessoriExercise({
       className={styles.exercise}
       aria-labelledby="montessori-exercise-title"
     >
-      <div className={styles.exerciseHeader}>
+      <div
+        className={
+          styles.exerciseHeader
+        }
+      >
         <div>
-          <span className={styles.exerciseType}>
+          <span
+            className={
+              styles.exerciseType
+            }
+          >
             MONTESSORI
           </span>
 
@@ -577,265 +740,386 @@ export default function MontessoriExercise({
             {resolvedExercise.title}
           </h3>
 
-          <p>{resolvedExercise.instructions}</p>
+          <p>
+            {
+              resolvedExercise.instructions
+            }
+          </p>
         </div>
 
-        <span className={styles.totalQuestions}>
-          {resolvedExercise.questions.length} preguntas
+        <span
+          className={
+            styles.totalQuestions
+          }
+        >
+          {
+            resolvedExercise.questions
+              .length
+          }{' '}
+          preguntas
         </span>
       </div>
 
-      <div className={styles.questions}>
-        {resolvedExercise.questions.map((question) => {
-          const currentAnswers =
-            answers[question.id] ?? {};
+      <div
+        className={styles.questions}
+      >
+        {resolvedExercise.questions.map(
+          (question) => {
+            const currentAnswers =
+              answers[question.id] ??
+              {};
 
-          const isCorrect =
-            hasChecked &&
-            questionIsCorrect(
-              question,
-              currentAnswers,
-            );
+            const isCorrect =
+              hasChecked &&
+              questionIsCorrect(
+                question,
+                currentAnswers,
+              );
 
-          const isIncorrect =
-            hasChecked && !isCorrect;
+            const isIncorrect =
+              hasChecked &&
+              !isCorrect;
 
-          return (
-            <article
-              className={styles.questionCard}
-              style={cardStyle}
-              key={question.id}
-            >
-              <p className={styles.questionLabel}>
-                Ejercicio {question.id}
-              </p>
-
-              <div
-                className={styles.montessoriBoard}
-                style={boardStyle}
+            return (
+              <article
+                className={
+                  styles.questionCard
+                }
+                style={cardStyle}
+                key={question.id}
               >
-                <div
-                  className={styles.wordGrid}
-                  style={wordGridStyle}
+                <p
+                  className={
+                    styles.questionLabel
+                  }
                 >
-                  {question.words.map(
-                    (word, wordIndex) => {
-                      const wordId = getWordId(
+                  Ejercicio{' '}
+                  {question.id}
+                </p>
+
+                <div
+                  className={
+                    styles.montessoriBoard
+                  }
+                  style={boardStyle}
+                >
+                  <div
+                    className={
+                      styles.wordGrid
+                    }
+                    style={
+                      wordGridStyle
+                    }
+                  >
+                    {question.words.map(
+                      (
                         word,
                         wordIndex,
-                      );
+                      ) => {
+                        const wordId =
+                          getWordId(
+                            word,
+                            wordIndex,
+                          );
 
-                      const correctPlacement =
-                        getCorrectPlacement(
-                          question,
-                          wordId,
-                          wordIndex,
+                        const correctPlacement =
+                          getCorrectPlacement(
+                            question,
+                            wordId,
+                            wordIndex,
+                          );
+
+                        const placedSymbol =
+                          getSymbol(
+                            question,
+                            currentAnswers[
+                              wordId
+                            ],
+                          );
+
+                        return (
+                          <div
+                            className={
+                              styles.wordColumn
+                            }
+                            style={
+                              wordColumnStyle
+                            }
+                            key={
+                              wordId
+                            }
+                          >
+                            <strong
+                              className={
+                                styles.wordText
+                              }
+                              style={
+                                wordTextStyle
+                              }
+                            >
+                              {
+                                word.word
+                              }
+                            </strong>
+
+                            <button
+                              type="button"
+                              className={
+                                styles.symbolSlot
+                              }
+                              style={{
+                                ...slotStyle,
+
+                                ...(placedSymbol
+                                  ? activeSlotStyle
+                                  : {}),
+
+                                ...(selectedSymbol?.questionId ===
+                                question.id
+                                  ? activeSlotStyle
+                                  : {}),
+
+                                ...(hasChecked &&
+                                currentAnswers[
+                                  wordId
+                                ] ===
+                                  correctPlacement
+                                  ? correctSlotStyle
+                                  : {}),
+
+                                ...(hasChecked &&
+                                currentAnswers[
+                                  wordId
+                                ] !==
+                                  correctPlacement
+                                  ? incorrectSlotStyle
+                                  : {}),
+                              }}
+                              onClick={() =>
+                                handleDropZoneClick(
+                                  question.id,
+                                  wordId,
+                                )
+                              }
+                              onDragOver={(
+                                event,
+                              ) =>
+                                event.preventDefault()
+                              }
+                              onDrop={(
+                                event,
+                              ) =>
+                                handleDrop(
+                                  event,
+                                  question.id,
+                                  wordId,
+                                )
+                              }
+                              aria-label={`Colocar símbolo en ${word.word}`}
+                            >
+                              {placedSymbol ? (
+                                <SymbolShape
+                                  symbol={
+                                    placedSymbol
+                                  }
+                                />
+                              ) : (
+                                <span
+                                  style={
+                                    emptyDotStyle
+                                  }
+                                />
+                              )}
+                            </button>
+
+                            <span
+                              className={
+                                styles.translation
+                              }
+                              style={
+                                translationStyle
+                              }
+                            >
+                              {
+                                word.translation
+                              }
+                            </span>
+
+                            <AudioPlayer
+                              text={
+                                word.word
+                              }
+                              language="en"
+                            />
+
+                            <VocabularyButton
+                              word={
+                                word.word
+                              }
+                              translation={
+                                word.translation
+                              }
+                              lessonKey={
+                                lessonKey
+                              }
+                              exampleSentence={question.words
+                                .map(
+                                  (
+                                    item,
+                                  ) =>
+                                    item.word,
+                                )
+                                .join(
+                                  ' ',
+                                )}
+                            />
+                          </div>
+                        );
+                      },
+                    )}
+                  </div>
+                </div>
+
+                <p
+                  className={
+                    styles.helperText
+                  }
+                  style={helperStyle}
+                >
+                  Arrastra un símbolo o
+                  selecciónalo y luego
+                  toca el espacio
+                  correspondiente.
+                </p>
+
+                <div
+                  className={
+                    styles.symbolBank
+                  }
+                  style={
+                    symbolBankStyle
+                  }
+                >
+                  {question.symbols.map(
+                    (symbol) => {
+                      const isSelected =
+                        selectedSymbol?.questionId ===
+                          question.id &&
+                        selectedSymbol.symbolId ===
+                          symbol.id;
+
+                      const tooltip =
+                        getSymbolTooltip(
+                          symbol,
                         );
 
-                      const placedSymbol = getSymbol(
-                        question,
-                        currentAnswers[wordId],
-                      );
-
                       return (
-                        <div
-                          className={styles.wordColumn}
-                          style={wordColumnStyle}
-                          key={wordId}
+                        <button
+                          type="button"
+                          className={
+                            styles.symbolOption
+                          }
+                          style={{
+                            ...symbolOptionStyle,
+
+                            ...(isSelected
+                              ? selectedSymbolStyle
+                              : {}),
+                          }}
+                          key={
+                            symbol.id
+                          }
+                          draggable
+                          onClick={() =>
+                            handleSymbolClick(
+                              question.id,
+                              symbol.id,
+                            )
+                          }
+                          onDragStart={(
+                            event,
+                          ) => {
+                            event.dataTransfer.setData(
+                              'text/plain',
+                              symbol.id,
+                            );
+                          }}
                         >
-                          <strong
-                            className={styles.wordText}
-                            style={wordTextStyle}
-                          >
-                            {word.word}
-                          </strong>
-
-                          <button
-                            type="button"
-                            className={
-                              styles.symbolSlot
+                          <SymbolShape
+                            symbol={
+                              symbol
                             }
-                            style={{
-                              ...slotStyle,
-
-                              ...(placedSymbol
-                                ? activeSlotStyle
-                                : {}),
-
-                              ...(selectedSymbol?.questionId ===
-                              question.id
-                                ? activeSlotStyle
-                                : {}),
-
-                              ...(hasChecked &&
-                              currentAnswers[wordId] ===
-                                correctPlacement
-                                ? correctSlotStyle
-                                : {}),
-
-                              ...(hasChecked &&
-                              currentAnswers[wordId] !==
-                                correctPlacement
-                                ? incorrectSlotStyle
-                                : {}),
-                            }}
-                            onClick={() =>
-                              handleDropZoneClick(
-                                question.id,
-                                wordId,
-                              )
-                            }
-                            onDragOver={(event) =>
-                              event.preventDefault()
-                            }
-                            onDrop={(event) =>
-                              handleDrop(
-                                event,
-                                question.id,
-                                wordId,
-                              )
-                            }
-                            aria-label={`Colocar símbolo en ${word.word}`}
-                          >
-                            {placedSymbol ? (
-                              <SymbolShape
-                                symbol={placedSymbol}
-                              />
-                            ) : (
-                              <span
-                                style={emptyDotStyle}
-                              />
-                            )}
-                          </button>
+                          />
 
                           <span
                             className={
-                              styles.translation
+                              styles.symbolText
                             }
-                            style={translationStyle}
                           >
-                            {word.translation}
+                            {getSymbolLabel(
+                              symbol,
+                            )}
+
+                            {tooltip ? (
+                              <span
+                                className={
+                                  styles.symbolTooltip
+                                }
+                              >
+                                {
+                                  tooltip
+                                }
+                              </span>
+                            ) : null}
                           </span>
-                        </div>
+                        </button>
                       );
                     },
                   )}
                 </div>
-              </div>
 
-              <p
-                className={styles.helperText}
-                style={helperStyle}
-              >
-                Arrastra un símbolo o selecciónalo y luego toca el
-                espacio correspondiente.
-              </p>
+                {isCorrect && (
+                  <div
+                    className={
+                      styles.correctFeedback
+                    }
+                    role="status"
+                  >
+                    <strong>
+                      ¡Muy bien!
+                    </strong>
 
-              <div
-                className={styles.symbolBank}
-                style={symbolBankStyle}
-              >
-                {question.symbols.map((symbol) => {
-                  const isSelected =
-                    selectedSymbol?.questionId ===
-                      question.id &&
-                    selectedSymbol.symbolId ===
-                      symbol.id;
-
-                  const tooltip =
-                    getSymbolTooltip(symbol);
-
-                  return (
-                    <button
-                      type="button"
-                      className={
-                        styles.symbolOption
+                    <p>
+                      {
+                        question.sentenceTranslation
                       }
-                      style={{
-                        ...symbolOptionStyle,
+                    </p>
+                  </div>
+                )}
 
-                        ...(isSelected
-                          ? selectedSymbolStyle
-                          : {}),
-                      }}
-                      key={symbol.id}
-                      draggable
-                      onClick={() =>
-                        handleSymbolClick(
-                          question.id,
-                          symbol.id,
-                        )
-                      }
-                      onDragStart={(event) => {
-                        event.dataTransfer.setData(
-                          'text/plain',
-                          symbol.id,
-                        );
-                      }}
-                    >
-                      <SymbolShape
-                        symbol={symbol}
-                      />
+                {isIncorrect && (
+                  <div
+                    className={
+                      styles.incorrectFeedback
+                    }
+                    role="status"
+                  >
+                    <strong>
+                      Revisa los
+                      símbolos.
+                    </strong>
 
-                      <span
-                        className={
-                          styles.symbolText
-                        }
-                      >
-                        {getSymbolLabel(symbol)}
-
-                        {tooltip ? (
-                          <span
-                            className={
-                              styles.symbolTooltip
-                            }
-                          >
-                            {tooltip}
-                          </span>
-                        ) : null}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {isCorrect && (
-                <div
-                  className={
-                    styles.correctFeedback
-                  }
-                  role="status"
-                >
-                  <strong>
-                    ¡Muy bien!
-                  </strong>
-
-                  <p>
-                    {question.sentenceTranslation}
-                  </p>
-                </div>
-              )}
-
-              {isIncorrect && (
-                <div
-                  className={
-                    styles.incorrectFeedback
-                  }
-                  role="status"
-                >
-                  <strong>
-                    Revisa los símbolos.
-                  </strong>
-
-                  <p>
-                    Hay una o más palabras con el símbolo
-                    incorrecto.
-                  </p>
-                </div>
-              )}
-            </article>
-          );
-        })}
+                    <p>
+                      Hay una o más
+                      palabras con el
+                      símbolo incorrecto.
+                    </p>
+                  </div>
+                )}
+              </article>
+            );
+          },
+        )}
       </div>
 
       <div
@@ -844,7 +1128,9 @@ export default function MontessoriExercise({
       >
         <button
           type="button"
-          className={styles.checkButton}
+          className={
+            styles.checkButton
+          }
           style={{
             ...checkButtonStyle,
 
@@ -852,7 +1138,9 @@ export default function MontessoriExercise({
               ? disabledButtonStyle
               : {}),
           }}
-          disabled={!allQuestionsComplete}
+          disabled={
+            !allQuestionsComplete
+          }
           onClick={checkExercise}
         >
           Corregir ejercicio
@@ -861,22 +1149,32 @@ export default function MontessoriExercise({
 
       {hasChecked && (
         <div
-          className={styles.resultCard}
+          className={
+            styles.resultCard
+          }
           aria-live="polite"
         >
-          <p className={styles.resultLabel}>
+          <p
+            className={
+              styles.resultLabel
+            }
+          >
             TU RESULTADO
           </p>
 
           <h4>
             {correctAnswers} de{' '}
-            {resolvedExercise.questions.length}{' '}
+            {
+              resolvedExercise
+                .questions.length
+            }{' '}
             correctas
           </h4>
 
           <p>
             {correctAnswers ===
-            resolvedExercise.questions.length
+            resolvedExercise.questions
+              .length
               ? 'Dominaste los símbolos de esta práctica.'
               : 'Puedes revisar las preguntas y volver a intentarlo.'}
           </p>

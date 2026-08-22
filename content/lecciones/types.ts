@@ -94,6 +94,7 @@ export type MontessoriExercise = {
 export type ListeningChoiceOption = {
   id: string;
   text: string;
+  translation?: string;
 };
 
 export type ListeningChoiceQuestion = {
