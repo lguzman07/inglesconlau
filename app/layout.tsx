@@ -1,42 +1,55 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Lexend } from 'next/font/google';
-import ScrollToTop from '@/components/ScrollToTop/ScrollToTop';
+
 import Footer from '@/components/Footer/Footer';
 import RevealOnScroll from '@/components/RevealOnScroll/RevealOnScroll';
 import ScrollProgress from '@/components/ScrollProgress/ScrollProgress';
+import ScrollToTop from '@/components/ScrollToTop/ScrollToTop';
 import StudentNavbar from '@/components/StudentNavbar/StudentNavbar';
+
 import './globals.css';
 
 const lexend = Lexend({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-lexend',
+  weight: ['300', '400', '500', '600', '700', '800'],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://inglesconlau.com'),
+
   title: {
     default: 'Inglés con Lau | Aprende conmigo',
     template: '%s | Inglés con Lau',
   },
+
   description:
     'Aprende inglés con confianza mediante lecciones grabadas, ejercicios interactivos y una ruta diseñada especialmente para hispanohablantes.',
+
   applicationName: 'Inglés con Lau',
   creator: 'Laura Guzmán',
   publisher: 'Inglés con Lau',
+
   alternates: {
     canonical: '/',
   },
+
   openGraph: {
     title: 'Inglés con Lau | Aprende conmigo',
+
     description:
       'Lecciones grabadas, ejercicios interactivos y una ruta clara para aprender inglés con confianza y a tu propio ritmo.',
+
     url: '/',
+
     siteName: 'Inglés con Lau',
+
     locale: 'es_DO',
+
     type: 'website',
   },
+
   robots: {
     index: true,
     follow: true,
@@ -45,12 +58,20 @@ export const metadata: Metadata = {
 
 const themeInitializationScript = `
   try {
-    const savedPreference = localStorage.getItem('display-mode-v2');
-    const validPreferences = ['auto', 'normal', 'dark', 'contrast'];
+    const savedPreference =
+      localStorage.getItem('display-mode-v2');
 
-    const preference = validPreferences.includes(savedPreference)
-      ? savedPreference
-      : 'auto';
+    const validPreferences = [
+      'auto',
+      'normal',
+      'dark',
+      'contrast'
+    ];
+
+    const preference =
+      validPreferences.includes(savedPreference)
+        ? savedPreference
+        : 'auto';
 
     const systemTheme = window.matchMedia(
       '(prefers-color-scheme: dark)'
@@ -59,9 +80,12 @@ const themeInitializationScript = `
       : 'normal';
 
     document.documentElement.dataset.theme =
-      preference === 'auto' ? systemTheme : preference;
+      preference === 'auto'
+        ? systemTheme
+        : preference;
   } catch {
-    document.documentElement.dataset.theme = 'normal';
+    document.documentElement.dataset.theme =
+      'normal';
   }
 `;
 
@@ -71,7 +95,11 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html
+      lang="es"
+      className={lexend.className}
+      suppressHydrationWarning
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -80,14 +108,17 @@ export default function RootLayout({
         />
       </head>
 
-      <body className={lexend.className}>
+      <body>
         <ScrollProgress />
+
         <StudentNavbar />
+
         <RevealOnScroll />
 
         {children}
 
         <Footer />
+
         <ScrollToTop />
       </body>
     </html>

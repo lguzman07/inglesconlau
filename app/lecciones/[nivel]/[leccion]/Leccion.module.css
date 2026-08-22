@@ -70,9 +70,20 @@
   border-radius: 999px;
 }
 
+.topLessonNavigation {
+  margin-top: 20px;
+  margin-bottom: 48px;
+}
+
+.topLessonNavigation .lessonNavigation {
+  margin-top: 0;
+}
+
 .videoSection {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(250px, 0.75fr);
+  grid-template-columns:
+    minmax(0, 1.45fr)
+    minmax(250px, 0.75fr);
   overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -185,11 +196,19 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 20px;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
 }
 
 .sectionHeader h2 {
   font-size: clamp(1.65rem, 3vw, 2.15rem);
+}
+
+/*
+  Mantiene el primer ejercicio cerca del encabezado
+  "PRÁCTICA / 10 preguntas".
+*/
+.sectionHeader + section {
+  margin-top: 0;
 }
 
 .exerciseCount,
@@ -198,10 +217,10 @@
   color: var(--text-light);
   font-size: 0.78rem;
   font-weight: 700;
+  white-space: nowrap;
   background: var(--surface-soft);
   border: 1px solid var(--border);
   border-radius: 999px;
-  white-space: nowrap;
 }
 
 .practiceCard {
@@ -264,8 +283,8 @@
 
 .navigationLink {
   display: flex;
-  flex-direction: column;
   min-width: 180px;
+  flex-direction: column;
   padding: 15px 18px;
   color: var(--text);
   text-decoration: none;
@@ -292,8 +311,8 @@
 
 .navigationLink:hover,
 .navigationLink:focus-visible {
-  border-color: var(--primary);
   background: var(--primary-light);
+  border-color: var(--primary);
   transform: translateY(-2px);
 }
 
@@ -313,6 +332,11 @@
   .completionCard {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .topLessonNavigation {
+    margin-top: 14px;
+    margin-bottom: 38px;
   }
 
   .videoSection {
@@ -335,6 +359,8 @@
   .sectionHeader {
     align-items: flex-start;
     flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
   }
 }
 
@@ -345,6 +371,11 @@
 
   .lessonPosition {
     align-self: flex-start;
+  }
+
+  .topLessonNavigation {
+    margin-top: 10px;
+    margin-bottom: 32px;
   }
 
   .objectiveCard {

@@ -746,18 +746,6 @@ export default function MontessoriExercise({
             }
           </p>
         </div>
-
-        <span
-          className={
-            styles.totalQuestions
-          }
-        >
-          {
-            resolvedExercise.questions
-              .length
-          }{' '}
-          preguntas
-        </span>
       </div>
 
       <div
@@ -1105,14 +1093,13 @@ export default function MontessoriExercise({
                     role="status"
                   >
                     <strong>
-                      Revisa los
-                      símbolos.
+                      Revisa los símbolos.
                     </strong>
 
                     <p>
-                      Hay una o más
-                      palabras con el
-                      símbolo incorrecto.
+                      Hay una o más palabras
+                      con el símbolo
+                      incorrecto.
                     </p>
                   </div>
                 )}
