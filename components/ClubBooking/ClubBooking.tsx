@@ -10,6 +10,7 @@ type ClubSession = {
   startsAt: string;
   endsAt: string;
   maxReaders: number;
+  studentsCanJoin: boolean;
 };
 
 type ReadingReservation = {
@@ -38,7 +39,7 @@ function getSessionCountdown(startsAt: string, endsAt: string) {
 
   const totalMinutes = Math.max(
     1,
-    Math.ceil((startTime - now) / (1000 * 60))
+    Math.ceil((startTime - now) / (1000 * 60)),
   );
 
   const days = Math.floor(totalMinutes / 1440);
@@ -54,7 +55,11 @@ function getSessionCountdown(startsAt: string, endsAt: string) {
   if (hours > 0) {
     return `Próxima sesión en ${hours} ${
       hours === 1 ? 'hora' : 'horas'
-    }${minutes > 0 ? ` y ${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}` : ''}`;
+    }${
+      minutes > 0
+        ? ` y ${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`
+        : ''
+    }`;
   }
 
   return `Próxima sesión en ${totalMinutes} ${
@@ -65,24 +70,23 @@ function getSessionCountdown(startsAt: string, endsAt: string) {
 function isSessionLive(startsAt: string, endsAt: string) {
   const now = Date.now();
 
-  return (
-    now >= new Date(startsAt).getTime() &&
-    now < new Date(endsAt).getTime()
-  );
+  return now >= new Date(startsAt).getTime() && now < new Date(endsAt).getTime();
 }
 
-export default function ClubBooking({
-  session,
-  isAdmin,
-}: ClubBookingProps) {
-  const [reservation, setReservation] =
-    useState<ReadingReservation | null>(null);
+export default function ClubBooking({ session, isAdmin }: ClubBookingProps) {
+  const [reservation, setReservation] = useState<ReadingReservation | null>(
+    null,
+  );
+  const [reservedCount, setReservedCount] = useState(0);
+  const [studentsCanJoin, setStudentsCanJoin] = useState(
+    session.studentsCanJoin,
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [message, setMessage] = useState('');
   const [countdown, setCountdown] = useState(() =>
-    getSessionCountdown(session.startsAt, session.endsAt)
+    getSessionCountdown(session.startsAt, session.endsAt),
   );
 
   const sessionDate = new Intl.DateTimeFormat('es-DO', {
@@ -93,6 +97,7 @@ export default function ClubBooking({
   }).format(new Date(session.startsAt));
 
   const sessionIsLive = isSessionLive(session.startsAt, session.endsAt);
+  const availableSlots = Math.max(0, session.maxReaders - reservedCount);
 
   async function loadCurrentReservation() {
     const supabase = createClient();
@@ -125,6 +130,18 @@ export default function ClubBooking({
     return currentReservation;
   }
 
+  async function loadReservedCount() {
+    const supabase = createClient();
+
+    const { count } = await supabase
+      .from('reading_reservations')
+      .select('id', { count: 'exact', head: true })
+      .eq('session_id', session.id)
+      .eq('status', 'reserved');
+
+    setReservedCount(count ?? 0);
+  }
+
   useEffect(() => {
     function updateCountdown() {
       setCountdown(getSessionCountdown(session.startsAt, session.endsAt));
@@ -138,12 +155,11 @@ export default function ClubBooking({
 
   useEffect(() => {
     async function loadReservation() {
-      if (isAdmin) {
-        setIsLoading(false);
-        return;
-      }
+      await Promise.all([
+        isAdmin ? Promise.resolve(null) : loadCurrentReservation(),
+        loadReservedCount(),
+      ]);
 
-      await loadCurrentReservation();
       setIsLoading(false);
     }
 
@@ -167,11 +183,12 @@ export default function ClubBooking({
     }
 
     const newReservation = await loadCurrentReservation();
+    await loadReservedCount();
 
     setMessage(
       newReservation
         ? 'Tu turno de lectura quedó reservado.'
-        : 'No pudimos confirmar tu turno. Inténtalo de nuevo.'
+        : 'No pudimos confirmar tu turno. Inténtalo de nuevo.',
     );
     setIsSaving(false);
   }
@@ -193,14 +210,46 @@ export default function ClubBooking({
     }
 
     setReservation(null);
+    await loadReservedCount();
+
     setMessage('Tu turno de lectura fue cancelado.');
+    setIsSaving(false);
+  }
+
+  async function updateStudentAccess(nextValue: boolean) {
+    setIsSaving(true);
+    setMessage('');
+
+    const response = await fetch('/api/club-room', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId: session.id,
+        studentsCanJoin: nextValue,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMessage(data.error ?? 'No pudimos actualizar la sala.');
+      setIsSaving(false);
+      return;
+    }
+
+    setStudentsCanJoin(data.studentsCanJoin);
+    setMessage(
+      data.studentsCanJoin
+        ? 'La sala ya está abierta para estudiantes.'
+        : 'La sala quedó cerrada para estudiantes.',
+    );
     setIsSaving(false);
   }
 
   function joinRoom() {
     setIsJoining(true);
     window.location.assign(
-      `/club-de-lectura/sala?sessionId=${encodeURIComponent(session.id)}`
+      `/club-de-lectura/sala?sessionId=${encodeURIComponent(session.id)}`,
     );
   }
 
@@ -221,10 +270,18 @@ export default function ClubBooking({
         </p>
       </div>
 
+      <p className={styles.text}>
+        Turnos de lectura reservados: {reservedCount} de {session.maxReaders}.
+        {availableSlots > 0
+          ? ` Quedan ${availableSlots} turnos disponibles.`
+          : ' Los turnos de lectura están llenos.'}
+      </p>
+
       {isAdmin ? (
         <>
           <p className={styles.hostNote}>
-            Eres la anfitriona. Puedes entrar a la sala en cualquier momento.
+            Eres la anfitriona. Puedes preparar la sala y decidir cuándo los
+            estudiantes pueden entrar.
           </p>
 
           <button
@@ -235,14 +292,26 @@ export default function ClubBooking({
           >
             {isJoining ? 'Abriendo la sala...' : 'Entrar como anfitriona'}
           </button>
+
+          <button
+            type="button"
+            className={styles.secondaryButton}
+            onClick={() => void updateStudentAccess(!studentsCanJoin)}
+            disabled={isSaving}
+          >
+            {studentsCanJoin
+              ? 'Cerrar sala para estudiantes'
+              : 'Abrir sala para estudiantes'}
+          </button>
         </>
       ) : (
         <div className={styles.reservationArea}>
           <h2 className={styles.reservationTitle}>Reserva tu turno para leer</h2>
 
           <p className={styles.text}>
-            Hay hasta {session.maxReaders} turnos disponibles. La lectura en
-            vivo es para los estudiantes que reservaron un turno.
+            Los primeros {session.maxReaders} estudiantes que reserven entran
+            como lectores. Los demás estudiantes con suscripción pueden entrar
+            como oyentes cuando la sala esté abierta.
           </p>
 
           {isLoading ? (
@@ -263,26 +332,41 @@ export default function ClubBooking({
                 {isSaving ? 'Cancelando...' : 'Cancelar mi turno'}
               </button>
 
-              {sessionIsLive && (
+              {sessionIsLive && studentsCanJoin && (
                 <button
                   type="button"
                   className={styles.primaryButton}
                   onClick={joinRoom}
                   disabled={isJoining}
                 >
-                  {isJoining ? 'Abriendo la sala...' : 'Unirme al club'}
+                  {isJoining ? 'Abriendo la sala...' : 'Entrar como lectora'}
                 </button>
               )}
             </div>
           ) : (
-            <button
-              type="button"
-              className={styles.primaryButton}
-              onClick={reserveTurn}
-              disabled={isSaving}
-            >
-              {isSaving ? 'Reservando...' : 'Reservar mi turno de lectura'}
-            </button>
+            <>
+              {availableSlots > 0 && (
+                <button
+                  type="button"
+                  className={styles.primaryButton}
+                  onClick={reserveTurn}
+                  disabled={isSaving}
+                >
+                  {isSaving ? 'Reservando...' : 'Reservar mi turno de lectura'}
+                </button>
+              )}
+
+              {sessionIsLive && studentsCanJoin && (
+                <button
+                  type="button"
+                  className={styles.secondaryButton}
+                  onClick={joinRoom}
+                  disabled={isJoining}
+                >
+                  {isJoining ? 'Abriendo la sala...' : 'Entrar como oyente'}
+                </button>
+              )}
+            </>
           )}
 
           {message && (
@@ -295,10 +379,12 @@ export default function ClubBooking({
 
       <p className={styles.roomNote}>
         {isAdmin
-          ? 'La sala se creará al entrar por primera vez a esta sesión.'
-          : sessionIsLive
-            ? 'Tu turno está reservado: ya puedes entrar a la sala.'
-            : 'La sala estará disponible cuando comience la sesión.'}
+          ? studentsCanJoin
+            ? 'La sala está abierta para estudiantes.'
+            : 'La sala está cerrada para estudiantes hasta que decidas abrirla.'
+          : sessionIsLive && studentsCanJoin
+            ? 'La sala está abierta. Si tienes turno, entras como lectora; si no, entras como oyente.'
+            : 'La sala estará disponible cuando sea la hora y la anfitriona la abra.'}
       </p>
     </section>
   );
