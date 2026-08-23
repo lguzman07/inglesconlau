@@ -3,8 +3,8 @@ import {
   notFound,
   redirect,
 } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
 import { lessonTitles } from '@/content/lecciones/catalog';
+import { createClient } from '@/lib/supabase/server';
 import styles from './Nivel.module.css';
 
 type Level = {
@@ -64,6 +64,37 @@ const levels: Record<string, Level> = {
   },
 };
 
+const levelOrder = [
+  {
+    slug: 'a0',
+    code: 'A0',
+  },
+  {
+    slug: 'a1',
+    code: 'A1',
+  },
+  {
+    slug: 'a2',
+    code: 'A2',
+  },
+  {
+    slug: 'b1',
+    code: 'B1',
+  },
+  {
+    slug: 'b1-plus',
+    code: 'B1+',
+  },
+  {
+    slug: 'b2',
+    code: 'B2',
+  },
+  {
+    slug: 'c1',
+    code: 'C1',
+  },
+];
+
 export default async function NivelPage({
   params,
 }: {
@@ -81,22 +112,57 @@ export default async function NivelPage({
     notFound();
   }
 
+  const currentLevelIndex =
+    levelOrder.findIndex(
+      ({ slug }) =>
+        slug === normalizedLevel,
+    );
+
+  const previousLevel =
+    currentLevelIndex > 0
+      ? levelOrder[
+          currentLevelIndex - 1
+        ]
+      : null;
+
+  const nextLevel =
+    currentLevelIndex <
+    levelOrder.length - 1
+      ? levelOrder[
+          currentLevelIndex + 1
+        ]
+      : null;
+
   const levelLessons = Object.entries(
     lessonTitles[normalizedLevel] ?? {},
   )
-    .map(([lessonNumber, lessonTitle]) => ({
-      number: Number(lessonNumber),
-      title: lessonTitle,
-    }))
+    .map(
+      ([
+        lessonNumber,
+        lessonTitle,
+      ]) => ({
+        number: Number(
+          lessonNumber,
+        ),
+        title: lessonTitle,
+      }),
+    )
     .filter(
       (lesson) =>
-        Number.isInteger(lesson.number) &&
+        Number.isInteger(
+          lesson.number,
+        ) &&
         lesson.number > 0 &&
-        lesson.title.trim().length > 0,
+        lesson.title.trim().length >
+          0,
     )
     .sort(
-      (firstLesson, secondLesson) =>
-        firstLesson.number - secondLesson.number,
+      (
+        firstLesson,
+        secondLesson,
+      ) =>
+        firstLesson.number -
+        secondLesson.number,
     );
 
   const supabase =
@@ -132,7 +198,9 @@ export default async function NivelPage({
 
     supabase
       .from('lesson_progress')
-      .select('lesson_key, is_completed')
+      .select(
+        'lesson_key, is_completed',
+      )
       .eq('user_id', user.id)
       .eq('is_completed', true),
   ]);
@@ -157,18 +225,30 @@ export default async function NivelPage({
     isAdmin ||
     hasCurrentSubscription;
 
-  const completedLessonKeys = new Set(
-    (progressResult.data ?? []).map(
-      (progress) => progress.lesson_key,
-    ),
-  );
+  const completedLessonKeys =
+    new Set(
+      (
+        progressResult.data ?? []
+      ).map(
+        (progress) =>
+          progress.lesson_key,
+      ),
+    );
 
   return (
-    <main className={styles.main}>
-      <div className={styles.container}>
+    <main
+      className={styles.main}
+    >
+      <div
+        className={
+          styles.container
+        }
+      >
         <Link
           href="/lecciones"
-          className={styles.backLink}
+          className={
+            styles.backLink
+          }
         >
           ← Todas las lecciones
         </Link>
@@ -193,9 +273,7 @@ export default async function NivelPage({
           </p>
 
           <h1
-            className={
-              styles.title
-            }
+            className={styles.title}
           >
             {level.title}
           </h1>
@@ -224,7 +302,8 @@ export default async function NivelPage({
 
               <h2>
                 Empieza por:{' '}
-                {levelLessons[0]?.title ??
+                {levelLessons[0]
+                  ?.title ??
                   'Contenido próximamente'}
               </h2>
 
@@ -285,7 +364,8 @@ export default async function NivelPage({
             {levelLessons.map(
               ({
                 number,
-                title: lessonTitle,
+                title:
+                  lessonTitle,
               }) => {
                 const canOpenLesson =
                   hasLessonAccess ||
@@ -303,7 +383,7 @@ export default async function NivelPage({
                   <li key={number}>
                     {canOpenLesson ? (
                       <Link
-                        href={`/lecciones/${params.nivel}/${number}`}
+                        href={`/lecciones/${normalizedLevel}/${number}`}
                         className={
                           styles.lessonCard
                         }
@@ -334,7 +414,8 @@ export default async function NivelPage({
                           </h3>
 
                           <p>
-                            {number <= 3 &&
+                            {number <=
+                              3 &&
                             !hasLessonAccess
                               ? 'Lección de muestra gratuita.'
                               : 'Abre la lección para ver su video, ejercicios y progreso.'}
@@ -346,7 +427,8 @@ export default async function NivelPage({
                             styles.openLesson
                           }
                         >
-                          {number <= 3 &&
+                          {number <=
+                            3 &&
                           !hasLessonAccess
                             ? 'Probar gratis'
                             : 'Abrir lección'}{' '}
@@ -363,11 +445,6 @@ export default async function NivelPage({
                               ? styles.completedCheckActive
                               : ''
                           }`}
-                          aria-label={
-                            isCompleted
-                              ? 'Lección completada'
-                              : 'Lección pendiente'
-                          }
                           title={
                             isCompleted
                               ? 'Lección completada'
@@ -375,7 +452,9 @@ export default async function NivelPage({
                           }
                           aria-hidden="true"
                         >
-                          {isCompleted ? '✓' : ''}
+                          {isCompleted
+                            ? '✓'
+                            : ''}
                         </span>
                       </Link>
                     ) : (
@@ -434,11 +513,6 @@ export default async function NivelPage({
                               ? styles.completedCheckActive
                               : ''
                           }`}
-                          aria-label={
-                            isCompleted
-                              ? 'Lección completada'
-                              : 'Lección pendiente'
-                          }
                           title={
                             isCompleted
                               ? 'Lección completada'
@@ -446,7 +520,9 @@ export default async function NivelPage({
                           }
                           aria-hidden="true"
                         >
-                          {isCompleted ? '✓' : ''}
+                          {isCompleted
+                            ? '✓'
+                            : ''}
                         </span>
                       </div>
                     )}
@@ -456,6 +532,79 @@ export default async function NivelPage({
             )}
           </ol>
         </section>
+
+        <nav
+          className={
+            styles.levelNavigation
+          }
+          aria-label="Navegación entre niveles"
+        >
+          <div
+            className={
+              styles.levelNavigationSlot
+            }
+          >
+            {previousLevel && (
+              <Link
+                href={`/lecciones/${previousLevel.slug}`}
+                className={
+                  styles.levelNavigationLink
+                }
+              >
+                <span
+                  className={
+                    styles.levelNavigationArrow
+                  }
+                  aria-hidden="true"
+                >
+                  ←
+                </span>
+
+                <span>
+                  <small>
+                    Nivel anterior
+                  </small>
+
+                  <strong>
+                    {
+                      previousLevel.code
+                    }
+                  </strong>
+                </span>
+              </Link>
+            )}
+          </div>
+
+          <div
+            className={`${styles.levelNavigationSlot} ${styles.levelNavigationSlotNext}`}
+          >
+            {nextLevel && (
+              <Link
+                href={`/lecciones/${nextLevel.slug}`}
+                className={`${styles.levelNavigationLink} ${styles.levelNavigationLinkNext}`}
+              >
+                <span>
+                  <small>
+                    Nivel siguiente
+                  </small>
+
+                  <strong>
+                    {nextLevel.code}
+                  </strong>
+                </span>
+
+                <span
+                  className={
+                    styles.levelNavigationArrow
+                  }
+                  aria-hidden="true"
+                >
+                  →
+                </span>
+              </Link>
+            )}
+          </div>
+        </nav>
       </div>
     </main>
   );
