@@ -26,10 +26,17 @@ const LEVEL_ORDER = [
   'c1',
 ];
 
+type ClubSession = {
+  id: string;
+  starts_at: string;
+  ends_at: string;
+  max_readers: number;
+};
+
 function getValidLessonKey(value: string | null) {
   if (
     !value ||
-    !/^[a-z0-9+]+\/\d+$/i.test(value)
+    !/^[a-z0-9-]+\/\d+$/i.test(value)
   ) {
     return null;
   }
@@ -69,6 +76,63 @@ function formatLessonLabel(lessonKey: string) {
   )}`;
 }
 
+function getClubCountdown(
+  startsAt: string,
+  endsAt: string,
+) {
+  const now = Date.now();
+  const startTime = new Date(startsAt).getTime();
+  const endTime = new Date(endsAt).getTime();
+
+  if (now >= startTime && now < endTime) {
+    return 'En vivo ahora';
+  }
+
+  if (now >= endTime) {
+    return 'Sesión finalizada';
+  }
+
+  const totalMinutes = Math.max(
+    0,
+    Math.floor((startTime - now) / 60000),
+  );
+
+  const days = Math.floor(totalMinutes / 1440);
+  const hours = Math.floor(
+    (totalMinutes % 1440) / 60,
+  );
+  const minutes = totalMinutes % 60;
+
+  if (days > 0) {
+    return `Comienza en ${days} ${
+      days === 1 ? 'día' : 'días'
+    } y ${hours} h`;
+  }
+
+  if (hours > 0) {
+    return `Comienza en ${hours} h y ${minutes} min`;
+  }
+
+  return `Comienza en ${minutes} min`;
+}
+
+function formatClubDate(startsAt: string) {
+  const formattedDate = new Intl.DateTimeFormat(
+    'es-DO',
+    {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      timeZone: 'America/Santo_Domingo',
+    },
+  ).format(new Date(startsAt));
+
+  return (
+    formattedDate.charAt(0).toUpperCase() +
+    formattedDate.slice(1)
+  );
+}
+
 export default function InicioPage() {
   const pathname = usePathname();
 
@@ -103,8 +167,8 @@ export default function InicioPage() {
     setAvailableReadingSlots,
   ] = useState<number | null>(null);
 
-  const [clubSessionId, setClubSessionId] =
-    useState<string | null>(null);
+  const [clubSession, setClubSession] =
+    useState<ClubSession | null>(null);
 
   const [
     readingReservationSlot,
@@ -206,52 +270,78 @@ export default function InicioPage() {
 
       const { data: session } = await supabase
         .from('club_sessions')
-        .select('id')
+        .select(
+          'id, starts_at, ends_at, max_readers',
+        )
         .eq('is_published', true)
-        .gte('starts_at', new Date().toISOString())
-        .order('starts_at', { ascending: true })
+        .gte('ends_at', new Date().toISOString())
+        .order('starts_at', {
+          ascending: true,
+        })
         .limit(1)
         .maybeSingle();
 
       if (!session) {
-        setClubSessionId(null);
-        setAvailableReadingSlots(0);
+        setClubSession(null);
+        setAvailableReadingSlots(null);
         setReadingReservationSlot(null);
+        setReadingClubDate('Próxima sesión');
+        setClubCountdown('No hay sesión programada');
         return;
       }
 
-      setClubSessionId(session.id);
+      const currentSession =
+        session as ClubSession;
+
+      setClubSession(currentSession);
+      setReadingClubDate(
+        formatClubDate(currentSession.starts_at),
+      );
+      setClubCountdown(
+        getClubCountdown(
+          currentSession.starts_at,
+          currentSession.ends_at,
+        ),
+      );
 
       const {
         data: { user },
       } = await supabase.auth.getUser();
 
       const [
-        { data: availability },
+        { count: reservedTurns },
         { data: reservation },
       ] = await Promise.all([
-        supabase.rpc(
-          'get_reading_slot_availability',
-          {
-            p_session_id: session.id,
-          },
-        ),
+        supabase
+          .from('reading_reservations')
+          .select('id', {
+            count: 'exact',
+            head: true,
+          })
+          .eq('session_id', currentSession.id)
+          .eq('status', 'reserved'),
 
         user
           ? supabase
               .from('reading_reservations')
               .select('slot_number')
-              .eq('session_id', session.id)
+              .eq(
+                'session_id',
+                currentSession.id,
+              )
               .eq('user_id', user.id)
               .eq('status', 'reserved')
               .maybeSingle()
           : Promise.resolve({ data: null }),
       ]);
 
+      const takenTurns = reservedTurns ?? 0;
+
       setAvailableReadingSlots(
-        typeof availability === 'number'
-          ? availability
-          : 0,
+        Math.max(
+          currentSession.max_readers - takenTurns,
+          0,
+        ),
       );
 
       setReadingReservationSlot(
@@ -260,131 +350,31 @@ export default function InicioPage() {
     }, []);
 
   useEffect(() => {
-    const dominicanOffset =
-      4 * 60 * 60 * 1000;
+    void loadReadingAvailability();
+  }, [loadReadingAvailability]);
 
-    const sessionDuration =
-      2 * 60 * 60 * 1000;
+  useEffect(() => {
+    if (!clubSession) return;
 
-    function updateClubSession() {
-      const now = new Date();
-
-      const dominicanNow = new Date(
-        now.getTime() - dominicanOffset,
-      );
-
-      const currentDay =
-        dominicanNow.getUTCDay();
-
-      let daysUntilThursday =
-        (4 - currentDay + 7) % 7;
-
-      let sessionStart = new Date(
-        Date.UTC(
-          dominicanNow.getUTCFullYear(),
-          dominicanNow.getUTCMonth(),
-          dominicanNow.getUTCDate() +
-            daysUntilThursday,
-          23,
-          0,
-          0,
+    function updateCountdown() {
+      setClubCountdown(
+        getClubCountdown(
+          clubSession.starts_at,
+          clubSession.ends_at,
         ),
       );
-
-      if (
-        currentDay === 4 &&
-        now.getTime() >=
-          sessionStart.getTime() +
-            sessionDuration
-      ) {
-        daysUntilThursday = 7;
-
-        sessionStart = new Date(
-          Date.UTC(
-            dominicanNow.getUTCFullYear(),
-            dominicanNow.getUTCMonth(),
-            dominicanNow.getUTCDate() +
-              daysUntilThursday,
-            23,
-            0,
-            0,
-          ),
-        );
-      }
-
-      const formattedDate =
-        new Intl.DateTimeFormat('es-DO', {
-          weekday: 'long',
-          day: 'numeric',
-          month: 'long',
-          timeZone:
-            'America/Santo_Domingo',
-        }).format(sessionStart);
-
-      setReadingClubDate(
-        formattedDate.charAt(0).toUpperCase() +
-          formattedDate.slice(1),
-      );
-
-      const timeUntilSession =
-        sessionStart.getTime() - now.getTime();
-
-      if (
-        timeUntilSession <= 0 &&
-        timeUntilSession > -sessionDuration
-      ) {
-        setClubCountdown('En vivo ahora');
-        return;
-      }
-
-      const totalMinutes = Math.max(
-        0,
-        Math.floor(
-          timeUntilSession / 60000,
-        ),
-      );
-
-      const days = Math.floor(
-        totalMinutes / 1440,
-      );
-
-      const hours = Math.floor(
-        (totalMinutes % 1440) / 60,
-      );
-
-      const minutes = totalMinutes % 60;
-
-      if (days > 0) {
-        setClubCountdown(
-          `Comienza en ${days} ${
-            days === 1 ? 'día' : 'días'
-          } y ${hours} h`,
-        );
-      } else if (hours > 0) {
-        setClubCountdown(
-          `Comienza en ${hours} h y ${minutes} min`,
-        );
-      } else {
-        setClubCountdown(
-          `Comienza en ${minutes} min`,
-        );
-      }
     }
 
-    updateClubSession();
+    updateCountdown();
 
     const intervalId = window.setInterval(
-      updateClubSession,
+      updateCountdown,
       60000,
     );
 
     return () =>
       window.clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
-    void loadReadingAvailability();
-  }, [loadReadingAvailability]);
+  }, [clubSession]);
 
   useEffect(() => {
     async function loadProfile() {
@@ -592,7 +582,7 @@ export default function InicioPage() {
 
   async function handleCancelReservation() {
     if (
-      !clubSessionId ||
+      !clubSession ||
       isCancellingReservation
     ) {
       return;
@@ -606,7 +596,7 @@ export default function InicioPage() {
     const { error } = await supabase.rpc(
       'cancel_reading_reservation',
       {
-        p_session_id: clubSessionId,
+        p_session_id: clubSession.id,
       },
     );
 
@@ -745,7 +735,11 @@ export default function InicioPage() {
                 styles.currentLesson
               }
             >
-              <div className={styles.lessonCardContent}>
+              <div
+                className={
+                  styles.lessonCardContent
+                }
+              >
                 <p
                   className={
                     styles.cardLabel
@@ -789,7 +783,11 @@ export default function InicioPage() {
                 styles.progressLesson
               }
             >
-              <div className={styles.lessonCardContent}>
+              <div
+                className={
+                  styles.lessonCardContent
+                }
+              >
                 <p
                   className={
                     styles.cardLabel
@@ -1097,7 +1095,7 @@ export default function InicioPage() {
                       </p>
                     )}
 
-                    {clubSessionId &&
+                    {clubSession &&
                       availableReadingSlots !==
                         null &&
                       availableReadingSlots >
