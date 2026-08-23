@@ -4,14 +4,13 @@ import {
   redirect,
 } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import { getLessonTitle } from '@/content/lecciones/catalog';
+import { lessonTitles } from '@/content/lecciones/catalog';
 import styles from './Nivel.module.css';
 
 type Level = {
   code: string;
   title: string;
   description: string;
-  lessonCount: number;
 };
 
 const levels: Record<string, Level> = {
@@ -20,7 +19,6 @@ const levels: Record<string, Level> = {
     title: 'Primeros pasos',
     description:
       'Una base clara para comenzar a entender y usar inglés desde cero.',
-    lessonCount: 80,
   },
 
   a1: {
@@ -28,7 +26,6 @@ const levels: Record<string, Level> = {
     title: 'Principiante',
     description:
       'Frases y vocabulario para comunicarte en situaciones cotidianas.',
-    lessonCount: 266,
   },
 
   a2: {
@@ -36,7 +33,6 @@ const levels: Record<string, Level> = {
     title: 'Básico',
     description:
       'Más confianza para hablar de experiencias, planes y situaciones frecuentes.',
-    lessonCount: 170,
   },
 
   b1: {
@@ -44,7 +40,6 @@ const levels: Record<string, Level> = {
     title: 'Intermedio',
     description:
       'Comunica ideas, opiniones y experiencias con mayor independencia.',
-    lessonCount: 155,
   },
 
   'b1-plus': {
@@ -52,7 +47,6 @@ const levels: Record<string, Level> = {
     title: 'Intermedio alto',
     description:
       'Refuerza fluidez y precisión al expresar ideas más detalladas.',
-    lessonCount: 74,
   },
 
   b2: {
@@ -60,7 +54,6 @@ const levels: Record<string, Level> = {
     title: 'Intermedio avanzado',
     description:
       'Comprende contenido más complejo y argumenta con confianza.',
-    lessonCount: 134,
   },
 
   c1: {
@@ -68,7 +61,6 @@ const levels: Record<string, Level> = {
     title: 'Avanzado',
     description:
       'Comunícate con precisión y naturalidad en contextos complejos.',
-    lessonCount: 158,
   },
 };
 
@@ -88,6 +80,24 @@ export default async function NivelPage({
   if (!level) {
     notFound();
   }
+
+  const levelLessons = Object.entries(
+    lessonTitles[normalizedLevel] ?? {},
+  )
+    .map(([lessonNumber, lessonTitle]) => ({
+      number: Number(lessonNumber),
+      title: lessonTitle,
+    }))
+    .filter(
+      (lesson) =>
+        Number.isInteger(lesson.number) &&
+        lesson.number > 0 &&
+        lesson.title.trim().length > 0,
+    )
+    .sort(
+      (firstLesson, secondLesson) =>
+        firstLesson.number - secondLesson.number,
+    );
 
   const supabase =
     createClient();
@@ -214,10 +224,8 @@ export default async function NivelPage({
 
               <h2>
                 Empieza por:{' '}
-                {getLessonTitle(
-                  normalizedLevel,
-                  1,
-                )}
+                {levelLessons[0]?.title ??
+                  'Contenido próximamente'}
               </h2>
 
               <p>
@@ -264,7 +272,7 @@ export default async function NivelPage({
             </div>
 
             <p>
-              {level.lessonCount}{' '}
+              {levelLessons.length}{' '}
               lecciones
             </p>
           </div>
@@ -274,21 +282,11 @@ export default async function NivelPage({
               styles.lessonList
             }
           >
-            {Array.from(
-              {
-                length:
-                  level.lessonCount,
-              },
-              (_, index) => {
-                const number =
-                  index + 1;
-
-                const lessonTitle =
-                  getLessonTitle(
-                    normalizedLevel,
-                    number,
-                  );
-
+            {levelLessons.map(
+              ({
+                number,
+                title: lessonTitle,
+              }) => {
                 const canOpenLesson =
                   hasLessonAccess ||
                   number <= 3;
@@ -462,4 +460,3 @@ export default async function NivelPage({
     </main>
   );
 }
-
