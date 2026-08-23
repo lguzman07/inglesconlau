@@ -11,7 +11,7 @@ import { createClient } from '@/lib/supabase/client';
 import { getLessonTitle } from '@/content/lecciones/catalog';
 import styles from './Inicio.module.css';
 
-const TOTAL_LESSONS = 1037;
+const TOTAL_LESSONS = 1024;
 
 const LAST_LESSON_STORAGE_KEY =
   'inglesconlau-last-opened-lesson';
@@ -356,11 +356,14 @@ export default function InicioPage() {
   useEffect(() => {
     if (!clubSession) return;
 
+    const startsAt = clubSession.starts_at;
+    const endsAt = clubSession.ends_at;
+
     function updateCountdown() {
       setClubCountdown(
         getClubCountdown(
-          clubSession.starts_at,
-          clubSession.ends_at,
+          startsAt,
+          endsAt,
         ),
       );
     }
