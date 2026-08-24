@@ -10,12 +10,7 @@ const lessonA001: LessonContent = {
   subtitle:
     'Aprende a decir quién eres, de dónde eres y cómo decir tu nombre en inglés.',
 
-  videoSrc: '/videos/a0/01-placeholder.mp4',
 
-  videoTitle: 'Preséntate en inglés',
-
-  videoDescription:
-    'En este video aprenderás a usar “I am” y “My name is” para hablar de ti.',
 
   objective:
     'Al terminar, podrás decir tu nombre, tu profesión y de dónde eres.',
