@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import Link from 'next/link';
@@ -24,6 +25,7 @@ type Availability = {
 
 type BookingSchedule = {
   label: string;
+  level: string;
   starts_at: string;
   ends_at: string;
 };
@@ -45,6 +47,102 @@ const LEVEL_OPTIONS = [
   { value: 'b1-plus', label: 'B1+' },
   { value: 'b2', label: 'B2' },
 ];
+
+const WEEK_DAYS = [
+  'Lu',
+  'Ma',
+  'Mi',
+  'Ju',
+  'Vi',
+  'Sá',
+  'Do',
+];
+
+function getLevelLabel(value: string) {
+  return (
+    LEVEL_OPTIONS.find(
+      (level) => level.value === value,
+    )?.label ?? value.toUpperCase()
+  );
+}
+
+function toIsoDate(date: Date) {
+  const year = date.getUTCFullYear();
+  const month = String(
+    date.getUTCMonth() + 1,
+  ).padStart(2, '0');
+  const day = String(date.getUTCDate()).padStart(
+    2,
+    '0',
+  );
+
+  return `${year}-${month}-${day}`;
+}
+
+function getMonthStart(value: string) {
+  return `${value.slice(0, 7)}-01`;
+}
+
+function changeMonth(value: string, amount: number) {
+  const [year, month] = value
+    .split('-')
+    .map(Number);
+
+  return toIsoDate(
+    new Date(
+      Date.UTC(year, month - 1 + amount, 1),
+    ),
+  );
+}
+
+function getCalendarDays(monthValue: string) {
+  const [year, month] = monthValue
+    .split('-')
+    .map(Number);
+
+  const firstDay = new Date(
+    Date.UTC(year, month - 1, 1),
+  );
+
+  const mondayOffset =
+    (firstDay.getUTCDay() + 6) % 7;
+
+  const gridStart = new Date(firstDay);
+  gridStart.setUTCDate(
+    gridStart.getUTCDate() - mondayOffset,
+  );
+
+  return Array.from({ length: 42 }, (_, index) => {
+    const day = new Date(gridStart);
+    day.setUTCDate(day.getUTCDate() + index);
+    return toIsoDate(day);
+  });
+}
+
+function formatMonth(value: string) {
+  const [year, month] = value
+    .split('-')
+    .map(Number);
+
+  const formatted = new Intl.DateTimeFormat(
+    'es-DO',
+    {
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
+    },
+  ).format(new Date(Date.UTC(year, month - 1, 1)));
+
+  return (
+    formatted.charAt(0).toUpperCase() +
+    formatted.slice(1)
+  );
+}
+
+function formatShortDate(value: string) {
+  const [year, month, day] = value.split('-');
+  return `${day}/${month}/${year}`;
+}
 
 function getDominicanToday() {
   const parts = new Intl.DateTimeFormat(
@@ -139,12 +237,19 @@ function getReadableError(
 
 export default function GroupClassesDashboard() {
   const today = getDominicanToday();
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   const [availableClasses, setAvailableClasses] =
     useState(0);
 
   const [selectedDate, setSelectedDate] =
     useState(today);
+
+  const [calendarMonth, setCalendarMonth] =
+    useState(getMonthStart(today));
+
+  const [isCalendarOpen, setIsCalendarOpen] =
+    useState(false);
 
   const [selectedLevel, setSelectedLevel] =
     useState('a1');
@@ -206,6 +311,7 @@ export default function GroupClassesDashboard() {
                 status,
                 schedule:group_class_schedules (
                   label,
+                  level,
                   starts_at,
                   ends_at
                 )
@@ -251,7 +357,15 @@ export default function GroupClassesDashboard() {
       setSelectedScheduleId('');
 
       const supabase = createClient();
-'get_group_class_availability_by_level'
+
+      const { data, error: availabilityError } =
+        await supabase.rpc(
+          'get_group_class_availability_by_level',
+          {
+            p_class_date: date,
+            p_level: level,
+          },
+        );
 
       if (availabilityError) {
         setAvailability([]);
@@ -282,6 +396,47 @@ export default function GroupClassesDashboard() {
     selectedDate,
     selectedLevel,
   ]);
+
+  useEffect(() => {
+    if (!isCalendarOpen) return;
+
+    function closeCalendar(event: MouseEvent) {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(
+          event.target as Node,
+        )
+      ) {
+        setIsCalendarOpen(false);
+      }
+    }
+
+    function closeWithEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setIsCalendarOpen(false);
+      }
+    }
+
+    document.addEventListener(
+      'mousedown',
+      closeCalendar,
+    );
+    document.addEventListener(
+      'keydown',
+      closeWithEscape,
+    );
+
+    return () => {
+      document.removeEventListener(
+        'mousedown',
+        closeCalendar,
+      );
+      document.removeEventListener(
+        'keydown',
+        closeWithEscape,
+      );
+    };
+  }, [isCalendarOpen]);
 
   async function handleReserve() {
     if (
@@ -448,25 +603,148 @@ export default function GroupClassesDashboard() {
 
           <h4>Elige la fecha y el horario</h4>
 
-          <label
+          <div
             className={styles.dateField}
-            htmlFor="group-class-date"
+            ref={calendarRef}
           >
-            Día de la clase
-            <input
-              id="group-class-date"
-              type="date"
-              min={today}
-              value={selectedDate}
-              onChange={(event) => {
-                setSelectedDate(
-                  event.target.value,
+            <span>Día de la clase</span>
+
+            <button
+              type="button"
+              className={styles.dateTrigger}
+              aria-haspopup="dialog"
+              aria-expanded={isCalendarOpen}
+              onClick={() => {
+                setCalendarMonth(
+                  getMonthStart(selectedDate),
                 );
-                setError('');
-                setMessage('');
+                setIsCalendarOpen((open) => !open);
               }}
-            />
-          </label>
+            >
+              <strong>
+                {formatShortDate(selectedDate)}
+              </strong>
+              <span aria-hidden="true">▦</span>
+            </button>
+
+            {isCalendarOpen ? (
+              <div
+                className={styles.calendar}
+                role="dialog"
+                aria-label="Escoge el día de la clase"
+              >
+                <div className={styles.calendarHeader}>
+                  <strong>
+                    {formatMonth(calendarMonth)}
+                  </strong>
+
+                  <div>
+                    <button
+                      type="button"
+                      aria-label="Mes anterior"
+                      disabled={
+                        changeMonth(
+                          calendarMonth,
+                          -1,
+                        ) < getMonthStart(today)
+                      }
+                      onClick={() =>
+                        setCalendarMonth((month) =>
+                          changeMonth(month, -1),
+                        )
+                      }
+                    >
+                      ←
+                    </button>
+
+                    <button
+                      type="button"
+                      aria-label="Mes siguiente"
+                      onClick={() =>
+                        setCalendarMonth((month) =>
+                          changeMonth(month, 1),
+                        )
+                      }
+                    >
+                      →
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  className={styles.weekDays}
+                  aria-hidden="true"
+                >
+                  {WEEK_DAYS.map((day) => (
+                    <span key={day}>{day}</span>
+                  ))}
+                </div>
+
+                <div className={styles.calendarGrid}>
+                  {getCalendarDays(calendarMonth).map(
+                    (day) => {
+                      const isOutsideMonth =
+                        day.slice(0, 7) !==
+                        calendarMonth.slice(0, 7);
+                      const isPast = day < today;
+                      const isSelected =
+                        day === selectedDate;
+                      const isToday = day === today;
+
+                      return (
+                        <button
+                          key={day}
+                          type="button"
+                          className={`${
+                            styles.calendarDay
+                          } ${
+                            isOutsideMonth
+                              ? styles.calendarDayOutside
+                              : ''
+                          } ${
+                            isSelected
+                              ? styles.calendarDaySelected
+                              : ''
+                          } ${
+                            isToday
+                              ? styles.calendarDayToday
+                              : ''
+                          }`}
+                          disabled={isPast}
+                          aria-pressed={isSelected}
+                          aria-label={formatDate(day)}
+                          onClick={() => {
+                            setSelectedDate(day);
+                            setIsCalendarOpen(false);
+                            setError('');
+                            setMessage('');
+                          }}
+                        >
+                          {Number(day.slice(8, 10))}
+                        </button>
+                      );
+                    },
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  className={styles.todayButton}
+                  onClick={() => {
+                    setSelectedDate(today);
+                    setCalendarMonth(
+                      getMonthStart(today),
+                    );
+                    setIsCalendarOpen(false);
+                    setError('');
+                    setMessage('');
+                  }}
+                >
+                  Ir a hoy
+                </button>
+              </div>
+            ) : null}
+          </div>
 
           <p className={styles.selectedDate}>
             {formatDate(selectedDate)}
@@ -556,7 +834,7 @@ export default function GroupClassesDashboard() {
               href="/clases-grupales"
               className={styles.purchaseLink}
             >
-              Comprar paquete de 5 clases
+              Ver paquetes de clases
             </Link>
           ) : null}
         </article>
@@ -607,6 +885,17 @@ export default function GroupClassesDashboard() {
                         </span>
                       ) : null}
                     </div>
+
+                    {schedule ? (
+                      <span
+                        className={styles.bookingLevel}
+                        aria-label={`Nivel ${getLevelLabel(
+                          schedule.level,
+                        )}`}
+                      >
+                        {getLevelLabel(schedule.level)}
+                      </span>
+                    ) : null}
 
                     <button
                       type="button"

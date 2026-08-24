@@ -136,6 +136,7 @@
 }
 
 .dateField {
+  position: relative;
   display: grid;
   gap: 8px;
   margin-top: 20px;
@@ -144,23 +145,185 @@
   font-weight: 700;
 }
 
-.dateField input {
+.dateTrigger {
+  display: flex;
   width: 100%;
   min-height: 48px;
-  padding: 10px 13px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 14px;
   color: var(--text);
   font: inherit;
-  color-scheme: light dark;
-  background: var(--surface-soft);
+  text-align: left;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  box-sizing: border-box;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 4%);
+  cursor: pointer;
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
 }
 
-.dateField input:focus-visible {
-  outline: 3px solid var(--primary-light);
+.dateTrigger > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--primary);
+  background: var(--surface-soft);
+  border-radius: 9px;
+}
+
+.dateTrigger:hover {
+  border-color: var(--primary);
+}
+
+.dateTrigger:focus-visible {
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
   border-color: var(--primary);
+}
+
+.calendar {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  z-index: 50;
+  width: min(100%, 360px);
+  padding: 18px;
+  box-sizing: border-box;
+  color: var(--text);
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-hover);
+}
+
+.calendarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.calendarHeader > strong {
+  font-size: 1rem;
+}
+
+.calendarHeader > div {
+  display: flex;
+  gap: 7px;
+}
+
+.calendarHeader button,
+.calendarDay,
+.todayButton {
+  color: var(--text);
+  font: inherit;
+  background: transparent;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.calendarHeader button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  place-items: center;
+  border-radius: 10px;
+}
+
+.calendarHeader button:hover:not(:disabled),
+.calendarHeader button:focus-visible,
+.todayButton:hover,
+.todayButton:focus-visible {
+  color: var(--primary);
+  background: var(--surface-soft);
+  border-color: var(--primary);
+}
+
+.calendarHeader button:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.weekDays,
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.weekDays {
+  margin-bottom: 7px;
+}
+
+.weekDays span {
+  padding: 4px 0;
+  color: var(--text-light);
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.calendarDay {
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-color: transparent;
+  border-radius: 10px;
+}
+
+.calendarDay:hover:not(:disabled),
+.calendarDay:focus-visible {
+  color: var(--primary);
+  background: var(--surface-soft);
+  border-color: var(--primary);
+}
+
+.calendarDayOutside {
+  color: var(--text-light);
+  opacity: 0.42;
+}
+
+.calendarDayToday {
+  border-color: var(--primary);
+}
+
+.calendarDaySelected,
+.calendarDaySelected:hover:not(:disabled) {
+  color: #ffffff;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.calendarDay:disabled {
+  cursor: not-allowed;
+  opacity: 0.28;
+}
+
+.calendarHeader button:focus-visible,
+.calendarDay:focus-visible,
+.todayButton:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.todayButton {
+  width: 100%;
+  min-height: 40px;
+  margin-top: 13px;
+  color: var(--primary);
+  font-weight: 800;
+  border-radius: 10px;
 }
 
 .selectedDate {
@@ -299,11 +462,12 @@
 }
 
 .bookingItem {
+  position: relative;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 14px;
-  padding: 15px;
+  padding: 15px 15px 58px;
   background: var(--surface-soft);
   border: 1px solid var(--border);
   border-radius: 14px;
@@ -325,6 +489,18 @@
   color: var(--text-light);
   font-size: 0.82rem;
   line-height: 1.5;
+}
+
+.bookingItem .bookingLevel {
+  position: absolute;
+  right: 16px;
+  bottom: 13px;
+  margin: 0;
+  color: var(--primary);
+  font-size: 1.55rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
 
 .bookingItem button {

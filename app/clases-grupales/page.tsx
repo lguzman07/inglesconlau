@@ -1,37 +1,32 @@
-import type {
-  Metadata,
-} from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import WeeklyGroupClassBooking from '@/components/WeeklyGroupClassBooking/WeeklyGroupClassBooking';
+import GroupClassPackages from '@/components/GroupClassPackages/GroupClassPackages';
 import { createClient } from '@/lib/supabase/server';
 
 import styles from './ClasesGrupales.module.css';
 
 export const metadata: Metadata = {
-  title:
-    'Clases grupales A1 | Inglés con Lau',
+  title: 'Clases grupales en vivo | Inglés con Lau',
   description:
-    'Compra un paquete de cinco clases grupales A1 en vivo con Inglés con Lau.',
+    'Compra clases grupales en vivo y reserva libremente en los niveles A1, A2, B1, B1+ y B2.',
 };
 
 const benefits = [
-  'Cinco clases en vivo por paquete',
-  'Explicaciones claras desde el nivel A1',
-  'Práctica oral durante cada encuentro',
-  'Corrección y acompañamiento en vivo',
-  'Las clases permanecen disponibles hasta agotarlas',
+  'Clases en vivo de una hora',
+  'Acceso a los grupos A1, A2, B1, B1+ y B2',
+  'Libertad para cambiar de nivel al reservar',
+  'Práctica oral, corrección y acompañamiento en vivo',
+  'Tus clases permanecen disponibles hasta agotarlas',
 ];
 
 export default async function ClasesGrupalesPage() {
-  const supabase =
-    createClient();
+  const supabase = createClient();
 
   const {
     data: { user },
-  } =
-    await supabase.auth.getUser();
+  } = await supabase.auth.getUser();
 
   if (!user) {
     redirect(
@@ -41,349 +36,175 @@ export default async function ClasesGrupalesPage() {
 
   const paymentDetails = {
     bankName:
-      process.env
-        .GROUP_CLASS_BANK_NAME ?? '',
+      process.env.GROUP_CLASS_BANK_NAME ?? '',
     accountHolder:
-      process.env
-        .GROUP_CLASS_ACCOUNT_HOLDER ?? '',
+      process.env.GROUP_CLASS_ACCOUNT_HOLDER ?? '',
     idDocument:
-      process.env
-        .GROUP_CLASS_ID_DOCUMENT ?? '',
+      process.env.GROUP_CLASS_ID_DOCUMENT ?? '',
     productType:
-      process.env
-        .GROUP_CLASS_PRODUCT_TYPE ?? '',
+      process.env.GROUP_CLASS_PRODUCT_TYPE ?? '',
     accountNumber:
-      process.env
-        .GROUP_CLASS_ACCOUNT_NUMBER ?? '',
+      process.env.GROUP_CLASS_ACCOUNT_NUMBER ?? '',
     currency:
-      process.env
-        .GROUP_CLASS_CURRENCY ?? '',
+      process.env.GROUP_CLASS_CURRENCY ?? '',
     paymentEmail:
-      process.env
-        .GROUP_CLASS_PAYMENT_EMAIL ?? '',
+      process.env.GROUP_CLASS_PAYMENT_EMAIL ?? '',
     swiftCode:
-      process.env
-        .GROUP_CLASS_SWIFT_CODE ?? '',
+      process.env.GROUP_CLASS_SWIFT_CODE ?? '',
   };
 
   return (
     <main className={styles.main}>
-      <div
-        className={styles.container}
-      >
-        <Link
-          href="/inicio"
-          className={
-            styles.backLink
-          }
-        >
+      <div className={styles.container}>
+        <Link href="/inicio" className={styles.backLink}>
           ← Volver a Inicio
         </Link>
 
-        <section
-          className={styles.hero}
-        >
-          <div
-            className={
-              styles.heroContent
-            }
-          >
-            <span
-              className={
-                styles.badge
-              }
-            >
+        <section className={styles.hero}>
+          <div className={styles.heroContent}>
+            <span className={styles.badge}>
               CLASES EN VIVO
             </span>
 
-            <p
-              className={
-                styles.eyebrow
-              }
-            >
-              CLASES GRUPALES A1
+            <p className={styles.eyebrow}>
+              CLASES GRUPALES
             </p>
 
-            <h1>
-              Aprende inglés en
-              compañía
-            </h1>
+            <h1>Aprende inglés en compañía</h1>
 
-            <p
-              className={
-                styles.heroDescription
-              }
-            >
-              Elige el grupo que mejor
-              se adapte a ti y compra
-              un paquete de cinco
-              clases para usar hasta
-              agotarlas.
+            <p className={styles.heroDescription}>
+              Compra la cantidad de clases que prefieras.
+              Después, escoge el nivel, la fecha y el horario
+              de cada encuentro desde tu plataforma.
             </p>
 
-            <div
-              className={
-                styles.heroActions
-              }
-            >
+            <div className={styles.heroActions}>
               <a
-                href="#reservar"
-                className={
-                  styles.primaryButton
-                }
+                href="#comprar"
+                className={styles.primaryButton}
               >
-                Reservar mis 5 clases
-                <span
-                  aria-hidden="true"
-                >
-                  →
-                </span>
+                Ver paquetes
+                <span aria-hidden="true">→</span>
               </a>
 
-              <a
-                href="#reservar"
-                className={
-                  styles.secondaryButton
-                }
+              <Link
+                href="/inicio"
+                className={styles.secondaryButton}
               >
-                Ver horarios
-              </a>
+                Ir a mis reservas
+              </Link>
             </div>
           </div>
 
           <aside
-            className={
-              styles.priceCard
-            }
-            aria-label="Precio del paquete"
+            className={styles.priceCard}
+            aria-label="Resumen de los paquetes"
           >
-            <p
-              className={
-                styles.priceLabel
-              }
-            >
-              PAQUETE DE 5 CLASES
+            <p className={styles.priceLabel}>
+              ELIGE TU OPCIÓN
             </p>
 
-            <div
-              className={styles.price}
-            >
-              <span>RD$</span>
-              <strong>600</strong>
+            <div className={styles.priceRange}>
+              <span>Desde</span>
+              <strong>5</strong>
+              <span>hasta 80 clases</span>
             </div>
 
-            <p
-              className={
-                styles.priceDescription
-              }
-            >
-              Incluye cinco clases en
-              vivo de una hora.
+            <p className={styles.priceDescription}>
+              Mientras más clases compras, menor es el precio
+              por cada encuentro.
             </p>
 
-            <div
-              className={
-                styles.priceDetail
-              }
-            >
-              <span
-                aria-hidden="true"
-              >
-                ✓
-              </span>
-              <p>
-                RD$120 por cada hora
-                de clase.
-              </p>
+            <div className={styles.priceDetail}>
+              <span aria-hidden="true">✓</span>
+              <p>Sin restricciones por nivel.</p>
             </div>
 
-            <div
-              className={
-                styles.priceDetail
-              }
-            >
-              <span
-                aria-hidden="true"
-              >
-                ✓
-              </span>
-              <p>
-                Compra otro paquete
-                cuando agotes tus
-                clases.
-              </p>
+            <div className={styles.priceDetail}>
+              <span aria-hidden="true">✓</span>
+              <p>Reserva cada clase según disponibilidad.</p>
             </div>
           </aside>
         </section>
 
-        <WeeklyGroupClassBooking
-          paymentDetails={
-            paymentDetails
-          }
+        <GroupClassPackages
+          paymentDetails={paymentDetails}
         />
 
         <section
-          className={
-            styles.benefitsSection
-          }
+          className={styles.benefitsSection}
           aria-labelledby="benefits-title"
         >
           <div>
-            <p
-              className={
-                styles.eyebrow
-              }
-            >
-              QUÉ INCLUYE
-            </p>
-
+            <p className={styles.eyebrow}>QUÉ INCLUYE</p>
             <h2 id="benefits-title">
-              Un espacio para aprender
-              y practicar
+              Aprende a tu ritmo y explora otros niveles
             </h2>
-
-            <p
-              className={
-                styles.sectionDescription
-              }
-            >
-              Después de enviar el
-              comprobante por correo,
-              Lau verificará el pago y
-              activará tus cinco
-              clases.
+            <p className={styles.sectionDescription}>
+              Tu saldo es general. Puedes continuar en tu
+              nivel habitual o reservar otra clase cuando
+              quieras investigar un tema diferente.
             </p>
           </div>
 
-          <ul
-            className={
-              styles.benefitList
-            }
-          >
-            {benefits.map(
-              (benefit) => (
-                <li key={benefit}>
-                  <span
-                    aria-hidden="true"
-                  >
-                    ✓
-                  </span>
-                  <p>{benefit}</p>
-                </li>
-              ),
-            )}
+          <ul className={styles.benefitList}>
+            {benefits.map((benefit) => (
+              <li key={benefit}>
+                <span aria-hidden="true">✓</span>
+                <p>{benefit}</p>
+              </li>
+            ))}
           </ul>
         </section>
 
         <section
-          className={
-            styles.processSection
-          }
+          className={styles.processSection}
           aria-labelledby="process-title"
         >
-          <div
-            className={
-              styles.sectionHeading
-            }
-          >
+          <div className={styles.sectionHeading}>
             <div>
-              <p
-                className={
-                  styles.eyebrow
-                }
-              >
+              <p className={styles.eyebrow}>
                 INSCRIPCIÓN
               </p>
-
               <h2 id="process-title">
-                ¿Cómo compras tu
-                paquete?
+                ¿Cómo funciona?
               </h2>
             </div>
           </div>
 
-          <ol
-            className={
-              styles.processGrid
-            }
-          >
-            <li
-              className={
-                styles.processCard
-              }
-            >
-              <span
-                className={
-                  styles.stepNumber
-                }
-              >
-                01
-              </span>
-              <h3>
-                Elige tu grupo
-              </h3>
+          <ol className={styles.processGrid}>
+            <li className={styles.processCard}>
+              <span className={styles.stepNumber}>01</span>
+              <h3>Elige tu paquete</h3>
               <p>
-                Selecciona el horario
-                que mejor se adapte a
-                ti.
+                Compra 5 clases, el mes de 20 clases o el
+                curso completo de 80 clases.
               </p>
             </li>
 
-            <li
-              className={
-                styles.processCard
-              }
-            >
-              <span
-                className={
-                  styles.stepNumber
-                }
-              >
-                02
-              </span>
-              <h3>
-                Realiza el pago
-              </h3>
+            <li className={styles.processCard}>
+              <span className={styles.stepNumber}>02</span>
+              <h3>Envía el comprobante</h3>
               <p>
-                Usa los datos
-                bancarios que
-                aparecerán después de
-                solicitar el paquete.
+                Realiza la transferencia y envíala desde el
+                correo de tu cuenta.
               </p>
             </li>
 
-            <li
-              className={
-                styles.processCard
-              }
-            >
-              <span
-                className={
-                  styles.stepNumber
-                }
-              >
-                03
-              </span>
-              <h3>
-                Envía el comprobante
-              </h3>
+            <li className={styles.processCard}>
+              <span className={styles.stepNumber}>03</span>
+              <h3>Reserva tus clases</h3>
               <p>
-                Envíalo por correo.
-                Cuando sea verificado,
-                Lau activará tus cinco
-                clases.
+                Cuando se active tu saldo, escoge libremente
+                el nivel, la fecha y el horario.
               </p>
             </li>
           </ol>
         </section>
 
-        <section
-          className={styles.notice}
-        >
+        <section className={styles.notice}>
           <div
-            className={
-              styles.noticeIcon
-            }
+            className={styles.noticeIcon}
             aria-hidden="true"
           >
             !
@@ -392,48 +213,28 @@ export default async function ClasesGrupalesPage() {
           <div>
             <h2>Importante</h2>
             <p>
-              Solicitar el paquete no
-              confirma el pago. Tus
-              cinco clases se activan
-              después de verificar el
-              comprobante enviado por
-              correo.
+              Tener clases disponibles no garantiza un cupo
+              específico. Cada encuentro debe reservarse y
+              los horarios llenos no podrán seleccionarse.
             </p>
           </div>
         </section>
 
-        <section
-          className={
-            styles.finalCta
-          }
-        >
-          <p
-            className={
-              styles.eyebrow
-            }
-          >
+        <section className={styles.finalCta}>
+          <p className={styles.eyebrow}>
             ¿LISTA PARA COMENZAR?
           </p>
-          <h2>
-            Compra tu paquete de
-            clases A1
-          </h2>
+          <h2>Escoge el paquete que se adapte a ti</h2>
           <p>
-            Elige tu grupo y reserva
-            tus cinco clases.
+            Todas las opciones te permiten reservar en
+            cualquier nivel disponible.
           </p>
           <a
-            href="#reservar"
-            className={
-              styles.primaryButton
-            }
+            href="#comprar"
+            className={styles.primaryButton}
           >
-            Reservar mis 5 clases
-            <span
-              aria-hidden="true"
-            >
-              →
-            </span>
+            Ver paquetes
+            <span aria-hidden="true">→</span>
           </a>
         </section>
       </div>
