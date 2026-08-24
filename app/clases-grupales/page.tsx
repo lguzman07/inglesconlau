@@ -18,7 +18,6 @@ export const metadata: Metadata = {
 
 const benefits = [
   'Cinco clases en vivo por paquete',
-  'Grupos pequeños de hasta 10 estudiantes',
   'Explicaciones claras desde el nivel A1',
   'Práctica oral durante cada encuentro',
   'Corrección y acompañamiento en vivo',
