@@ -1,9 +1,9 @@
 import type { LessonContent } from '../types';
 
-const lessonA1112: LessonContent = {
+const lessonA1052: LessonContent = {
   level: 'a1',
 
-  number: 112,
+  number: 52,
 
   title: 'Presente simple afirmativo',
 
@@ -11,7 +11,7 @@ const lessonA1112: LessonContent = {
     'Aprende a formar oraciones afirmativas para hablar de rutinas, hábitos y hechos.',
 
   videoSrc:
-    '/videos/a1/112-placeholder.mp4',
+    '/videos/a1/052-placeholder.mp4',
 
   videoTitle:
     'Cómo usar el presente simple afirmativo',
@@ -406,4 +406,4 @@ const lessonA1112: LessonContent = {
   ],
 };
 
-export default lessonA1112;
+export default lessonA1052;

@@ -10,7 +10,10 @@ const lessonA001: LessonContent = {
   subtitle:
     'Aprende a decir quién eres, de dónde eres y cómo decir tu nombre en inglés.',
 
+  videoTitle: 'Preséntate en inglés',
 
+  videoDescription:
+    'En este video aprenderás a usar “I am” y “My name is” para hablar de ti.',
 
   objective:
     'Al terminar, podrás decir tu nombre, tu profesión y de dónde eres.',
@@ -40,7 +43,6 @@ const lessonA001: LessonContent = {
               word: 'a',
               translation: 'un / una',
             },
-
             {
               word: 'teacher.',
               translation:
@@ -86,7 +88,6 @@ const lessonA001: LessonContent = {
               word: 'My',
               translation: 'mi',
             },
-
             {
               word: 'name',
               translation: 'nombre',
@@ -121,7 +122,6 @@ const lessonA001: LessonContent = {
               word: 'a',
               translation: 'un / una',
             },
-
             {
               word: 'student.',
               translation: 'estudiante',
@@ -142,7 +142,6 @@ const lessonA001: LessonContent = {
               word: 'My',
               translation: 'mi',
             },
-
             {
               word: 'name',
               translation: 'nombre',
@@ -189,17 +188,14 @@ const lessonA001: LessonContent = {
               word: 'I',
               translation: 'yo',
             },
-
             {
               word: 'am',
               translation: 'soy / estoy',
             },
-
             {
               word: 'a',
               translation: 'un / una',
             },
-
             {
               word: 'student.',
               translation: 'estudiante',
@@ -226,12 +222,10 @@ const lessonA001: LessonContent = {
               word: 'I',
               translation: 'yo',
             },
-
             {
               word: 'am',
               translation: 'soy / estoy',
             },
-
             {
               word: 'Dominican.',
               translation:
@@ -252,8 +246,6 @@ const lessonA001: LessonContent = {
           acceptedAnswers: [
             'My name is María',
             'My name is María.',
-            'My name is Maria',
-            'My name is Maria.',
           ],
 
           modelAnswer: [
@@ -261,17 +253,14 @@ const lessonA001: LessonContent = {
               word: 'My',
               translation: 'mi',
             },
-
             {
               word: 'name',
               translation: 'nombre',
             },
-
             {
               word: 'is',
               translation: 'es',
             },
-
             {
               word: 'María.',
               translation: 'María',
@@ -298,22 +287,18 @@ const lessonA001: LessonContent = {
               word: 'I',
               translation: 'yo',
             },
-
             {
               word: 'am',
               translation: 'soy / estoy',
             },
-
             {
               word: 'from',
               translation: 'de',
             },
-
             {
               word: 'Santo',
               translation: 'Santo',
             },
-
             {
               word: 'Domingo.',
               translation: 'Domingo',
@@ -340,17 +325,14 @@ const lessonA001: LessonContent = {
               word: 'I',
               translation: 'yo',
             },
-
             {
               word: 'am',
               translation: 'soy / estoy',
             },
-
             {
               word: 'a',
               translation: 'un / una',
             },
-
             {
               word: 'teacher.',
               translation:
