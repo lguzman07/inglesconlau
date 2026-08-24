@@ -1,37 +1,20 @@
 import type { Metadata } from 'next';
+
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+import WeeklyGroupClassBooking from '@/components/WeeklyGroupClassBooking/WeeklyGroupClassBooking';
 import { createClient } from '@/lib/supabase/server';
 
 import styles from './ClasesGrupales.module.css';
 
 export const metadata: Metadata = {
-  title: 'Clases grupales A1 | Inglés con Lau',
+  title:
+    'Clases grupales A1 | Inglés con Lau',
+
   description:
-    'Reserva tu horario para las clases grupales en vivo de Inglés con Lau.',
+    'Reserva tu semana para las clases grupales en vivo de Inglés con Lau.',
 };
-
-const BOOKING_URL =
-  'https://calendly.com/admin-inglesconlau/clasesgrupalesa1';
-
-const schedules = [
-  {
-    id: 'morning',
-    label: 'Grupo de la mañana',
-    time: '9:30 a. m. – 10:30 a. m.',
-  },
-  {
-    id: 'midday',
-    label: 'Grupo del mediodía',
-    time: '11:00 a. m. – 12:00 p. m.',
-  },
-  {
-    id: 'night',
-    label: 'Grupo de la noche',
-    time: '9:00 p. m. – 10:00 p. m.',
-  },
-];
 
 const benefits = [
   'Clases en vivo de lunes a viernes',
@@ -77,21 +60,30 @@ export default async function ClasesGrupalesPage() {
               Aprende inglés en compañía
             </h1>
 
-            <p className={styles.heroDescription}>
-              Elige el horario que mejor se adapte a ti
-              y aprende en un grupo pequeño, con
-              acompañamiento, práctica y corrección en
-              vivo.
+            <p
+              className={
+                styles.heroDescription
+              }
+            >
+              Elige la semana y el horario que
+              mejor se adapten a ti. Aprende
+              dentro de un grupo pequeño, con
+              acompañamiento, práctica y
+              corrección en vivo.
             </p>
 
-            <div className={styles.heroActions}>
+            <div
+              className={
+                styles.heroActions
+              }
+            >
               <a
-                href={BOOKING_URL}
-                target="_blank"
-                rel="noreferrer"
-                className={styles.primaryButton}
+                href="#reservar"
+                className={
+                  styles.primaryButton
+                }
               >
-                Reservar mi horario
+                Seleccionar mi semana
 
                 <span aria-hidden="true">
                   →
@@ -99,10 +91,12 @@ export default async function ClasesGrupalesPage() {
               </a>
 
               <a
-                href="#horarios"
-                className={styles.secondaryButton}
+                href="#reservar"
+                className={
+                  styles.secondaryButton
+                }
               >
-                Ver horarios
+                Ver semanas y horarios
               </a>
             </div>
           </div>
@@ -111,122 +105,101 @@ export default async function ClasesGrupalesPage() {
             className={styles.priceCard}
             aria-label="Precio de las clases"
           >
-            <p className={styles.priceLabel}>
+            <p
+              className={
+                styles.priceLabel
+              }
+            >
               INVERSIÓN SEMANAL
             </p>
 
             <div className={styles.price}>
               <span>RD$</span>
+
               <strong>600</strong>
             </div>
 
-            <p className={styles.priceDescription}>
-              Incluye cinco clases en vivo de una hora,
-              de lunes a viernes.
+            <p
+              className={
+                styles.priceDescription
+              }
+            >
+              Incluye cinco clases en vivo de
+              una hora, de lunes a viernes.
             </p>
 
-            <div className={styles.priceDetail}>
+            <div
+              className={
+                styles.priceDetail
+              }
+            >
               <span aria-hidden="true">
                 ✓
               </span>
 
               <p>
-                Equivale a RD$120 por cada hora de clase.
+                Equivale a RD$120 por cada
+                hora de clase.
               </p>
             </div>
 
-            <div className={styles.priceDetail}>
+            <div
+              className={
+                styles.priceDetail
+              }
+            >
               <span aria-hidden="true">
                 ✓
               </span>
 
               <p>
-                Máximo 10 estudiantes en cada grupo.
+                Máximo 10 estudiantes en
+                cada grupo.
               </p>
             </div>
           </aside>
         </section>
 
-        <section
-          id="horarios"
-          className={styles.schedulesSection}
-          aria-labelledby="schedules-title"
-        >
-          <div className={styles.sectionHeading}>
-            <div>
-              <p className={styles.eyebrow}>
-                HORARIOS
-              </p>
-
-              <h2 id="schedules-title">
-                Elige tu grupo
-              </h2>
-            </div>
-
-            <p>
-              Las clases se imparten de lunes a viernes
-              en el horario de República Dominicana
-              (UTC−4).
-            </p>
-          </div>
-
-          <div className={styles.scheduleGrid}>
-            {schedules.map((schedule) => (
-              <article
-                key={schedule.id}
-                className={styles.scheduleCard}
-              >
-                <span className={styles.scheduleDot} />
-
-                <p className={styles.scheduleLabel}>
-                  {schedule.label}
-                </p>
-
-                <h3>{schedule.time}</h3>
-
-                <p className={styles.scheduleDays}>
-                  Lunes a viernes
-                </p>
-
-                <div className={styles.capacity}>
-                  Hasta 10 estudiantes
-                </div>
-
-                <a
-                  href={BOOKING_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={styles.scheduleButton}
-                >
-                  Elegir este horario
-                </a>
-              </article>
-            ))}
-          </div>
-        </section>
+        <WeeklyGroupClassBooking />
 
         <section
-          className={styles.benefitsSection}
+          className={
+            styles.benefitsSection
+          }
           aria-labelledby="benefits-title"
         >
           <div>
-            <p className={styles.eyebrow}>
+            <p
+              className={
+                styles.eyebrow
+              }
+            >
               QUÉ INCLUYE
             </p>
 
             <h2 id="benefits-title">
-              Un espacio para aprender y practicar
+              Un espacio para aprender y
+              practicar
             </h2>
 
-            <p className={styles.sectionDescription}>
-              No necesitas saberlo todo antes de entrar.
-              Estas clases están diseñadas para ayudarte
-              a construir una base clara y usar el
-              inglés con más seguridad.
+            <p
+              className={
+                styles.sectionDescription
+              }
+            >
+              No necesitas saberlo todo antes
+              de entrar. Estas clases están
+              diseñadas para ayudarte a
+              construir una base clara y usar
+              el inglés con más seguridad.
             </p>
           </div>
 
-          <ul className={styles.benefitList}>
+          <ul
+            className={
+              styles.benefitList
+            }
+          >
             {benefits.map((benefit) => (
               <li key={benefit}>
                 <span aria-hidden="true">
@@ -240,12 +213,22 @@ export default async function ClasesGrupalesPage() {
         </section>
 
         <section
-          className={styles.processSection}
+          className={
+            styles.processSection
+          }
           aria-labelledby="process-title"
         >
-          <div className={styles.sectionHeading}>
+          <div
+            className={
+              styles.sectionHeading
+            }
+          >
             <div>
-              <p className={styles.eyebrow}>
+              <p
+                className={
+                  styles.eyebrow
+                }
+              >
                 INSCRIPCIÓN
               </p>
 
@@ -255,45 +238,81 @@ export default async function ClasesGrupalesPage() {
             </div>
           </div>
 
-          <ol className={styles.processGrid}>
-            <li className={styles.processCard}>
-              <span className={styles.stepNumber}>
+          <ol
+            className={
+              styles.processGrid
+            }
+          >
+            <li
+              className={
+                styles.processCard
+              }
+            >
+              <span
+                className={
+                  styles.stepNumber
+                }
+              >
                 01
               </span>
 
-              <h3>Elige tu horario</h3>
+              <h3>
+                Elige tu semana
+              </h3>
 
               <p>
-                Abre el calendario y selecciona uno de
-                los tres grupos disponibles.
+                Selecciona una de las semanas
+                disponibles a partir del 14 de
+                septiembre.
               </p>
             </li>
 
-            <li className={styles.processCard}>
-              <span className={styles.stepNumber}>
+            <li
+              className={
+                styles.processCard
+              }
+            >
+              <span
+                className={
+                  styles.stepNumber
+                }
+              >
                 02
               </span>
 
-              <h3>Envía el comprobante</h3>
+              <h3>
+                Selecciona tu grupo
+              </h3>
 
               <p>
-                Después de reservar, envía el
-                comprobante de pago siguiendo las
-                instrucciones del correo.
+                Escoge uno de los tres horarios
+                y reserva uno de los 10 cupos
+                disponibles.
               </p>
             </li>
 
-            <li className={styles.processCard}>
-              <span className={styles.stepNumber}>
+            <li
+              className={
+                styles.processCard
+              }
+            >
+              <span
+                className={
+                  styles.stepNumber
+                }
+              >
                 03
               </span>
 
-              <h3>Recibe tu acceso</h3>
+              <h3>
+                Confirma tu pago
+              </h3>
 
               <p>
-                Cuando el pago sea confirmado, recibirás
-                el enlace privado para entrar a la
-                clase.
+                Sube el comprobante dentro de
+                Inglés con Lau. Cuando sea
+                aprobado, tu reservación
+                quedará confirmada.
               </p>
             </li>
           </ol>
@@ -301,7 +320,9 @@ export default async function ClasesGrupalesPage() {
 
         <section className={styles.notice}>
           <div
-            className={styles.noticeIcon}
+            className={
+              styles.noticeIcon
+            }
             aria-hidden="true"
           >
             !
@@ -311,17 +332,24 @@ export default async function ClasesGrupalesPage() {
             <h2>Importante</h2>
 
             <p>
-              Reservar un horario no confirma
-              automáticamente el cupo. La inscripción
-              queda confirmada después de verificar el
-              pago. No compartas el enlace privado de la
-              clase.
+              La reservación inicial mantiene
+              tu cupo durante 45 minutos. Para
+              conservarlo, debes subir el
+              comprobante de pago antes de que
+              termine ese tiempo. No compartas
+              el enlace privado de la clase.
             </p>
           </div>
         </section>
 
-        <section className={styles.finalCta}>
-          <p className={styles.eyebrow}>
+        <section
+          className={styles.finalCta}
+        >
+          <p
+            className={
+              styles.eyebrow
+            }
+          >
             ¿LISTA PARA COMENZAR?
           </p>
 
@@ -330,17 +358,18 @@ export default async function ClasesGrupalesPage() {
           </h2>
 
           <p>
-            Escoge el horario que funcione mejor para ti
+            Escoge tu semana, selecciona el
+            horario que funcione mejor para ti
             y asegura tu espacio.
           </p>
 
           <a
-            href={BOOKING_URL}
-            target="_blank"
-            rel="noreferrer"
-            className={styles.primaryButton}
+            href="#reservar"
+            className={
+              styles.primaryButton
+            }
           >
-            Reservar mi horario
+            Seleccionar mi semana
 
             <span aria-hidden="true">
               →

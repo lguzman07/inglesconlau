@@ -1,0 +1,338 @@
+.booking {
+  margin-top: 70px;
+  scroll-margin-top: 30px;
+}
+
+.heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 26px;
+}
+
+.eyebrow,
+.weekHeading p,
+.reservationLabel {
+  margin: 0 0 10px;
+  color: var(--primary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.heading h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+}
+
+.heading > p {
+  max-width: 430px;
+  margin: 0;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+.loading,
+.error,
+.success {
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.loading {
+  color: var(--text-light);
+  text-align: center;
+}
+
+.error {
+  margin-bottom: 20px;
+  color: #a61b1b;
+  background: #fff1f1;
+  border-color: #e7a5a5;
+}
+
+.success {
+  margin-bottom: 20px;
+  color: var(--text);
+  background: var(--primary-light);
+}
+
+.weekSelector {
+  display: flex;
+  gap: 12px;
+  padding: 4px 2px 18px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.weekButton {
+  display: flex;
+  min-width: 130px;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.weekButton span {
+  color: var(--text-light);
+  font-size: 0.72rem;
+}
+
+.weekButton strong {
+  font-size: 1rem;
+}
+
+.weekButton small {
+  margin-top: 5px;
+  color: var(--primary);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.weekButton:hover,
+.weekButton:focus-visible,
+.weekButtonActive {
+  color: var(--surface);
+  background: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.weekButton:hover span,
+.weekButton:focus-visible span,
+.weekButtonActive span,
+.weekButton:hover small,
+.weekButton:focus-visible small,
+.weekButtonActive small {
+  color: var(--surface);
+}
+
+.weekHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 16px 0 22px;
+  padding: 24px 26px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+
+.weekHeading h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+}
+
+.weekPrice {
+  padding: 10px 14px;
+  color: var(--surface);
+  font-weight: 900;
+  background: var(--primary);
+  border-radius: 999px;
+}
+
+.scheduleGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.scheduleCard {
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+}
+
+.scheduleDot {
+  width: 12px;
+  height: 12px;
+  margin-bottom: 26px;
+  background: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 0 7px var(--primary-light);
+}
+
+.scheduleLabel {
+  margin: 0 0 10px;
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+}
+
+.scheduleCard h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.45rem;
+}
+
+.scheduleDays {
+  margin: 10px 0 22px;
+  color: var(--text-light);
+}
+
+.capacity {
+  margin-bottom: 24px;
+  padding: 12px;
+  color: var(--text-light);
+  text-align: center;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.capacity strong {
+  color: var(--primary);
+}
+
+.reserveButton,
+.cancelButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+  padding: 14px 18px;
+  font: inherit;
+  font-weight: 800;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.reserveButton {
+  color: var(--surface);
+  background: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.reserveButton:hover:not(:disabled),
+.reserveButton:focus-visible:not(:disabled) {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.reserveButton:disabled,
+.cancelButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.reservationCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+}
+
+.reservationCard h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.4rem;
+}
+
+.reservationCard p:not(.reservationLabel) {
+  margin: 10px 0 0;
+  color: var(--text-light);
+}
+
+.reservationActions {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statusBadge {
+  display: inline-flex;
+  padding: 9px 13px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  border-radius: 999px;
+}
+
+.pending_payment {
+  color: #785400;
+  background: #fff4c7;
+}
+
+.pending_review {
+  color: #005a76;
+  background: #d8f4ff;
+}
+
+.confirmed {
+  color: #12642e;
+  background: #dff7e6;
+}
+
+.rejected,
+.cancelled {
+  color: #8a1e1e;
+  background: #ffe4e4;
+}
+
+.cancelButton {
+  color: var(--primary);
+  background: transparent;
+  border: 1px solid var(--primary);
+}
+
+.cancelButton:hover,
+.cancelButton:focus-visible {
+  color: var(--surface);
+  background: var(--primary);
+}
+
+.weekButton:focus-visible,
+.reserveButton:focus-visible,
+.cancelButton:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 3px;
+}
+
+@media (max-width: 850px) {
+  .scheduleGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 650px) {
+  .heading,
+  .weekHeading,
+  .reservationCard {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .reservationActions,
+  .cancelButton {
+    width: 100%;
+    align-items: stretch;
+    box-sizing: border-box;
+  }
+}

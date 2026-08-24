@@ -40,7 +40,7 @@ export default function StepOne() {
         </p>
 
         <Link href="/plan" className={styles.ctaButton}>
-          Ver el plan →
+          Ver los planes →
         </Link>
       </div>
     </section>

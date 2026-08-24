@@ -23,7 +23,7 @@ export default function Hero() {
             <span className="button-title">Ver el plan</span>
 
             <span className="button-subtitle">
-              RD$1,200 al mes
+              Desde RD$600 a la semana
             </span>
           </Link>
 
