@@ -1,123 +1,165 @@
-type VerbTensesLesson = {
+type VerbTensesLevel =
+  | 'a0'
+  | 'a1'
+  | 'a2'
+  | 'b1'
+  | 'b1-plus'
+  | 'b2'
+  | 'c1';
+
+export type VerbTensesLesson = {
   lessonKey: string;
-  level: string;
+  level: VerbTensesLevel;
   lessonNumber: number;
 };
 
-type VerbTensesModule = {
+export type VerbTensesModule = {
   id: string;
   title: string;
   description: string;
   lessons: VerbTensesLesson[];
 };
 
-function lesson(
-  level: string,
-  lessonNumber: number,
-): VerbTensesLesson {
-  return {
+function createLessons(
+  level: VerbTensesLevel,
+  lessonNumbers: number[],
+): VerbTensesLesson[] {
+  return lessonNumbers.map((lessonNumber) => ({
     lessonKey: `${level}/${lessonNumber}`,
     level,
     lessonNumber,
-  };
+  }));
+}
+
+function createLessonRange(
+  level: VerbTensesLevel,
+  firstLesson: number,
+  lastLesson: number,
+): VerbTensesLesson[] {
+  return createLessons(
+    level,
+    Array.from(
+      {
+        length:
+          lastLesson - firstLesson + 1,
+      },
+      (_, index) => firstLesson + index,
+    ),
+  );
 }
 
 export const verbTensesModules: VerbTensesModule[] = [
   {
-    id: 'foundations-with-be',
+    id: 'verb-be-foundations',
 
-    title: 'Fundamentos con be',
+    title: 'Fundamentos del verbo be',
 
     description:
-      'Empieza con am, is, are y las contracciones esenciales que necesitarás para estudiar los tiempos verbales.',
+      'Comienza con am, is y are, sus contracciones, negativos, preguntas y respuestas cortas.',
 
     lessons: [
-      lesson('a0', 1),
-      lesson('a0', 2),
-      lesson('a1', 6),
-      lesson('a1', 7),
+      ...createLessons('a0', [
+        1,
+        2,
+        76,
+      ]),
+
+      ...createLessonRange(
+        'a1',
+        8,
+        12,
+      ),
     ],
   },
 
   {
     id: 'present-simple',
 
-    title: 'Present simple',
+    title: 'Presente simple',
 
     description:
-      'Aprende a hablar de rutinas, hábitos, hechos y situaciones permanentes.',
+      'Aprende a hablar de rutinas, hábitos, gustos, hechos y acciones habituales.',
 
     lessons: [
-      lesson('a1', 112),
-      lesson('a1', 113),
-      lesson('a1', 114),
-      lesson('a1', 115),
-      lesson('a1', 116),
-      lesson('a1', 117),
-      lesson('a1', 118),
-      lesson('a1', 119),
-      lesson('a1', 122),
+      ...createLessons('a1', [16]),
+
+      ...createLessonRange(
+        'a1',
+        51,
+        61,
+      ),
     ],
   },
 
   {
     id: 'present-continuous',
 
-    title: 'Present continuous',
+    title: 'Presente continuo',
 
     description:
-      'Habla de acciones que ocurren ahora, situaciones temporales y diferencias con el presente simple.',
+      'Describe acciones que están ocurriendo ahora y aprende a diferenciarlas de los hábitos.',
 
     lessons: [
-      lesson('a1', 202),
-      lesson('a1', 203),
-      lesson('a1', 204),
-      lesson('a1', 205),
-      lesson('a1', 206),
-      lesson('a1', 208),
-      lesson('a2', 1),
-      lesson('a2', 2),
-      lesson('b1', 1),
+      ...createLessonRange(
+        'a1',
+        79,
+        83,
+      ),
+
+      ...createLessons('a2', [
+        1,
+        2,
+      ]),
+
+      ...createLessons('b1', [1]),
     ],
   },
 
   {
     id: 'past-simple',
 
-    title: 'Past simple',
+    title: 'Pasado simple',
 
     description:
-      'Aprende a hablar de acciones y situaciones terminadas en el pasado.',
+      'Habla de acontecimientos terminados, verbos regulares e irregulares y hábitos del pasado.',
 
     lessons: [
-      lesson('a1', 252),
-      lesson('a1', 253),
-      lesson('a1', 254),
-      lesson('a1', 257),
-      lesson('a1', 258),
-      lesson('a1', 259),
-      lesson('a1', 260),
-      lesson('a1', 262),
-      lesson('a1', 263),
+      ...createLessonRange(
+        'a1',
+        97,
+        99,
+      ),
+
+      ...createLessonRange(
+        'a2',
+        3,
+        6,
+      ),
+
+      ...createLessonRange(
+        'b1',
+        10,
+        13,
+      ),
     ],
   },
 
   {
     id: 'past-continuous',
 
-    title: 'Past continuous',
+    title: 'Pasado continuo',
 
     description:
-      'Describe acciones que estaban ocurriendo y combínalas con acontecimientos en pasado simple.',
+      'Describe acciones en progreso en el pasado, interrupciones y acontecimientos simultáneos.',
 
     lessons: [
-      lesson('a2', 7),
-      lesson('a2', 8),
-      lesson('a2', 9),
-      lesson('a2', 10),
-      lesson('a2', 11),
-      lesson('a2', 13),
-      lesson('b1', 6),
+      ...createLessonRange(
+        'a2',
+        7,
+        14,
+      ),
+
+      ...createLessons('b1', [6]),
     ],
   },
 
@@ -127,118 +169,118 @@ export const verbTensesModules: VerbTensesModule[] = [
     title: 'Present perfect',
 
     description:
-      'Conecta el pasado con el presente para hablar de experiencias, resultados y duración.',
+      'Conecta el pasado con el presente para hablar de experiencias, duración y acciones recientes.',
 
     lessons: [
-      lesson('a2', 15),
-      lesson('a2', 16),
-      lesson('a2', 17),
-      lesson('a2', 18),
-      lesson('a2', 19),
-      lesson('a2', 20),
-      lesson('a2', 21),
-      lesson('a2', 22),
-      lesson('a2', 25),
-      lesson('a2', 26),
-      lesson('b1', 2),
-      lesson('b1', 3),
-    ],
-  },
+      ...createLessonRange(
+        'a2',
+        15,
+        27,
+      ),
 
-  {
-    id: 'present-perfect-continuous',
+      ...createLessonRange(
+        'b1',
+        2,
+        5,
+      ),
 
-    title: 'Present perfect continuous',
+      ...createLessons(
+        'b1-plus',
+        [2],
+      ),
 
-    description:
-      'Expresa acciones que comenzaron en el pasado y continúan o tienen efectos visibles en el presente.',
-
-    lessons: [
-      lesson('b1', 4),
-      lesson('b1', 5),
-      lesson('b1-plus', 2),
-      lesson('b2', 1),
+      ...createLessons('b2', [1]),
     ],
   },
 
   {
     id: 'past-perfect',
 
-    title: 'Past perfect y past perfect continuous',
+    title: 'Past perfect',
 
     description:
-      'Organiza acontecimientos pasados y explica qué había sucedido antes de otro momento.',
+      'Expresa qué acción ocurrió primero y construye narraciones con diferentes tiempos pasados.',
 
     lessons: [
-      lesson('b1', 7),
-      lesson('b1', 8),
-      lesson('b1-plus', 3),
-      lesson('b2', 2),
+      ...createLessonRange(
+        'b1',
+        7,
+        9,
+      ),
+
+      ...createLessons(
+        'b1-plus',
+        [3, 4],
+      ),
+
+      ...createLessons('b2', [
+        2,
+        3,
+      ]),
     ],
   },
 
   {
     id: 'future-forms',
 
-    title: 'Going to, will y planes futuros',
+    title: 'Formas del futuro',
 
     description:
-      'Habla de planes, decisiones, predicciones, promesas y acontecimientos futuros.',
+      'Domina going to, will, present continuous, future continuous, future perfect y future in the past.',
 
     lessons: [
-      lesson('a1', 266),
-      lesson('a1', 267),
-      lesson('a1', 268),
-      lesson('a1', 269),
-      lesson('a2', 28),
-      lesson('a2', 29),
-      lesson('a2', 30),
-      lesson('a2', 31),
-      lesson('a2', 32),
-      lesson('a2', 33),
-      lesson('a2', 34),
-      lesson('b1', 14),
-      lesson('b1', 16),
-    ],
-  },
+      ...createLessons('a1', [100]),
 
-  {
-    id: 'advanced-future-forms',
+      ...createLessonRange(
+        'a2',
+        28,
+        34,
+      ),
 
-    title: 'Future continuous y future perfect',
+      ...createLessonRange(
+        'b1',
+        14,
+        16,
+      ),
 
-    description:
-      'Describe acciones en progreso, acciones completadas y duración en momentos futuros.',
+      ...createLessonRange(
+        'b1-plus',
+        5,
+        7,
+      ),
 
-    lessons: [
-      lesson('b1', 15),
-      lesson('b1-plus', 5),
-      lesson('b1-plus', 6),
-      lesson('b2', 4),
-      lesson('b2', 5),
+      ...createLessonRange(
+        'b2',
+        4,
+        7,
+      ),
+
+      ...createLessons('c1', [
+        5,
+        6,
+      ]),
     ],
   },
 
   {
     id: 'advanced-tense-control',
 
-    title: 'Control avanzado de tiempos verbales',
+    title: 'Dominio avanzado de los tiempos verbales',
 
     description:
-      'Combina tiempos verbales, controla la perspectiva temporal y expresa relaciones complejas entre pasado, presente y futuro.',
+      'Consolida todos los tiempos y elige cada forma verbal según la perspectiva, el aspecto y el contexto.',
 
     lessons: [
-      lesson('b1-plus', 1),
-      lesson('b1-plus', 4),
-      lesson('b2', 3),
-      lesson('b2', 6),
-      lesson('b2', 7),
-      lesson('c1', 1),
-      lesson('c1', 2),
-      lesson('c1', 4),
-      lesson('c1', 5),
-      lesson('c1', 6),
-      lesson('c1', 61),
+      ...createLessons(
+        'b1-plus',
+        [1],
+      ),
+
+      ...createLessonRange(
+        'c1',
+        1,
+        4,
+      ),
     ],
   },
 ];
