@@ -1,0 +1,511 @@
+.main {
+    min-height: 100vh;
+    color: var(--text);
+    background: var(--background);
+}
+
+.container {
+    width: min(1120px, 88%);
+    margin: 0 auto;
+    padding: 44px 0 80px;
+}
+
+.backLink {
+    display: inline-flex;
+    margin-bottom: 26px;
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.backLink:hover,
+.backLink:focus-visible {
+    color: var(--primary-hover);
+}
+
+.backLink:focus-visible {
+    outline: 3px solid var(--primary-light);
+    outline-offset: 3px;
+}
+
+.hero {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.5fr)
+        minmax(260px, .7fr);
+    gap: 32px;
+    padding: 44px 48px;
+    background:
+        linear-gradient(
+            135deg,
+            var(--surface-soft),
+            var(--surface)
+        );
+    border: 1px solid var(--border);
+    border-radius: 24px;
+}
+
+.heroContent {
+    align-self: center;
+}
+
+.labBadge {
+    display: inline-flex;
+    padding: 8px 12px;
+    color: var(--surface);
+    font-size: .8rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    background: var(--primary);
+    border-radius: 999px;
+}
+
+.eyebrow {
+    margin: 20px 0 10px;
+    color: var(--primary);
+    font-size: .82rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+}
+
+.title {
+    max-width: 670px;
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    line-height: 1.08;
+}
+
+.description {
+    max-width: 650px;
+    margin: 18px 0 0;
+    color: var(--text-light);
+    font-size: 1.02rem;
+    line-height: 1.7;
+}
+
+.startButton,
+.primaryButton,
+.secondaryButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 50px;
+    padding: 13px 20px;
+    font-weight: 800;
+    text-decoration: none;
+    border-radius: 999px;
+    transition: var(--transition);
+}
+
+.startButton,
+.primaryButton {
+    color: var(--surface);
+    background: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.startButton {
+    margin-top: 26px;
+}
+
+.startButton:hover,
+.startButton:focus-visible,
+.primaryButton:hover,
+.primaryButton:focus-visible {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.startButton:focus-visible,
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible {
+    outline: 3px solid var(--primary-light);
+    outline-offset: 3px;
+}
+
+.progressCard {
+    align-self: stretch;
+    padding: 28px;
+    background: var(--surface);
+    border: 1px solid var(--primary-light);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+.progressLabel {
+    margin: 0;
+    color: var(--primary);
+    font-size: .76rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+}
+
+.progressNumber {
+    display: block;
+    margin-top: 16px;
+    color: var(--text);
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    line-height: 1;
+}
+
+.progressText {
+    margin: 12px 0 0;
+    color: var(--text-light);
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+.progressTrack {
+    width: 100%;
+    height: 10px;
+    margin-top: 22px;
+    overflow: hidden;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+}
+
+.progressFill {
+    display: block;
+    height: 100%;
+    background: var(--primary);
+    border-radius: inherit;
+    transition: width 220ms ease;
+}
+
+.progressNote {
+    margin: 16px 0 0;
+    color: var(--text-light);
+    font-size: .78rem;
+    line-height: 1.5;
+}
+
+.introduction {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: 24px;
+    padding: 24px 28px;
+    background: var(--surface);
+    border: 1px solid var(--primary-light);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+.introductionIcon {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+    place-items: center;
+    color: var(--surface);
+    font-weight: 900;
+    background: var(--primary);
+    border-radius: 50%;
+}
+
+.introduction h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.1rem;
+}
+
+.introduction p {
+    max-width: 780px;
+    margin: 7px 0 0;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.modulesSection {
+    margin-top: 50px;
+}
+
+.sectionHeading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+    margin-bottom: 20px;
+}
+
+.sectionHeading .eyebrow {
+    margin: 0 0 9px;
+}
+
+.sectionHeading h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1.65rem, 3vw, 2.15rem);
+}
+
+.sectionHeading > p {
+    max-width: 330px;
+    margin: 0;
+    color: var(--text-light);
+    font-size: .9rem;
+    line-height: 1.6;
+    text-align: right;
+}
+
+.moduleList {
+    display: grid;
+    gap: 22px;
+}
+
+.moduleCard {
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+}
+
+.moduleHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 26px 28px;
+    background: var(--surface-soft);
+    border-bottom: 1px solid var(--border);
+}
+
+.moduleNumber {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    flex: 0 0 auto;
+    place-items: center;
+    color: var(--primary);
+    font-weight: 900;
+    background: var(--surface);
+    border: 1px solid var(--primary-light);
+    border-radius: 50%;
+}
+
+.moduleHeader p {
+    margin: 0 0 6px;
+    color: var(--primary);
+    font-size: .73rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+}
+
+.moduleHeader h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.3rem;
+}
+
+.moduleHeader div > span {
+    display: block;
+    margin-top: 8px;
+    color: var(--text-light);
+    font-size: .9rem;
+    line-height: 1.55;
+}
+
+.lessonList {
+    display: grid;
+    gap: 0;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.lessonList li + li {
+    border-top: 1px solid var(--border);
+}
+
+.lessonCard {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 20px 24px;
+    color: var(--text);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.lessonCard:hover,
+.lessonCard:focus-visible {
+    background: var(--surface-soft);
+}
+
+.lessonCard:focus-visible {
+    outline: 3px solid var(--primary-light);
+    outline-offset: -3px;
+}
+
+.lessonOrder {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 auto;
+    place-items: center;
+    color: var(--primary);
+    font-size: .85rem;
+    font-weight: 900;
+    background: var(--surface-soft);
+    border-radius: 50%;
+}
+
+.lessonContent {
+    flex: 1;
+}
+
+.lessonLabels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 7px;
+}
+
+.lessonLabels span {
+    display: inline-flex;
+    padding: 4px 7px;
+    color: var(--primary);
+    font-size: .66rem;
+    font-weight: 800;
+    background: var(--surface-soft);
+    border: 1px solid var(--primary-light);
+    border-radius: 999px;
+}
+
+.lessonContent h4 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1rem;
+}
+
+.lessonContent p {
+    margin: 6px 0 0;
+    color: var(--text-light);
+    font-size: .85rem;
+    line-height: 1.5;
+}
+
+.openLesson {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    color: var(--primary);
+    font-size: .82rem;
+    font-weight: 800;
+}
+
+.openLesson span {
+    font-size: 1.05rem;
+    transition: transform var(--transition);
+}
+
+.lessonCard:hover .openLesson span,
+.lessonCard:focus-visible .openLesson span {
+    transform: translateX(3px);
+}
+
+.completedCheck {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+    place-items: center;
+    color: transparent;
+    font-weight: 900;
+    background: var(--surface-soft);
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+}
+
+.completedCheckActive {
+    color: var(--surface);
+    background: var(--primary);
+}
+
+.bottomNavigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 44px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+}
+
+.secondaryButton {
+    color: var(--primary);
+    background: transparent;
+    border: 1px solid var(--primary);
+}
+
+.secondaryButton:hover,
+.secondaryButton:focus-visible {
+    color: var(--surface);
+    background: var(--primary);
+}
+
+@media (max-width: 850px) {
+    .hero {
+        grid-template-columns: 1fr;
+    }
+
+    .progressCard {
+        max-width: none;
+    }
+}
+
+@media (max-width: 700px) {
+    .sectionHeading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .sectionHeading > p {
+        max-width: none;
+        text-align: left;
+    }
+
+    .bottomNavigation {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .primaryButton,
+    .secondaryButton {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        width: min(92%, 1120px);
+        padding-top: 30px;
+    }
+
+    .hero {
+        padding: 30px 24px;
+    }
+
+    .introduction,
+    .moduleHeader {
+        padding: 22px;
+    }
+
+    .lessonCard {
+        align-items: flex-start;
+        gap: 13px;
+        padding: 18px;
+    }
+
+    .openLesson {
+        display: none;
+    }
+
+    .completedCheck {
+        width: 34px;
+        height: 34px;
+    }
+}

@@ -35,6 +35,13 @@ type ProgressRow = {
     | null;
 };
 
+type ExerciseProgressRow = {
+  answers: Record<string, string>;
+  score: number;
+  total_questions: number;
+  has_attempted: boolean;
+};
+
 type ActiveBubble =
   | {
       type: 'word';
@@ -51,6 +58,9 @@ type FillInTheBlanksProps = {
   title: string;
   instructions: string;
   lessonKey: string;
+  exerciseKey?: string;
+  lessonTotalQuestions?: number;
+  showLessonProgress?: boolean;
   questions: FillInTheBlanksQuestion[];
   nextLessonHref?: string;
   englishVariant?: 'en' | 'en-GB';
@@ -112,7 +122,10 @@ export default function FillInTheBlanks({
   title,
   instructions,
   lessonKey,
+  exerciseKey = 'fill-in-the-blanks-1',
   questions,
+  lessonTotalQuestions = questions.length,
+  showLessonProgress = true,
   nextLessonHref,
   englishVariant = 'en',
 }: FillInTheBlanksProps) {
@@ -128,6 +141,9 @@ export default function FillInTheBlanks({
 
   const supabase =
     supabaseRef.current;
+
+  const draftKey =
+    `lesson-exercise-draft:${lessonKey}:${exerciseKey}`;
 
   const [answers, setAnswers] =
     useState<Record<number, string>>(
@@ -213,9 +229,13 @@ export default function FillInTheBlanks({
         ),
     ).length;
 
+  const passingScore = Math.ceil(
+    questions.length * 0.7,
+  );
+
   const passedCurrentAttempt =
     hasChecked &&
-    correctAnswers >= 7;
+    correctAnswers >= passingScore;
 
   const canMarkManually =
     !hasAttempted &&
@@ -251,8 +271,42 @@ export default function FillInTheBlanks({
 
   useEffect(() => {
     async function loadProgress() {
-      const { data, error } =
-        await supabase
+      let hasLocalDraft = false;
+
+      try {
+        const storedDraft =
+          window.localStorage.getItem(draftKey);
+
+        if (storedDraft) {
+          const parsedDraft = JSON.parse(
+            storedDraft,
+          ) as { answers?: unknown };
+
+          setAnswers(
+            getAnswersFromDatabase(
+              parsedDraft.answers,
+            ),
+          );
+
+          setHasChecked(false);
+          hasLocalDraft = true;
+        }
+      } catch {
+        window.localStorage.removeItem(draftKey);
+      }
+
+      const [exerciseResult, lessonResult] =
+        await Promise.all([
+          supabase
+            .from('lesson_exercise_progress')
+            .select(
+              'answers, score, total_questions, has_attempted',
+            )
+            .eq('lesson_key', lessonKey)
+            .eq('exercise_key', exerciseKey)
+            .maybeSingle(),
+
+          supabase
           .from('lesson_progress')
           .select(
             'answers, score, total_questions, has_attempted, is_completed, completion_source',
@@ -261,11 +315,17 @@ export default function FillInTheBlanks({
             'lesson_key',
             lessonKey,
           )
-          .maybeSingle();
+          .maybeSingle(),
+        ]);
 
-      if (error) {
+      if (
+        exerciseResult.error ||
+        lessonResult.error
+      ) {
         setProgressError(
-          error.message,
+          exerciseResult.error?.message ??
+            lessonResult.error?.message ??
+            'No se pudo cargar el progreso.',
         );
 
         setIsLoadingProgress(
@@ -275,19 +335,27 @@ export default function FillInTheBlanks({
         return;
       }
 
-      if (data) {
-        const progress =
-          data as ProgressRow;
+      if (
+        exerciseResult.data &&
+        !hasLocalDraft
+      ) {
+        const exerciseProgress =
+          exerciseResult.data as ExerciseProgressRow;
 
         setAnswers(
           getAnswersFromDatabase(
-            progress.answers,
+            exerciseProgress.answers,
           ),
         );
 
         setHasChecked(
-          progress.has_attempted,
+          exerciseProgress.has_attempted,
         );
+      }
+
+      if (lessonResult.data) {
+        const progress =
+          lessonResult.data as ProgressRow;
 
         applyProgress(progress);
       }
@@ -298,7 +366,31 @@ export default function FillInTheBlanks({
     }
 
     void loadProgress();
-  }, [lessonKey, supabase]);
+  }, [draftKey, exerciseKey, lessonKey, supabase]);
+
+  useEffect(() => {
+    if (
+      isLoadingProgress ||
+      hasChecked
+    ) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      window.localStorage.setItem(
+        draftKey,
+        JSON.stringify({ answers }),
+      );
+    }, 500);
+
+    return () =>
+      window.clearTimeout(timeoutId);
+  }, [
+    answers,
+    draftKey,
+    hasChecked,
+    isLoadingProgress,
+  ]);
 
   useEffect(() => {
     function closeBubble(
@@ -380,16 +472,20 @@ export default function FillInTheBlanks({
 
     const { data, error } =
       await supabase.rpc(
-        'save_lesson_attempt',
+        'save_lesson_exercise_attempt',
         {
           p_lesson_key:
             lessonKey,
+          p_exercise_key:
+            exerciseKey,
           p_answers:
             answersForDatabase,
           p_score:
             correctAnswers,
           p_total_questions:
             questions.length,
+          p_lesson_total_questions:
+            lessonTotalQuestions,
         },
       );
 
@@ -410,6 +506,10 @@ export default function FillInTheBlanks({
       data as ProgressRow,
     );
 
+    window.localStorage.removeItem(
+      draftKey,
+    );
+
     setHasChecked(true);
     setActiveBubble(null);
 
@@ -417,6 +517,11 @@ export default function FillInTheBlanks({
   }
 
   function handleRetry() {
+    window.localStorage.setItem(
+      draftKey,
+      JSON.stringify({ answers: {} }),
+    );
+
     setAnswers({});
     setHasChecked(false);
     setActiveBubble(null);
@@ -1118,7 +1223,7 @@ export default function FillInTheBlanks({
               <p>
                 {passedCurrentAttempt
                   ? '¡Muy bien! Aprobaste este ejercicio.'
-                  : 'Necesitas 7 respuestas correctas para aprobar. Puedes intentarlo de nuevo.'}
+                  : `Necesitas ${passingScore} respuestas correctas para aprobar. Puedes intentarlo de nuevo.`}
               </p>
             </div>
 
@@ -1143,7 +1248,7 @@ export default function FillInTheBlanks({
                 ejercicio
               </button>
 
-              {passedCurrentAttempt &&
+              {isCompleted &&
                 nextLessonHref && (
                   <Link
                     href={
@@ -1162,6 +1267,7 @@ export default function FillInTheBlanks({
         )}
       </section>
 
+      {showLessonProgress && (
       <section
         className={
           styles.resultCard
@@ -1188,10 +1294,13 @@ export default function FillInTheBlanks({
               </h4>
 
               <p>
-                Aprobaste el
-                ejercicio con 7 de
-                10 o más respuestas
-                correctas.
+                Alcanzaste al menos{' '}
+                {Math.ceil(
+                  lessonTotalQuestions * 0.7,
+                )}{' '}
+                de{' '}
+                {lessonTotalQuestions}{' '}
+                preguntas correctas.
               </p>
             </>
           ) : isCompleted &&
@@ -1238,10 +1347,14 @@ export default function FillInTheBlanks({
                 Ya hiciste un
                 intento. Para
                 completarla
-                necesitas obtener
-                al menos 7 de 10
-                respuestas
-                correctas.
+                necesitas obtener al
+                menos{' '}
+                {Math.ceil(
+                  lessonTotalQuestions * 0.7,
+                )}{' '}
+                de{' '}
+                {lessonTotalQuestions}{' '}
+                preguntas correctas.
               </p>
             </>
           ) : (
@@ -1327,6 +1440,7 @@ export default function FillInTheBlanks({
           )}
         </div>
       </section>
+      )}
     </>
   );
 }

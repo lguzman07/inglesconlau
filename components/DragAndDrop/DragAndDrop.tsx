@@ -5,6 +5,7 @@ import {
   DragEvent,
   KeyboardEvent,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -33,6 +34,12 @@ type ProgressRow = {
     | null;
 };
 
+type DraftRow = {
+  draft: {
+    answers?: Record<string, string[]>;
+  } | null;
+};
+
 type DraggedToken = {
   questionId: number;
   tokenId: string;
@@ -49,6 +56,7 @@ type DragAndDropProps = {
   lessonKey: string;
   questions: DragAndDropQuestion[];
   nextLessonHref?: string;
+  exerciseIndex?: number;
 };
 
 function shuffle<T>(items: T[]) {
@@ -123,6 +131,44 @@ function getAnswersFromDatabase(
   );
 }
 
+function getAnswersFromDraft(
+  value: unknown,
+) {
+  if (
+    !value ||
+    typeof value !== 'object' ||
+    Array.isArray(value)
+  ) {
+    return {};
+  }
+
+  return Object.entries(
+    value,
+  ).reduce<
+    Record<number, string[]>
+  >(
+    (
+      result,
+      [questionId, answer],
+    ) => {
+      if (
+        Array.isArray(answer) &&
+        answer.every(
+          (item) =>
+            typeof item === 'string',
+        )
+      ) {
+        result[
+          Number(questionId)
+        ] = answer;
+      }
+
+      return result;
+    },
+    {},
+  );
+}
+
 function getToken(
   question: DragAndDropQuestion,
   tokenId: string,
@@ -154,6 +200,7 @@ export default function DragAndDrop({
   lessonKey,
   questions,
   nextLessonHref,
+  exerciseIndex = 0,
 }: DragAndDropProps) {
   const supabaseRef =
     useRef<
@@ -169,6 +216,21 @@ export default function DragAndDrop({
 
   const supabase =
     supabaseRef.current;
+
+  const draftStorageKey = useMemo(
+    () =>
+      `inglesconlau-exercise-draft:${lessonKey}:${exerciseIndex}`,
+    [lessonKey, exerciseIndex],
+  );
+
+  const userIdRef =
+    useRef<string | null>(null);
+
+  const hasLoadedProgressRef =
+    useRef(false);
+
+  const saveDraftTimeoutRef =
+    useRef<number | null>(null);
 
   const [
     answers,
@@ -340,6 +402,23 @@ export default function DragAndDrop({
     );
   }
 
+  async function deleteDraft() {
+    window.localStorage.removeItem(
+      draftStorageKey,
+    );
+
+    if (!userIdRef.current) {
+      return;
+    }
+
+    await supabase
+      .from('lesson_exercise_drafts')
+      .delete()
+      .eq('user_id', userIdRef.current)
+      .eq('lesson_key', lessonKey)
+      .eq('exercise_index', exerciseIndex);
+  }
+
   useEffect(() => {
     randomizeExercise();
 
@@ -392,7 +471,17 @@ export default function DragAndDrop({
   }, [supabase]);
 
   useEffect(() => {
+    hasLoadedProgressRef.current =
+      false;
+
     async function loadProgress() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      userIdRef.current =
+        user?.id ?? null;
+
       const {
         data,
         error,
@@ -419,6 +508,9 @@ export default function DragAndDrop({
           false,
         );
 
+        hasLoadedProgressRef.current =
+          true;
+
         return;
       }
 
@@ -439,15 +531,207 @@ export default function DragAndDrop({
         applyProgress(
           progress,
         );
+
+        if (progress.has_attempted) {
+          setIsLoadingProgress(
+            false,
+          );
+
+          hasLoadedProgressRef.current =
+            true;
+
+          return;
+        }
+      }
+
+      let restoredDraftAnswers:
+        | Record<number, string[]>
+        | null = null;
+
+      const localDraft =
+        window.localStorage.getItem(
+          draftStorageKey,
+        );
+
+      if (localDraft) {
+        try {
+          const parsedDraft =
+            JSON.parse(localDraft) as {
+              answers?: unknown;
+            };
+
+          restoredDraftAnswers =
+            getAnswersFromDraft(
+              parsedDraft.answers,
+            );
+        } catch {
+          window.localStorage.removeItem(
+            draftStorageKey,
+          );
+        }
+      }
+
+      if (
+        !restoredDraftAnswers &&
+        userIdRef.current
+      ) {
+        const { data: draftData } =
+          await supabase
+            .from('lesson_exercise_drafts')
+            .select('draft')
+            .eq(
+              'user_id',
+              userIdRef.current,
+            )
+            .eq(
+              'lesson_key',
+              lessonKey,
+            )
+            .eq(
+              'exercise_index',
+              exerciseIndex,
+            )
+            .maybeSingle();
+
+        const draftRow =
+          draftData as DraftRow | null;
+
+        if (draftRow?.draft?.answers) {
+          restoredDraftAnswers =
+            getAnswersFromDraft(
+              draftRow.draft.answers,
+            );
+
+          window.localStorage.setItem(
+            draftStorageKey,
+            JSON.stringify({
+              answers:
+                restoredDraftAnswers,
+              updatedAt:
+                new Date().toISOString(),
+            }),
+          );
+        }
+      }
+
+      if (restoredDraftAnswers) {
+        setAnswers(
+          restoredDraftAnswers,
+        );
       }
 
       setIsLoadingProgress(
         false,
       );
+
+      hasLoadedProgressRef.current =
+        true;
     }
 
     void loadProgress();
-  }, [lessonKey, supabase]);
+
+    return () => {
+      hasLoadedProgressRef.current =
+        false;
+
+      if (
+        saveDraftTimeoutRef.current
+      ) {
+        window.clearTimeout(
+          saveDraftTimeoutRef.current,
+        );
+
+        saveDraftTimeoutRef.current =
+          null;
+      }
+    };
+  }, [
+    draftStorageKey,
+    exerciseIndex,
+    lessonKey,
+    supabase,
+  ]);
+
+  useEffect(() => {
+    if (
+      !hasLoadedProgressRef.current ||
+      hasChecked
+    ) {
+      return;
+    }
+
+    const draft = {
+      answers,
+      updatedAt:
+        new Date().toISOString(),
+    };
+
+    window.localStorage.setItem(
+      draftStorageKey,
+      JSON.stringify(draft),
+    );
+
+    if (
+      saveDraftTimeoutRef.current
+    ) {
+      window.clearTimeout(
+        saveDraftTimeoutRef.current,
+      );
+    }
+
+    saveDraftTimeoutRef.current =
+      window.setTimeout(() => {
+        async function saveDraft() {
+          if (!userIdRef.current) {
+            return;
+          }
+
+          await supabase
+            .from('lesson_exercise_drafts')
+            .upsert(
+              {
+                user_id:
+                  userIdRef.current,
+                lesson_key:
+                  lessonKey,
+                exercise_index:
+                  exerciseIndex,
+                draft: {
+                  answers,
+                },
+                updated_at:
+                  new Date().toISOString(),
+              },
+              {
+                onConflict:
+                  'user_id,lesson_key,exercise_index',
+              },
+            );
+        }
+
+        void saveDraft();
+      }, 700);
+
+    return () => {
+      if (
+        saveDraftTimeoutRef.current
+      ) {
+        window.clearTimeout(
+          saveDraftTimeoutRef.current,
+        );
+
+        saveDraftTimeoutRef.current =
+          null;
+      }
+    };
+  }, [
+    answers,
+    draftStorageKey,
+    exerciseIndex,
+    hasChecked,
+    lessonKey,
+    supabase,
+  ]);
 
   function getDraggedToken(
     event: DragEvent,
@@ -890,6 +1174,8 @@ export default function DragAndDrop({
       return;
     }
 
+    await deleteDraft();
+
     applyProgress(
       data as ProgressRow,
     );
@@ -907,6 +1193,15 @@ export default function DragAndDrop({
     setAnswers({});
     setHasChecked(false);
     randomizeExercise();
+
+    window.localStorage.setItem(
+      draftStorageKey,
+      JSON.stringify({
+        answers: {},
+        updatedAt:
+          new Date().toISOString(),
+      }),
+    );
   }
 
   async function setCompletion(
@@ -949,6 +1244,10 @@ export default function DragAndDrop({
       );
 
       return;
+    }
+
+    if (completed) {
+      await deleteDraft();
     }
 
     applyProgress(

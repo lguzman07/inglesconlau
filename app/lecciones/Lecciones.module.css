@@ -1,279 +1,430 @@
 .main {
-  min-height: 100vh;
-  background: var(--background);
-  color: var(--text);
+    min-height: 100vh;
+    background: var(--background);
+    color: var(--text);
 }
 
 .container {
-  width: min(1120px, 88%);
-  margin: 0 auto;
-  padding: 64px 0 80px;
+    width: min(1120px, 88%);
+    margin: 0 auto;
+    padding: 64px 0 80px;
 }
 
 .hero {
-  padding: 48px;
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 24px;
+    padding: 48px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 24px;
 }
 
 .eyebrow {
-  margin: 0 0 12px;
-  color: var(--primary);
-  font-size: .85rem;
-  font-weight: 700;
-  letter-spacing: .12em;
+    margin: 0 0 12px;
+    color: var(--primary);
+    font-size: .85rem;
+    font-weight: 700;
+    letter-spacing: .12em;
 }
 
 .title {
-  max-width: 720px;
-  margin: 0;
-  color: var(--text);
-  font-size: clamp(2.2rem, 4vw, 3.6rem);
-  line-height: 1.08;
+    max-width: 720px;
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    line-height: 1.08;
 }
 
 .description {
-  max-width: 650px;
-  margin: 18px 0 0;
-  color: var(--text-light);
-  font-size: 1.05rem;
-  line-height: 1.7;
+    max-width: 650px;
+    margin: 18px 0 0;
+    color: var(--text-light);
+    font-size: 1.05rem;
+    line-height: 1.7;
 }
 
 .heroActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
 }
 
 .continueButton,
 .backButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 50px;
-  padding: 13px 20px;
-  font-weight: 700;
-  text-decoration: none;
-  border-radius: 999px;
-  transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    padding: 13px 20px;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 999px;
+    transition: var(--transition);
 }
 
 .continueButton {
-  color: var(--surface);
-  background: var(--primary);
-  border: 1px solid var(--primary);
+    color: var(--surface);
+    background: var(--primary);
+    border: 1px solid var(--primary);
 }
 
 .backButton {
-  color: var(--primary);
-  background: transparent;
-  border: 1px solid var(--primary);
+    color: var(--primary);
+    background: transparent;
+    border: 1px solid var(--primary);
 }
 
 .infoCard {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  margin-top: 24px;
-  padding: 24px 28px;
-  background: var(--surface);
-  border: 1px solid var(--primary-light);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: 24px;
+    padding: 24px 28px;
+    background: var(--surface);
+    border: 1px solid var(--primary-light);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
 }
 
 .infoIcon {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  flex-shrink: 0;
-  place-items: center;
-  color: var(--surface);
-  font-weight: 800;
-  background: var(--primary);
-  border-radius: 50%;
+    display: grid;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    place-items: center;
+    color: var(--surface);
+    font-weight: 800;
+    background: var(--primary);
+    border-radius: 50%;
 }
 
 .infoTitle {
-  margin: 0;
-  color: var(--text);
-  font-size: 1.1rem;
+    margin: 0;
+    color: var(--text);
+    font-size: 1.1rem;
 }
 
 .infoText {
-  margin: 7px 0 0;
-  color: var(--text-light);
-  line-height: 1.6;
+    margin: 7px 0 0;
+    color: var(--text-light);
+    line-height: 1.6;
 }
 
 .levelsSection {
-  margin-top: 48px;
+    margin-top: 48px;
 }
 
 .sectionHeading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 28px;
-  margin-bottom: 20px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+    margin-bottom: 20px;
 }
 
 .sectionHeading .eyebrow {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .sectionTitle {
-  margin: 0;
-  color: var(--text);
-  font-size: clamp(1.65rem, 3vw, 2.15rem);
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(1.65rem, 3vw, 2.15rem);
 }
 
 .sectionNote {
-  max-width: 330px;
-  margin: 0;
-  color: var(--text-light);
-  font-size: .92rem;
-  line-height: 1.6;
-  text-align: right;
+    max-width: 330px;
+    margin: 0;
+    color: var(--text-light);
+    font-size: .92rem;
+    line-height: 1.6;
+    text-align: right;
 }
 
 .levelGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
 }
 
 .levelCard {
-  display: block;
-  min-height: 222px;
-  padding: 26px;
-  color: inherit;
-  text-decoration: none;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    display: block;
+    min-height: 222px;
+    padding: 26px;
+    color: inherit;
+    text-decoration: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    transition:
+        transform 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease;
 }
 
 .levelCard:hover {
-  border-color: var(--primary-light);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, .1);
-  transform: translateY(-3px);
+    border-color: var(--primary-light);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .1);
+    transform: translateY(-3px);
 }
 
 .levelCard:focus-visible {
-  outline: 3px solid var(--primary-light);
-  outline-offset: 3px;
+    outline: 3px solid var(--primary-light);
+    outline-offset: 3px;
 }
 
 .levelTop {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
 }
 
 .levelBadge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 50px;
-  padding: 8px 11px;
-  color: var(--primary);
-  font-size: .92rem;
-  font-weight: 800;
-  background: var(--surface-soft);
-  border: 1px solid var(--primary-light);
-  border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    padding: 8px 11px;
+    color: var(--primary);
+    font-size: .92rem;
+    font-weight: 800;
+    background: var(--surface-soft);
+    border: 1px solid var(--primary-light);
+    border-radius: 999px;
 }
 
 .openLevel {
-  color: var(--primary);
-  font-size: .78rem;
-  font-weight: 800;
+    color: var(--primary);
+    font-size: .78rem;
+    font-weight: 800;
 }
 
 .levelTitle {
-  margin: 28px 0 0;
-  color: var(--text);
-  font-size: 1.35rem;
+    margin: 28px 0 0;
+    color: var(--text);
+    font-size: 1.35rem;
 }
 
 .levelDescription {
-  margin: 12px 0 0;
-  color: var(--text-light);
-  font-size: .93rem;
-  line-height: 1.65;
+    margin: 12px 0 0;
+    color: var(--text-light);
+    font-size: .93rem;
+    line-height: 1.65;
+}
+
+.labsSection {
+    margin-top: 56px;
+}
+
+.labCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 34px 38px;
+    color: inherit;
+    text-decoration: none;
+    background:
+        linear-gradient(
+            135deg,
+            var(--surface-soft),
+            var(--surface)
+        );
+    border: 1px solid var(--primary-light);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    transition:
+        transform 160ms ease,
+        border-color 160ms ease,
+        box-shadow 160ms ease;
+}
+
+.labCard:hover {
+    border-color: var(--primary);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, .11);
+    transform: translateY(-3px);
+}
+
+.labCard:focus-visible {
+    outline: 3px solid var(--primary-light);
+    outline-offset: 3px;
+}
+
+.labContent {
+    flex: 1;
+}
+
+.labTop {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.labBadge,
+.labStatus {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 6px 11px;
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    border-radius: 999px;
+}
+
+.labBadge {
+    color: var(--surface);
+    background: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.labStatus {
+    color: var(--primary);
+    background: var(--surface);
+    border: 1px solid var(--primary-light);
+}
+
+.labTitle {
+    margin: 22px 0 0;
+    color: var(--text);
+    font-size: clamp(1.55rem, 3vw, 2.1rem);
+}
+
+.labSubtitle {
+    margin: 7px 0 0;
+    color: var(--primary);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.labDescription {
+    max-width: 700px;
+    margin: 14px 0 0;
+    color: var(--text-light);
+    font-size: .95rem;
+    line-height: 1.65;
+}
+
+.labMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 20px;
+}
+
+.labMeta span {
+    display: inline-flex;
+    padding: 7px 10px;
+    color: var(--text-light);
+    font-size: .75rem;
+    font-weight: 700;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+}
+
+.labAction {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex: 0 0 auto;
+    color: var(--primary);
+    font-size: .95rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.labAction span {
+    font-size: 1.25rem;
+    transition: transform var(--transition);
+}
+
+.labCard:hover .labAction span,
+.labCard:focus-visible .labAction span {
+    transform: translateX(4px);
 }
 
 .continueButton:hover,
 .continueButton:focus-visible {
-  background: var(--primary-hover);
-  border-color: var(--primary-hover);
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
 }
 
 .backButton:hover,
 .backButton:focus-visible {
-  color: var(--surface);
-  background: var(--primary);
+    color: var(--surface);
+    background: var(--primary);
 }
 
 .continueButton:focus-visible,
 .backButton:focus-visible {
-  outline: 3px solid var(--primary-light);
-  outline-offset: 3px;
+    outline: 3px solid var(--primary-light);
+    outline-offset: 3px;
 }
 
 @media (max-width: 900px) {
-  .levelGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+    .levelGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 800px) {
-  .sectionHeading {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+    .sectionHeading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
 
-  .sectionNote {
-    max-width: none;
-    text-align: left;
-  }
+    .sectionNote {
+        max-width: none;
+        text-align: left;
+    }
+
+    .labCard {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 24px;
+    }
 }
 
 @media (max-width: 600px) {
-  .container {
-    width: min(92%, 1120px);
-    padding-top: 32px;
-  }
+    .container {
+        width: min(92%, 1120px);
+        padding-top: 32px;
+    }
 
-  .hero {
-    padding: 30px 24px;
-  }
+    .hero {
+        padding: 30px 24px;
+    }
 
-  .heroActions {
-    flex-direction: column;
-  }
+    .heroActions {
+        flex-direction: column;
+    }
 
-  .continueButton,
-  .backButton {
-    width: 100%;
-  }
+    .continueButton,
+    .backButton {
+        width: 100%;
+    }
 
-  .infoCard {
-    padding: 22px;
-  }
+    .infoCard {
+        padding: 22px;
+    }
 
-  .levelGrid {
-    grid-template-columns: 1fr;
-  }
+    .levelGrid {
+        grid-template-columns: 1fr;
+    }
 
-  .levelCard {
-    min-height: 0;
-  }
+    .levelCard {
+        min-height: 0;
+    }
+
+    .labCard {
+        padding: 27px 24px;
+    }
+
+    .labAction {
+        justify-content: space-between;
+        width: 100%;
+    }
 }

@@ -59,9 +59,13 @@ export default function LeccionesPage() {
     <main className={styles.main}>
       <div className={styles.container}>
         <section className={styles.hero}>
-          <p className={styles.eyebrow}>TU RUTA DE APRENDIZAJE</p>
+          <p className={styles.eyebrow}>
+            TU RUTA DE APRENDIZAJE
+          </p>
 
-          <h1 className={styles.title}>Todas tus lecciones</h1>
+          <h1 className={styles.title}>
+            Todas tus lecciones
+          </h1>
 
           <p className={styles.description}>
             Puedes avanzar a tu ritmo y explorar cualquier nivel cuando lo
@@ -69,11 +73,17 @@ export default function LeccionesPage() {
           </p>
 
           <div className={styles.heroActions}>
-            <Link href="/lecciones/a0" className={styles.continueButton}>
+            <Link
+              href="/lecciones/a0"
+              className={styles.continueButton}
+            >
               Empezar desde A0
             </Link>
 
-            <Link href="/inicio" className={styles.backButton}>
+            <Link
+              href="/inicio"
+              className={styles.backButton}
+            >
               Volver al dashboard
             </Link>
           </div>
@@ -83,7 +93,10 @@ export default function LeccionesPage() {
           className={styles.infoCard}
           aria-label="Información de acceso"
         >
-          <div className={styles.infoIcon} aria-hidden="true">
+          <div
+            className={styles.infoIcon}
+            aria-hidden="true"
+          >
             ✓
           </div>
 
@@ -102,7 +115,9 @@ export default function LeccionesPage() {
         <section className={styles.levelsSection}>
           <div className={styles.sectionHeading}>
             <div>
-              <p className={styles.eyebrow}>NIVELES</p>
+              <p className={styles.eyebrow}>
+                NIVELES
+              </p>
 
               <h2 className={styles.sectionTitle}>
                 Elige por dónde continuar
@@ -122,11 +137,18 @@ export default function LeccionesPage() {
                 className={styles.levelCard}
               >
                 <div className={styles.levelTop}>
-                  <span className={styles.levelBadge}>{item.level}</span>
-                  <span className={styles.openLevel}>Ver lecciones →</span>
+                  <span className={styles.levelBadge}>
+                    {item.level}
+                  </span>
+
+                  <span className={styles.openLevel}>
+                    Ver lecciones →
+                  </span>
                 </div>
 
-                <h3 className={styles.levelTitle}>{item.title}</h3>
+                <h3 className={styles.levelTitle}>
+                  {item.title}
+                </h3>
 
                 <p className={styles.levelDescription}>
                   {item.description}
@@ -134,6 +156,68 @@ export default function LeccionesPage() {
               </Link>
             ))}
           </div>
+        </section>
+
+        <section className={styles.labsSection}>
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>
+                LABS
+              </p>
+
+              <h2 className={styles.sectionTitle}>
+                Practica por tema
+              </h2>
+            </div>
+
+            <p className={styles.sectionNote}>
+              Recorre las mismas lecciones desde una ruta temática.
+            </p>
+          </div>
+
+          <Link
+            href="/labs/verb-tenses"
+            className={styles.labCard}
+          >
+            <div className={styles.labContent}>
+              <div className={styles.labTop}>
+                <span className={styles.labBadge}>
+                  VERB TENSES
+                </span>
+
+                <span className={styles.labStatus}>
+                  Primer Lab
+                </span>
+              </div>
+
+              <h3 className={styles.labTitle}>
+                Verb Tenses Lab
+              </h3>
+
+              <p className={styles.labSubtitle}>
+                Ruta guiada de tiempos verbales
+              </p>
+
+              <p className={styles.labDescription}>
+                Practica presente, pasado, futuro y tiempos perfectos en una
+                ruta organizada desde los fundamentos hasta el nivel avanzado.
+              </p>
+
+              <div
+                className={styles.labMeta}
+                aria-label="Características del Lab"
+              >
+                <span>A0–C1</span>
+                <span>Mismas lecciones</span>
+                <span>Progreso compartido</span>
+              </div>
+            </div>
+
+            <span className={styles.labAction}>
+              Abrir Lab
+              <span aria-hidden="true">→</span>
+            </span>
+          </Link>
         </section>
       </div>
     </main>

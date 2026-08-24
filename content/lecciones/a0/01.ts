@@ -2,128 +2,369 @@ import type { LessonContent } from '../types';
 
 const lessonA001: LessonContent = {
   level: 'a0',
+
   number: 1,
+
   title: 'Presentarte: I am / My name is',
+
   subtitle:
     'Aprende a decir quién eres, de dónde eres y cómo decir tu nombre en inglés.',
+
   videoSrc: '/videos/a0/01-placeholder.mp4',
+
   videoTitle: 'Preséntate en inglés',
+
   videoDescription:
     'En este video aprenderás a usar “I am” y “My name is” para hablar de ti.',
+
   objective:
     'Al terminar, podrás decir tu nombre, tu profesión y de dónde eres.',
+
   exercises: [
     {
       type: 'fill-in-the-blanks',
+
       title: 'Completa los espacios',
+
       instructions:
         'Escribe am o is en cada espacio. Toca una palabra si quieres ver su traducción.',
+
       questions: [
         {
           id: 1,
-          before: [{ word: 'I', translation: 'yo' }],
-          after: [
-            { word: 'a', translation: 'un / una' },
-            { word: 'teacher.', translation: 'profesor / profesora' },
+
+          before: [
+            {
+              word: 'I',
+              translation: 'yo',
+            },
           ],
+
+          after: [
+            {
+              word: 'a',
+              translation: 'un / una',
+            },
+
+            {
+              word: 'teacher.',
+              translation:
+                'profesor / profesora',
+            },
+          ],
+
           answer: 'am',
-          sentenceTranslation: 'Soy profesor o profesora.',
+
+          sentenceTranslation:
+            'Soy profesor o profesora.',
         },
+
         {
           id: 2,
-          before: [{ word: 'I', translation: 'yo' }],
+
+          before: [
+            {
+              word: 'I',
+              translation: 'yo',
+            },
+          ],
+
           after: [
             {
               word: 'Dominican.',
-              translation: 'dominicano / dominicana',
+              translation:
+                'dominicano / dominicana',
             },
           ],
+
           answer: 'am',
-          sentenceTranslation: 'Soy dominicano o dominicana.',
+
+          sentenceTranslation:
+            'Soy dominicano o dominicana.',
         },
+
         {
           id: 3,
+
           before: [
-            { word: 'My', translation: 'mi' },
-            { word: 'name', translation: 'nombre' },
-          ],
-          after: [{ word: 'Ana.', translation: 'Ana' }],
-          answer: 'is',
-          sentenceTranslation: 'Mi nombre es Ana.',
-        },
-        {
-          id: 4,
-          before: [{ word: 'I', translation: 'yo' }],
-          after: [
-            { word: 'a', translation: 'un / una' },
-            { word: 'student.', translation: 'estudiante' },
-          ],
-          answer: 'am',
-          sentenceTranslation: 'Soy estudiante.',
-        },
-        {
-          id: 5,
-          before: [
-            { word: 'My', translation: 'mi' },
-            { word: 'name', translation: 'nombre' },
-          ],
-          after: [{ word: 'Carlos.', translation: 'Carlos' }],
-          answer: 'is',
-          sentenceTranslation: 'Mi nombre es Carlos.',
-        },
-        {
-          id: 6,
-          before: [{ word: 'I', translation: 'yo' }],
-          after: [
-            { word: 'from', translation: 'de' },
-            { word: 'the', translation: 'el / la' },
             {
-              word: 'Dominican Republic.',
-              translation: 'República Dominicana',
+              word: 'My',
+              translation: 'mi',
+            },
+
+            {
+              word: 'name',
+              translation: 'nombre',
             },
           ],
-          answer: 'am',
-          sentenceTranslation: 'Soy de República Dominicana.',
+
+          after: [
+            {
+              word: 'Ana.',
+              translation: 'Ana',
+            },
+          ],
+
+          answer: 'is',
+
+          sentenceTranslation:
+            'Mi nombre es Ana.',
         },
+
+        {
+          id: 4,
+
+          before: [
+            {
+              word: 'I',
+              translation: 'yo',
+            },
+          ],
+
+          after: [
+            {
+              word: 'a',
+              translation: 'un / una',
+            },
+
+            {
+              word: 'student.',
+              translation: 'estudiante',
+            },
+          ],
+
+          answer: 'am',
+
+          sentenceTranslation:
+            'Soy estudiante.',
+        },
+
+        {
+          id: 5,
+
+          before: [
+            {
+              word: 'My',
+              translation: 'mi',
+            },
+
+            {
+              word: 'name',
+              translation: 'nombre',
+            },
+          ],
+
+          after: [
+            {
+              word: 'Carlos.',
+              translation: 'Carlos',
+            },
+          ],
+
+          answer: 'is',
+
+          sentenceTranslation:
+            'Mi nombre es Carlos.',
+        },
+      ],
+    },
+
+    {
+      type: 'sentence-construction',
+
+      title: 'Construye tu presentación',
+
+      instructions:
+        'Lee cada oración en español y escríbela completa en inglés.',
+
+      questions: [
+        {
+          id: 6,
+
+          sourceSentence:
+            'Yo soy estudiante.',
+
+          acceptedAnswers: [
+            'I am a student',
+            'I am a student.',
+          ],
+
+          modelAnswer: [
+            {
+              word: 'I',
+              translation: 'yo',
+            },
+
+            {
+              word: 'am',
+              translation: 'soy / estoy',
+            },
+
+            {
+              word: 'a',
+              translation: 'un / una',
+            },
+
+            {
+              word: 'student.',
+              translation: 'estudiante',
+            },
+          ],
+
+          explanation:
+            'Usamos I am para decir quiénes somos. Antes de una profesión o descripción singular usamos a.',
+        },
+
         {
           id: 7,
-          before: [
-            { word: 'My', translation: 'mi' },
-            { word: 'name', translation: 'nombre' },
+
+          sourceSentence:
+            'Yo soy dominicana.',
+
+          acceptedAnswers: [
+            'I am Dominican',
+            'I am Dominican.',
           ],
-          after: [{ word: 'María.', translation: 'María' }],
-          answer: 'is',
-          sentenceTranslation: 'Mi nombre es María.',
+
+          modelAnswer: [
+            {
+              word: 'I',
+              translation: 'yo',
+            },
+
+            {
+              word: 'am',
+              translation: 'soy / estoy',
+            },
+
+            {
+              word: 'Dominican.',
+              translation:
+                'dominicano / dominicana',
+            },
+          ],
+
+          explanation:
+            'Las nacionalidades se escriben con mayúscula en inglés.',
         },
+
         {
           id: 8,
-          before: [{ word: 'I', translation: 'yo' }],
-          after: [
-            { word: 'a', translation: 'un / una' },
-            { word: 'doctor.', translation: 'médico / médica' },
+
+          sourceSentence:
+            'Mi nombre es María.',
+
+          acceptedAnswers: [
+            'My name is María',
+            'My name is María.',
+            'My name is Maria',
+            'My name is Maria.',
           ],
-          answer: 'am',
-          sentenceTranslation: 'Soy médico o médica.',
+
+          modelAnswer: [
+            {
+              word: 'My',
+              translation: 'mi',
+            },
+
+            {
+              word: 'name',
+              translation: 'nombre',
+            },
+
+            {
+              word: 'is',
+              translation: 'es',
+            },
+
+            {
+              word: 'María.',
+              translation: 'María',
+            },
+          ],
+
+          explanation:
+            'Con My name usamos is porque name es singular.',
         },
+
         {
           id: 9,
-          before: [{ word: 'I', translation: 'yo' }],
-          after: [
-            { word: 'from', translation: 'de' },
-            { word: 'Santo Domingo.', translation: 'Santo Domingo' },
+
+          sourceSentence:
+            'Yo soy de Santo Domingo.',
+
+          acceptedAnswers: [
+            'I am from Santo Domingo',
+            'I am from Santo Domingo.',
           ],
-          answer: 'am',
-          sentenceTranslation: 'Soy de Santo Domingo.',
+
+          modelAnswer: [
+            {
+              word: 'I',
+              translation: 'yo',
+            },
+
+            {
+              word: 'am',
+              translation: 'soy / estoy',
+            },
+
+            {
+              word: 'from',
+              translation: 'de',
+            },
+
+            {
+              word: 'Santo',
+              translation: 'Santo',
+            },
+
+            {
+              word: 'Domingo.',
+              translation: 'Domingo',
+            },
+          ],
+
+          explanation:
+            'Usamos be from para expresar de dónde somos.',
         },
+
         {
           id: 10,
-          before: [
-            { word: 'My', translation: 'mi' },
-            { word: 'name', translation: 'nombre' },
+
+          sourceSentence:
+            'Yo soy profesora.',
+
+          acceptedAnswers: [
+            'I am a teacher',
+            'I am a teacher.',
           ],
-          after: [{ word: 'Daniel.', translation: 'Daniel' }],
-          answer: 'is',
-          sentenceTranslation: 'Mi nombre es Daniel.',
+
+          modelAnswer: [
+            {
+              word: 'I',
+              translation: 'yo',
+            },
+
+            {
+              word: 'am',
+              translation: 'soy / estoy',
+            },
+
+            {
+              word: 'a',
+              translation: 'un / una',
+            },
+
+            {
+              word: 'teacher.',
+              translation:
+                'profesor / profesora',
+            },
+          ],
+
+          explanation:
+            'Usamos a antes de una profesión singular: a teacher.',
         },
       ],
     },
