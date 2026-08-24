@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { createClient } from '@/lib/supabase/server';
 
-import styles from './ClasesGrupales.module.css';
+import styles from './Labs.module.css';
 
 export const metadata: Metadata = {
   title: 'Clases grupales A1 | Inglés con Lau',
