@@ -251,15 +251,7 @@ export default function GroupClassesDashboard() {
       setSelectedScheduleId('');
 
       const supabase = createClient();
-
-      const { data, error: availabilityError } =
-        await supabase.rpc(
-          'get_group_class_availability_by_level',
-          {
-            p_class_date: date,
-            p_level: level,
-          },
-        );
+'get_group_class_availability_by_level'
 
       if (availabilityError) {
         setAvailability([]);
