@@ -1,0 +1,493 @@
+.main {
+  min-height: 100vh;
+  padding: 56px 0 90px;
+  background: var(--surface-soft);
+}
+
+.container {
+  width: min(90%, 1120px);
+  margin: 0 auto;
+}
+
+.backLink {
+  display: inline-flex;
+  margin-bottom: 28px;
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.backLink:hover,
+.backLink:focus-visible {
+  color: var(--primary-hover);
+  transform: translateX(-3px);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.7fr);
+  gap: 26px;
+}
+
+.heroContent,
+.priceCard {
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+}
+
+.heroContent {
+  padding: clamp(38px, 7vw, 72px);
+  background: var(--surface);
+}
+
+.priceCard {
+  display: flex;
+  flex-direction: column;
+  padding: 34px;
+  background: var(--primary);
+}
+
+.badge {
+  display: inline-flex;
+  margin-bottom: 28px;
+  padding: 9px 14px;
+  color: var(--surface);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  background: var(--primary);
+  border-radius: 999px;
+}
+
+.eyebrow,
+.priceLabel {
+  margin: 0 0 12px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.eyebrow {
+  color: var(--primary);
+}
+
+.hero h1 {
+  max-width: 760px;
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  line-height: 0.98;
+}
+
+.heroDescription {
+  max-width: 680px;
+  margin: 24px 0 0;
+  color: var(--text-light);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.8;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.primaryButton,
+.secondaryButton,
+.scheduleButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 15px 21px;
+  font-weight: 800;
+  text-decoration: none;
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+  transition: var(--transition);
+}
+
+.primaryButton {
+  color: var(--surface);
+  background: var(--primary);
+}
+
+.secondaryButton {
+  color: var(--primary);
+  background: transparent;
+}
+
+.primaryButton:hover,
+.primaryButton:focus-visible {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.secondaryButton:hover,
+.secondaryButton:focus-visible {
+  color: var(--surface);
+  background: var(--primary);
+}
+
+.priceLabel {
+  color: var(--surface);
+  opacity: 0.85;
+}
+
+.price {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 8px 0;
+  color: var(--surface);
+}
+
+.price span {
+  margin-top: 12px;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.price strong {
+  font-size: clamp(3.8rem, 8vw, 5.8rem);
+  line-height: 1;
+}
+
+.priceDescription {
+  margin: 12px 0 26px;
+  color: var(--surface);
+  line-height: 1.65;
+  opacity: 0.92;
+}
+
+.priceDetail {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-top: 18px;
+  color: var(--surface);
+  border-top: 1px solid color-mix(
+    in srgb,
+    var(--surface) 28%,
+    transparent
+  );
+}
+
+.priceDetail + .priceDetail {
+  margin-top: 18px;
+}
+
+.priceDetail span {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 900;
+  background: var(--surface);
+  border-radius: 50%;
+}
+
+.priceDetail p {
+  margin: 2px 0 0;
+  line-height: 1.55;
+}
+
+.schedulesSection,
+.benefitsSection,
+.processSection {
+  margin-top: 70px;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 26px;
+}
+
+.sectionHeading h2,
+.benefitsSection h2,
+.finalCta h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+  line-height: 1.15;
+}
+
+.sectionHeading > p,
+.sectionDescription {
+  max-width: 520px;
+  margin: 0;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+.scheduleGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.scheduleCard,
+.processCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+}
+
+.scheduleCard {
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+}
+
+.scheduleDot {
+  width: 12px;
+  height: 12px;
+  margin-bottom: 28px;
+  background: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 0 7px var(--primary-light);
+}
+
+.scheduleLabel {
+  margin: 0 0 10px;
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.scheduleCard h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.35rem;
+  line-height: 1.3;
+}
+
+.scheduleDays {
+  margin: 10px 0 22px;
+  color: var(--text-light);
+}
+
+.capacity {
+  margin-bottom: 24px;
+  padding: 11px 13px;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.scheduleButton {
+  margin-top: auto;
+  color: var(--primary);
+  background: transparent;
+}
+
+.scheduleButton:hover,
+.scheduleButton:focus-visible {
+  color: var(--surface);
+  background: var(--primary);
+}
+
+.benefitsSection {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  gap: 54px;
+  padding: clamp(32px, 6vw, 58px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+}
+
+.sectionDescription {
+  margin-top: 20px;
+}
+
+.benefitList {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.benefitList li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.benefitList span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--surface);
+  font-size: 0.75rem;
+  font-weight: 900;
+  background: var(--primary);
+  border-radius: 50%;
+}
+
+.benefitList p {
+  margin: 0;
+  color: var(--text);
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.processGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.processCard {
+  padding: 28px;
+}
+
+.stepNumber {
+  display: block;
+  margin-bottom: 42px;
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.processCard h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.2rem;
+}
+
+.processCard p {
+  margin: 12px 0 0;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-top: 34px;
+  padding: 26px;
+  background: var(--primary-light);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+
+.noticeIcon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--surface);
+  font-weight: 900;
+  background: var(--primary);
+  border-radius: 50%;
+}
+
+.notice h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1.1rem;
+}
+
+.notice p {
+  margin: 8px 0 0;
+  color: var(--text-light);
+  line-height: 1.65;
+}
+
+.finalCta {
+  margin-top: 70px;
+  padding: clamp(36px, 7vw, 68px);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+}
+
+.finalCta > p:not(.eyebrow) {
+  max-width: 580px;
+  margin: 18px auto 28px;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+.backLink:focus-visible,
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible,
+.scheduleButton:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .hero,
+  .benefitsSection {
+    grid-template-columns: 1fr;
+  }
+
+  .scheduleGrid,
+  .processGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 650px) {
+  .main {
+    padding-top: 34px;
+  }
+
+  .sectionHeading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .heroContent,
+  .priceCard,
+  .benefitsSection,
+  .finalCta {
+    padding: 28px 24px;
+  }
+
+  .heroActions,
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .notice {
+    flex-direction: column;
+  }
+}
