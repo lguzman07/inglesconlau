@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { getLessonTitle } from '@/content/lecciones/catalog';
+import GroupClassesDashboard from '@/components/GroupClassesDashboard/GroupClassesDashboard';
 import styles from './Inicio.module.css';
 
 const TOTAL_LESSONS = 1080;
@@ -1144,6 +1145,8 @@ export default function InicioPage() {
             </aside>
           </div>
         </section>
+
+        <GroupClassesDashboard />
 
         <section
           className={

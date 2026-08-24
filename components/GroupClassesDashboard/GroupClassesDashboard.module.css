@@ -1,0 +1,391 @@
+.section {
+  margin-top: 40px;
+  padding: 32px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+}
+
+.heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.heading h2,
+.bookingCard h3,
+.upcomingCard h3 {
+  margin: 0;
+  color: var(--text);
+}
+
+.heading h2 {
+  font-size: clamp(1.7rem, 3vw, 2.25rem);
+}
+
+.description {
+  max-width: 620px;
+  margin: 14px 0 0;
+  color: var(--text-light);
+  line-height: 1.65;
+}
+
+.balanceCard {
+  display: flex;
+  min-width: 190px;
+  padding: 20px;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--primary-light);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.balanceCard span {
+  color: var(--text-light);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.balanceCard strong {
+  margin-top: 6px;
+  color: var(--primary);
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.balanceCard a {
+  margin-top: 14px;
+  color: var(--primary);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  gap: 20px;
+  margin-top: 26px;
+}
+
+.bookingCard,
+.upcomingCard {
+  min-width: 0;
+  padding: 26px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.bookingCard h3,
+.upcomingCard h3 {
+  font-size: 1.2rem;
+}
+
+.dateField {
+  display: grid;
+  gap: 8px;
+  margin-top: 20px;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.dateField input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 13px;
+  color: var(--text);
+  font: inherit;
+  color-scheme: light dark;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.dateField input:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 2px;
+  border-color: var(--primary);
+}
+
+.selectedDate {
+  margin: 16px 0 0;
+  color: var(--text);
+  font-weight: 800;
+}
+
+.scheduleList {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.scheduleButton {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 15px;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.scheduleButton > span {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.scheduleButton strong {
+  overflow-wrap: anywhere;
+}
+
+.scheduleButton small {
+  color: var(--text-light);
+  font-size: 0.82rem;
+}
+
+.scheduleButton em {
+  flex-shrink: 0;
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.scheduleButton:hover:not(:disabled),
+.scheduleButton:focus-visible:not(:disabled),
+.scheduleButtonSelected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.scheduleButton:focus-visible {
+  outline: none;
+}
+
+.scheduleButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.52;
+}
+
+.scheduleButton:disabled em {
+  color: var(--text-light);
+}
+
+.reserveButton,
+.purchaseLink {
+  display: inline-flex;
+  width: 100%;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 18px;
+  padding: 12px 18px;
+  font: inherit;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 999px;
+  box-sizing: border-box;
+  transition: var(--transition);
+}
+
+.reserveButton {
+  color: var(--surface);
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  cursor: pointer;
+}
+
+.reserveButton:hover:not(:disabled),
+.reserveButton:focus-visible:not(:disabled) {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.reserveButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.purchaseLink {
+  color: var(--primary);
+  background: transparent;
+  border: 1px solid var(--primary);
+}
+
+.purchaseLink:hover,
+.purchaseLink:focus-visible {
+  color: var(--surface);
+  background: var(--primary);
+}
+
+.reserveButton:focus-visible,
+.purchaseLink:focus-visible,
+.balanceCard a:focus-visible,
+.bookingItem button:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 3px;
+}
+
+.bookingList {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.bookingItem {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.bookingItem > div {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+}
+
+.bookingItem strong {
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.bookingItem span {
+  color: var(--text-light);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.bookingItem button {
+  flex-shrink: 0;
+  padding: 8px 11px;
+  color: var(--primary);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  background: transparent;
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.bookingItem button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.emptyState {
+  margin-top: 20px;
+  padding: 22px;
+  text-align: center;
+  background: var(--surface-soft);
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+}
+
+.emptyState p {
+  margin: 0;
+  color: var(--text);
+  font-weight: 800;
+}
+
+.emptyState span,
+.emptyText {
+  display: block;
+  margin: 8px 0 0;
+  color: var(--text-light);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.successMessage,
+.errorMessage {
+  margin: 16px 0 0;
+  padding: 13px 15px;
+  font-size: 0.88rem;
+  font-weight: 750;
+  line-height: 1.5;
+  border-radius: 13px;
+}
+
+.successMessage {
+  color: #176b3a;
+  background: #eaf9f0;
+  border: 1px solid #a9e5bd;
+}
+
+.errorMessage {
+  color: #9f2d25;
+  background: #fff0ee;
+  border: 1px solid #f2bbb5;
+}
+
+@media (max-width: 900px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .section {
+    padding: 24px;
+  }
+
+  .heading {
+    flex-direction: column;
+  }
+
+  .balanceCard {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .bookingCard,
+  .upcomingCard {
+    padding: 20px;
+  }
+
+  .scheduleButton,
+  .bookingItem {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
