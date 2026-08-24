@@ -1,12 +1,36 @@
-import { createServerClient } from '@supabase/ssr';
-import { NextRequest, NextResponse } from 'next/server';
+import {
+  createServerClient,
+} from '@supabase/ssr';
+import {
+  NextRequest,
+  NextResponse,
+} from 'next/server';
 import { cookies } from 'next/headers';
 
-export async function GET(request: NextRequest) {
-  const requestUrl = new URL(request.url);
+function getSafeNextPath(
+  value: string | null,
+) {
+  if (
+    !value ||
+    !value.startsWith('/') ||
+    value.startsWith('//')
+  ) {
+    return '/inicio';
+  }
+
+  return value;
+}
+
+export async function GET(
+  request: NextRequest,
+) {
+  const requestUrl =
+    new URL(request.url);
 
   const code =
-    requestUrl.searchParams.get('code');
+    requestUrl.searchParams.get(
+      'code',
+    );
 
   const keepSession =
     requestUrl.searchParams.get(
@@ -23,16 +47,29 @@ export async function GET(request: NextRequest) {
       'device_name',
     );
 
-  const loginUrl =
-    new URL(
-      '/iniciar-sesion',
-      requestUrl.origin,
+  const nextPath =
+    getSafeNextPath(
+      requestUrl.searchParams.get(
+        'next',
+      ),
     );
 
-  if (!code) {
+  const loginUrl = new URL(
+    '/iniciar-sesion',
+    requestUrl.origin,
+  );
+
+  loginUrl.searchParams.set(
+    'next',
+    nextPath,
+  );
+
+  function redirectToLogin(
+    error: string,
+  ) {
     loginUrl.searchParams.set(
       'error',
-      'oauth_callback',
+      error,
     );
 
     return NextResponse.redirect(
@@ -40,14 +77,9 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  if (!deviceId) {
-    loginUrl.searchParams.set(
-      'error',
+  if (!code || !deviceId) {
+    return redirectToLogin(
       'oauth_callback',
-    );
-
-    return NextResponse.redirect(
-      loginUrl,
     );
   }
 
@@ -79,13 +111,14 @@ export async function GET(request: NextRequest) {
                     value,
                     options,
                   );
-
                   return;
                 }
 
                 const {
-                  expires: _expires,
-                  maxAge: _maxAge,
+                  expires:
+                    _expires,
+                  maxAge:
+                    _maxAge,
                   ...sessionOptions
                 } = options;
 
@@ -109,13 +142,8 @@ export async function GET(request: NextRequest) {
     );
 
   if (exchangeError) {
-    loginUrl.searchParams.set(
-      'error',
+    return redirectToLogin(
       'oauth_callback',
-    );
-
-    return NextResponse.redirect(
-      loginUrl,
     );
   }
 
@@ -127,19 +155,12 @@ export async function GET(request: NextRequest) {
   if (!user) {
     await supabase.auth.signOut();
 
-    loginUrl.searchParams.set(
-      'error',
+    return redirectToLogin(
       'oauth_callback',
-    );
-
-    return NextResponse.redirect(
-      loginUrl,
     );
   }
 
-  const {
-    error: deviceError,
-  } =
+  const { error: deviceError } =
     await supabase.rpc(
       'register_current_device',
       {
@@ -160,38 +181,27 @@ export async function GET(request: NextRequest) {
           '2 dispositivos activos',
         );
 
-    loginUrl.searchParams.set(
-      'error',
+    return redirectToLogin(
       reachedDeviceLimit
         ? 'device_limit'
         : 'oauth_callback',
-    );
-
-    return NextResponse.redirect(
-      loginUrl,
     );
   }
 
   const {
     data: profile,
     error: profileError,
-  } =
-    await supabase
-      .from('profiles')
-      .select(
-        'full_name, birth_date, country, gender, english_level, learning_goal',
-      )
-      .eq('id', user.id)
-      .maybeSingle();
+  } = await supabase
+    .from('profiles')
+    .select(
+      'full_name, birth_date, country, gender, english_level, learning_goal',
+    )
+    .eq('id', user.id)
+    .maybeSingle();
 
   if (profileError) {
-    loginUrl.searchParams.set(
-      'error',
+    return redirectToLogin(
       'oauth_callback',
-    );
-
-    return NextResponse.redirect(
-      loginUrl,
     );
   }
 
@@ -205,11 +215,16 @@ export async function GET(request: NextRequest) {
         profile?.learning_goal,
     );
 
+  const destination =
+    profileIsComplete
+      ? nextPath
+      : `/completar-perfil?next=${encodeURIComponent(
+          nextPath,
+        )}`;
+
   return NextResponse.redirect(
     new URL(
-      profileIsComplete
-        ? '/inicio'
-        : '/completar-perfil',
+      destination,
       requestUrl.origin,
     ),
   );

@@ -1,5 +1,6 @@
-import type { Metadata } from 'next';
-
+import type {
+  Metadata,
+} from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
@@ -11,53 +12,102 @@ import styles from './ClasesGrupales.module.css';
 export const metadata: Metadata = {
   title:
     'Clases grupales A1 | Inglés con Lau',
-
   description:
-    'Reserva tu semana para las clases grupales en vivo de Inglés con Lau.',
+    'Compra un paquete de cinco clases grupales A1 en vivo con Inglés con Lau.',
 };
 
 const benefits = [
-  'Clases en vivo de lunes a viernes',
+  'Cinco clases en vivo por paquete',
   'Grupos pequeños de hasta 10 estudiantes',
   'Explicaciones claras desde el nivel A1',
   'Práctica oral durante cada encuentro',
   'Corrección y acompañamiento en vivo',
-  'Acceso mediante una sala privada',
+  'Las clases permanecen disponibles hasta agotarlas',
 ];
 
 export default async function ClasesGrupalesPage() {
-  const supabase = createClient();
+  const supabase =
+    createClient();
 
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } =
+    await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/iniciar-sesion');
+    redirect(
+      '/iniciar-sesion?next=%2Fclases-grupales',
+    );
   }
+
+  const paymentDetails = {
+    bankName:
+      process.env
+        .GROUP_CLASS_BANK_NAME ?? '',
+    accountHolder:
+      process.env
+        .GROUP_CLASS_ACCOUNT_HOLDER ?? '',
+    idDocument:
+      process.env
+        .GROUP_CLASS_ID_DOCUMENT ?? '',
+    productType:
+      process.env
+        .GROUP_CLASS_PRODUCT_TYPE ?? '',
+    accountNumber:
+      process.env
+        .GROUP_CLASS_ACCOUNT_NUMBER ?? '',
+    currency:
+      process.env
+        .GROUP_CLASS_CURRENCY ?? '',
+    paymentEmail:
+      process.env
+        .GROUP_CLASS_PAYMENT_EMAIL ?? '',
+    swiftCode:
+      process.env
+        .GROUP_CLASS_SWIFT_CODE ?? '',
+  };
 
   return (
     <main className={styles.main}>
-      <div className={styles.container}>
+      <div
+        className={styles.container}
+      >
         <Link
           href="/inicio"
-          className={styles.backLink}
+          className={
+            styles.backLink
+          }
         >
           ← Volver a Inicio
         </Link>
 
-        <section className={styles.hero}>
-          <div className={styles.heroContent}>
-            <span className={styles.badge}>
+        <section
+          className={styles.hero}
+        >
+          <div
+            className={
+              styles.heroContent
+            }
+          >
+            <span
+              className={
+                styles.badge
+              }
+            >
               CLASES EN VIVO
             </span>
 
-            <p className={styles.eyebrow}>
+            <p
+              className={
+                styles.eyebrow
+              }
+            >
               CLASES GRUPALES A1
             </p>
 
             <h1>
-              Aprende inglés en compañía
+              Aprende inglés en
+              compañía
             </h1>
 
             <p
@@ -65,11 +115,11 @@ export default async function ClasesGrupalesPage() {
                 styles.heroDescription
               }
             >
-              Elige la semana y el horario que
-              mejor se adapten a ti. Aprende
-              dentro de un grupo pequeño, con
-              acompañamiento, práctica y
-              corrección en vivo.
+              Elige el grupo que mejor
+              se adapte a ti y compra
+              un paquete de cinco
+              clases para usar hasta
+              agotarlas.
             </p>
 
             <div
@@ -83,9 +133,10 @@ export default async function ClasesGrupalesPage() {
                   styles.primaryButton
                 }
               >
-                Seleccionar mi semana
-
-                <span aria-hidden="true">
+                Reservar mis 5 clases
+                <span
+                  aria-hidden="true"
+                >
                   →
                 </span>
               </a>
@@ -96,26 +147,29 @@ export default async function ClasesGrupalesPage() {
                   styles.secondaryButton
                 }
               >
-                Ver semanas y horarios
+                Ver horarios
               </a>
             </div>
           </div>
 
           <aside
-            className={styles.priceCard}
-            aria-label="Precio de las clases"
+            className={
+              styles.priceCard
+            }
+            aria-label="Precio del paquete"
           >
             <p
               className={
                 styles.priceLabel
               }
             >
-              INVERSIÓN SEMANAL
+              PAQUETE DE 5 CLASES
             </p>
 
-            <div className={styles.price}>
+            <div
+              className={styles.price}
+            >
               <span>RD$</span>
-
               <strong>600</strong>
             </div>
 
@@ -124,8 +178,8 @@ export default async function ClasesGrupalesPage() {
                 styles.priceDescription
               }
             >
-              Incluye cinco clases en vivo de
-              una hora, de lunes a viernes.
+              Incluye cinco clases en
+              vivo de una hora.
             </p>
 
             <div
@@ -133,13 +187,14 @@ export default async function ClasesGrupalesPage() {
                 styles.priceDetail
               }
             >
-              <span aria-hidden="true">
+              <span
+                aria-hidden="true"
+              >
                 ✓
               </span>
-
               <p>
-                Equivale a RD$120 por cada
-                hora de clase.
+                RD$120 por cada hora
+                de clase.
               </p>
             </div>
 
@@ -148,19 +203,25 @@ export default async function ClasesGrupalesPage() {
                 styles.priceDetail
               }
             >
-              <span aria-hidden="true">
+              <span
+                aria-hidden="true"
+              >
                 ✓
               </span>
-
               <p>
-                Máximo 10 estudiantes en
-                cada grupo.
+                Compra otro paquete
+                cuando agotes tus
+                clases.
               </p>
             </div>
           </aside>
         </section>
 
-        <WeeklyGroupClassBooking />
+        <WeeklyGroupClassBooking
+          paymentDetails={
+            paymentDetails
+          }
+        />
 
         <section
           className={
@@ -178,8 +239,8 @@ export default async function ClasesGrupalesPage() {
             </p>
 
             <h2 id="benefits-title">
-              Un espacio para aprender y
-              practicar
+              Un espacio para aprender
+              y practicar
             </h2>
 
             <p
@@ -187,11 +248,11 @@ export default async function ClasesGrupalesPage() {
                 styles.sectionDescription
               }
             >
-              No necesitas saberlo todo antes
-              de entrar. Estas clases están
-              diseñadas para ayudarte a
-              construir una base clara y usar
-              el inglés con más seguridad.
+              Después de enviar el
+              comprobante por correo,
+              Lau verificará el pago y
+              activará tus cinco
+              clases.
             </p>
           </div>
 
@@ -200,15 +261,18 @@ export default async function ClasesGrupalesPage() {
               styles.benefitList
             }
           >
-            {benefits.map((benefit) => (
-              <li key={benefit}>
-                <span aria-hidden="true">
-                  ✓
-                </span>
-
-                <p>{benefit}</p>
-              </li>
-            ))}
+            {benefits.map(
+              (benefit) => (
+                <li key={benefit}>
+                  <span
+                    aria-hidden="true"
+                  >
+                    ✓
+                  </span>
+                  <p>{benefit}</p>
+                </li>
+              ),
+            )}
           </ul>
         </section>
 
@@ -233,7 +297,8 @@ export default async function ClasesGrupalesPage() {
               </p>
 
               <h2 id="process-title">
-                ¿Cómo reservas tu espacio?
+                ¿Cómo compras tu
+                paquete?
               </h2>
             </div>
           </div>
@@ -255,15 +320,13 @@ export default async function ClasesGrupalesPage() {
               >
                 01
               </span>
-
               <h3>
-                Elige tu semana
+                Elige tu grupo
               </h3>
-
               <p>
-                Selecciona una de las semanas
-                disponibles a partir del 14 de
-                septiembre.
+                Selecciona el horario
+                que mejor se adapte a
+                ti.
               </p>
             </li>
 
@@ -279,15 +342,14 @@ export default async function ClasesGrupalesPage() {
               >
                 02
               </span>
-
               <h3>
-                Selecciona tu grupo
+                Realiza el pago
               </h3>
-
               <p>
-                Escoge uno de los tres horarios
-                y reserva uno de los 10 cupos
-                disponibles.
+                Usa los datos
+                bancarios que
+                aparecerán después de
+                solicitar el paquete.
               </p>
             </li>
 
@@ -303,22 +365,22 @@ export default async function ClasesGrupalesPage() {
               >
                 03
               </span>
-
               <h3>
-                Confirma tu pago
+                Envía el comprobante
               </h3>
-
               <p>
-                Sube el comprobante dentro de
-                Inglés con Lau. Cuando sea
-                aprobado, tu reservación
-                quedará confirmada.
+                Envíalo por correo.
+                Cuando sea verificado,
+                Lau activará tus cinco
+                clases.
               </p>
             </li>
           </ol>
         </section>
 
-        <section className={styles.notice}>
+        <section
+          className={styles.notice}
+        >
           <div
             className={
               styles.noticeIcon
@@ -330,20 +392,21 @@ export default async function ClasesGrupalesPage() {
 
           <div>
             <h2>Importante</h2>
-
             <p>
-              La reservación inicial mantiene
-              tu cupo durante 45 minutos. Para
-              conservarlo, debes subir el
-              comprobante de pago antes de que
-              termine ese tiempo. No compartas
-              el enlace privado de la clase.
+              Solicitar el paquete no
+              confirma el pago. Tus
+              cinco clases se activan
+              después de verificar el
+              comprobante enviado por
+              correo.
             </p>
           </div>
         </section>
 
         <section
-          className={styles.finalCta}
+          className={
+            styles.finalCta
+          }
         >
           <p
             className={
@@ -352,26 +415,24 @@ export default async function ClasesGrupalesPage() {
           >
             ¿LISTA PARA COMENZAR?
           </p>
-
           <h2>
-            Reserva tu grupo de clases A1
+            Compra tu paquete de
+            clases A1
           </h2>
-
           <p>
-            Escoge tu semana, selecciona el
-            horario que funcione mejor para ti
-            y asegura tu espacio.
+            Elige tu grupo y reserva
+            tus cinco clases.
           </p>
-
           <a
             href="#reservar"
             className={
               styles.primaryButton
             }
           >
-            Seleccionar mi semana
-
-            <span aria-hidden="true">
+            Reservar mis 5 clases
+            <span
+              aria-hidden="true"
+            >
               →
             </span>
           </a>

@@ -11,70 +11,48 @@ import { createClient } from '@/lib/supabase/client';
 
 import styles from './WeeklyGroupClassBooking.module.css';
 
+type PaymentDetails = {
+  bankName: string;
+  accountHolder: string;
+  idDocument: string;
+  productType: string;
+  accountNumber: string;
+  currency: string;
+  paymentEmail: string;
+  swiftCode: string;
+};
+
 type Availability = {
-  week_start: string;
   schedule_id: string;
   schedule_code: string;
   schedule_label: string;
   starts_at: string;
   ends_at: string;
   max_students: number;
-  reserved_students: number;
+  active_students: number;
   available_spots: number;
 };
 
-type ReservationStatus =
+type PackageStatus =
   | 'pending_payment'
-  | 'pending_review'
-  | 'confirmed'
-  | 'rejected'
+  | 'active'
+  | 'exhausted'
   | 'cancelled';
 
-type Reservation = {
+type ClassPackage = {
   id: string;
   schedule_id: string;
-  week_start: string;
-  status: ReservationStatus;
+  total_classes: number;
+  remaining_classes: number;
   price_dop: number;
-  expires_at: string | null;
+  status: PackageStatus;
+  activated_at: string | null;
+  created_at: string;
 };
 
-function parseDate(value: string) {
-  return new Date(`${value}T12:00:00`);
-}
-
-function formatWeek(weekStart: string) {
-  const startDate = parseDate(weekStart);
-  const endDate = new Date(startDate);
-
-  endDate.setDate(startDate.getDate() + 4);
-
-  const startDay = startDate.getDate();
-  const endDay = endDate.getDate();
-
-  const startMonth =
-    new Intl.DateTimeFormat('es-DO', {
-      month: 'long',
-    }).format(startDate);
-
-  const endMonth =
-    new Intl.DateTimeFormat('es-DO', {
-      month: 'long',
-    }).format(endDate);
-
-  if (startMonth === endMonth) {
-    return `${startDay}–${endDay} de ${startMonth}`;
-  }
-
-  return `${startDay} de ${startMonth}–${endDay} de ${endMonth}`;
-}
-
-function formatShortWeek(weekStart: string) {
-  return new Intl.DateTimeFormat('es-DO', {
-    day: 'numeric',
-    month: 'short',
-  }).format(parseDate(weekStart));
-}
+type Props = {
+  paymentDetails: PaymentDetails;
+};
 
 function formatTime(value: string) {
   const [hourValue, minuteValue] =
@@ -84,87 +62,62 @@ function formatTime(value: string) {
   const minute = Number(minuteValue);
 
   const period =
-    hour >= 12 ? 'p. m.' : 'a. m.';
+    hour >= 12
+      ? 'p. m.'
+      : 'a. m.';
 
-  const formattedHour =
-    hour % 12 || 12;
-
-  return `${formattedHour}:${String(
+  return `${hour % 12 || 12}:${String(
     minute,
   ).padStart(2, '0')} ${period}`;
 }
 
 function getStatusLabel(
-  status: ReservationStatus,
+  status: PackageStatus,
 ) {
   if (status === 'pending_payment') {
     return 'Pendiente de pago';
   }
 
-  if (status === 'pending_review') {
-    return 'Pago en revisión';
+  if (status === 'active') {
+    return 'Paquete activo';
   }
 
-  if (status === 'confirmed') {
-    return 'Confirmada';
+  if (status === 'exhausted') {
+    return 'Clases agotadas';
   }
 
-  if (status === 'rejected') {
-    return 'Pago rechazado';
-  }
-
-  return 'Cancelada';
+  return 'Cancelado';
 }
 
-function isActiveReservation(
-  reservation: Reservation,
-) {
-  if (
-    reservation.status ===
-      'pending_review' ||
-    reservation.status ===
-      'confirmed'
-  ) {
-    return true;
-  }
+export default function WeeklyGroupClassBooking({
+  paymentDetails,
+}: Props) {
+  const [
+    availability,
+    setAvailability,
+  ] = useState<Availability[]>([]);
 
-  if (
-    reservation.status !==
-      'pending_payment' ||
-    !reservation.expires_at
-  ) {
-    return false;
-  }
+  const [
+    packages,
+    setPackages,
+  ] = useState<ClassPackage[]>([]);
 
-  return (
-    new Date(
-      reservation.expires_at,
-    ).getTime() > Date.now()
+  const [
+    requestingScheduleId,
+    setRequestingScheduleId,
+  ] = useState<string | null>(
+    null,
   );
-}
 
-export default function WeeklyGroupClassBooking() {
-  const [availability, setAvailability] =
-    useState<Availability[]>([]);
-
-  const [reservations, setReservations] =
-    useState<Reservation[]>([]);
-
-  const [selectedWeek, setSelectedWeek] =
-    useState('');
+  const [
+    cancellingPackageId,
+    setCancellingPackageId,
+  ] = useState<string | null>(
+    null,
+  );
 
   const [isLoading, setIsLoading] =
     useState(true);
-
-  const [
-    reservingScheduleId,
-    setReservingScheduleId,
-  ] = useState<string | null>(null);
-
-  const [
-    cancellingReservationId,
-    setCancellingReservationId,
-  ] = useState<string | null>(null);
 
   const [message, setMessage] =
     useState('');
@@ -172,229 +125,208 @@ export default function WeeklyGroupClassBooking() {
   const [error, setError] =
     useState('');
 
-  const loadBookingData =
+  const loadData =
     useCallback(async () => {
       setIsLoading(true);
       setError('');
 
-      const supabase = createClient();
+      const supabase =
+        createClient();
 
       const [
         availabilityResult,
-        reservationsResult,
+        packagesResult,
       ] = await Promise.all([
         supabase.rpc(
-          'get_group_class_availability',
-          {
-            p_weeks: 8,
-          },
+          'get_group_class_package_availability',
         ),
 
         supabase
           .from(
-            'group_class_reservations',
+            'group_class_packages',
           )
           .select(
             [
               'id',
               'schedule_id',
-              'week_start',
-              'status',
+              'total_classes',
+              'remaining_classes',
               'price_dop',
-              'expires_at',
+              'status',
+              'activated_at',
+              'created_at',
             ].join(','),
           )
-          .order('week_start', {
-            ascending: true,
+          .order('created_at', {
+            ascending: false,
           }),
       ]);
 
-      if (availabilityResult.error) {
+      if (
+        availabilityResult.error
+      ) {
         setError(
-          availabilityResult.error.message,
+          availabilityResult.error
+            .message,
         );
-
         setIsLoading(false);
         return;
       }
 
-      if (reservationsResult.error) {
+      if (packagesResult.error) {
         setError(
-          reservationsResult.error.message,
+          packagesResult.error.message,
         );
-
         setIsLoading(false);
         return;
       }
-
-      const availabilityRows =
-        (availabilityResult.data ??
-          []) as Availability[];
-
-const reservationRows =
-  (reservationsResult.data ?? []) as unknown as Reservation[];
 
       setAvailability(
-        availabilityRows,
+        (availabilityResult.data ??
+          []) as unknown as Availability[],
       );
 
-      setReservations(
-        reservationRows,
-      );
-
-      setSelectedWeek(
-        (currentWeek) =>
-          currentWeek ||
-          availabilityRows[0]
-            ?.week_start ||
-          '',
+      setPackages(
+        (packagesResult.data ??
+          []) as unknown as ClassPackage[],
       );
 
       setIsLoading(false);
     }, []);
 
   useEffect(() => {
-    void loadBookingData();
-  }, [loadBookingData]);
+    void loadData();
+  }, [loadData]);
 
-  const weeks = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          availability.map(
-            (item) =>
-              item.week_start,
-          ),
-        ),
-      ),
-    [availability],
-  );
-
-  const selectedSchedules =
+  const currentPackage =
     useMemo(
       () =>
-        availability.filter(
+        packages.find(
           (item) =>
-            item.week_start ===
-            selectedWeek,
+            item.status ===
+              'pending_payment' ||
+            item.status === 'active',
         ),
-      [
-        availability,
-        selectedWeek,
-      ],
+      [packages],
     );
 
-  const selectedReservation =
+  const latestExhaustedPackage =
     useMemo(
       () =>
-        reservations.find(
-          (reservation) =>
-            reservation.week_start ===
-              selectedWeek &&
-            isActiveReservation(
-              reservation,
-            ),
+        packages.find(
+          (item) =>
+            item.status ===
+            'exhausted',
         ),
-      [
-        reservations,
-        selectedWeek,
-      ],
+      [packages],
     );
 
-  const selectedReservationSchedule =
-    selectedReservation
-      ? selectedSchedules.find(
-          (schedule) =>
-            schedule.schedule_id ===
-            selectedReservation.schedule_id,
+  const currentSchedule =
+    currentPackage
+      ? availability.find(
+          (item) =>
+            item.schedule_id ===
+            currentPackage.schedule_id,
         )
       : undefined;
 
-  async function handleReserve(
+  const paymentIsConfigured =
+    Object.values(
+      paymentDetails,
+    ).every(
+      (value) =>
+        value.trim().length > 0,
+    );
+
+  const emailHref =
+    `mailto:${paymentDetails.paymentEmail}` +
+    `?subject=${encodeURIComponent(
+      'Comprobante de pago - Paquete de 5 clases',
+    )}` +
+    `&body=${encodeURIComponent(
+      'Hola, envío mi comprobante de pago para activar mi paquete de 5 clases grupales A1.',
+    )}`;
+
+  async function handleRequest(
     scheduleId: string,
   ) {
-    if (
-      !selectedWeek ||
-      reservingScheduleId
-    ) {
+    if (requestingScheduleId) {
       return;
     }
 
-    setReservingScheduleId(
+    setRequestingScheduleId(
       scheduleId,
     );
-
     setMessage('');
     setError('');
 
-    const supabase = createClient();
+    const supabase =
+      createClient();
 
-    const { error: reserveError } =
+    const { error: requestError } =
       await supabase.rpc(
-        'reserve_group_class_week',
+        'request_group_class_package',
         {
-          p_week_start:
-            selectedWeek,
           p_schedule_id:
             scheduleId,
         },
       );
 
-    if (reserveError) {
+    if (requestError) {
       setError(
-        reserveError.message,
+        requestError.message,
       );
-
-      setReservingScheduleId(
+      setRequestingScheduleId(
         null,
       );
-
       return;
     }
 
     setMessage(
-      'Tu cupo fue reservado durante 45 minutos. Ahora debes enviar el comprobante de pago.',
+      'Tu solicitud fue creada. Realiza el pago y envía el comprobante por correo.',
     );
 
-    await loadBookingData();
+    await loadData();
 
-    setReservingScheduleId(
+    setRequestingScheduleId(
       null,
     );
   }
 
   async function handleCancel() {
     if (
-      !selectedReservation ||
-      cancellingReservationId
+      !currentPackage ||
+      currentPackage.status !==
+        'pending_payment' ||
+      cancellingPackageId
     ) {
       return;
     }
 
     const shouldCancel =
       window.confirm(
-        '¿Quieres cancelar esta reservación?',
+        '¿Quieres cancelar esta solicitud?',
       );
 
     if (!shouldCancel) {
       return;
     }
 
-    setCancellingReservationId(
-      selectedReservation.id,
+    setCancellingPackageId(
+      currentPackage.id,
     );
-
     setMessage('');
     setError('');
 
-    const supabase = createClient();
+    const supabase =
+      createClient();
 
     const { error: cancelError } =
       await supabase.rpc(
-        'cancel_group_class_reservation',
+        'cancel_group_class_package_request',
         {
-          p_reservation_id:
-            selectedReservation.id,
+          p_package_id:
+            currentPackage.id,
         },
       );
 
@@ -402,21 +334,19 @@ const reservationRows =
       setError(
         cancelError.message,
       );
-
-      setCancellingReservationId(
+      setCancellingPackageId(
         null,
       );
-
       return;
     }
 
     setMessage(
-      'La reservación fue cancelada.',
+      'La solicitud fue cancelada.',
     );
 
-    await loadBookingData();
+    await loadData();
 
-    setCancellingReservationId(
+    setCancellingPackageId(
       null,
     );
   }
@@ -427,8 +357,11 @@ const reservationRows =
         id="reservar"
         className={styles.booking}
       >
-        <div className={styles.loading}>
-          Cargando semanas y horarios...
+        <div
+          className={styles.loading}
+        >
+          Cargando horarios y
+          paquetes...
         </div>
       </section>
     );
@@ -440,20 +373,29 @@ const reservationRows =
       className={styles.booking}
       aria-labelledby="booking-title"
     >
-      <div className={styles.heading}>
+      <div
+        className={styles.heading}
+      >
         <div>
-          <p className={styles.eyebrow}>
-            RESERVA SEMANAL
+          <p
+            className={
+              styles.eyebrow
+            }
+          >
+            PAQUETE DE CLASES
           </p>
 
           <h2 id="booking-title">
-            Selecciona tu semana
+            Tus cinco clases
           </h2>
         </div>
 
         <p>
-          Cada reservación incluye las
-          cinco clases de esa semana.
+          Elige un grupo, realiza el
+          pago y envía el comprobante
+          por correo. Las clases no
+          vencen mientras tengas
+          saldo.
         </p>
       </div>
 
@@ -475,252 +417,396 @@ const reservationRows =
         </div>
       ) : null}
 
-      <div
-        className={styles.weekSelector}
-        aria-label="Semanas disponibles"
-      >
-        {weeks.map((week) => {
-          const weekReservation =
-            reservations.find(
-              (reservation) =>
-                reservation.week_start ===
-                  week &&
-                isActiveReservation(
-                  reservation,
-                ),
-            );
-
-          return (
-            <button
-              key={week}
-              type="button"
-              className={`${styles.weekButton} ${
-                selectedWeek === week
-                  ? styles.weekButtonActive
-                  : ''
-              }`}
-              onClick={() => {
-                setSelectedWeek(week);
-                setMessage('');
-                setError('');
-              }}
-            >
-              <span>
-                Semana del
-              </span>
-
-              <strong>
-                {formatShortWeek(
-                  week,
-                )}
-              </strong>
-
-              {weekReservation ? (
-                <small>
-                  {getStatusLabel(
-                    weekReservation.status,
-                  )}
-                </small>
-              ) : null}
-            </button>
-          );
-        })}
-      </div>
-
-      <div className={styles.weekHeading}>
-        <div>
-          <p>
-            SEMANA SELECCIONADA
-          </p>
-
-          <h3>
-            {formatWeek(
-              selectedWeek,
-            )}
-          </h3>
-        </div>
-
-        <span className={styles.weekPrice}>
-          RD$600
-        </span>
-      </div>
-
-      {selectedReservation &&
-      selectedReservationSchedule ? (
-        <article
-          className={
-            styles.reservationCard
-          }
-        >
-          <div>
-            <p
-              className={
-                styles.reservationLabel
-              }
-            >
-              TU RESERVACIÓN
-            </p>
-
-            <h3>
-              {
-                selectedReservationSchedule
-                  .schedule_label
-              }
-            </h3>
-
-            <p>
-              {formatTime(
-                selectedReservationSchedule
-                  .starts_at,
-              )}{' '}
-              –{' '}
-              {formatTime(
-                selectedReservationSchedule
-                  .ends_at,
-              )}
-            </p>
-          </div>
-
-          <div
+      {currentPackage ? (
+        <>
+          <article
             className={
-              styles.reservationActions
+              styles.packageCard
             }
           >
-            <span
-              className={`${styles.statusBadge} ${
-                styles[
-                  selectedReservation
-                    .status
-                ]
-              }`}
-            >
-              {getStatusLabel(
-                selectedReservation.status,
-              )}
-            </span>
-
-            {selectedReservation.status !==
-            'confirmed' ? (
-              <button
-                type="button"
+            <div>
+              <p
                 className={
-                  styles.cancelButton
-                }
-                disabled={
-                  cancellingReservationId ===
-                  selectedReservation.id
-                }
-                onClick={() =>
-                  void handleCancel()
+                  styles.reservationLabel
                 }
               >
-                {cancellingReservationId
-                  ? 'Cancelando...'
-                  : 'Cancelar reservación'}
-              </button>
-            ) : null}
-          </div>
-        </article>
-      ) : (
-        <div
-          className={
-            styles.scheduleGrid
-          }
-        >
-          {selectedSchedules.map(
-            (schedule) => {
-              const isFull =
-                schedule.available_spots <=
-                0;
+                TU PAQUETE
+              </p>
 
-              const isReserving =
-                reservingScheduleId ===
-                schedule.schedule_id;
+              <h3>
+                {currentSchedule
+                  ?.schedule_label ??
+                  'Grupo seleccionado'}
+              </h3>
 
-              return (
-                <article
-                  key={
-                    schedule.schedule_id
-                  }
-                  className={
-                    styles.scheduleCard
-                  }
-                >
-                  <span
-                    className={
-                      styles.scheduleDot
-                    }
-                  />
+              {currentSchedule ? (
+                <p>
+                  {formatTime(
+                    currentSchedule
+                      .starts_at,
+                  )}{' '}
+                  –{' '}
+                  {formatTime(
+                    currentSchedule
+                      .ends_at,
+                  )}
+                </p>
+              ) : null}
+            </div>
 
+            <div
+              className={
+                styles.packageSummary
+              }
+            >
+              <span
+                className={`${styles.statusBadge} ${
+                  styles[
+                    currentPackage
+                      .status
+                  ]
+                }`}
+              >
+                {getStatusLabel(
+                  currentPackage.status,
+                )}
+              </span>
+
+              <strong
+                className={
+                  styles.classCounter
+                }
+              >
+                {
+                  currentPackage.remaining_classes
+                }{' '}
+                de{' '}
+                {
+                  currentPackage.total_classes
+                }
+              </strong>
+
+              <span
+                className={
+                  styles.counterLabel
+                }
+              >
+                clases disponibles
+              </span>
+            </div>
+          </article>
+
+          {currentPackage.status ===
+          'pending_payment' ? (
+            <div
+              className={
+                styles.paymentCard
+              }
+            >
+              <div
+                className={
+                  styles.paymentHeading
+                }
+              >
+                <div>
                   <p
                     className={
-                      styles.scheduleLabel
+                      styles.eyebrow
                     }
                   >
-                    {
-                      schedule.schedule_label
-                    }
+                    DATOS PARA EL PAGO
                   </p>
 
                   <h3>
-                    {formatTime(
-                      schedule.starts_at,
-                    )}
+                    Completa tu
+                    solicitud
                   </h3>
+                </div>
+
+                <strong>
+                  RD$600
+                </strong>
+              </div>
+
+              {paymentIsConfigured ? (
+                <>
+                  <dl
+                    className={
+                      styles.bankDetails
+                    }
+                  >
+                    <div>
+                      <dt>Banco</dt>
+                      <dd>
+                        {
+                          paymentDetails.bankName
+                        }
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt>
+                        Titular
+                      </dt>
+                      <dd>
+                        {
+                          paymentDetails.accountHolder
+                        }
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt>
+                        Documento
+                      </dt>
+                      <dd>
+                        {
+                          paymentDetails.idDocument
+                        }
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt>
+                        Producto
+                      </dt>
+                      <dd>
+                        {
+                          paymentDetails.productType
+                        }
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt>
+                        Número de cuenta
+                      </dt>
+                      <dd>
+                        {
+                          paymentDetails.accountNumber
+                        }
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt>
+                        Moneda
+                      </dt>
+                      <dd>
+                        {
+                          paymentDetails.currency
+                        }
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt>SWIFT</dt>
+                      <dd>
+                        {
+                          paymentDetails.swiftCode
+                        }
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt>
+                        Correo
+                      </dt>
+                      <dd>
+                        {
+                          paymentDetails.paymentEmail
+                        }
+                      </dd>
+                    </div>
+                  </dl>
 
                   <p
                     className={
-                      styles.scheduleDays
+                      styles.paymentInstructions
                     }
                   >
-                    Lunes a viernes
+                    Realiza el pago y
+                    envía una foto o
+                    PDF del comprobante
+                    a{' '}
+                    <strong>
+                      {
+                        paymentDetails.paymentEmail
+                      }
+                    </strong>
+                    . Lau verificará el
+                    pago y activará tus
+                    cinco clases.
                   </p>
 
                   <div
                     className={
-                      styles.capacity
+                      styles.paymentActions
                     }
                   >
-                    <strong>
-                      {
-                        schedule.available_spots
+                    <a
+                      href={
+                        emailHref
                       }
-                    </strong>{' '}
-                    de{' '}
-                    {
-                      schedule.max_students
-                    }{' '}
-                    cupos disponibles
-                  </div>
+                      className={
+                        styles.emailButton
+                      }
+                    >
+                      Enviar comprobante
+                      por correo
+                    </a>
 
-                  <button
-                    type="button"
+                    <button
+                      type="button"
+                      className={
+                        styles.cancelButton
+                      }
+                      disabled={
+                        Boolean(
+                          cancellingPackageId,
+                        )
+                      }
+                      onClick={() =>
+                        void handleCancel()
+                      }
+                    >
+                      {cancellingPackageId
+                        ? 'Cancelando...'
+                        : 'Cancelar solicitud'}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div
+                  className={
+                    styles.error
+                  }
+                >
+                  Los datos bancarios
+                  todavía no están
+                  configurados en el
+                  servidor.
+                </div>
+              )}
+            </div>
+          ) : null}
+        </>
+      ) : (
+        <>
+          {latestExhaustedPackage ? (
+            <div
+              className={
+                styles.exhaustedNotice
+              }
+            >
+              Tu paquete anterior llegó
+              a cero. Puedes comprar
+              otro paquete de cinco
+              clases seleccionando un
+              grupo.
+            </div>
+          ) : null}
+
+          <div
+            className={
+              styles.scheduleGrid
+            }
+          >
+            {availability.map(
+              (schedule) => {
+                const isFull =
+                  schedule.available_spots <=
+                  0;
+
+                const isRequesting =
+                  requestingScheduleId ===
+                  schedule.schedule_id;
+
+                return (
+                  <article
+                    key={
+                      schedule.schedule_id
+                    }
                     className={
-                      styles.reserveButton
-                    }
-                    disabled={
-                      isFull ||
-                      Boolean(
-                        reservingScheduleId,
-                      )
-                    }
-                    onClick={() =>
-                      void handleReserve(
-                        schedule.schedule_id,
-                      )
+                      styles.scheduleCard
                     }
                   >
-                    {isFull
-                      ? 'Grupo completo'
-                      : isReserving
-                        ? 'Reservando...'
-                        : 'Reservar este grupo'}
-                  </button>
-                </article>
-              );
-            },
-          )}
-        </div>
+                    <span
+                      className={
+                        styles.scheduleDot
+                      }
+                    />
+
+                    <p
+                      className={
+                        styles.scheduleLabel
+                      }
+                    >
+                      {
+                        schedule.schedule_label
+                      }
+                    </p>
+
+                    <h3>
+                      {formatTime(
+                        schedule.starts_at,
+                      )}
+                    </h3>
+
+                    <p
+                      className={
+                        styles.scheduleDays
+                      }
+                    >
+                      Clases grupales A1
+                    </p>
+
+                    <div
+                      className={
+                        styles.capacity
+                      }
+                    >
+                      <strong>
+                        {
+                          schedule.available_spots
+                        }
+                      </strong>{' '}
+                      de{' '}
+                      {
+                        schedule.max_students
+                      }{' '}
+                      cupos disponibles
+                    </div>
+
+                    <button
+                      type="button"
+                      className={
+                        styles.reserveButton
+                      }
+                      disabled={
+                        isFull ||
+                        Boolean(
+                          requestingScheduleId,
+                        )
+                      }
+                      onClick={() =>
+                        void handleRequest(
+                          schedule.schedule_id,
+                        )
+                      }
+                    >
+                      {isFull
+                        ? 'Grupo completo'
+                        : isRequesting
+                          ? 'Solicitando...'
+                          : 'Elegir este grupo'}
+                    </button>
+                  </article>
+                );
+              },
+            )}
+          </div>
+        </>
       )}
     </section>
   );
