@@ -75,7 +75,7 @@ export default function VocabularyButton({
         .toLocaleLowerCase();
 
       const alreadySaved = (data ?? []).some(
-        (item) =>
+        (item: any) =>
           String(item.word)
             .trim()
             .toLocaleLowerCase() === normalizedWord,

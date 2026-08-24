@@ -104,9 +104,8 @@ function getClubCountdown(
   const minutes = totalMinutes % 60;
 
   if (days > 0) {
-    return `Comienza en ${days} ${
-      days === 1 ? 'día' : 'días'
-    } y ${hours} h`;
+    return `Comienza en ${days} ${days === 1 ? 'día' : 'días'
+      } y ${hours} h`;
   }
 
   if (hours > 0) {
@@ -323,15 +322,15 @@ export default function InicioPage() {
 
         user
           ? supabase
-              .from('reading_reservations')
-              .select('slot_number')
-              .eq(
-                'session_id',
-                currentSession.id,
-              )
-              .eq('user_id', user.id)
-              .eq('status', 'reserved')
-              .maybeSingle()
+            .from('reading_reservations')
+            .select('slot_number')
+            .eq(
+              'session_id',
+              currentSession.id,
+            )
+            .eq('user_id', user.id)
+            .eq('status', 'reserved')
+            .maybeSingle()
           : Promise.resolve({ data: null }),
       ]);
 
@@ -476,12 +475,13 @@ export default function InicioPage() {
       const furthestLesson = (
         openedLessons ?? []
       )
-        .map((item) =>
-          getValidLessonKey(item.lesson_key),
+        .map(
+          (item: { lesson_key: string | null }) =>
+            getValidLessonKey(item.lesson_key),
         )
         .filter(
           (
-            lessonKey,
+            lessonKey: string | null,
           ): lessonKey is string =>
             lessonKey !== null,
         )
@@ -506,7 +506,7 @@ export default function InicioPage() {
       const databaseLessonKey =
         getValidLessonKey(
           lastOpenedLesson?.lesson_key ??
-            null,
+          null,
         );
 
       const storedLessonKey =
@@ -518,8 +518,8 @@ export default function InicioPage() {
 
       setLastLessonKey(
         storedLessonKey ??
-          databaseLessonKey ??
-          'a0/1',
+        databaseLessonKey ??
+        'a0/1',
       );
 
       if (subscription?.status) {
@@ -566,7 +566,7 @@ export default function InicioPage() {
       ) {
         setLiveClassError(
           data?.error ||
-            'No pudimos abrir la clase. Inténtalo de nuevo.',
+          'No pudimos abrir la clase. Inténtalo de nuevo.',
         );
 
         setIsOpeningLiveClass(false);
@@ -657,7 +657,7 @@ export default function InicioPage() {
   const generalProgress = Math.min(
     100,
     (completedLessons / TOTAL_LESSONS) *
-      100,
+    100,
   );
 
   const generalProgressLabel =
@@ -696,13 +696,11 @@ export default function InicioPage() {
                 }
               >
                 <span
-                  className={`${
-                    styles.statusLight
-                  } ${
-                    hasActiveAccess
+                  className={`${styles.statusLight
+                    } ${hasActiveAccess
                       ? styles.statusLightActive
                       : styles.statusLightInactive
-                  }`}
+                    }`}
                   aria-hidden="true"
                 />
 
@@ -971,7 +969,7 @@ export default function InicioPage() {
 
               {hasActiveAccess ? (
                 readingReservationSlot !==
-                null ? (
+                  null ? (
                   <>
                     <div
                       className={
@@ -1064,7 +1062,7 @@ export default function InicioPage() {
                     </p>
 
                     {availableReadingSlots ===
-                    null ? (
+                      null ? (
                       <p
                         className={
                           styles.availableSlots
@@ -1083,7 +1081,7 @@ export default function InicioPage() {
                           availableReadingSlots
                         }{' '}
                         {availableReadingSlots ===
-                        1
+                          1
                           ? 'turno disponible'
                           : 'turnos disponibles'}
                       </p>
@@ -1100,9 +1098,9 @@ export default function InicioPage() {
 
                     {clubSession &&
                       availableReadingSlots !==
-                        null &&
+                      null &&
                       availableReadingSlots >
-                        0 && (
+                      0 && (
                         <div
                           className={
                             styles.clubActions
@@ -1198,7 +1196,7 @@ export default function InicioPage() {
                   {isLoadingProfile
                     ? 'Cargando...'
                     : indicatedLevel ||
-                      'No indicado'}
+                    'No indicado'}
                 </strong>
               </p>
             </article>

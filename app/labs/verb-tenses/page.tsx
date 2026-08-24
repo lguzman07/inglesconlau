@@ -52,7 +52,7 @@ export default async function VerbTensesLabPage() {
   const completedLessonKeys =
     new Set(
       (progressData ?? []).map(
-        (progress) =>
+        (progress: { lesson_key: string }) =>
           progress.lesson_key,
       ),
     );
@@ -68,10 +68,10 @@ export default async function VerbTensesLabPage() {
   const progressPercentage =
     verbTensesLessonCount > 0
       ? Math.round(
-          (completedLessons /
-            verbTensesLessonCount) *
-            100,
-        )
+        (completedLessons /
+          verbTensesLessonCount) *
+        100,
+      )
       : 0;
 
   const firstLesson =
@@ -387,7 +387,7 @@ export default async function VerbTensesLabPage() {
                               >
                                 {String(
                                   lessonIndex +
-                                    1,
+                                  1,
                                 ).padStart(
                                   2,
                                   '0',
@@ -446,11 +446,10 @@ export default async function VerbTensesLabPage() {
                               </span>
 
                               <span
-                                className={`${styles.completedCheck} ${
-                                  isCompleted
+                                className={`${styles.completedCheck} ${isCompleted
                                     ? styles.completedCheckActive
                                     : ''
-                                }`}
+                                  }`}
                                 title={
                                   isCompleted
                                     ? 'Lección completada'

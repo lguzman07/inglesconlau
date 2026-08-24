@@ -231,9 +231,8 @@ export default function WeeklyGroupClassBooking() {
         (availabilityResult.data ??
           []) as Availability[];
 
-      const reservationRows =
-        (reservationsResult.data ??
-          []) as Reservation[];
+const reservationRows =
+  (reservationsResult.data ?? []) as unknown as Reservation[];
 
       setAvailability(
         availabilityRows,
