@@ -11,7 +11,7 @@ import { createClient } from '@/lib/supabase/client';
 import { getLessonTitle } from '@/content/lecciones/catalog';
 import styles from './Inicio.module.css';
 
-const TOTAL_LESSONS = 1024;
+const TOTAL_LESSONS = 1080;
 
 const LAST_LESSON_STORAGE_KEY =
   'inglesconlau-last-opened-lesson';
