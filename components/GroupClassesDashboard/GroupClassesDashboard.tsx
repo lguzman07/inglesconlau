@@ -38,6 +38,14 @@ type GroupClassBooking = {
     | null;
 };
 
+const LEVEL_OPTIONS = [
+  { value: 'a1', label: 'A1' },
+  { value: 'a2', label: 'A2' },
+  { value: 'b1', label: 'B1' },
+  { value: 'b1-plus', label: 'B1+' },
+  { value: 'b2', label: 'B2' },
+];
+
 function getDominicanToday() {
   const parts = new Intl.DateTimeFormat(
     'en-CA',
@@ -138,6 +146,9 @@ export default function GroupClassesDashboard() {
   const [selectedDate, setSelectedDate] =
     useState(today);
 
+  const [selectedLevel, setSelectedLevel] =
+    useState('a1');
+
   const [selectedScheduleId, setSelectedScheduleId] =
     useState('');
 
@@ -232,7 +243,10 @@ export default function GroupClassesDashboard() {
     }, [today]);
 
   const loadAvailability =
-    useCallback(async (date: string) => {
+    useCallback(async (
+      date: string,
+      level: string,
+    ) => {
       setIsLoadingSchedules(true);
       setSelectedScheduleId('');
 
@@ -240,9 +254,10 @@ export default function GroupClassesDashboard() {
 
       const { data, error: availabilityError } =
         await supabase.rpc(
-          'get_group_class_availability',
+          'get_group_class_availability_by_level',
           {
             p_class_date: date,
+            p_level: level,
           },
         );
 
@@ -266,8 +281,15 @@ export default function GroupClassesDashboard() {
   }, [loadStudentClasses]);
 
   useEffect(() => {
-    void loadAvailability(selectedDate);
-  }, [loadAvailability, selectedDate]);
+    void loadAvailability(
+      selectedDate,
+      selectedLevel,
+    );
+  }, [
+    loadAvailability,
+    selectedDate,
+    selectedLevel,
+  ]);
 
   async function handleReserve() {
     if (
@@ -301,7 +323,10 @@ export default function GroupClassesDashboard() {
         ),
       );
       setIsReserving(false);
-      await loadAvailability(selectedDate);
+      await loadAvailability(
+        selectedDate,
+        selectedLevel,
+      );
       return;
     }
 
@@ -313,7 +338,10 @@ export default function GroupClassesDashboard() {
 
     await Promise.all([
       loadStudentClasses(),
-      loadAvailability(selectedDate),
+      loadAvailability(
+        selectedDate,
+        selectedLevel,
+      ),
     ]);
   }
 
@@ -353,7 +381,10 @@ export default function GroupClassesDashboard() {
 
     await Promise.all([
       loadStudentClasses(),
-      loadAvailability(selectedDate),
+      loadAvailability(
+        selectedDate,
+        selectedLevel,
+      ),
     ]);
   }
 
@@ -365,7 +396,7 @@ export default function GroupClassesDashboard() {
       <div className={styles.heading}>
         <div>
           <p className={styles.eyebrow}>
-            CLASES GRUPALES A1
+            CLASES GRUPALES
           </p>
 
           <h2 id="group-classes-title">
@@ -392,7 +423,38 @@ export default function GroupClassesDashboard() {
 
       <div className={styles.contentGrid}>
         <article className={styles.bookingCard}>
-          <h3>Elige una fecha</h3>
+          <h3>Escoge tu nivel</h3>
+
+          <div
+            className={styles.levelSelector}
+            role="group"
+            aria-label="Nivel de la clase grupal"
+          >
+            {LEVEL_OPTIONS.map((level) => (
+              <button
+                key={level.value}
+                type="button"
+                className={`${styles.levelButton} ${
+                  selectedLevel === level.value
+                    ? styles.levelButtonSelected
+                    : ''
+                }`}
+                onClick={() => {
+                  setSelectedLevel(level.value);
+                  setSelectedScheduleId('');
+                  setError('');
+                  setMessage('');
+                }}
+                aria-pressed={
+                  selectedLevel === level.value
+                }
+              >
+                {level.label}
+              </button>
+            ))}
+          </div>
+
+          <h4>Elige la fecha y el horario</h4>
 
           <label
             className={styles.dateField}

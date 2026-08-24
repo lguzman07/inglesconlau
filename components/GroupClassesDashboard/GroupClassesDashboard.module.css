@@ -23,7 +23,8 @@
 
 .heading h2,
 .bookingCard h3,
-.upcomingCard h3 {
+.upcomingCard h3,
+.bookingCard h4 {
   margin: 0;
   color: var(--text);
 }
@@ -93,6 +94,45 @@
 .bookingCard h3,
 .upcomingCard h3 {
   font-size: 1.2rem;
+}
+
+.bookingCard h4 {
+  margin-top: 24px;
+  font-size: 1rem;
+}
+
+.levelSelector {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 18px;
+}
+
+.levelButton {
+  min-height: 44px;
+  padding: 9px 8px;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.levelButton:hover,
+.levelButton:focus-visible,
+.levelButtonSelected {
+  color: var(--surface);
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.levelButton:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 2px;
 }
 
 .dateField {
@@ -387,5 +427,9 @@
   .bookingItem {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .levelSelector {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
