@@ -723,3 +723,15 @@ export const lessonTitles: Record<
     100: 'Resumir',
   },
 };
+
+export function getLessonTitle(
+  level: string,
+  lessonNumber: number,
+) {
+  return (
+    lessonTitles[
+      level.toLowerCase()
+    ]?.[lessonNumber] ??
+    `Lección ${lessonNumber}`
+  );
+}
