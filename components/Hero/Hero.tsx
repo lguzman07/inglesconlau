@@ -19,8 +19,8 @@ export default function Hero() {
         </p>
 
         <div className="hero-buttons">
-          <Link href="/plan" className="primary-button">
-            <span className="button-title">Ver el plan</span>
+          <Link href="/planes" className="primary-button">
+            <span className="button-title">Ver los planes</span>
 
             <span className="button-subtitle">
               Desde RD$600 a la semana

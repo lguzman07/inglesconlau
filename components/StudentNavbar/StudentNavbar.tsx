@@ -39,22 +39,11 @@ export default function StudentNavbar() {
 
     async function loadAdminRole() {
       const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        return;
-      }
-
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .maybeSingle();
+      const { data: hasAdminRole, error } =
+        await supabase.rpc('is_current_user_admin');
 
       if (isMounted) {
-        setIsAdmin(profile?.role === 'admin');
+        setIsAdmin(!error && hasAdminRole === true);
       }
     }
 
