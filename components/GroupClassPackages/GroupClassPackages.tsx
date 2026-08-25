@@ -126,8 +126,7 @@ export default function GroupClassPackages({
           Compra clases para usar en cualquier nivel
         </h2>
         <p>
-          Tus clases no quedan atadas a A1, A2, B1,
-          B1+ o B2. Cuando reserves, podrás escoger el
+          Tus clases no quedan atadas a A1, A2, B1 o B2. Cuando reserves, podrás escoger el
           nivel que quieras explorar.
         </p>
       </div>
@@ -147,15 +146,13 @@ export default function GroupClassPackages({
               type="button"
               role="radio"
               aria-checked={isSelected}
-              className={`${styles.packageCard} ${
-                isSelected
+              className={`${styles.packageCard} ${isSelected
                   ? styles.packageCardSelected
                   : ''
-              } ${
-                item.id === 'complete-80'
+                } ${item.id === 'complete-80'
                   ? styles.bestValueCard
                   : ''
-              }`}
+                }`}
               onClick={() =>
                 setSelectedPackageId(item.id)
               }
