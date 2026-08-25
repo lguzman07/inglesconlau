@@ -540,10 +540,7 @@ export default function InicioPage() {
   }, []);
 
   async function handleOpenLiveClass() {
-    if (
-      isOpeningLiveClass ||
-      !hasActiveAccess
-    ) {
+    if (isOpeningLiveClass) {
       return;
     }
 
@@ -874,48 +871,19 @@ export default function InicioPage() {
                 </span>
               </div>
 
-              {hasActiveAccess ? (
-                <button
-                  type="button"
-                  className={
-                    styles.liveClassButton
-                  }
-                  onClick={
-                    handleOpenLiveClass
-                  }
-                  disabled={
-                    isOpeningLiveClass
-                  }
-                >
-                  {isOpeningLiveClass
-                    ? 'Abriendo clase...'
-                    : role === 'admin'
-                      ? 'Entrar como anfitriona'
-                      : 'Entrar a clase'}
-                </button>
-              ) : (
-                <>
-                  <button
-                    type="button"
-                    className={
-                      styles.liveClassButton
-                    }
-                    disabled
-                  >
-                    Entrar a clase
-                  </button>
-
-                  <p
-                    className={
-                      styles.liveClassAccessNote
-                    }
-                  >
-                    Requiere una suscripción
-                    activa.
-                  </p>
-                </>
-              )}
-
+              <button
+                type="button"
+                className={styles.liveClassButton}
+                onClick={handleOpenLiveClass}
+                disabled={isOpeningLiveClass}
+              >
+                {isOpeningLiveClass
+                  ? 'Comprobando reserva...'
+                  : role === 'admin'
+                    ? 'Entrar como anfitriona'
+                    : 'Entrar a clase'}
+                    
+              </button>
               {liveClassError && (
                 <p
                   className={
