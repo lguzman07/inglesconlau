@@ -3,8 +3,10 @@ import {
   notFound,
   redirect,
 } from 'next/navigation';
+
 import { lessonTitles } from '@/content/lecciones/catalog';
 import { createClient } from '@/lib/supabase/server';
+
 import styles from './Nivel.module.css';
 
 type Level = {
@@ -23,9 +25,9 @@ const levels: Record<string, Level> = {
 
   a2: {
     code: 'A2',
-    title: 'BÃ¡sico',
+    title: 'Básico',
     description:
-      'MÃ¡s confianza para hablar de experiencias, planes y situaciones frecuentes.',
+      'Más confianza para hablar de experiencias, planes y situaciones frecuentes.',
   },
 
   b1: {
@@ -39,14 +41,14 @@ const levels: Record<string, Level> = {
     code: 'B2',
     title: 'Intermedio avanzado',
     description:
-      'Comprende contenido mÃ¡s complejo y argumenta con confianza.',
+      'Comprende contenido más complejo y argumenta con confianza.',
   },
 
   c1: {
     code: 'C1',
     title: 'Avanzado',
     description:
-      'ComunÃ­cate con precisiÃ³n y naturalidad en contextos complejos.',
+      'Comunícate con precisión y naturalidad en contextos complejos.',
   },
 };
 
@@ -208,7 +210,11 @@ export default async function NivelPage({
       (
         progressResult.data ?? []
       ).map(
-        (progress: { lesson_key: string }) =>
+        (
+          progress: {
+            lesson_key: string;
+          },
+        ) =>
           progress.lesson_key,
       ),
     );
@@ -228,7 +234,7 @@ export default async function NivelPage({
             styles.backLink
           }
         >
-          â† Todas las lecciones
+          ← Todas las lecciones
         </Link>
 
         <section
@@ -275,20 +281,20 @@ export default async function NivelPage({
                   styles.startEyebrow
                 }
               >
-                RECOMENDACIÃ“N
+                RECOMENDACIÓN
               </p>
 
               <h2>
                 Empieza por:{' '}
                 {levelLessons[0]
                   ?.title ??
-                  'Contenido prÃ³ximamente'}
+                  'Contenido próximamente'}
               </h2>
 
               <p>
                 {hasLessonAccess
-                  ? 'Las lecciones estÃ¡n organizadas en orden para que siempre sepas quÃ© estudiar despuÃ©s.'
-                  : 'Puedes probar gratis las primeras 3 lecciones de este nivel. Activa tu suscripciÃ³n para abrir el resto.'}
+                  ? 'Las lecciones están organizadas en orden para que siempre sepas qué estudiar después.'
+                  : 'Puedes probar gratis las primeras 3 lecciones de este nivel. Activa tu suscripción para abrir el resto.'}
               </p>
             </div>
 
@@ -395,8 +401,8 @@ export default async function NivelPage({
                             {number <=
                               3 &&
                             !hasLessonAccess
-                              ? 'LecciÃ³n de muestra gratuita.'
-                              : 'Abre la lecciÃ³n para ver su video, ejercicios y progreso.'}
+                              ? 'Lección de muestra gratuita.'
+                              : 'Abre la lección para ver su video, ejercicios y progreso.'}
                           </p>
                         </div>
 
@@ -409,11 +415,11 @@ export default async function NivelPage({
                             3 &&
                           !hasLessonAccess
                             ? 'Probar gratis'
-                            : 'Abrir lecciÃ³n'}{' '}
+                            : 'Abrir lección'}{' '}
                           <span
                             aria-hidden="true"
                           >
-                            â†’
+                            →
                           </span>
                         </span>
 
@@ -425,13 +431,13 @@ export default async function NivelPage({
                           }`}
                           title={
                             isCompleted
-                              ? 'LecciÃ³n completada'
-                              : 'LecciÃ³n pendiente'
+                              ? 'Lección completada'
+                              : 'Lección pendiente'
                           }
                           aria-hidden="true"
                         >
                           {isCompleted
-                            ? 'âœ“'
+                            ? '✓'
                             : ''}
                         </span>
                       </Link>
@@ -468,7 +474,7 @@ export default async function NivelPage({
 
                           <p>
                             Activa tu
-                            suscripciÃ³n
+                            suscripción
                             para acceder
                             al video,
                             ejercicios y
@@ -481,8 +487,8 @@ export default async function NivelPage({
                             styles.openLesson
                           }
                         >
-                          ðŸ”’ Requiere
-                          suscripciÃ³n
+                          🔒 Requiere
+                          suscripción
                         </span>
 
                         <span
@@ -493,13 +499,13 @@ export default async function NivelPage({
                           }`}
                           title={
                             isCompleted
-                              ? 'LecciÃ³n completada'
-                              : 'LecciÃ³n pendiente'
+                              ? 'Lección completada'
+                              : 'Lección pendiente'
                           }
                           aria-hidden="true"
                         >
                           {isCompleted
-                            ? 'âœ“'
+                            ? '✓'
                             : ''}
                         </span>
                       </div>
@@ -515,7 +521,7 @@ export default async function NivelPage({
           className={
             styles.levelNavigation
           }
-          aria-label="NavegaciÃ³n entre niveles"
+          aria-label="Navegación entre niveles"
         >
           <div
             className={
@@ -535,7 +541,7 @@ export default async function NivelPage({
                   }
                   aria-hidden="true"
                 >
-                  â†
+                  ←
                 </span>
 
                 <span>
@@ -577,7 +583,7 @@ export default async function NivelPage({
                   }
                   aria-hidden="true"
                 >
-                  â†’
+                  →
                 </span>
               </Link>
             )}
