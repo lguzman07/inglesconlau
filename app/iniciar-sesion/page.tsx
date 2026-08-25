@@ -376,43 +376,7 @@ export default function IniciarSesionPage() {
       makeSupabaseCookiesSessionOnly();
     }
 
-    const {
-      data: profile,
-      error: profileError,
-    } = await supabase
-      .from('profiles')
-      .select(
-        'full_name, birth_date, country, gender, english_level, learning_goal',
-      )
-      .eq('id', authData.user.id)
-      .maybeSingle();
-
-    if (profileError) {
-      setMessage(
-        'Iniciaste sesión, pero no pudimos comprobar tu perfil. Inténtalo nuevamente.',
-      );
-      setIsLoading(false);
-      return;
-    }
-
-    const profileIsComplete =
-      Boolean(
-        profile?.full_name?.trim() &&
-          profile?.birth_date &&
-          profile?.country?.trim() &&
-          profile?.gender &&
-          profile?.english_level &&
-          profile?.learning_goal,
-      );
-
-    const destination =
-      profileIsComplete
-        ? nextPath
-        : `/completar-perfil?next=${encodeURIComponent(
-            nextPath,
-          )}`;
-
-    router.replace(destination);
+    router.replace(nextPath);
     router.refresh();
   }
 

@@ -47,6 +47,9 @@ const LEVEL_OPTIONS = [
   { value: 'b2', label: 'B2' },
 ];
 
+const COURSE_START_DATE = '2026-09-14';
+const COURSE_END_DATE = '2027-01-01';
+
 const WEEK_DAYS = [
   'Lu',
   'Ma',
@@ -169,6 +172,36 @@ function getDominicanToday() {
   return `${year}-${month}-${day}`;
 }
 
+function getInitialClassDate() {
+  const today = getDominicanToday();
+
+  if (today < COURSE_START_DATE) return COURSE_START_DATE;
+  if (today > COURSE_END_DATE) return COURSE_END_DATE;
+
+  const date = new Date(`${today}T12:00:00-04:00`);
+  const day = date.getDay();
+
+  if (day === 6) date.setDate(date.getDate() + 2);
+  if (day === 0) date.setDate(date.getDate() + 1);
+
+  return toIsoDate(
+    new Date(
+      Date.UTC(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+      ),
+    ),
+  );
+}
+
+function isValidClassDate(value: string) {
+  if (value < COURSE_START_DATE || value > COURSE_END_DATE) return false;
+
+  const day = new Date(`${value}T12:00:00-04:00`).getDay();
+  return day >= 1 && day <= 5;
+}
+
 function formatDate(value: string) {
   const formatted = new Intl.DateTimeFormat(
     'es-DO',
@@ -236,16 +269,17 @@ function getReadableError(
 
 export default function GroupClassesDashboard() {
   const today = getDominicanToday();
+  const initialClassDate = getInitialClassDate();
   const calendarRef = useRef<HTMLDivElement>(null);
 
   const [availableClasses, setAvailableClasses] =
     useState(0);
 
   const [selectedDate, setSelectedDate] =
-    useState(today);
+    useState(initialClassDate);
 
   const [calendarMonth, setCalendarMonth] =
-    useState(getMonthStart(today));
+    useState(getMonthStart(initialClassDate));
 
   const [isCalendarOpen, setIsCalendarOpen] =
     useState(false);
@@ -354,6 +388,12 @@ export default function GroupClassesDashboard() {
     ) => {
       setIsLoadingSchedules(true);
       setSelectedScheduleId('');
+
+      if (!isValidClassDate(date)) {
+        setAvailability([]);
+        setIsLoadingSchedules(false);
+        return;
+      }
 
       const supabase = createClient();
 
@@ -550,9 +590,9 @@ export default function GroupClassesDashboard() {
           </h2>
 
           <p className={styles.description}>
-            Tener clases disponibles no garantiza un
-            horario. Selecciona la fecha y reserva
-            antes de que se complete.
+            El programa comienza el 14 de septiembre de 2026
+            y dura 16 semanas. Puedes cambiar una reserva por
+            otro nivel u horario que tenga cupo.
           </p>
         </div>
 
@@ -645,7 +685,7 @@ export default function GroupClassesDashboard() {
                         changeMonth(
                           calendarMonth,
                           -1,
-                        ) < getMonthStart(today)
+                        ) < getMonthStart(COURSE_START_DATE)
                       }
                       onClick={() =>
                         setCalendarMonth((month) =>
@@ -659,6 +699,12 @@ export default function GroupClassesDashboard() {
                     <button
                       type="button"
                       aria-label="Mes siguiente"
+                      disabled={
+                        changeMonth(
+                          calendarMonth,
+                          1,
+                        ) > getMonthStart(COURSE_END_DATE)
+                      }
                       onClick={() =>
                         setCalendarMonth((month) =>
                           changeMonth(month, 1),
@@ -686,6 +732,8 @@ export default function GroupClassesDashboard() {
                         day.slice(0, 7) !==
                         calendarMonth.slice(0, 7);
                       const isPast = day < today;
+                      const isOutsideCourse =
+                        !isValidClassDate(day);
                       const isSelected =
                         day === selectedDate;
                       const isToday = day === today;
@@ -709,7 +757,7 @@ export default function GroupClassesDashboard() {
                               ? styles.calendarDayToday
                               : ''
                           }`}
-                          disabled={isPast}
+                          disabled={isPast || isOutsideCourse}
                           aria-pressed={isSelected}
                           aria-label={formatDate(day)}
                           onClick={() => {
@@ -730,16 +778,16 @@ export default function GroupClassesDashboard() {
                   type="button"
                   className={styles.todayButton}
                   onClick={() => {
-                    setSelectedDate(today);
+                    setSelectedDate(initialClassDate);
                     setCalendarMonth(
-                      getMonthStart(today),
+                      getMonthStart(initialClassDate),
                     );
                     setIsCalendarOpen(false);
                     setError('');
                     setMessage('');
                   }}
                 >
-                  Ir a hoy
+                  Ir a la próxima clase
                 </button>
               </div>
             ) : null}
@@ -803,7 +851,7 @@ export default function GroupClassesDashboard() {
                     <em>
                       {isFull
                         ? 'Sin cupos'
-                        : 'Disponible'}
+                        : `${schedule.spots_remaining} cupos`}
                     </em>
                   </button>
                 );

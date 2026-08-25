@@ -1,403 +1,51 @@
-.page {
-  min-height: 100vh;
-  padding: 3rem 2rem 7rem;
-  color: var(--text);
-  background: var(--surface-soft);
-}
-
-.container {
-  width: 100%;
-  max-width: 1180px;
-  margin: 0 auto;
-}
-
-.backLink {
-  display: inline-flex;
-  margin-bottom: 3.5rem;
-  color: var(--text-light);
-  font-weight: 700;
-  text-decoration: none;
-  transition: var(--transition);
-}
-
-.backLink:hover {
-  color: var(--primary);
-}
-
-.backLink:focus-visible,
-.searchField input:focus-visible,
-.purchaseButtons button:focus-visible,
-.balanceControls input:focus-visible,
-.balanceControls button:focus-visible {
-  outline: 3px solid var(--primary-light);
-  outline-offset: 3px;
-}
-
-.header {
-  max-width: 760px;
-  margin-bottom: 3rem;
-}
-
-.eyebrow {
-  margin: 0 0 0.75rem;
-  color: var(--primary);
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-}
-
-.header h1 {
-  margin: 0;
-  font-size: clamp(2.25rem, 6vw, 4rem);
-  line-height: 1.1;
-}
-
-.header > p:not(.eyebrow) {
-  margin: 1.25rem 0 0;
-  color: var(--text-light);
-  font-size: 1.05rem;
-  line-height: 1.7;
-}
-
-.panel {
-  padding: 2rem;
-  background: var(--surface-solid);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-
-.toolbar {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 2rem;
-  padding-bottom: 1.75rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.toolbar h2,
-.toolbar p {
-  margin: 0;
-}
-
-.toolbar p {
-  margin-top: 0.4rem;
-  color: var(--text-light);
-}
-
-.searchField {
-  display: grid;
-  width: min(100%, 340px);
-  gap: 0.5rem;
-  color: var(--text-light);
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.searchField input,
-.balanceControls input {
-  min-height: 48px;
-  padding: 0.8rem 1rem;
-  color: var(--text);
-  font: inherit;
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-}
-
-.successNotice,
-.errorNotice,
-.errorBox {
-  margin-top: 1.5rem;
-  padding: 1rem 1.1rem;
-  line-height: 1.5;
-  border-radius: 14px;
-}
-
-.successNotice {
-  color: var(--text);
-  background: var(--primary-light);
-  border: 1px solid var(--primary);
-}
-
-.errorNotice,
-.errorBox {
-  color: var(--text);
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-}
-
-.errorBox {
-  max-width: 760px;
-}
-
-.studentGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.25rem;
-  margin-top: 1.75rem;
-}
-
-.studentCard {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  padding: 1.5rem;
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-
-.studentHeading {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.studentHeading h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1.15rem;
-  line-height: 1.35;
-}
-
-.studentHeading a {
-  display: block;
-  overflow-wrap: anywhere;
-  color: var(--text-light);
-  font-size: 0.9rem;
-}
-
-.levelBadge {
-  flex: 0 0 auto;
-  padding: 0.45rem 0.75rem;
-  color: var(--primary);
-  font-size: 0.8rem;
-  font-weight: 800;
-  text-align: center;
-  background: var(--primary-light);
-  border-radius: 999px;
-}
-
-.studentDetails {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin: 1.5rem 0;
-}
-
-.studentDetails div {
-  min-width: 0;
-  padding: 0.85rem;
-  background: var(--surface-solid);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-}
-
-.studentDetails dt {
-  color: var(--text-light);
-  font-size: 0.72rem;
-  font-weight: 700;
-  line-height: 1.35;
-}
-
-.studentDetails dd {
-  margin: 0.35rem 0 0;
-  overflow-wrap: anywhere;
-  font-size: 1.05rem;
-  font-weight: 800;
-}
-
-.purchaseEditor {
-  margin-top: auto;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--border);
-}
-
-.purchaseEditor > span,
-.balanceEditor > label {
-  display: block;
-  margin-bottom: 0.55rem;
-  color: var(--text-light);
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.purchaseButtons {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.6rem;
-}
-
-.purchaseButtons button {
-  min-height: 44px;
-  padding: 0.7rem 0.6rem;
-  color: var(--primary);
-  font: inherit;
-  font-size: 0.82rem;
-  font-weight: 800;
-  cursor: pointer;
-  background: var(--primary-light);
-  border: 1px solid var(--primary);
-  border-radius: 12px;
-  transition: var(--transition);
-}
-
-.purchaseButtons button:hover:not(:disabled) {
-  color: var(--surface-solid);
-  background: var(--primary);
-  transform: translateY(-1px);
-}
-
-.purchaseButtons button:disabled {
-  cursor: wait;
-  opacity: 0.6;
-}
-
-.balanceEditor {
-  margin-top: 1.25rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--border);
-}
-
-.balanceEditor > label {
-  margin-top: 0;
-}
-
-.balanceControls {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: 0.75rem;
-}
-
-.balanceControls button:not(.discardButton) {
-  min-height: 48px;
-  padding: 0.8rem 1.25rem;
-  color: var(--surface-solid);
-  font: inherit;
-  font-weight: 800;
-  cursor: pointer;
-  background: var(--primary);
-  border: 0;
-  border-radius: 14px;
-  transition: var(--transition);
-}
-
-.balanceControls button:not(.discardButton):hover:not(:disabled) {
-  background: var(--primary-hover);
-  transform: translateY(-1px);
-}
-
-.balanceControls button:disabled {
-  cursor: wait;
-  opacity: 0.65;
-}
-
-.discardButton {
-  min-height: 48px;
-  padding: 0.8rem 1rem;
-  color: var(--text-light);
-  font: inherit;
-  font-weight: 800;
-  cursor: pointer;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  transition: var(--transition);
-}
-
-.discardButton:hover:not(:disabled) {
-  color: var(--text);
-  background: var(--surface-solid);
-}
-
-.inlineSuccess,
-.inlineError {
-  margin-top: 0.75rem;
-  padding: 0.75rem 0.9rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-  line-height: 1.45;
-  border-radius: 12px;
-}
-
-.inlineSuccess {
-  color: var(--text);
-  background: var(--primary-light);
-  border: 1px solid var(--primary);
-}
-
-.inlineError {
-  color: var(--text);
-  background: var(--surface-solid);
-  border: 1px solid var(--border);
-}
-
-.emptyState {
-  margin-top: 1.75rem;
-  padding: 3rem 1.5rem;
-  color: var(--text-light);
-  text-align: center;
-  background: var(--surface-soft);
-  border: 1px dashed var(--border);
-  border-radius: var(--radius);
-}
-
-@media (max-width: 900px) {
-  .studentGrid {
-    grid-template-columns: 1fr;
-  }
-}
-
+.page { min-height: 100vh; padding: 3rem 2rem 7rem; color: var(--text); background: var(--surface-soft); }
+.container { width: 100%; max-width: 1180px; margin: 0 auto; }
+.backLink { display: inline-flex; margin-bottom: 3.5rem; color: var(--text-light); font-weight: 700; text-decoration: none; }
+.backLink:hover { color: var(--primary); }
+.header { max-width: 780px; margin-bottom: 3rem; }
+.eyebrow { margin: 0 0 .75rem; color: var(--primary); font-size: .8rem; font-weight: 800; letter-spacing: .12em; }
+.header h1 { margin: 0; font-size: clamp(2.25rem, 6vw, 4rem); line-height: 1.1; }
+.header > p:not(.eyebrow) { margin: 1.25rem 0 0; color: var(--text-light); font-size: 1.05rem; line-height: 1.7; }
+.panel, .requestsPanel { padding: 2rem; background: var(--surface-solid); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.panel { margin-top: 1.5rem; }
+.requestsHeading, .toolbar { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+.requestsHeading h2, .toolbar h2, .toolbar p { margin: 0; }
+.requestsHeading strong { color: var(--primary); font-size: 2rem; }
+.toolbar p { margin-top: .4rem; color: var(--text-light); }
+.searchField { display: grid; width: min(100%, 340px); gap: .5rem; color: var(--text-light); font-size: .85rem; font-weight: 700; }
+.searchField input, .balanceControls input { min-height: 48px; padding: .8rem 1rem; color: var(--text); font: inherit; background: var(--surface-soft); border: 1px solid var(--border); border-radius: 14px; }
+.requestGrid, .studentGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; margin-top: 1.75rem; }
+.requestCard, .studentCard { min-width: 0; padding: 1.5rem; background: var(--surface-soft); border: 1px solid var(--border); border-radius: var(--radius); }
+.studentCard { display: flex; flex-direction: column; }
+.requestTop, .studentHeading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.requestTop h3, .studentHeading h3 { margin: 0 0 .35rem; font-size: 1.15rem; }
+.requestTop a, .studentHeading a { color: var(--text-light); font-size: .9rem; overflow-wrap: anywhere; }
+.requestTop > span, .levelBadge { flex: 0 0 auto; padding: .45rem .75rem; color: var(--primary); font-size: .8rem; font-weight: 800; background: var(--primary-light); border-radius: 999px; }
+.requestCard dl, .studentDetails { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin: 1.4rem 0; }
+.studentDetails { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.requestCard dl div, .studentDetails div { min-width: 0; padding: .85rem; background: var(--surface-solid); border: 1px solid var(--border); border-radius: 14px; }
+.requestCard dt, .studentDetails dt { color: var(--text-light); font-size: .72rem; font-weight: 700; }
+.requestCard dd, .studentDetails dd { margin: .35rem 0 0; overflow-wrap: anywhere; font-weight: 800; }
+.requestActions, .purchaseButtons, .balanceControls { display: grid; gap: .7rem; }
+.requestActions { grid-template-columns: auto 1fr; }
+.purchaseButtons { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.balanceControls { grid-template-columns: minmax(0, 1fr) auto auto; }
+.requestActions button, .purchaseButtons button, .balanceControls button { min-height: 46px; padding: .75rem 1rem; color: var(--surface-solid); font: inherit; font-weight: 800; cursor: pointer; background: var(--primary); border: 1px solid var(--primary); border-radius: 13px; }
+.requestActions .rejectButton, .discardButton { color: var(--text-light); background: transparent; border-color: var(--border); }
+.purchaseEditor, .balanceEditor { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--border); }
+.purchaseEditor { margin-top: auto; }
+.purchaseEditor > span, .balanceEditor > label { display: block; margin-bottom: .55rem; color: var(--text-light); font-size: .85rem; font-weight: 700; }
+.inlineSuccess, .inlineError, .errorBox { margin-top: 1rem; padding: .8rem 1rem; line-height: 1.5; border-radius: 12px; }
+.inlineSuccess { background: var(--primary-light); border: 1px solid var(--primary); }
+.inlineError, .errorBox { background: var(--surface-soft); border: 1px solid var(--border); }
+.emptyState { margin-top: 1.5rem; padding: 2.5rem 1.5rem; color: var(--text-light); text-align: center; border: 1px dashed var(--border); border-radius: var(--radius); }
+.backLink:focus-visible, input:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+button:disabled { cursor: wait; opacity: .6; }
+@media (max-width: 900px) { .requestGrid, .studentGrid { grid-template-columns: 1fr; } }
 @media (max-width: 680px) {
-  .page {
-    padding: 2rem 1.25rem 5rem;
-  }
-
-  .backLink {
-    margin-bottom: 2.75rem;
-  }
-
-  .panel {
-    padding: 1.25rem;
-  }
-
-  .toolbar {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .searchField {
-    width: 100%;
-  }
-
-  .studentDetails {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 440px) {
-  .studentHeading,
-  .balanceControls {
-    grid-template-columns: 1fr;
-  }
-
-  .studentHeading {
-    flex-direction: column;
-  }
-
-  .balanceControls {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-
-  .purchaseButtons {
-    grid-template-columns: 1fr;
-  }
-
-  .balanceControls button {
-    width: 100%;
-  }
+  .page { padding: 2rem 1.25rem 5rem; }
+  .panel, .requestsPanel { padding: 1.25rem; }
+  .requestsHeading, .toolbar, .studentHeading { align-items: stretch; flex-direction: column; }
+  .searchField { width: 100%; }
+  .studentDetails, .requestCard dl, .purchaseButtons, .requestActions, .balanceControls { grid-template-columns: 1fr; }
 }

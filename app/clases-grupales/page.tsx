@@ -10,47 +10,36 @@ import styles from './ClasesGrupales.module.css';
 export const metadata: Metadata = {
   title: 'Clases grupales en vivo | Inglés con Lau',
   description:
-    'Compra clases grupales en vivo y reserva libremente en los niveles A1, A2, B1 y B2.',
+    'Escoge un paquete y reserva tu horario para las clases grupales de A1, A2, B1 o B2.',
 };
 
 const benefits = [
   'Clases en vivo de una hora',
-  'Acceso a los grupos A1, A2, B1 y B2',
-  'Libertad para cambiar de nivel al reservar',
+  'Grupos A1, A2, B1 y B2',
+  'Máximo 13 estudiantes por clase',
+  'Libertad para explorar otro nivel al cambiar una reserva',
   'Práctica oral, corrección y acompañamiento en vivo',
-  'Tus clases permanecen disponibles hasta agotarlas',
 ];
 
 export default async function ClasesGrupalesPage() {
   const supabase = createClient();
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect(
-      '/iniciar-sesion?next=%2Fclases-grupales',
-    );
+    redirect('/iniciar-sesion?next=%2Fclases-grupales');
   }
 
   const paymentDetails = {
-    bankName:
-      process.env.GROUP_CLASS_BANK_NAME ?? '',
-    accountHolder:
-      process.env.GROUP_CLASS_ACCOUNT_HOLDER ?? '',
-    idDocument:
-      process.env.GROUP_CLASS_ID_DOCUMENT ?? '',
-    productType:
-      process.env.GROUP_CLASS_PRODUCT_TYPE ?? '',
-    accountNumber:
-      process.env.GROUP_CLASS_ACCOUNT_NUMBER ?? '',
-    currency:
-      process.env.GROUP_CLASS_CURRENCY ?? '',
-    paymentEmail:
-      process.env.GROUP_CLASS_PAYMENT_EMAIL ?? '',
-    swiftCode:
-      process.env.GROUP_CLASS_SWIFT_CODE ?? '',
+    bankName: process.env.GROUP_CLASS_BANK_NAME ?? '',
+    accountHolder: process.env.GROUP_CLASS_ACCOUNT_HOLDER ?? '',
+    idDocument: process.env.GROUP_CLASS_ID_DOCUMENT ?? '',
+    productType: process.env.GROUP_CLASS_PRODUCT_TYPE ?? '',
+    accountNumber: process.env.GROUP_CLASS_ACCOUNT_NUMBER ?? '',
+    currency: process.env.GROUP_CLASS_CURRENCY ?? '',
+    paymentEmail: process.env.GROUP_CLASS_PAYMENT_EMAIL ?? '',
+    swiftCode: process.env.GROUP_CLASS_SWIFT_CODE ?? '',
   };
 
   return (
@@ -62,180 +51,66 @@ export default async function ClasesGrupalesPage() {
 
         <section className={styles.hero}>
           <div className={styles.heroContent}>
-            <span className={styles.badge}>
-              CLASES EN VIVO
-            </span>
-
-            <p className={styles.eyebrow}>
-              CLASES GRUPALES
-            </p>
-
-            <h1>Aprende inglés en compañía</h1>
-
+            <span className={styles.badge}>CLASES EN VIVO</span>
+            <p className={styles.eyebrow}>INICIO · 14 DE SEPTIEMBRE DE 2026</p>
+            <h1>Elige primero el horario que funciona para ti</h1>
             <p className={styles.heroDescription}>
-              Compra la cantidad de clases que prefieras.
-              Después, escoge el nivel, la fecha y el horario
-              de cada encuentro desde tu plataforma.
+              Las clases duran 16 semanas. Antes de pagar verás el nivel, el
+              horario y los cupos disponibles. Tu compra apartará ese horario
+              principal mientras verificamos el comprobante.
             </p>
-
             <div className={styles.heroActions}>
-              <a
-                href="#comprar"
-                className={styles.primaryButton}
-              >
-                Ver paquetes
-                <span aria-hidden="true">→</span>
+              <a href="#comprar" className={styles.primaryButton}>
+                Ver paquetes y horarios <span aria-hidden="true">→</span>
               </a>
-
-              <Link
-                href="/inicio"
-                className={styles.secondaryButton}
-              >
+              <Link href="/inicio" className={styles.secondaryButton}>
                 Ir a mis reservas
               </Link>
             </div>
           </div>
 
-          <aside
-            className={styles.priceCard}
-            aria-label="Resumen de los paquetes"
-          >
-            <p className={styles.priceLabel}>
-              ELIGE TU OPCIÓN
-            </p>
-
-            <div className={styles.priceRange}>
-              <span>Desde</span>
-              <strong>5</strong>
-              <span>hasta 80 clases</span>
+          <aside className={styles.priceCard} aria-label="Opciones de compra">
+            <p className={styles.priceLabel}>TRES OPCIONES</p>
+            <div className={styles.packageSummary}>
+              <strong>5</strong><span>clases · 1 semana</span>
+              <strong>20</strong><span>clases · 4 semanas</span>
+              <strong>80</strong><span>clases · curso completo</span>
             </div>
-
             <p className={styles.priceDescription}>
-              Mientras más clases compras, menor es el precio
-              por cada encuentro.
+              El curso completo cuesta RD$7,000 y ahorra RD$2,600 frente al
+              precio regular de las 80 clases.
             </p>
-
-            <div className={styles.priceDetail}>
-              <span aria-hidden="true">✓</span>
-              <p>Sin restricciones por nivel.</p>
-            </div>
-
-            <div className={styles.priceDetail}>
-              <span aria-hidden="true">✓</span>
-              <p>Reserva cada clase según disponibilidad.</p>
-            </div>
           </aside>
         </section>
 
-        <GroupClassPackages
-          paymentDetails={paymentDetails}
-        />
+        <GroupClassPackages paymentDetails={paymentDetails} />
 
-        <section
-          className={styles.benefitsSection}
-          aria-labelledby="benefits-title"
-        >
+        <section className={styles.benefitsSection} aria-labelledby="benefits-title">
           <div>
             <p className={styles.eyebrow}>QUÉ INCLUYE</p>
-            <h2 id="benefits-title">
-              Aprende a tu ritmo y explora otros niveles
-            </h2>
+            <h2 id="benefits-title">Tu horario principal, con libertad para explorar</h2>
             <p className={styles.sectionDescription}>
-              Tu saldo es general. Puedes continuar en tu
-              nivel habitual o reservar otra clase cuando
-              quieras investigar un tema diferente.
+              Al aprobar el pago, tus clases quedarán reservadas en el horario
+              elegido. Si quieres explorar, cancela una fecha y utiliza ese
+              crédito en otro nivel u horario con cupo.
             </p>
           </div>
-
           <ul className={styles.benefitList}>
             {benefits.map((benefit) => (
-              <li key={benefit}>
-                <span aria-hidden="true">✓</span>
-                <p>{benefit}</p>
-              </li>
+              <li key={benefit}><span aria-hidden="true">✓</span><p>{benefit}</p></li>
             ))}
           </ul>
         </section>
 
-        <section
-          className={styles.processSection}
-          aria-labelledby="process-title"
-        >
-          <div className={styles.sectionHeading}>
-            <div>
-              <p className={styles.eyebrow}>
-                INSCRIPCIÓN
-              </p>
-              <h2 id="process-title">
-                ¿Cómo funciona?
-              </h2>
-            </div>
-          </div>
-
+        <section className={styles.processSection} aria-labelledby="process-title">
+          <p className={styles.eyebrow}>INSCRIPCIÓN</p>
+          <h2 id="process-title">¿Cómo funciona?</h2>
           <ol className={styles.processGrid}>
-            <li className={styles.processCard}>
-              <span className={styles.stepNumber}>01</span>
-              <h3>Elige tu paquete</h3>
-              <p>
-                Compra 5 clases, el mes de 20 clases o el
-                curso completo de 80 clases.
-              </p>
-            </li>
-
-            <li className={styles.processCard}>
-              <span className={styles.stepNumber}>02</span>
-              <h3>Envía el comprobante</h3>
-              <p>
-                Realiza la transferencia y envíala desde el
-                correo de tu cuenta.
-              </p>
-            </li>
-
-            <li className={styles.processCard}>
-              <span className={styles.stepNumber}>03</span>
-              <h3>Reserva tus clases</h3>
-              <p>
-                Cuando se active tu saldo, escoge libremente
-                el nivel, la fecha y el horario.
-              </p>
-            </li>
+            <li className={styles.processCard}><span>01</span><h3>Escoge el paquete</h3><p>Selecciona 5, 20 u 80 clases.</p></li>
+            <li className={styles.processCard}><span>02</span><h3>Escoge el horario</h3><p>Verás los niveles, horas y cupos antes de pagar.</p></li>
+            <li className={styles.processCard}><span>03</span><h3>Envía el comprobante</h3><p>El horario se aparta 48 horas mientras se verifica.</p></li>
+            <li className={styles.processCard}><span>04</span><h3>Recibe tus reservas</h3><p>Al aprobarse, las fechas aparecen automáticamente en tu cuenta.</p></li>
           </ol>
-        </section>
-
-        <section className={styles.notice}>
-          <div
-            className={styles.noticeIcon}
-            aria-hidden="true"
-          >
-            !
-          </div>
-
-          <div>
-            <h2>Importante</h2>
-            <p>
-              Tener clases disponibles no garantiza un cupo
-              específico. Cada encuentro debe reservarse y
-              los horarios llenos no podrán seleccionarse.
-            </p>
-          </div>
-        </section>
-
-        <section className={styles.finalCta}>
-          <p className={styles.eyebrow}>
-            ¿LISTA PARA COMENZAR?
-          </p>
-          <h2>Escoge el paquete que se adapte a ti</h2>
-          <p>
-            Todas las opciones te permiten reservar en
-            cualquier nivel disponible.
-          </p>
-          <a
-            href="#comprar"
-            className={styles.primaryButton}
-          >
-            Ver paquetes
-            <span aria-hidden="true">→</span>
-          </a>
         </section>
       </div>
     </main>

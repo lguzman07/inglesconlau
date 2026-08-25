@@ -9,317 +9,72 @@
   box-shadow: var(--shadow);
 }
 
-.heading {
-  max-width: 760px;
-}
+.heading { max-width: 780px; }
+.eyebrow { margin: 0 0 10px; color: var(--primary); font-size: .8rem; font-weight: 850; letter-spacing: .12em; }
+.heading h2, .scheduleHeading h3, .purchasePanel h3 { margin: 0; color: var(--text); }
+.heading h2 { font-size: clamp(1.7rem, 3vw, 2.35rem); line-height: 1.2; }
+.heading > p:not(.eyebrow), .scheduleHeading > p:not(.eyebrow) { margin: 14px 0 0; color: var(--text-light); line-height: 1.65; }
 
-.eyebrow {
-  margin: 0 0 10px;
-  color: var(--primary);
-  font-size: 0.8rem;
-  font-weight: 850;
-  letter-spacing: 0.12em;
-}
+.packageGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+.packageCard { position: relative; display: flex; min-width: 0; min-height: 380px; padding: 24px; align-items: flex-start; flex-direction: column; color: var(--text); font: inherit; text-align: left; background: var(--surface-soft); border: 1px solid var(--border); border-radius: 20px; cursor: pointer; transition: var(--transition); }
+.packageCard:hover, .packageCard:focus-visible, .packageCardSelected { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); transform: translateY(-3px); }
+.packageCard:focus-visible, .scheduleCard:focus-visible, .emailButton:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.bestValueCard { background: var(--surface); }
+.bestValueBadge, .savingsBadge { display: inline-flex; min-height: 28px; align-items: center; margin-bottom: 10px; padding: 4px 10px; font-size: .72rem; font-weight: 850; letter-spacing: .05em; border-radius: 999px; }
+.bestValueBadge { color: var(--surface-solid); background: var(--primary); }
+.savingsBadge { color: var(--primary); background: var(--primary-light); border: 1px solid var(--primary); }
+.packageName { margin-top: 8px; color: var(--text-light); font-size: .9rem; font-weight: 750; }
+.classCount { margin-top: 7px; font-size: 1.35rem; }
+.packagePrice { display: flex; align-items: flex-start; gap: 4px; margin-top: 22px; color: var(--primary); font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 900; line-height: 1; }
+.packagePrice small { padding-top: 4px; font-size: .9rem; }
+.perClass { margin-top: 8px; font-size: .85rem; font-weight: 800; }
+.packageDescription { margin-top: 18px; color: var(--text-light); font-size: .88rem; line-height: 1.55; }
+.selectLabel { display: inline-flex; width: 100%; min-height: 42px; align-items: center; justify-content: center; margin-top: auto; padding: 9px 12px; color: var(--primary); font-size: .82rem; font-weight: 850; border: 1px solid var(--primary); border-radius: 999px; box-sizing: border-box; }
+.packageCardSelected .selectLabel { color: var(--surface-solid); background: var(--primary); }
 
-.heading h2,
-.purchasePanel h3 {
-  margin: 0;
-  color: var(--text);
-}
+.scheduleSection { margin-top: 28px; padding: 26px; background: var(--surface-soft); border: 1px solid var(--border); border-radius: 20px; }
+.scheduleHeading { max-width: 700px; }
+.levelGroups { display: grid; gap: 22px; margin-top: 24px; }
+.levelGroup h4 { margin: 0 0 10px; color: var(--primary); font-size: .9rem; letter-spacing: .08em; }
+.scheduleGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.scheduleCard { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 76px; padding: 14px 16px; color: var(--text); font: inherit; text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; cursor: pointer; }
+.scheduleCard span { display: grid; gap: 4px; }
+.scheduleCard small { color: var(--text-light); }
+.scheduleCard em { color: var(--primary); font-size: .78rem; font-style: normal; font-weight: 800; text-align: right; }
+.scheduleCardSelected { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+.scheduleCard:disabled { cursor: not-allowed; opacity: .55; }
+.statusText { color: var(--text-light); }
 
-.heading h2 {
-  font-size: clamp(1.7rem, 3vw, 2.35rem);
-  line-height: 1.2;
-}
-
-.heading > p:not(.eyebrow) {
-  margin: 14px 0 0;
-  color: var(--text-light);
-  line-height: 1.65;
-}
-
-.packageGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 28px;
-}
-
-.packageCard {
-  position: relative;
-  display: flex;
-  min-width: 0;
-  min-height: 360px;
-  padding: 24px;
-  align-items: flex-start;
-  flex-direction: column;
-  color: var(--text);
-  font: inherit;
-  text-align: left;
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.packageCard:hover,
-.packageCard:focus-visible,
-.packageCardSelected {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-light);
-  transform: translateY(-3px);
-}
-
-.packageCard:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 3px;
-}
-
-.bestValueCard {
-  background: var(--surface);
-}
-
-.packageBadge {
-  display: inline-flex;
-  min-height: 28px;
-  align-items: center;
-  margin-bottom: 18px;
-  padding: 4px 10px;
-  color: var(--surface-solid);
-  font-size: 0.72rem;
-  font-weight: 850;
-  letter-spacing: 0.05em;
-  background: var(--primary);
-  border-radius: 999px;
-}
-
-.packageName {
-  color: var(--text-light);
-  font-size: 0.9rem;
-  font-weight: 750;
-}
-
-.classCount {
-  margin-top: 7px;
-  color: var(--text);
-  font-size: 1.35rem;
-}
-
-.packagePrice {
-  display: flex;
-  align-items: flex-start;
-  gap: 4px;
-  margin-top: 22px;
-  color: var(--primary);
-  font-size: clamp(2.2rem, 4vw, 3rem);
-  font-weight: 900;
-  line-height: 1;
-}
-
-.packagePrice small {
-  padding-top: 4px;
-  font-size: 0.9rem;
-}
-
-.perClass {
-  margin-top: 8px;
-  color: var(--text);
-  font-size: 0.85rem;
-  font-weight: 800;
-}
-
-.packageDescription {
-  margin-top: 18px;
-  color: var(--text-light);
-  font-size: 0.88rem;
-  line-height: 1.55;
-}
-
-.selectLabel {
-  display: inline-flex;
-  width: 100%;
-  min-height: 42px;
-  align-items: center;
-  justify-content: center;
-  margin-top: auto;
-  padding: 9px 12px;
-  color: var(--primary);
-  font-size: 0.82rem;
-  font-weight: 850;
-  border: 1px solid var(--primary);
-  border-radius: 999px;
-  box-sizing: border-box;
-}
-
-.packageCardSelected .selectLabel {
-  color: var(--surface-solid);
-  background: var(--primary);
-}
-
-.purchasePanel {
-  display: grid;
-  grid-template-columns: minmax(220px, 0.65fr) minmax(0, 1.35fr);
-  gap: 18px;
-  margin-top: 22px;
-}
-
-.purchaseSummary,
-.paymentCard {
-  padding: 26px;
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-}
-
-.purchaseSummary {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-}
-
-.purchaseSummary > p {
-  margin: 0;
-  color: var(--primary);
-  font-size: 0.75rem;
-  font-weight: 850;
-  letter-spacing: 0.1em;
-}
-
-.purchaseSummary h3 {
-  margin-top: 12px;
-  font-size: 1.4rem;
-}
-
-.purchaseSummary > span {
-  margin-top: 10px;
-  color: var(--text-light);
-  line-height: 1.5;
-}
-
-.purchaseSummary > strong {
-  margin-top: auto;
-  padding-top: 28px;
-  color: var(--primary);
-  line-height: 1.5;
-}
-
-.paymentIntro {
-  margin: 12px 0 0;
-  color: var(--text-light);
-  line-height: 1.6;
-}
-
-.paymentDetails {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin: 22px 0 0;
-}
-
-.paymentRow {
-  min-width: 0;
-  padding: 13px 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 13px;
-}
-
-.paymentRow dt {
-  color: var(--text-light);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.paymentRow dd {
-  margin: 6px 0 0;
-  color: var(--text);
-  font-size: 0.9rem;
-  font-weight: 800;
-  overflow-wrap: anywhere;
-}
-
-.emailButton {
-  display: inline-flex;
-  width: 100%;
-  min-height: 48px;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-  padding: 12px 18px;
-  color: var(--surface-solid);
-  font-weight: 850;
-  text-align: center;
-  text-decoration: none;
-  background: var(--primary);
-  border: 1px solid var(--primary);
-  border-radius: 999px;
-  box-sizing: border-box;
-  transition: var(--transition);
-}
-
-.emailButton:hover,
-.emailButton:focus-visible {
-  background: var(--primary-hover);
-  border-color: var(--primary-hover);
-}
-
-.emailButton:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 3px;
-}
-
-.missingEmail,
-.activationNote {
-  color: var(--text-light);
-  font-size: 0.82rem;
-  line-height: 1.55;
-}
-
-.missingEmail {
-  margin: 18px 0 0;
-  color: #9f2d25;
-  font-weight: 800;
-}
-
-.activationNote {
-  margin: 13px 0 0;
-}
+.purchasePanel { display: grid; grid-template-columns: minmax(220px, .65fr) minmax(0, 1.35fr); gap: 18px; margin-top: 22px; }
+.purchaseSummary, .paymentCard { padding: 26px; background: var(--surface-soft); border: 1px solid var(--border); border-radius: 20px; }
+.purchaseSummary { display: flex; align-items: flex-start; flex-direction: column; }
+.purchaseSummary > p { margin: 0; color: var(--primary); font-size: .75rem; font-weight: 850; letter-spacing: .1em; }
+.purchaseSummary h3 { margin-top: 12px; font-size: 1.4rem; }
+.purchaseSummary > span { margin-top: 10px; color: var(--text-light); line-height: 1.5; }
+.purchaseSummary > strong { margin-top: auto; padding-top: 28px; color: var(--primary); line-height: 1.5; }
+.paymentIntro { margin: 12px 0 0; color: var(--text-light); line-height: 1.6; }
+.paymentDetails { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 22px 0 0; }
+.paymentRow { min-width: 0; padding: 13px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 13px; }
+.paymentRow dt { color: var(--text-light); font-size: .72rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.paymentRow dd { margin: 6px 0 0; overflow-wrap: anywhere; font-size: .9rem; font-weight: 800; }
+.emailButton { display: inline-flex; width: 100%; min-height: 50px; align-items: center; justify-content: center; margin-top: 20px; padding: 12px 18px; color: var(--surface-solid); font: inherit; font-weight: 850; background: var(--primary); border: 1px solid var(--primary); border-radius: 999px; cursor: pointer; }
+.emailButton:hover:not(:disabled) { background: var(--primary-hover); }
+.emailButton:disabled { cursor: not-allowed; opacity: .55; }
+.errorMessage, .successMessage { margin: 14px 0 0; padding: 12px 14px; line-height: 1.5; border-radius: 12px; }
+.errorMessage { background: var(--surface); border: 1px solid var(--border); }
+.successMessage { background: var(--primary-light); border: 1px solid var(--primary); }
 
 @media (max-width: 900px) {
-  .packageGrid,
-  .purchasePanel {
-    grid-template-columns: 1fr;
-  }
-
-  .packageCard {
-    min-height: 0;
-  }
-
-  .selectLabel {
-    margin-top: 24px;
-  }
-
-  .purchaseSummary > strong {
-    margin-top: 0;
-  }
+  .packageGrid, .purchasePanel, .scheduleGrid { grid-template-columns: 1fr; }
+  .packageCard { min-height: 0; }
+  .selectLabel { margin-top: 24px; }
+  .purchaseSummary > strong { margin-top: 0; }
 }
 
 @media (max-width: 600px) {
-  .section {
-    padding: 22px;
-    border-radius: 20px;
-  }
-
-  .packageCard,
-  .purchaseSummary,
-  .paymentCard {
-    padding: 20px;
-  }
-
-  .paymentDetails {
-    grid-template-columns: 1fr;
-  }
+  .section, .scheduleSection { padding: 22px; border-radius: 20px; }
+  .packageCard, .purchaseSummary, .paymentCard { padding: 20px; }
+  .paymentDetails { grid-template-columns: 1fr; }
+  .scheduleCard { align-items: flex-start; flex-direction: column; }
+  .scheduleCard em { text-align: left; }
 }

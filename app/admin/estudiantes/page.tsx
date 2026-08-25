@@ -4,72 +4,48 @@ import { redirect } from 'next/navigation';
 
 import { createClient } from '@/lib/supabase/server';
 
-import AdminStudents, {
-  type AdminStudent,
-} from './AdminStudents';
+import AdminStudents, { type AdminStudent, type PurchaseRequest } from './AdminStudents';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'Administrar estudiantes | Inglés con Lau',
-  description:
-    'Consulta estudiantes y administra sus cupos de clases grupales.',
+  description: 'Aprueba pagos, consulta estudiantes y administra sus clases.',
 };
 
 export default async function AdminStudentsPage() {
   const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  if (!user) redirect('/iniciar-sesion?next=%2Fadmin%2Festudiantes');
 
-  if (!user) {
-    redirect(
-      '/iniciar-sesion?next=%2Fadmin%2Festudiantes',
-    );
-  }
+  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle();
+  if (profile?.role !== 'admin') redirect('/inicio');
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .maybeSingle();
+  const [studentsResult, requestsResult] = await Promise.all([
+    supabase.rpc('admin_list_students'),
+    supabase.rpc('admin_list_group_purchase_requests'),
+  ]);
 
-  if (profile?.role !== 'admin') {
-    redirect('/inicio');
-  }
-
-  const { data, error } = await supabase.rpc(
-    'admin_list_students',
-  );
+  const error = studentsResult.error ?? requestsResult.error;
 
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-        <Link href="/inicio" className={styles.backLink}>
-          ← Volver al inicio
-        </Link>
-
+        <Link href="/inicio" className={styles.backLink}>← Volver al inicio</Link>
         <header className={styles.header}>
           <p className={styles.eyebrow}>ADMINISTRACIÓN</p>
-          <h1>Estudiantes y cupos</h1>
-          <p>
-            Consulta las cuentas registradas y asigna la
-            cantidad exacta de clases disponibles.
-          </p>
+          <h1>Estudiantes, pagos y reservas</h1>
+          <p>Aprueba solicitudes específicas y administra los saldos manuales cuando sea necesario.</p>
         </header>
-
         {error ? (
-          <div className={styles.errorBox} role="alert">
-            No pudimos cargar los estudiantes. Comprueba que
-            ejecutaste el archivo SQL del panel administrativo.
-          </div>
+          <div className={styles.errorBox} role="alert">No pudimos cargar el panel. Ejecuta primero la migración SQL nueva.</div>
         ) : (
           <AdminStudents
-            initialStudents={(data ?? []) as AdminStudent[]}
+            initialStudents={(studentsResult.data ?? []) as AdminStudent[]}
+            initialRequests={(requestsResult.data ?? []) as PurchaseRequest[]}
           />
         )}
       </div>
     </main>
   );
 }
-
