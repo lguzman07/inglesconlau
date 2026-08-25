@@ -32,11 +32,11 @@ const groupClassPackages = [
   },
   {
     id: '20',
-    name: 'Mes completo',
+    name: '4 Semanas',
     amount: '1,900',
     period: '/20 clases',
     badge: 'Ahorra RD$500',
-    button: 'Comprar el mes completo',
+    button: 'Comprar las 4 semanas',
     benefits: [
       '20 clases grupales en vivo de una hora.',
       'RD$95 por cada clase.',

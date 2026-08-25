@@ -32,7 +32,7 @@ const PACKAGES = [
   },
   {
     id: 'month-20',
-    name: 'Mes completo',
+    name: '4 Semanas',
     classes: 20,
     price: 1900,
     pricePerClass: 95,
