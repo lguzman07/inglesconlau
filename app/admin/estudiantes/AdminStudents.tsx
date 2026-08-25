@@ -23,7 +23,7 @@ type AdminStudentsProps = {
 type Notice = {
   type: 'success' | 'error';
   text: string;
-} | null;
+};
 
 const purchasePackages = [5, 20, 80] as const;
 
@@ -50,7 +50,9 @@ export default function AdminStudents({
   const [purchasingId, setPurchasingId] = useState<
     string | null
   >(null);
-  const [notice, setNotice] = useState<Notice>(null);
+  const [notices, setNotices] = useState<
+    Record<string, Notice | undefined>
+  >({});
 
   const filteredStudents = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -77,50 +79,77 @@ export default function AdminStudents({
       newBalance < 0 ||
       newBalance > 10000
     ) {
-      setNotice({
-        type: 'error',
-        text: 'Escribe una cantidad entera entre 0 y 10,000.',
-      });
+      setNotices((current) => ({
+        ...current,
+        [student.user_id]: {
+          type: 'error',
+          text: 'Escribe una cantidad entera entre 0 y 10,000.',
+        },
+      }));
       return;
     }
 
     setSavingId(student.user_id);
-    setNotice(null);
+    setNotices((current) => ({
+      ...current,
+      [student.user_id]: undefined,
+    }));
 
-    const { error } = await supabase.rpc(
-      'admin_set_class_balance',
-      {
-        p_user_id: student.user_id,
-        p_available_classes: newBalance,
-      },
-    );
+    try {
+      const { data, error } = await supabase.rpc(
+        'admin_set_class_balance',
+        {
+          p_user_id: student.user_id,
+          p_available_classes: newBalance,
+        },
+      );
 
-    if (error) {
-      setNotice({
-        type: 'error',
-        text:
-          error.message ||
-          'No pudimos actualizar los cupos.',
-      });
+      if (error) {
+        throw error;
+      }
+
+      const confirmedBalance = Number(data ?? newBalance);
+
+      setStudents((currentStudents) =>
+        currentStudents.map((currentStudent) =>
+          currentStudent.user_id === student.user_id
+            ? {
+                ...currentStudent,
+                available_classes: confirmedBalance,
+              }
+            : currentStudent,
+        ),
+      );
+      setDraftBalances((current) => ({
+        ...current,
+        [student.user_id]: String(confirmedBalance),
+      }));
+      setNotices((current) => ({
+        ...current,
+        [student.user_id]: {
+          type: 'success',
+          text: `Guardado: ahora tiene ${confirmedBalance} cupos disponibles.`,
+        },
+      }));
+    } catch (error) {
+      const errorMessage =
+        typeof error === 'object' &&
+        error !== null &&
+        'message' in error &&
+        typeof error.message === 'string'
+          ? error.message
+          : 'No pudimos actualizar los cupos.';
+
+      setNotices((current) => ({
+        ...current,
+        [student.user_id]: {
+          type: 'error',
+          text: errorMessage,
+        },
+      }));
+    } finally {
       setSavingId(null);
-      return;
     }
-
-    setStudents((currentStudents) =>
-      currentStudents.map((currentStudent) =>
-        currentStudent.user_id === student.user_id
-          ? {
-              ...currentStudent,
-              available_classes: newBalance,
-            }
-          : currentStudent,
-      ),
-    );
-    setNotice({
-      type: 'success',
-      text: `Ahora ${student.full_name} tiene ${newBalance} clases disponibles.`,
-    });
-    setSavingId(null);
   }
 
   async function confirmPurchase(
@@ -128,59 +157,88 @@ export default function AdminStudents({
     classes: (typeof purchasePackages)[number],
   ) {
     setPurchasingId(student.user_id);
-    setNotice(null);
+    setNotices((current) => ({
+      ...current,
+      [student.user_id]: undefined,
+    }));
 
-    const { data, error } = await supabase.rpc(
-      'admin_confirm_class_purchase',
-      {
-        p_user_id: student.user_id,
-        p_classes: classes,
-      },
-    );
+    try {
+      const { data, error } = await supabase.rpc(
+        'admin_confirm_class_purchase',
+        {
+          p_user_id: student.user_id,
+          p_classes: classes,
+        },
+      );
 
-    if (error) {
-      setNotice({
-        type: 'error',
-        text:
-          error.message ||
-          'No pudimos confirmar la compra.',
-      });
+      if (error) {
+        throw error;
+      }
+
+      const updatedBalance = Array.isArray(data)
+        ? data[0]
+        : data;
+      const availableClasses = Number(
+        updatedBalance?.available_classes ??
+          student.available_classes + classes,
+      );
+      const totalPurchased = Number(
+        updatedBalance?.total_purchased ??
+          student.total_purchased + classes,
+      );
+
+      setStudents((currentStudents) =>
+        currentStudents.map((currentStudent) =>
+          currentStudent.user_id === student.user_id
+            ? {
+                ...currentStudent,
+                available_classes: availableClasses,
+                total_purchased: totalPurchased,
+              }
+            : currentStudent,
+        ),
+      );
+      setDraftBalances((current) => ({
+        ...current,
+        [student.user_id]: String(availableClasses),
+      }));
+      setNotices((current) => ({
+        ...current,
+        [student.user_id]: {
+          type: 'success',
+          text: `Compra confirmada: +${classes} clases.`,
+        },
+      }));
+    } catch (error) {
+      const errorMessage =
+        typeof error === 'object' &&
+        error !== null &&
+        'message' in error &&
+        typeof error.message === 'string'
+          ? error.message
+          : 'No pudimos confirmar la compra.';
+
+      setNotices((current) => ({
+        ...current,
+        [student.user_id]: {
+          type: 'error',
+          text: errorMessage,
+        },
+      }));
+    } finally {
       setPurchasingId(null);
-      return;
     }
+  }
 
-    const updatedBalance = Array.isArray(data)
-      ? data[0]
-      : data;
-    const availableClasses = Number(
-      updatedBalance?.available_classes ??
-        student.available_classes + classes,
-    );
-    const totalPurchased = Number(
-      updatedBalance?.total_purchased ??
-        student.total_purchased + classes,
-    );
-
-    setStudents((currentStudents) =>
-      currentStudents.map((currentStudent) =>
-        currentStudent.user_id === student.user_id
-          ? {
-              ...currentStudent,
-              available_classes: availableClasses,
-              total_purchased: totalPurchased,
-            }
-          : currentStudent,
-      ),
-    );
+  function discardBalanceChanges(student: AdminStudent) {
     setDraftBalances((current) => ({
       ...current,
-      [student.user_id]: String(availableClasses),
+      [student.user_id]: String(student.available_classes),
     }));
-    setNotice({
-      type: 'success',
-      text: `Compra de ${classes} clases confirmada para ${student.full_name}.`,
-    });
-    setPurchasingId(null);
+    setNotices((current) => ({
+      ...current,
+      [student.user_id]: undefined,
+    }));
   }
 
   return (
@@ -206,19 +264,6 @@ export default function AdminStudents({
           />
         </label>
       </div>
-
-      {notice ? (
-        <div
-          className={
-            notice.type === 'success'
-              ? styles.successNotice
-              : styles.errorNotice
-          }
-          role={notice.type === 'error' ? 'alert' : 'status'}
-        >
-          {notice.text}
-        </div>
-      ) : null}
 
       {filteredStudents.length === 0 ? (
         <div className={styles.emptyState}>
@@ -307,6 +352,19 @@ export default function AdminStudents({
                   />
                   <button
                     type="button"
+                    className={styles.discardButton}
+                    onClick={() => discardBalanceChanges(student)}
+                    disabled={
+                      savingId === student.user_id ||
+                      purchasingId === student.user_id ||
+                      draftBalances[student.user_id] ===
+                        String(student.available_classes)
+                    }
+                  >
+                    Descartar
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => saveBalance(student)}
                     disabled={
                       savingId === student.user_id ||
@@ -318,6 +376,23 @@ export default function AdminStudents({
                       : 'Asignar'}
                   </button>
                 </div>
+                {notices[student.user_id] ? (
+                  <div
+                    className={
+                      notices[student.user_id]?.type ===
+                      'success'
+                        ? styles.inlineSuccess
+                        : styles.inlineError
+                    }
+                    role={
+                      notices[student.user_id]?.type === 'error'
+                        ? 'alert'
+                        : 'status'
+                    }
+                  >
+                    {notices[student.user_id]?.text}
+                  </div>
+                ) : null}
               </div>
             </article>
           ))}

@@ -2,9 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { useEffect, useState } from 'react';
+
 import ThemeControls from '@/components/ThemeControls/ThemeControls';
+import { createClient } from '@/lib/supabase/client';
+
 import styles from './StudentNavbar.module.css';
 
 const DEVICE_ID_STORAGE_KEY = 'ingles-con-lau-device-id';
@@ -15,25 +17,66 @@ const navigationItems = [
   { href: '/configuracion', label: 'Configuración' },
 ];
 
+const adminNavigationItem = {
+  href: '/admin/estudiantes',
+  label: 'Estudiantes',
+};
+
 export default function StudentNavbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const isStudentArea =
     pathname === '/inicio' ||
     pathname.startsWith('/lecciones') ||
-    pathname.startsWith('/configuracion');
+    pathname.startsWith('/configuracion') ||
+    pathname.startsWith('/admin');
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadAdminRole() {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        return;
+      }
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (isMounted) {
+        setIsAdmin(profile?.role === 'admin');
+      }
+    }
+
+    loadAdminRole();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   if (!isStudentArea) {
     return null;
   }
 
+  const visibleNavigationItems = isAdmin
+    ? [...navigationItems, adminNavigationItem]
+    : navigationItems;
+
   async function handleLogout() {
     setIsLoggingOut(true);
 
     const supabase = createClient();
-
     const deviceId = window.localStorage.getItem(
       DEVICE_ID_STORAGE_KEY,
     );
@@ -55,7 +98,6 @@ export default function StudentNavbar() {
     }
 
     await supabase.auth.signOut();
-
     router.replace('/');
     router.refresh();
   }
@@ -70,7 +112,7 @@ export default function StudentNavbar() {
         className={styles.navigation}
         aria-label="Navegación principal"
       >
-        {navigationItems.map((item) => {
+        {visibleNavigationItems.map((item) => {
           const isActive =
             item.href === '/lecciones'
               ? pathname.startsWith('/lecciones')
