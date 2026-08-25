@@ -18,11 +18,9 @@ const LAST_LESSON_STORAGE_KEY =
   'inglesconlau-last-opened-lesson';
 
 const LEVEL_ORDER = [
-  'a0',
   'a1',
   'a2',
   'b1',
-  'b1-plus',
   'b2',
   'c1',
 ];

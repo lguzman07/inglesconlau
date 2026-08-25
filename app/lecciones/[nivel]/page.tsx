@@ -14,18 +14,11 @@ type Level = {
 };
 
 const levels: Record<string, Level> = {
-  a0: {
-    code: 'A0',
-    title: 'Primeros pasos',
-    description:
-      'Una base clara para comenzar a entender y usar inglÃ©s desde cero.',
-  },
-
   a1: {
     code: 'A1',
     title: 'Principiante',
     description:
-      'Frases y vocabulario para comunicarte en situaciones cotidianas.',
+      'Una base clara para comenzar desde cero y comunicarte en situaciones cotidianas.',
   },
 
   a2: {
@@ -40,13 +33,6 @@ const levels: Record<string, Level> = {
     title: 'Intermedio',
     description:
       'Comunica ideas, opiniones y experiencias con mayor independencia.',
-  },
-
-  'b1-plus': {
-    code: 'B1+',
-    title: 'Intermedio alto',
-    description:
-      'Refuerza fluidez y precisiÃ³n al expresar ideas mÃ¡s detalladas.',
   },
 
   b2: {
@@ -66,10 +52,6 @@ const levels: Record<string, Level> = {
 
 const levelOrder = [
   {
-    slug: 'a0',
-    code: 'A0',
-  },
-  {
     slug: 'a1',
     code: 'A1',
   },
@@ -80,10 +62,6 @@ const levelOrder = [
   {
     slug: 'b1',
     code: 'B1',
-  },
-  {
-    slug: 'b1-plus',
-    code: 'B1+',
   },
   {
     slug: 'b2',
@@ -609,4 +587,3 @@ export default async function NivelPage({
     </main>
   );
 }
-

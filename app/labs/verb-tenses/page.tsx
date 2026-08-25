@@ -250,8 +250,8 @@ export default async function VerbTensesLabPage() {
               Estas no son lecciones
               duplicadas. Cada tarjeta
               abre la lección original
-              de A0, A1, A2, B1, B1+,
-              B2 o C1 y conserva tus
+              de A1, A2, B1, B2 o C1 y
+              conserva tus
               respuestas y progreso.
             </p>
           </div>

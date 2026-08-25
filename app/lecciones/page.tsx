@@ -4,18 +4,11 @@ import styles from './Lecciones.module.css';
 
 const levels = [
   {
-    level: 'A0',
-    slug: 'a0',
-    title: 'Primeros pasos',
-    description:
-      'Empieza desde cero: alfabeto, sonidos, saludos, presentarte y vocabulario esencial.',
-  },
-  {
     level: 'A1',
     slug: 'a1',
     title: 'Principiante',
     description:
-      'Construye frases sencillas para hablar de ti, tu rutina, tu familia y tu entorno.',
+      'Empieza desde cero y construye frases para hablar de ti, tu rutina, tu familia y tu entorno.',
   },
   {
     level: 'A2',
@@ -30,13 +23,6 @@ const levels = [
     title: 'Intermedio',
     description:
       'Exprésate con mayor independencia, comparte opiniones y entiende conversaciones reales.',
-  },
-  {
-    level: 'B1+',
-    slug: 'b1-plus',
-    title: 'Intermedio alto',
-    description:
-      'Refuerza tu fluidez, amplía tu vocabulario y aprende a comunicar ideas más detalladas.',
   },
   {
     level: 'B2',
@@ -74,10 +60,10 @@ export default function LeccionesPage() {
 
           <div className={styles.heroActions}>
             <Link
-              href="/lecciones/a0"
+              href="/lecciones/a1"
               className={styles.continueButton}
             >
-              Empezar desde A0
+              Empezar desde A1
             </Link>
 
             <Link
@@ -207,7 +193,7 @@ export default function LeccionesPage() {
                 className={styles.labMeta}
                 aria-label="Características del Lab"
               >
-                <span>A0–C1</span>
+                <span>A1–C1</span>
                 <span>Mismas lecciones</span>
                 <span>Progreso compartido</span>
               </div>

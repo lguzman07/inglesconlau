@@ -10,12 +10,12 @@ import styles from './ClasesGrupales.module.css';
 export const metadata: Metadata = {
   title: 'Clases grupales en vivo | Inglés con Lau',
   description:
-    'Compra clases grupales en vivo y reserva libremente en los niveles A1, A2, B1, B1+ y B2.',
+    'Compra clases grupales en vivo y reserva libremente en los niveles A1, A2, B1 y B2.',
 };
 
 const benefits = [
   'Clases en vivo de una hora',
-  'Acceso a los grupos A1, A2, B1, B1+ y B2',
+  'Acceso a los grupos A1, A2, B1 y B2',
   'Libertad para cambiar de nivel al reservar',
   'Práctica oral, corrección y acompañamiento en vivo',
   'Tus clases permanecen disponibles hasta agotarlas',

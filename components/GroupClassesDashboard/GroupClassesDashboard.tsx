@@ -44,7 +44,6 @@ const LEVEL_OPTIONS = [
   { value: 'a1', label: 'A1' },
   { value: 'a2', label: 'A2' },
   { value: 'b1', label: 'B1' },
-  { value: 'b1-plus', label: 'B1+' },
   { value: 'b2', label: 'B2' },
 ];
 

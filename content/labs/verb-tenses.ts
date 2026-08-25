@@ -1,9 +1,7 @@
 type VerbTensesLevel =
-  | 'a0'
   | 'a1'
   | 'a2'
   | 'b1'
-  | 'b1-plus'
   | 'b2'
   | 'c1';
 
@@ -58,17 +56,12 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Comienza con am, is y are, sus contracciones, negativos, preguntas y respuestas cortas.',
 
     lessons: [
-      ...createLessons('a0', [
+      ...createLessons('a1', [
         1,
-        2,
-        76,
+        20,
+        39,
+        40,
       ]),
-
-      ...createLessonRange(
-        'a1',
-        8,
-        12,
-      ),
     ],
   },
 
@@ -81,13 +74,15 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Aprende a hablar de rutinas, hábitos, gustos, hechos y acciones habituales.',
 
     lessons: [
-      ...createLessons('a1', [16]),
-
-      ...createLessonRange(
-        'a1',
+      ...createLessons('a1', [
+        31,
         51,
-        61,
-      ),
+        56,
+        57,
+        58,
+        59,
+        60,
+      ]),
     ],
   },
 
@@ -100,11 +95,11 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Describe acciones que están ocurriendo ahora y aprende a diferenciarlas de los hábitos.',
 
     lessons: [
-      ...createLessonRange(
-        'a1',
-        79,
-        83,
-      ),
+      ...createLessons('a1', [
+        68,
+        69,
+        70,
+      ]),
 
       ...createLessons('a2', [
         1,
@@ -124,11 +119,11 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Habla de acontecimientos terminados, verbos regulares e irregulares y hábitos del pasado.',
 
     lessons: [
-      ...createLessonRange(
-        'a1',
-        97,
-        99,
-      ),
+      ...createLessons('a1', [
+        77,
+        78,
+        79,
+      ]),
 
       ...createLessonRange(
         'a2',
@@ -184,11 +179,6 @@ export const verbTensesModules: VerbTensesModule[] = [
         5,
       ),
 
-      ...createLessons(
-        'b1-plus',
-        [2],
-      ),
-
       ...createLessons('b2', [1]),
     ],
   },
@@ -208,11 +198,6 @@ export const verbTensesModules: VerbTensesModule[] = [
         9,
       ),
 
-      ...createLessons(
-        'b1-plus',
-        [3, 4],
-      ),
-
       ...createLessons('b2', [
         2,
         3,
@@ -229,7 +214,7 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Domina going to, will, present continuous, future continuous, future perfect y future in the past.',
 
     lessons: [
-      ...createLessons('a1', [100]),
+      ...createLessons('a1', [80]),
 
       ...createLessonRange(
         'a2',
@@ -241,12 +226,6 @@ export const verbTensesModules: VerbTensesModule[] = [
         'b1',
         14,
         16,
-      ),
-
-      ...createLessonRange(
-        'b1-plus',
-        5,
-        7,
       ),
 
       ...createLessonRange(
@@ -271,9 +250,10 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Consolida todos los tiempos y elige cada forma verbal según la perspectiva, el aspecto y el contexto.',
 
     lessons: [
-      ...createLessons(
-        'b1-plus',
-        [1],
+      ...createLessonRange(
+        'b1',
+        1,
+        16,
       ),
 
       ...createLessonRange(

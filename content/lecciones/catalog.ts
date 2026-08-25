@@ -2,7 +2,7 @@ export const lessonTitles: Record<
   string,
   Record<number, string>
 > = {
-  'a0-a1': {
+  a1: {
     1: 'Presentarte: I am, I’m, My name is y My name’s',
     2: 'Alfabeto completo A–Z: familias de sonidos, letras fáciles de confundir y dictado',
     3: 'Las cinco vocales cortas y largas: contraste, identificación y dictado',
@@ -168,7 +168,7 @@ export const lessonTitles: Record<
     80: 'Expresar una opinión',
   },
 
-  'b1-b1-plus': {
+  b1: {
     1: 'Present simple vs present continuous en contexto',
     2: 'Present perfect vs past simple',
     3: 'Present perfect con for y since',

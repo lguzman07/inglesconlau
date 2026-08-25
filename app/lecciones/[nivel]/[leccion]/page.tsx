@@ -29,46 +29,34 @@ type SearchParams = {
 };
 
 const levels: Record<string, Level> = {
-  a0: {
-    code: 'A0',
-    title: 'Primeros pasos',
-    lessonCount: 80,
-  },
-
   a1: {
     code: 'A1',
     title: 'Principiante',
-    lessonCount: 266,
+    lessonCount: 80,
   },
 
   a2: {
     code: 'A2',
     title: 'Básico',
-    lessonCount: 170,
+    lessonCount: 80,
   },
 
   b1: {
     code: 'B1',
     title: 'Intermedio',
-    lessonCount: 155,
-  },
-
-  'b1-plus': {
-    code: 'B1+',
-    title: 'Intermedio alto',
-    lessonCount: 74,
+    lessonCount: 80,
   },
 
   b2: {
     code: 'B2',
     title: 'Intermedio avanzado',
-    lessonCount: 134,
+    lessonCount: 80,
   },
 
   c1: {
     code: 'C1',
     title: 'Avanzado',
-    lessonCount: 158,
+    lessonCount: 80,
   },
 };
 
