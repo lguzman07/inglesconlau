@@ -16,6 +16,16 @@ export type AdminStudent = {
   joined_at: string;
 };
 
+export type StudentBooking = {
+  booking_id: string;
+  class_date: string;
+  status: string;
+  level: string;
+  label: string;
+  starts_at: string;
+  ends_at: string;
+};
+
 export type PurchaseRequest = {
   request_id: string;
   user_id: string;
@@ -76,6 +86,12 @@ export default function AdminStudents({
   const [busyId, setBusyId] = useState<string | null>(null);
   const [notices, setNotices] = useState<Record<string, Notice | undefined>>({});
   const [requestNotice, setRequestNotice] = useState<Notice | null>(null);
+  const [expandedStudentId, setExpandedStudentId] = useState<string | null>(null);
+  const [bookingsByStudent, setBookingsByStudent] = useState<
+    Record<string, StudentBooking[]>
+  >({});
+  const [bookingsLoading, setBookingsLoading] = useState<Record<string, boolean>>({});
+  const [bookingsError, setBookingsError] = useState<Record<string, string>>({});
 
   const filteredStudents = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -224,6 +240,39 @@ export default function AdminStudents({
     }));
   }
 
+  async function toggleBookings(student: AdminStudent) {
+    if (expandedStudentId === student.user_id) {
+      setExpandedStudentId(null);
+      return;
+    }
+
+    setExpandedStudentId(student.user_id);
+
+    if (bookingsByStudent[student.user_id]) return;
+
+    setBookingsLoading((current) => ({ ...current, [student.user_id]: true }));
+    setBookingsError((current) => ({ ...current, [student.user_id]: '' }));
+
+    const { data, error } = await supabase.rpc('admin_list_student_bookings', {
+      p_user_id: student.user_id,
+    });
+
+    setBookingsLoading((current) => ({ ...current, [student.user_id]: false }));
+
+    if (error) {
+      setBookingsError((current) => ({
+        ...current,
+        [student.user_id]: error.message,
+      }));
+      return;
+    }
+
+    setBookingsByStudent((current) => ({
+      ...current,
+      [student.user_id]: (data ?? []) as StudentBooking[],
+    }));
+  }
+
   return (
     <>
       <section className={styles.requestsPanel}>
@@ -285,6 +334,49 @@ export default function AdminStudents({
                 <div><dt>Total comprado</dt><dd>{student.total_purchased}</dd></div>
                 <div><dt>Registro</dt><dd>{new Intl.DateTimeFormat('es-DO', { dateStyle: 'medium' }).format(new Date(student.joined_at))}</dd></div>
               </dl>
+              <div className={styles.bookingsSection}>
+                <button
+                  type="button"
+                  className={styles.bookingsToggle}
+                  onClick={() => toggleBookings(student)}
+                >
+                  {expandedStudentId === student.user_id
+                    ? 'Ocultar clases reservadas'
+                    : 'Ver clases reservadas'}
+                </button>
+
+                {expandedStudentId === student.user_id ? (
+                  <div className={styles.bookingsList}>
+                    {bookingsLoading[student.user_id] ? (
+                      <p className={styles.inlineError}>Cargando reservas…</p>
+                    ) : bookingsError[student.user_id] ? (
+                      <p className={styles.inlineError}>{bookingsError[student.user_id]}</p>
+                    ) : (bookingsByStudent[student.user_id]?.length ?? 0) === 0 ? (
+                      <p className={styles.inlineError}>No tiene clases reservadas.</p>
+                    ) : (
+                      <ul>
+                        {bookingsByStudent[student.user_id]?.map((booking) => (
+                          <li key={booking.booking_id}>
+                            <span>
+                              {new Intl.DateTimeFormat('es-DO', { dateStyle: 'medium' }).format(
+                                new Date(`${booking.class_date}T00:00:00`),
+                              )}
+                            </span>
+                            <span>
+                              {booking.level.toUpperCase()} · {booking.label} ·{' '}
+                              {formatTime(booking.starts_at)}–{formatTime(booking.ends_at)}
+                            </span>
+                            <span className={styles.bookingStatus} data-status={booking.status}>
+                              {booking.status}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                ) : null}
+              </div>
+
               <div className={styles.purchaseEditor}>
                 <span>Asignación manual</span>
                 <div className={styles.purchaseButtons}>

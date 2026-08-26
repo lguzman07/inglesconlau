@@ -237,11 +237,69 @@
   border-color: var(--border);
 }
 
+.bookingsSection,
 .purchaseEditor,
 .balanceEditor {
   margin-top: 1.2rem;
   padding-top: 1.2rem;
   border-top: 1px solid var(--border);
+}
+
+.bookingsToggle {
+  padding: 0.6rem 1rem;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.bookingsList {
+  margin-top: 1rem;
+}
+
+.bookingsList ul {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bookingsList li {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.75rem 0.9rem;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.bookingsList li > span:first-child {
+  font-weight: 800;
+}
+
+.bookingsList li > span:nth-child(2) {
+  color: var(--text-light);
+  font-size: 0.85rem;
+}
+
+.bookingStatus {
+  justify-self: start;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-radius: 999px;
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.bookingStatus[data-status='cancelled'] {
+  color: var(--text-light);
+  background: var(--surface-soft);
 }
 
 .purchaseEditor {
@@ -291,7 +349,8 @@
 .requestActions button:focus-visible,
 .purchaseButtons button:focus-visible,
 .balanceControls input:focus-visible,
-.balanceControls button:focus-visible {
+.balanceControls button:focus-visible,
+.bookingsToggle:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
