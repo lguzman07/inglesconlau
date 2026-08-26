@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 const benefits = [
   'Clases en vivo de una hora',
   'Grupos A1, A2, B1 y B2',
-  'Máximo 13 estudiantes por clase',
+  'Máximo 10 estudiantes por clase',
   'Libertad para explorar otro nivel al cambiar una reserva',
   'Práctica oral, corrección y acompañamiento en vivo',
 ];

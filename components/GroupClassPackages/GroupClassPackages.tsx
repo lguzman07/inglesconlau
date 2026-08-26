@@ -249,7 +249,7 @@ export default function GroupClassPackages({
         <div className={styles.scheduleHeading}>
           <p className={styles.eyebrow}>HORARIO PRINCIPAL</p>
           <h3>Ahora escoge dónde guardar tu cupo</h3>
-          <p>Máximo 13 estudiantes por clase.</p>
+          <p>Máximo 10 estudiantes por clase.</p>
         </div>
 
         {isLoadingSchedules ? (
@@ -285,7 +285,7 @@ export default function GroupClassPackages({
                         <em>
                           {isFull
                             ? 'Sin cupos'
-                            : `${schedule.spots_remaining} de 13 disponibles`}
+                            : `${schedule.spots_remaining} de 10 disponibles`}
                         </em>
                       </button>
                     );
