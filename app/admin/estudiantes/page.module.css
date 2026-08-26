@@ -286,6 +286,30 @@
   font-size: 0.85rem;
 }
 
+.bookingRowEnd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.cancelBookingButton {
+  padding: 0.4rem 0.75rem;
+  color: var(--text-light);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.cancelBookingButton:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
 .bookingStatus {
   justify-self: start;
   padding: 0.25rem 0.6rem;
@@ -350,7 +374,8 @@
 .purchaseButtons button:focus-visible,
 .balanceControls input:focus-visible,
 .balanceControls button:focus-visible,
-.bookingsToggle:focus-visible {
+.bookingsToggle:focus-visible,
+.cancelBookingButton:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }

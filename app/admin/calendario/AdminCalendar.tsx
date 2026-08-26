@@ -79,6 +79,8 @@ export default function AdminCalendar({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [cancellingBookingId, setCancellingBookingId] = useState<string | null>(null);
+  const [cancelError, setCancelError] = useState('');
 
   const days = useMemo(
     () => Array.from({ length: 5 }, (_, index) => addDays(weekStart, index)),
@@ -147,6 +149,30 @@ export default function AdminCalendar({
 
     setWeekStart(nextWeekStart);
     setBookings((data ?? []) as WeekBooking[]);
+  }
+
+  async function cancelBooking(booking: WeekBooking) {
+    if (cancellingBookingId) return;
+    setCancellingBookingId(booking.booking_id);
+    setCancelError('');
+
+    const { error: cancelErrorResult } = await supabase.rpc(
+      'admin_cancel_group_class_booking',
+      { p_booking_id: booking.booking_id },
+    );
+
+    setCancellingBookingId(null);
+
+    if (cancelErrorResult) {
+      setCancelError(cancelErrorResult.message);
+      return;
+    }
+
+    setBookings((current) =>
+      current.map((item) =>
+        item.booking_id === booking.booking_id ? { ...item, status: 'cancelled' } : item,
+      ),
+    );
   }
 
   return (
@@ -233,11 +259,22 @@ export default function AdminCalendar({
                 Cerrar
               </button>
             </div>
+            {cancelError ? <p className={styles.inlineError}>{cancelError}</p> : null}
             <ul className={styles.studentRoster}>
               {selectedGroup.students.map((student) => (
                 <li key={student.booking_id}>
-                  <span>{student.student_name}</span>
-                  <a href={`mailto:${student.student_email}`}>{student.student_email}</a>
+                  <div>
+                    <span>{student.student_name}</span>
+                    <a href={`mailto:${student.student_email}`}>{student.student_email}</a>
+                  </div>
+                  <button
+                    type="button"
+                    className={styles.cancelBookingButton}
+                    onClick={() => cancelBooking(student)}
+                    disabled={cancellingBookingId === student.booking_id}
+                  >
+                    {cancellingBookingId === student.booking_id ? 'Cancelando…' : 'Cancelar reserva'}
+                  </button>
                 </li>
               ))}
             </ul>

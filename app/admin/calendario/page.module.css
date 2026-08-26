@@ -272,20 +272,46 @@
   border-radius: 13px;
 }
 
-.studentRoster li > span {
+.studentRoster li > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.studentRoster li span {
   font-weight: 700;
 }
 
-.studentRoster li > a {
+.studentRoster li a {
   color: var(--text-light);
   font-size: 0.85rem;
   overflow-wrap: anywhere;
 }
 
+.cancelBookingButton {
+  flex: 0 0 auto;
+  padding: 0.5rem 0.85rem;
+  color: var(--text-light);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+}
+
+.cancelBookingButton:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
 .backLink:focus-visible,
 .weekNav button:focus-visible,
 .classChip:focus-visible,
-.modalHeading button:focus-visible {
+.modalHeading button:focus-visible,
+.cancelBookingButton:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }

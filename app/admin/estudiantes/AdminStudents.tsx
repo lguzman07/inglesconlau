@@ -92,6 +92,7 @@ export default function AdminStudents({
   >({});
   const [bookingsLoading, setBookingsLoading] = useState<Record<string, boolean>>({});
   const [bookingsError, setBookingsError] = useState<Record<string, string>>({});
+  const [cancellingBookingId, setCancellingBookingId] = useState<string | null>(null);
 
   const filteredStudents = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -273,6 +274,30 @@ export default function AdminStudents({
     }));
   }
 
+  async function cancelBooking(studentId: string, booking: StudentBooking) {
+    if (cancellingBookingId) return;
+    setCancellingBookingId(booking.booking_id);
+    setBookingsError((current) => ({ ...current, [studentId]: '' }));
+
+    const { error } = await supabase.rpc('admin_cancel_group_class_booking', {
+      p_booking_id: booking.booking_id,
+    });
+
+    setCancellingBookingId(null);
+
+    if (error) {
+      setBookingsError((current) => ({ ...current, [studentId]: error.message }));
+      return;
+    }
+
+    setBookingsByStudent((current) => ({
+      ...current,
+      [studentId]: (current[studentId] ?? []).map((item) =>
+        item.booking_id === booking.booking_id ? { ...item, status: 'cancelled' } : item,
+      ),
+    }));
+  }
+
   return (
     <>
       <section className={styles.requestsPanel}>
@@ -347,10 +372,11 @@ export default function AdminStudents({
 
                 {expandedStudentId === student.user_id ? (
                   <div className={styles.bookingsList}>
+                    {bookingsError[student.user_id] ? (
+                      <p className={styles.inlineError}>{bookingsError[student.user_id]}</p>
+                    ) : null}
                     {bookingsLoading[student.user_id] ? (
                       <p className={styles.inlineError}>Cargando reservas…</p>
-                    ) : bookingsError[student.user_id] ? (
-                      <p className={styles.inlineError}>{bookingsError[student.user_id]}</p>
                     ) : (bookingsByStudent[student.user_id]?.length ?? 0) === 0 ? (
                       <p className={styles.inlineError}>No tiene clases reservadas.</p>
                     ) : (
@@ -366,8 +392,22 @@ export default function AdminStudents({
                               {booking.level.toUpperCase()} · {booking.label} ·{' '}
                               {formatTime(booking.starts_at)}–{formatTime(booking.ends_at)}
                             </span>
-                            <span className={styles.bookingStatus} data-status={booking.status}>
-                              {booking.status}
+                            <span className={styles.bookingRowEnd}>
+                              <span className={styles.bookingStatus} data-status={booking.status}>
+                                {booking.status}
+                              </span>
+                              {booking.status === 'reserved' ? (
+                                <button
+                                  type="button"
+                                  className={styles.cancelBookingButton}
+                                  onClick={() => cancelBooking(student.user_id, booking)}
+                                  disabled={cancellingBookingId === booking.booking_id}
+                                >
+                                  {cancellingBookingId === booking.booking_id
+                                    ? 'Cancelando…'
+                                    : 'Cancelar reserva'}
+                                </button>
+                              ) : null}
                             </span>
                           </li>
                         ))}
