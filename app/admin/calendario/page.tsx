@@ -68,7 +68,8 @@ export default async function AdminCalendarPage() {
         </header>
         {error ? (
           <div className={styles.errorBox} role="alert">
-            No pudimos cargar el calendario. Ejecuta primero la migración SQL nueva.
+            <p>No pudimos cargar el calendario.</p>
+            <p>{error.message}</p>
           </div>
         ) : (
           <AdminCalendar

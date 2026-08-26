@@ -192,6 +192,16 @@
   border-radius: 12px;
 }
 
+.errorBox p {
+  margin: 0;
+}
+
+.errorBox p + p {
+  margin-top: 0.4rem;
+  color: var(--text-light);
+  font-size: 0.85rem;
+}
+
 .modalOverlay {
   position: fixed;
   inset: 0;
