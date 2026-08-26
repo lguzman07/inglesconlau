@@ -25,7 +25,7 @@ const groupClassPackages = [
       'RD$120 por cada clase.',
       'Puedes escoger entre A1, A2, B1 y B2.',
       'Eliges la fecha y el horario de cada clase.',
-      'Máximo 12 estudiantes por grupo.',
+      'Máximo 10 estudiantes por grupo.',
       'Tus clases permanecen disponibles hasta agotarlas.',
       'Puedes explorar un nivel diferente cuando quieras.',
     ],
@@ -43,7 +43,7 @@ const groupClassPackages = [
       'Ahorras RD$500 frente a cuatro paquetes pequeños.',
       'Puedes escoger entre A1, A2, B1 y B2.',
       'Eliges la fecha y el horario de cada clase.',
-      'Máximo 12 estudiantes por grupo.',
+      'Máximo 10 estudiantes por grupo.',
       'Tus clases permanecen disponibles hasta agotarlas.',
     ],
   },
@@ -60,7 +60,7 @@ const groupClassPackages = [
       'Ahorras RD$2,600 frente a paquetes de cinco clases.',
       'Puedes escoger entre A1, A2, B1 y B2.',
       'Eliges la fecha y el horario de cada clase.',
-      'Máximo 12 estudiantes por grupo.',
+      'Máximo 10 estudiantes por grupo.',
       'Tus clases permanecen disponibles hasta agotarlas.',
     ],
   },
@@ -89,54 +89,6 @@ export default function Plan() {
         </header>
 
         <div className={styles.cardGrid}>
-          <section className={styles.planCard}>
-            <div className={styles.planHeading}>
-              <div>
-                <p className={styles.planName}>
-                  Plataforma Inglés con Lau
-                </p>
-                <div className={styles.price}>
-                  <span className={styles.currency}>RD$</span>
-                  <span className={styles.amount}>1,200</span>
-                  <span className={styles.period}>/mes</span>
-                </div>
-              </div>
-              <span className={styles.badge}>
-                Próximamente
-              </span>
-            </div>
-
-            <ul className={styles.benefits}>
-              {platformBenefits.map((benefit) => (
-                <li
-                  key={benefit}
-                  className={styles.benefit}
-                >
-                  <span
-                    className={styles.check}
-                    aria-hidden="true"
-                  >
-                    ✓
-                  </span>
-                  <span>{benefit}</span>
-                </li>
-              ))}
-            </ul>
-
-            <button
-              type="button"
-              className={`${styles.button} ${styles.buttonDisabled}`}
-              disabled
-              aria-disabled="true"
-            >
-              Disponible próximamente
-            </button>
-
-            <div className={styles.conditions}>
-              <span>La plataforma está en desarrollo.</span>
-            </div>
-          </section>
-
           {groupClassPackages.map((classPackage) => (
             <section
               key={classPackage.id}
@@ -194,6 +146,54 @@ export default function Plan() {
               </div>
             </section>
           ))}
+
+          <section className={styles.planCard}>
+            <div className={styles.planHeading}>
+              <div>
+                <p className={styles.planName}>
+                  Plataforma Inglés con Lau
+                </p>
+                <div className={styles.price}>
+                  <span className={styles.currency}>RD$</span>
+                  <span className={styles.amount}>1,200</span>
+                  <span className={styles.period}>/mes</span>
+                </div>
+              </div>
+              <span className={styles.badge}>
+                Próximamente
+              </span>
+            </div>
+
+            <ul className={styles.benefits}>
+              {platformBenefits.map((benefit) => (
+                <li
+                  key={benefit}
+                  className={styles.benefit}
+                >
+                  <span
+                    className={styles.check}
+                    aria-hidden="true"
+                  >
+                    ✓
+                  </span>
+                  <span>{benefit}</span>
+                </li>
+              ))}
+            </ul>
+
+            <button
+              type="button"
+              className={`${styles.button} ${styles.buttonDisabled}`}
+              disabled
+              aria-disabled="true"
+            >
+              Disponible próximamente
+            </button>
+
+            <div className={styles.conditions}>
+              <span>La plataforma está en desarrollo.</span>
+            </div>
+          </section>
         </div>
       </div>
     </main>
