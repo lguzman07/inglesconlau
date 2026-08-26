@@ -102,12 +102,6 @@ export default function PoliticaDePrivacidadPage() {
               </li>
 
               <li>
-                <strong>Lecturas en vivo:</strong> reserva de turno, asistencia
-                y voz durante tu lectura. Las cámaras de los estudiantes no son
-                necesarias ni se mostrarán en la grabación publicada.
-              </li>
-
-              <li>
                 <strong>Analítica general:</strong> visitas, páginas utilizadas,
                 rendimiento y errores, sin crear perfiles publicitarios.
               </li>
@@ -130,11 +124,6 @@ export default function PoliticaDePrivacidadPage() {
               <li>
                 Gestionar pagos, renovaciones, recibos, cancelaciones y
                 reactivaciones.
-              </li>
-
-              <li>
-                Ofrecer las lecturas en vivo y sus grabaciones durante el período
-                anunciado.
               </li>
 
               <li>
@@ -185,9 +174,8 @@ export default function PoliticaDePrivacidadPage() {
             <p className={styles.paragraph}>
               No enviamos promociones ni novedades comerciales. Usaremos el
               correo exclusivamente para recibos, incidencias de pago, seguridad,
-              recuperación de contraseña, soporte solicitado, cambios importantes
-              en el servicio, precio o documentos legales, y avisos necesarios
-              de las lecturas en vivo.
+              recuperación de contraseña, soporte solicitado, y cambios importantes
+              en el servicio, precio o documentos legales.
             </p>
           </section>
 
@@ -238,11 +226,6 @@ export default function PoliticaDePrivacidadPage() {
               </li>
 
               <li>
-                El proveedor de videollamadas o transmisión integrado, para
-                realizar y grabar las lecturas en vivo.
-              </li>
-
-              <li>
                 Servicios de correo transaccional, para enviar mensajes
                 necesarios.
               </li>
@@ -263,36 +246,7 @@ export default function PoliticaDePrivacidadPage() {
 
           <section className={styles.section}>
             <h2 className={styles.heading}>
-              9. Grabaciones de lecturas en vivo
-            </h2>
-
-            <p className={styles.paragraph}>
-              Las lecturas en vivo se realizan con Laura y hasta 10 estudiantes
-              que hayan reservado un turno para leer. No existe una modalidad de
-              oyente ni de participación por chat. Antes de reservar, se
-              informará que la voz del estudiante durante su turno puede quedar
-              incluida en la grabación.
-            </p>
-
-            <p className={styles.paragraph}>
-              La grabación publicada podrá mostrar la imagen y voz de Laura, la
-              lectura compartida y las voces de los estudiantes mientras leen.
-              Las cámaras de los estudiantes no son necesarias ni se mostrarán.
-              Si no deseas que tu voz pueda grabarse, no reserves un turno para
-              esa sesión.
-            </p>
-
-            <p className={styles.paragraph}>
-              Las grabaciones estarán disponibles solo dentro de la plataforma
-              durante 30 días y no podrán descargarse ni compartirse. Se
-              atenderán los derechos y obligaciones legales que correspondan en
-              cada caso.
-            </p>
-          </section>
-
-          <section className={styles.section}>
-            <h2 className={styles.heading}>
-              10. Conservación de la información
+              9. Conservación de la información
             </h2>
 
             <ul className={styles.list}>
@@ -315,13 +269,6 @@ export default function PoliticaDePrivacidadPage() {
               </li>
 
               <li>
-                <strong>Grabaciones de lecturas en vivo:</strong> estarán disponibles
-                durante 30 días y luego se retirarán del acceso ordinario; las
-                copias técnicas temporales podrán persistir durante un período
-                limitado de respaldo y seguridad.
-              </li>
-
-              <li>
                 <strong>Registros fiscales y de pago:</strong> se conservarán
                 durante el plazo exigido por la normativa aplicable, que puede
                 alcanzar 10 años.
@@ -335,7 +282,7 @@ export default function PoliticaDePrivacidadPage() {
           </section>
 
           <section className={styles.section}>
-            <h2 className={styles.heading}>11. Seguridad</h2>
+            <h2 className={styles.heading}>10. Seguridad</h2>
 
             <p className={styles.paragraph}>
               Aplicamos medidas técnicas y organizativas razonables, como
@@ -348,7 +295,7 @@ export default function PoliticaDePrivacidadPage() {
           </section>
 
           <section className={styles.section}>
-            <h2 className={styles.heading}>12. Tus derechos</h2>
+            <h2 className={styles.heading}>11. Tus derechos</h2>
 
             <p className={styles.paragraph}>
               Puedes solicitar acceso a tus datos, su corrección, actualización,
@@ -375,7 +322,7 @@ export default function PoliticaDePrivacidadPage() {
 
           <section className={styles.section}>
             <h2 className={styles.heading}>
-              13. Recuperación de una cuenta desactivada
+              12. Recuperación de una cuenta desactivada
             </h2>
 
             <p className={styles.paragraph}>
@@ -389,7 +336,7 @@ export default function PoliticaDePrivacidadPage() {
           </section>
 
           <section className={styles.section}>
-            <h2 className={styles.heading}>14. Decisiones automatizadas</h2>
+            <h2 className={styles.heading}>13. Decisiones automatizadas</h2>
 
             <p className={styles.paragraph}>
               No tomamos decisiones legales o de efecto similar basadas
@@ -402,7 +349,7 @@ export default function PoliticaDePrivacidadPage() {
 
           <section className={styles.section}>
             <h2 className={styles.heading}>
-              15. Cambios a esta Política
+              14. Cambios a esta Política
             </h2>
 
             <p className={styles.paragraph}>
@@ -414,7 +361,7 @@ export default function PoliticaDePrivacidadPage() {
           </section>
 
           <section className={styles.section}>
-            <h2 className={styles.heading}>16. Contacto y reclamaciones</h2>
+            <h2 className={styles.heading}>15. Contacto y reclamaciones</h2>
 
             <ul className={styles.contactList}>
               <li>

@@ -62,8 +62,8 @@ export default function TerminosYCondicionesPage() {
             <p className={styles.paragraph}>
               La suscripción ofrece acceso, mientras permanezca activa, a
               lecciones grabadas, ejercicios interactivos, rutas de
-              aprendizaje, visualización del progreso, materiales
-              descargables cuando se indiquen y las lecturas en vivo. El
+              aprendizaje, visualización del progreso y materiales
+              descargables cuando se indiquen. El
               contenido disponible puede ampliarse, reorganizarse o mejorarse
               sin reducir de manera sustancial el servicio contratado.
             </p>
@@ -153,8 +153,8 @@ export default function TerminosYCondicionesPage() {
 
             <p className={styles.paragraph}>
               Por tratarse de acceso digital disponible inmediatamente, los
-              períodos ya iniciados no se reembolsan por falta de uso,
-              inasistencia a una lectura en vivo o cambio de decisión, salvo cobro duplicado,
+              períodos ya iniciados no se reembolsan por falta de uso
+              o cambio de decisión, salvo cobro duplicado,
               incumplimiento atribuible a Inglés con Lau o cualquier otro
               supuesto en que la legislación aplicable reconozca
               obligatoriamente un reembolso o remedio.
@@ -184,52 +184,7 @@ export default function TerminosYCondicionesPage() {
           </section>
 
           <section className={styles.section}>
-            <h2 className={styles.heading}>8. Lecturas en vivo</h2>
-
-            <p className={styles.paragraph}>
-              Las lecturas en vivo son un beneficio adicional, opcional y sujeto
-              al calendario publicado. Cada sesión está destinada a Laura y a
-              un máximo de 10 estudiantes con un turno reservado para leer. No
-              existe una modalidad de oyente, público o participación separada.
-            </p>
-
-            <p className={styles.paragraph}>
-              Las lecturas en vivo estarán disponibles únicamente para cuentas
-              con acceso vigente y se realizarán mediante la tecnología de
-              videollamada integrada en la plataforma.
-            </p>
-
-            <p className={styles.paragraph}>
-              Si una lectura en vivo no puede realizarse un jueves, no se
-              trasladará a otro día. El calendario regular continuará el jueves
-              siguiente, sin que ello cree una sesión individual, crédito o
-              compensación adicional.
-            </p>
-
-            <p className={styles.paragraph}>
-              La inasistencia o la cancelación del turno por parte del estudiante
-              no genera reembolso ni una lectura individual. Cuando exista una
-              grabación, podrá reproducirse dentro de la plataforma durante 30
-              días.
-            </p>
-
-            <p className={styles.paragraph}>
-              Las grabaciones podrán incluir la imagen y voz de Laura, la lectura
-              compartida y la voz de cada estudiante durante su turno. Las
-              cámaras de los estudiantes no serán necesarias ni se mostrarán en
-              la grabación publicada.
-            </p>
-
-            <p className={styles.paragraph}>
-              Antes de reservar un turno se informará que la voz puede grabarse.
-              Quien no desee que su voz quede incluida no debe reservar un turno
-              para esa sesión. Las grabaciones no podrán descargarse, copiarse
-              ni compartirse.
-            </p>
-          </section>
-
-          <section className={styles.section}>
-            <h2 className={styles.heading}>9. Disponibilidad y mantenimiento</h2>
+            <h2 className={styles.heading}>8. Disponibilidad y mantenimiento</h2>
 
             <p className={styles.paragraph}>
               Podrán realizarse mantenimientos y existir interrupciones
@@ -251,7 +206,7 @@ export default function TerminosYCondicionesPage() {
 
           <section className={styles.section}>
             <h2 className={styles.heading}>
-              10. Uso permitido y conductas prohibidas
+              9. Uso permitido y conductas prohibidas
             </h2>
 
             <p className={styles.paragraph}>
@@ -287,7 +242,7 @@ export default function TerminosYCondicionesPage() {
 
           <section className={styles.section}>
             <h2 className={styles.heading}>
-              11. Suspensión o terminación por incumplimiento
+              10. Suspensión o terminación por incumplimiento
             </h2>
 
             <p className={styles.paragraph}>
@@ -307,7 +262,7 @@ export default function TerminosYCondicionesPage() {
           </section>
 
           <section className={styles.section}>
-            <h2 className={styles.heading}>12. Propiedad intelectual</h2>
+            <h2 className={styles.heading}>11. Propiedad intelectual</h2>
 
             <p className={styles.paragraph}>
               El diseño, marca, lecciones, explicaciones, ejercicios, rutas,
@@ -317,17 +272,11 @@ export default function TerminosYCondicionesPage() {
               limitada, revocable, no exclusiva e intransferible para uso
               personal durante el período de acceso.
             </p>
-
-            <p className={styles.paragraph}>
-              Las lecturas en vivo podrán utilizar obras en dominio público, textos propios o
-              materiales debidamente licenciados. Los derechos sobre obras de
-              terceros pertenecen a sus respectivos titulares.
-            </p>
           </section>
 
           <section className={styles.section}>
             <h2 className={styles.heading}>
-              13. Privacidad y comunicaciones necesarias
+              12. Privacidad y comunicaciones necesarias
             </h2>
 
             <p className={styles.paragraph}>
@@ -335,13 +284,13 @@ export default function TerminosYCondicionesPage() {
               que forma parte de estas condiciones. Solo enviaremos
               comunicaciones necesarias: recibos, incidencias de pago,
               seguridad, recuperación de contraseña, soporte solicitado,
-              cambios importantes y avisos de las lecturas en vivo.
+              y cambios importantes.
             </p>
           </section>
 
           <section className={styles.section}>
             <h2 className={styles.heading}>
-              14. Cambios en el servicio o en estos Términos
+              13. Cambios en el servicio o en estos Términos
             </h2>
 
             <p className={styles.paragraph}>
@@ -356,7 +305,7 @@ export default function TerminosYCondicionesPage() {
 
           <section className={styles.section}>
             <h2 className={styles.heading}>
-              15. Responsabilidad y derechos obligatorios
+              14. Responsabilidad y derechos obligatorios
             </h2>
 
             <p className={styles.paragraph}>
@@ -371,7 +320,7 @@ export default function TerminosYCondicionesPage() {
 
           <section className={styles.section}>
             <h2 className={styles.heading}>
-              16. Ley aplicable y solución de controversias
+              15. Ley aplicable y solución de controversias
             </h2>
 
             <p className={styles.paragraph}>
@@ -387,7 +336,7 @@ export default function TerminosYCondicionesPage() {
           </section>
 
           <section className={styles.section}>
-            <h2 className={styles.heading}>17. Contacto</h2>
+            <h2 className={styles.heading}>16. Contacto</h2>
 
             <ul className={styles.contactList}>
               <li>

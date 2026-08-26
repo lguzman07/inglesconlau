@@ -7,9 +7,7 @@ const platformBenefits = [
   'Cada lección incluye su propio video explicativo.',
   'Ejercicios interactivos con corrección inmediata.',
   'Visualización de tu progreso dentro de la plataforma.',
-  'Acceso a la lectura en vivo todos los jueves.',
   'Consejos de pronunciación para hispanohablantes.',
-  'Grabaciones de la lectura en vivo disponibles durante 30 días.',
 ];
 
 const liveClassBenefits = [
