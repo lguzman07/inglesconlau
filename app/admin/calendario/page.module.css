@@ -1,0 +1,310 @@
+.page {
+  min-height: 100vh;
+  padding: 3rem 2rem 7rem;
+  color: var(--text);
+  background: var(--surface-soft);
+}
+
+.container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.backLink {
+  display: inline-flex;
+  margin-bottom: 3.5rem;
+  color: var(--text-light);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: var(--primary);
+}
+
+.header {
+  max-width: 780px;
+  margin-bottom: 3rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  line-height: 1.1;
+}
+
+.header > p:not(.eyebrow) {
+  margin: 1.25rem 0 0;
+  color: var(--text-light);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.panel {
+  margin-top: 1.5rem;
+  padding: 2rem;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.toolbar h2 {
+  margin: 0;
+}
+
+.toolbar p {
+  margin-top: 0.4rem;
+  color: var(--text-light);
+}
+
+.weekNav {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.weekNav button {
+  min-height: 44px;
+  padding: 0.7rem 1rem;
+  color: var(--surface-solid);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 13px;
+  white-space: nowrap;
+}
+
+.weekNav button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.discardButton {
+  color: var(--text-light) !important;
+  background: transparent !important;
+  border-color: var(--border) !important;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.dayColumn {
+  min-width: 0;
+  padding: 1rem;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.dayHeading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-bottom: 0.85rem;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.dayHeading strong {
+  font-size: 0.95rem;
+}
+
+.dayHeading span {
+  color: var(--text-light);
+  font-size: 0.8rem;
+}
+
+.emptyDay {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 0.82rem;
+}
+
+.classChips {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.classChip {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.7rem 0.8rem;
+  text-align: left;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.classChipTime {
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.classChipCount {
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.inlineError {
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  line-height: 1.5;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.errorBox {
+  margin-top: 1.5rem;
+  padding: 0.8rem 1rem;
+  line-height: 1.5;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgb(0 0 0 / 55%);
+  z-index: 100;
+}
+
+.modal {
+  width: min(100%, 480px);
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 1.75rem;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.modalHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.modalHeading h3 {
+  margin: 0;
+}
+
+.modalHeading p {
+  margin: 0.35rem 0 0;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.modalHeading button {
+  min-height: 40px;
+  padding: 0.55rem 0.9rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.studentRoster {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.studentRoster li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0.9rem;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.studentRoster li > span {
+  font-weight: 700;
+}
+
+.studentRoster li > a {
+  color: var(--text-light);
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
+.backLink:focus-visible,
+.weekNav button:focus-visible,
+.classChip:focus-visible,
+.modalHeading button:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1000px) {
+  .calendarGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .page {
+    padding: 2rem 1.25rem 5rem;
+  }
+
+  .panel {
+    padding: 1.25rem;
+  }
+
+  .toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .weekNav {
+    flex-direction: column;
+  }
+
+  .calendarGrid {
+    grid-template-columns: 1fr;
+  }
+}

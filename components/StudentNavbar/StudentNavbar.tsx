@@ -17,10 +17,10 @@ const navigationItems = [
   { href: '/configuracion', label: 'Configuración' },
 ];
 
-const adminNavigationItem = {
-  href: '/admin/estudiantes',
-  label: 'Estudiantes',
-};
+const adminNavigationItems = [
+  { href: '/admin/estudiantes', label: 'Estudiantes' },
+  { href: '/admin/calendario', label: 'Calendario' },
+];
 
 export default function StudentNavbar() {
   const pathname = usePathname();
@@ -59,7 +59,7 @@ export default function StudentNavbar() {
   }
 
   const visibleNavigationItems = isAdmin
-    ? [...navigationItems, adminNavigationItem]
+    ? [...navigationItems, ...adminNavigationItems]
     : navigationItems;
 
   async function handleLogout() {
