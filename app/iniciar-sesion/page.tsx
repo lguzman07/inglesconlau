@@ -106,12 +106,21 @@ export default function IniciarSesionPage() {
     isSendingCloseSessionsEmail,
     setIsSendingCloseSessionsEmail,
   ] = useState(false);
+  const [
+    unconfirmedEmail,
+    setUnconfirmedEmail,
+  ] = useState<string | null>(null);
+  const [
+    isResendingConfirmation,
+    setIsResendingConfirmation,
+  ] = useState(false);
 
   const isBusy =
     isLoading ||
     isSendingRecovery ||
     isGoogleLoading ||
-    isSendingCloseSessionsEmail;
+    isSendingCloseSessionsEmail ||
+    isResendingConfirmation;
 
   useEffect(() => {
     const searchParams =
@@ -253,6 +262,39 @@ export default function IniciarSesionPage() {
     );
   }
 
+  async function handleResendConfirmation() {
+    if (!unconfirmedEmail) return;
+
+    setMessage('');
+    setIsResendingConfirmation(true);
+
+    const supabase =
+      createClient();
+
+    const { error } =
+      await supabase.auth.resend({
+        type: 'signup',
+        email: unconfirmedEmail,
+        options: {
+          emailRedirectTo:
+            `${window.location.origin}/iniciar-sesion?next=${encodeURIComponent(nextPath)}`,
+        },
+      });
+
+    setIsResendingConfirmation(false);
+
+    if (error) {
+      setMessage(
+        'No pudimos reenviar el correo de confirmación. Inténtalo nuevamente.',
+      );
+      return;
+    }
+
+    setMessage(
+      'Te reenviamos el correo de confirmación. Revisa tu bandeja de entrada (y la de correo no deseado).',
+    );
+  }
+
   async function handleCloseAllSessionsEmail() {
     const normalizedEmail =
       email.trim();
@@ -305,6 +347,7 @@ export default function IniciarSesionPage() {
 
     setMessage('');
     setIsDeviceLimit(false);
+    setUnconfirmedEmail(null);
     setIsLoading(true);
 
     saveKeepSessionPreference(
@@ -328,12 +371,32 @@ export default function IniciarSesionPage() {
       signInError ||
       !authData.user
     ) {
-      setMessage(
-        'No pudimos iniciar sesión. Revisa tu correo y contraseña e inténtalo nuevamente.',
-      );
+      const isUnconfirmed =
+        signInError?.code ===
+          'email_not_confirmed' ||
+        signInError?.message
+          ?.toLowerCase()
+          .includes('email not confirmed');
+
+      if (isUnconfirmed) {
+        setUnconfirmedEmail(
+          email.trim(),
+        );
+        setMessage(
+          'Tu cuenta todavía no está confirmada. Revisa tu correo o pide que te enviemos el enlace de confirmación de nuevo.',
+        );
+      } else {
+        setUnconfirmedEmail(null);
+        setMessage(
+          'No pudimos iniciar sesión. Revisa tu correo y contraseña e inténtalo nuevamente.',
+        );
+      }
+
       setIsLoading(false);
       return;
     }
+
+    setUnconfirmedEmail(null);
 
     const deviceId =
       getOrCreateDeviceId();
@@ -608,6 +671,23 @@ export default function IniciarSesionPage() {
               {isSendingCloseSessionsEmail
                 ? 'Enviando enlace...'
                 : 'Cerrar todas mis sesiones'}
+            </button>
+          ) : null}
+
+          {unconfirmedEmail ? (
+            <button
+              type="button"
+              className={
+                styles.secondaryButton
+              }
+              onClick={
+                handleResendConfirmation
+              }
+              disabled={isBusy}
+            >
+              {isResendingConfirmation
+                ? 'Reenviando...'
+                : 'Reenviar correo de confirmación'}
             </button>
           ) : null}
 
