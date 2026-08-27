@@ -115,7 +115,9 @@ export default function AdminStudents({
   const [requests, setRequests] = useState(initialRequests);
   const [search, setSearch] = useState('');
   const [levelFilter, setLevelFilter] = useState('all');
-  const [onlyActive, setOnlyActive] = useState(true);
+  const [activityFilter, setActivityFilter] = useState<
+    'all' | 'active' | 'unscheduled'
+  >('active');
   const [draftBalances, setDraftBalances] = useState<Record<string, string>>(
     () =>
       Object.fromEntries(
@@ -150,7 +152,15 @@ export default function AdminStudents({
     return students.filter((student) => {
       if (levelFilter !== 'all' && student.english_level !== levelFilter) return false;
 
-      if (onlyActive && student.available_classes <= 0 && !student.has_upcoming_class) {
+      if (
+        activityFilter === 'active' &&
+        student.available_classes <= 0 &&
+        !student.has_upcoming_class
+      ) {
+        return false;
+      }
+
+      if (activityFilter === 'unscheduled' && student.has_upcoming_class) {
         return false;
       }
 
@@ -160,7 +170,7 @@ export default function AdminStudents({
         value.toLowerCase().includes(query),
       );
     });
-  }, [search, students, levelFilter, onlyActive]);
+  }, [search, students, levelFilter, activityFilter]);
 
   function updateStudentBalance(
     userId: string,
@@ -428,14 +438,29 @@ export default function AdminStudents({
             ))}
           </div>
 
-          <label className={styles.activeToggle}>
-            <input
-              type="checkbox"
-              checked={onlyActive}
-              onChange={(event) => setOnlyActive(event.target.checked)}
-            />
-            <span>Solo con clases disponibles o agendadas</span>
-          </label>
+          <div className={styles.levelFilter}>
+            <button
+              type="button"
+              className={activityFilter === 'all' ? styles.levelFilterActive : ''}
+              onClick={() => setActivityFilter('all')}
+            >
+              Todos
+            </button>
+            <button
+              type="button"
+              className={activityFilter === 'active' ? styles.levelFilterActive : ''}
+              onClick={() => setActivityFilter('active')}
+            >
+              Con clases disponibles o agendadas
+            </button>
+            <button
+              type="button"
+              className={activityFilter === 'unscheduled' ? styles.levelFilterActive : ''}
+              onClick={() => setActivityFilter('unscheduled')}
+            >
+              Sin clases agendadas
+            </button>
+          </div>
         </div>
 
         {filteredStudents.length === 0 ? (
