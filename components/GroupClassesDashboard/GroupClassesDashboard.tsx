@@ -50,6 +50,14 @@ const LEVEL_OPTIONS = [
 const COURSE_START_DATE = '2026-09-14';
 const COURSE_END_DATE = '2027-01-01';
 
+const WEEK_RESERVE_REASONS: Record<string, string> = {
+  sin_creditos: 'no tenías suficientes clases disponibles',
+  lleno: 'esos horarios ya estaban llenos',
+  ya_reservada: 'ya tenías esas clases reservadas',
+  fuera_de_curso: 'esos días están fuera del período del curso',
+  ya_paso: 'esas clases ya habían comenzado',
+};
+
 const WEEK_DAYS = [
   'Lu',
   'Ma',
@@ -585,17 +593,38 @@ export default function GroupClassesDashboard() {
       (item) => item.result === 'reservada',
     ).length;
 
+    const skipped = results.filter(
+      (item) => item.result !== 'reservada',
+    );
+    const skippedReasons = Array.from(
+      new Set(
+        skipped.map((item) => item.result),
+      ),
+    );
+    const reasonText =
+      skippedReasons.length === 1
+        ? (WEEK_RESERVE_REASONS[
+            skippedReasons[0]
+          ] ?? 'no estaban disponibles')
+        : skippedReasons
+            .map(
+              (code) =>
+                WEEK_RESERVE_REASONS[code] ??
+                code,
+            )
+            .join('; ');
+
     if (bookedCount === 0) {
       setError(
-        'No pudimos reservar ningún día de esa semana. Revisa tus clases disponibles o el cupo del horario.',
+        `No pudimos reservar ningún día de esa semana porque ${reasonText}.`,
       );
-    } else if (bookedCount === results.length) {
+    } else if (skipped.length === 0) {
       setMessage(
         `¡Reservamos las ${bookedCount} clases de la semana!`,
       );
     } else {
       setMessage(
-        `Reservamos ${bookedCount} de ${results.length} días de esa semana. Algunos días no tenían cupo, ya estaban reservados o se quedaron sin clases disponibles.`,
+        `Reservamos ${bookedCount} de ${results.length} días de esa semana. El resto no se pudo reservar porque ${reasonText}.`,
       );
     }
 
