@@ -305,6 +305,9 @@ export default function GroupClassesDashboard() {
   const [isReserving, setIsReserving] =
     useState(false);
 
+  const [isReservingWeek, setIsReservingWeek] =
+    useState(false);
+
   const [cancellingId, setCancellingId] =
     useState<string | null>(null);
 
@@ -521,6 +524,82 @@ export default function GroupClassesDashboard() {
     );
     setSelectedScheduleId('');
     setIsReserving(false);
+
+    await Promise.all([
+      loadStudentClasses(),
+      loadAvailability(
+        selectedDate,
+        selectedLevel,
+      ),
+    ]);
+  }
+
+  async function handleReserveWeek() {
+    if (
+      !selectedScheduleId ||
+      isReserving ||
+      isReservingWeek ||
+      availableClasses <= 0
+    ) {
+      return;
+    }
+
+    setIsReservingWeek(true);
+    setError('');
+    setMessage('');
+
+    const supabase = createClient();
+
+    const { data, error: reserveError } =
+      await supabase.rpc(
+        'reserve_group_class_week',
+        {
+          p_schedule_id:
+            selectedScheduleId,
+          p_week_start: selectedDate,
+        },
+      );
+
+    setIsReservingWeek(false);
+
+    if (reserveError) {
+      setError(
+        getReadableError(
+          reserveError.message,
+        ),
+      );
+      await loadAvailability(
+        selectedDate,
+        selectedLevel,
+      );
+      return;
+    }
+
+    const results =
+      (data ?? []) as {
+        class_date: string;
+        result: string;
+      }[];
+
+    const bookedCount = results.filter(
+      (item) => item.result === 'reservada',
+    ).length;
+
+    if (bookedCount === 0) {
+      setError(
+        'No pudimos reservar ningún día de esa semana. Revisa tus clases disponibles o el cupo del horario.',
+      );
+    } else if (bookedCount === results.length) {
+      setMessage(
+        `¡Reservamos las ${bookedCount} clases de la semana!`,
+      );
+    } else {
+      setMessage(
+        `Reservamos ${bookedCount} de ${results.length} días de esa semana. Algunos días no tenían cupo, ya estaban reservados o se quedaron sin clases disponibles.`,
+      );
+    }
+
+    setSelectedScheduleId('');
 
     await Promise.all([
       loadStudentClasses(),
@@ -866,6 +945,7 @@ export default function GroupClassesDashboard() {
             disabled={
               !selectedScheduleId ||
               isReserving ||
+              isReservingWeek ||
               availableClasses <= 0
             }
           >
@@ -875,6 +955,22 @@ export default function GroupClassesDashboard() {
                 ? 'Compra clases para reservar'
                 : 'Confirmar reserva'}
           </button>
+
+          {selectedScheduleId && availableClasses > 0 ? (
+            <button
+              type="button"
+              className={styles.reserveWeekButton}
+              onClick={handleReserveWeek}
+              disabled={
+                isReserving ||
+                isReservingWeek
+              }
+            >
+              {isReservingWeek
+                ? 'Reservando la semana...'
+                : 'Reservar toda la semana (lun–vie)'}
+            </button>
+          ) : null}
 
           {availableClasses <= 0 && !isLoading ? (
             <Link
