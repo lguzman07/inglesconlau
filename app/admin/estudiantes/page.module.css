@@ -108,6 +108,55 @@
   border-radius: 14px;
 }
 
+.filterRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.levelFilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.levelFilter button {
+  padding: 0.5rem 0.9rem;
+  color: var(--text-light);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.levelFilterActive {
+  color: var(--surface-solid) !important;
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.activeToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.activeToggle input {
+  width: 18px;
+  height: 18px;
+}
+
 .requestGrid,
 .studentGrid {
   display: grid;
@@ -375,7 +424,9 @@
 .balanceControls input:focus-visible,
 .balanceControls button:focus-visible,
 .bookingsToggle:focus-visible,
-.cancelBookingButton:focus-visible {
+.cancelBookingButton:focus-visible,
+.levelFilter button:focus-visible,
+.activeToggle input:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }

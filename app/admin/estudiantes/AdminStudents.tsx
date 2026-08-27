@@ -14,6 +14,7 @@ export type AdminStudent = {
   available_classes: number;
   total_purchased: number;
   joined_at: string;
+  has_upcoming_class: boolean;
 };
 
 export type StudentBooking = {
@@ -74,6 +75,8 @@ export default function AdminStudents({
   const [students, setStudents] = useState(initialStudents);
   const [requests, setRequests] = useState(initialRequests);
   const [search, setSearch] = useState('');
+  const [levelFilter, setLevelFilter] = useState('all');
+  const [onlyActive, setOnlyActive] = useState(true);
   const [draftBalances, setDraftBalances] = useState<Record<string, string>>(
     () =>
       Object.fromEntries(
@@ -94,16 +97,31 @@ export default function AdminStudents({
   const [bookingsError, setBookingsError] = useState<Record<string, string>>({});
   const [cancellingBookingId, setCancellingBookingId] = useState<string | null>(null);
 
+  const levels = useMemo(
+    () =>
+      Array.from(new Set(students.map((student) => student.english_level))).sort((a, b) =>
+        a.localeCompare(b, 'es'),
+      ),
+    [students],
+  );
+
   const filteredStudents = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query) return students;
 
-    return students.filter((student) =>
-      [student.full_name, student.email, student.english_level].some((value) =>
+    return students.filter((student) => {
+      if (levelFilter !== 'all' && student.english_level !== levelFilter) return false;
+
+      if (onlyActive && student.available_classes <= 0 && !student.has_upcoming_class) {
+        return false;
+      }
+
+      if (!query) return true;
+
+      return [student.full_name, student.email, student.english_level].some((value) =>
         value.toLowerCase().includes(query),
-      ),
-    );
-  }, [search, students]);
+      );
+    });
+  }, [search, students, levelFilter, onlyActive]);
 
   function updateStudentBalance(
     userId: string,
@@ -343,9 +361,49 @@ export default function AdminStudents({
 
       <section className={styles.panel}>
         <div className={styles.toolbar}>
-          <div><h2>Todos los estudiantes</h2><p>{students.length} cuentas registradas</p></div>
+          <div>
+            <h2>Todos los estudiantes</h2>
+            <p>{filteredStudents.length} de {students.length} cuentas</p>
+          </div>
           <label className={styles.searchField}><span>Buscar</span><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Nombre, correo o nivel" /></label>
         </div>
+
+        <div className={styles.filterRow}>
+          <div className={styles.levelFilter}>
+            <button
+              type="button"
+              className={levelFilter === 'all' ? styles.levelFilterActive : ''}
+              onClick={() => setLevelFilter('all')}
+            >
+              Todos los niveles
+            </button>
+            {levels.map((level) => (
+              <button
+                key={level}
+                type="button"
+                className={levelFilter === level ? styles.levelFilterActive : ''}
+                onClick={() => setLevelFilter(level)}
+              >
+                {level}
+              </button>
+            ))}
+          </div>
+
+          <label className={styles.activeToggle}>
+            <input
+              type="checkbox"
+              checked={onlyActive}
+              onChange={(event) => setOnlyActive(event.target.checked)}
+            />
+            <span>Solo con clases disponibles o agendadas</span>
+          </label>
+        </div>
+
+        {filteredStudents.length === 0 ? (
+          <div className={styles.emptyState}>
+            Ningún estudiante coincide con estos filtros.
+          </div>
+        ) : null}
 
         <div className={styles.studentGrid}>
           {filteredStudents.map((student) => (
