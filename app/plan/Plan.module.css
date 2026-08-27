@@ -76,11 +76,26 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   box-sizing: border-box;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.planCard:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--primary);
 }
 
 .availableCard {
   border: 2px solid var(--primary);
   box-shadow: var(--shadow-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planCard,
+  .planCard:hover {
+    transition: none;
+    transform: none;
+  }
 }
 
 .planHeading {

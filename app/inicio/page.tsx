@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
+import CountUp from '@/components/CountUp/CountUp';
 import GroupClassesDashboard from '@/components/GroupClassesDashboard/GroupClassesDashboard';
 import ProfileCompletionCard from '@/components/ProfileCompletionCard/ProfileCompletionCard';
 import { getLessonTitle } from '@/content/lecciones/catalog';
@@ -11,6 +12,7 @@ import { createClient } from '@/lib/supabase/client';
 import styles from './Inicio.module.css';
 
 const TOTAL_LESSONS = 400;
+const LESSONS_PER_LEVEL = 80;
 const LAST_LESSON_STORAGE_KEY = 'inglesconlau-last-opened-lesson';
 const LEVEL_ORDER = ['a1', 'a2', 'b1', 'b2', 'c1'];
 
@@ -49,6 +51,7 @@ export default function InicioPage() {
   const [savedFlashcards, setSavedFlashcards] = useState(0);
   const [lastLessonKey, setLastLessonKey] = useState('a1/1');
   const [furthestLessonKey, setFurthestLessonKey] = useState('a1/1');
+  const [levelProgress, setLevelProgress] = useState<Record<string, number>>({});
 
   useEffect(() => {
     function syncLastOpenedLesson() {
@@ -145,8 +148,15 @@ export default function InicioPage() {
       );
       const furthest = [...progressKeys].sort(compareLessonKeys).at(-1);
 
+      const levelCounts: Record<string, number> = {};
+      for (const key of progressKeys) {
+        const [level] = key.split('/');
+        levelCounts[level] = (levelCounts[level] ?? 0) + 1;
+      }
+
       setLastLessonKey(storedLast ?? databaseLast);
       setFurthestLessonKey(furthest ?? 'a1/1');
+      setLevelProgress(levelCounts);
       setIsLoadingProfile(false);
     }
 
@@ -290,9 +300,42 @@ export default function InicioPage() {
           <h2>Tu progreso</h2>
           <div className={styles.summaryGrid}>
             <article><span>Nivel indicado</span><strong>{indicatedLevel || 'No indicado'}</strong></article>
-            <article><span>Progreso general</span><strong>{generalProgress.toFixed(2)}%</strong></article>
-            <article><span>Lecciones completadas</span><strong>{completedLessons} de {TOTAL_LESSONS}</strong></article>
-            <article><span>Vocabulary Building</span><strong>{savedFlashcards}</strong><Link href="/flashcards">Repasar flashcards →</Link></article>
+            <article><span>Progreso general</span><strong><CountUp value={generalProgress} decimals={2} suffix="%" /></strong></article>
+            <article><span>Lecciones completadas</span><strong><CountUp value={completedLessons} /> de {TOTAL_LESSONS}</strong></article>
+            <article><span>Vocabulary Building</span><strong><CountUp value={savedFlashcards} /></strong><Link href="/flashcards">Repasar flashcards →</Link></article>
+          </div>
+
+          <div className={styles.levelBadgeRow}>
+            {LEVEL_ORDER.map((level) => {
+              const completed = levelProgress[level] ?? 0;
+              const isComplete = completed >= LESSONS_PER_LEVEL;
+
+              return (
+                <Link
+                  key={level}
+                  href={`/lecciones/${level}`}
+                  className={`${styles.levelBadge} ${
+                    isComplete
+                      ? styles.levelBadgeComplete
+                      : completed > 0
+                        ? styles.levelBadgeStarted
+                        : ''
+                  }`}
+                >
+                  <span className={styles.levelBadgeIcon} aria-hidden="true">
+                    {isComplete ? '✓' : level.toUpperCase()}
+                  </span>
+                  <span className={styles.levelBadgeLabel}>
+                    {level.toUpperCase()}
+                    <small>
+                      {isComplete
+                        ? '¡Completado!'
+                        : `${completed} de ${LESSONS_PER_LEVEL}`}
+                    </small>
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </section>
 

@@ -148,7 +148,23 @@
 .lessonCard:focus-visible {
     border-color: var(--primary);
     background: var(--surface-soft);
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px -12px color-mix(in srgb, var(--primary) 40%, transparent);
+}
+
+.lessonCard:active {
+    transform: translateY(-1px);
+    transition-duration: 0.06s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lessonCard,
+    .lessonCard:hover,
+    .lessonCard:focus-visible,
+    .lessonCard:active {
+        transition: none;
+        transform: none;
+    }
 }
 
 .lessonNumber {
