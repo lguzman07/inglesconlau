@@ -54,6 +54,11 @@ function formatMoney(value: number) {
   return new Intl.NumberFormat('es-DO').format(value);
 }
 
+function formatDate(value: string) {
+  const [year, month, day] = value.split('-');
+  return `${day}/${month}/${year}`;
+}
+
 function formatTime(value: string) {
   const [hours, minutes] = value.split(':').map(Number);
   return new Intl.DateTimeFormat('es-DO', {
@@ -347,7 +352,7 @@ export default function AdminStudents({
                   <div><dt>Paquete</dt><dd>{request.package_classes} clases</dd></div>
                   <div><dt>Monto</dt><dd>RD${formatMoney(Number(request.price_dop))}</dd></div>
                   <div><dt>Horario</dt><dd>{formatTime(request.starts_at)}–{formatTime(request.ends_at)}</dd></div>
-                  <div><dt>Periodo</dt><dd>{request.week_start} → {request.reservation_end_date}</dd></div>
+                  <div><dt>Periodo</dt><dd>{formatDate(request.week_start)} → {formatDate(request.reservation_end_date)}</dd></div>
                 </dl>
                 <div className={styles.requestActions}>
                   <button type="button" className={styles.rejectButton} disabled={busyId === request.request_id} onClick={() => reviewRequest(request, false)}>Rechazar</button>
