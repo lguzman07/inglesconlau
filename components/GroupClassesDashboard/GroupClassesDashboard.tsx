@@ -746,6 +746,15 @@ export default function GroupClassesDashboard() {
                 {level.label}
               </button>
             ))}
+
+            <button
+              type="button"
+              className={styles.levelButton}
+              disabled
+              title="Próximamente"
+            >
+              C1 · Próximamente
+            </button>
           </div>
 
           <h4>Elige la fecha y el horario</h4>

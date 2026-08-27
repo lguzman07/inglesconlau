@@ -135,6 +135,20 @@
   outline-offset: 2px;
 }
 
+.levelButton:disabled {
+  color: var(--text-light);
+  cursor: not-allowed;
+  background: transparent;
+  border-style: dashed;
+  opacity: 0.75;
+}
+
+.levelButton:disabled:hover {
+  color: var(--text-light);
+  background: transparent;
+  border-color: var(--border);
+}
+
 .dateField {
   position: relative;
   display: grid;

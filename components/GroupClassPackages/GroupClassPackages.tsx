@@ -417,6 +417,19 @@ export default function GroupClassPackages({
                 </div>
               </div>
             ))}
+
+            <div className={styles.levelGroup}>
+              <h4>C1</h4>
+              <div className={styles.scheduleGrid}>
+                <div className={styles.scheduleCardComingSoon}>
+                  <span>
+                    <strong>Grupo C1</strong>
+                    <small>Horario por anunciar</small>
+                  </span>
+                  <em>Próximamente</em>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

@@ -44,6 +44,10 @@
 .scheduleCard:not(:disabled):hover { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); transform: translateY(-2px); }
 .scheduleCardSelected { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
 .scheduleCard:disabled { cursor: not-allowed; opacity: .55; }
+.scheduleCardComingSoon { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 76px; padding: 14px 16px; color: var(--text-light); font: inherit; text-align: left; background: var(--surface-soft); border: 1px dashed var(--border); border-radius: 14px; opacity: .75; }
+.scheduleCardComingSoon span { display: grid; gap: 4px; }
+.scheduleCardComingSoon small { color: var(--text-light); }
+.scheduleCardComingSoon em { color: var(--text-light); font-size: .78rem; font-style: normal; font-weight: 800; text-align: right; }
 
 @media (prefers-reduced-motion: reduce) {
   .packageCard, .packageCard:hover, .packageCardSelected,
@@ -84,6 +88,6 @@
   .section, .scheduleSection { padding: 22px; border-radius: 20px; }
   .packageCard, .purchaseSummary, .paymentCard { padding: 20px; }
   .paymentDetails { grid-template-columns: 1fr; }
-  .scheduleCard { align-items: flex-start; flex-direction: column; }
-  .scheduleCard em { text-align: left; }
+  .scheduleCard, .scheduleCardComingSoon { align-items: flex-start; flex-direction: column; }
+  .scheduleCard em, .scheduleCardComingSoon em { text-align: left; }
 }
