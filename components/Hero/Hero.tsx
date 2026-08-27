@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import HeroDemo from './HeroDemo';
+
 export default function Hero() {
   return (
     <section className="home">
@@ -37,6 +39,8 @@ export default function Hero() {
             </span>
           </button>
         </div>
+
+        <HeroDemo />
       </div>
     </section>
   );
