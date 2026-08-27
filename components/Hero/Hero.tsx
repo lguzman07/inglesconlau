@@ -25,19 +25,24 @@ export default function Hero() {
             <span className="button-title">Ver los planes</span>
 
             <span className="button-subtitle">
-              Desde RD$600 a la semana
+              Clase de prueba desde RD$100
             </span>
           </Link>
 
-          <button type="button" className="secondary-button">
+          <a
+            href="https://wa.me/18096504884?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20grupales"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="secondary-button"
+          >
             <span className="button-title">
-              ▶ Ver cómo funciona
+              💬 Escríbeme por WhatsApp
             </span>
 
             <span className="button-subtitle">
-              Video demo próximamente
+              809-650-4884
             </span>
-          </button>
+          </a>
         </div>
 
         <HeroDemo />

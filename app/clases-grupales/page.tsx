@@ -20,11 +20,31 @@ const benefits = [
   'Práctica oral, corrección y acompañamiento en vivo',
 ];
 
+function getDominicanToday() {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'America/Santo_Domingo',
+  }).formatToParts(new Date());
+
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+function getDaysUntilStart() {
+  const today = new Date(`${getDominicanToday()}T00:00:00`);
+  const start = new Date('2026-09-14T00:00:00');
+  return Math.round((start.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+}
+
 export default async function ClasesGrupalesPage() {
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  const daysUntilStart = getDaysUntilStart();
 
   const paymentDetails = {
     bankName: process.env.GROUP_CLASS_BANK_NAME ?? '',
@@ -47,7 +67,11 @@ export default async function ClasesGrupalesPage() {
         <section className={styles.hero}>
           <div className={styles.heroContent}>
             <span className={styles.badge}>CLASES EN VIVO</span>
-            <p className={styles.eyebrow}>INICIO · 14 DE SEPTIEMBRE DE 2026</p>
+            <p className={styles.eyebrow}>
+              {daysUntilStart > 0
+                ? `FALTAN ${daysUntilStart} DÍA${daysUntilStart === 1 ? '' : 'S'} · INICIO 14 DE SEPTIEMBRE`
+                : 'INICIO · 14 DE SEPTIEMBRE DE 2026'}
+            </p>
             <h1>Elige primero el horario que funciona para ti</h1>
             <p className={styles.heroDescription}>
               Las clases duran 16 semanas. Antes de pagar verás el nivel, el
@@ -66,8 +90,9 @@ export default async function ClasesGrupalesPage() {
           </div>
 
           <aside className={styles.priceCard} aria-label="Opciones de compra">
-            <p className={styles.priceLabel}>TRES OPCIONES</p>
+            <p className={styles.priceLabel}>CUATRO OPCIONES</p>
             <div className={styles.packageSummary}>
+              <strong>1</strong><span>clase de prueba · RD$100</span>
               <strong>5</strong><span>clases · 1 semana</span>
               <strong>20</strong><span>clases · 4 semanas</span>
               <strong>80</strong><span>clases · curso completo</span>
@@ -79,7 +104,11 @@ export default async function ClasesGrupalesPage() {
           </aside>
         </section>
 
-        <GroupClassPackages paymentDetails={paymentDetails} isLoggedIn={!!user} />
+        <GroupClassPackages
+          paymentDetails={paymentDetails}
+          isLoggedIn={!!user}
+          daysUntilStart={daysUntilStart}
+        />
 
         <section className={styles.benefitsSection} aria-labelledby="benefits-title">
           <div>

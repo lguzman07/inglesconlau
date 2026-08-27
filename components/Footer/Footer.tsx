@@ -85,6 +85,18 @@ export default function Footer() {
                 eventos@inglesconlau.com
               </a>
             </li>
+
+            <li>
+              <span>WhatsApp</span>
+
+              <a
+                href="https://wa.me/18096504884?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20grupales"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                809-650-4884
+              </a>
+            </li>
           </ul>
         </div>
       </div>

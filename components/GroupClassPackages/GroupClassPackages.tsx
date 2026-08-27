@@ -20,6 +20,7 @@ type PaymentDetails = {
 type GroupClassPackagesProps = {
   paymentDetails: PaymentDetails;
   isLoggedIn: boolean;
+  daysUntilStart: number;
 };
 
 type PendingSelection = {
@@ -82,6 +83,14 @@ type ScheduleOption = {
 
 const PACKAGES = [
   {
+    id: 'trial-1',
+    name: 'Clase de prueba',
+    classes: 1,
+    price: 100,
+    regularPrice: 100,
+    description: 'Una sola clase para conocer el método antes de comprar un paquete completo.',
+  },
+  {
     id: 'week-5',
     name: '1 semana',
     classes: 5,
@@ -108,6 +117,24 @@ const PACKAGES = [
 ] as const;
 
 const LEVEL_ORDER = ['a1', 'a2', 'b1', 'b2'];
+
+function getPackageIdFromQuery(): string | null {
+  if (typeof window === 'undefined') return null;
+
+  const params = new URLSearchParams(window.location.search);
+  const paquete = params.get('paquete');
+  if (!paquete) return null;
+
+  const match = PACKAGES.find(
+    (item) => item.id === paquete || String(item.classes) === paquete,
+  );
+
+  return match?.id ?? null;
+}
+
+function classesLabel(count: number) {
+  return count === 1 ? 'clase' : 'clases';
+}
 
 function formatMoney(value: number) {
   return new Intl.NumberFormat('es-DO', {
@@ -142,6 +169,7 @@ function PaymentRow({ label, value }: { label: string; value: string }) {
 export default function GroupClassPackages({
   paymentDetails,
   isLoggedIn,
+  daysUntilStart,
 }: GroupClassPackagesProps) {
   const supabase = useMemo(() => createClient(), []);
 
@@ -149,8 +177,12 @@ export default function GroupClassPackages({
     () => (isLoggedIn ? (readPendingSelection()?.scheduleId ?? null) : null),
   );
   const [selectedPackageId, setSelectedPackageId] = useState<string>(() => {
-    if (!isLoggedIn) return 'four-weeks-20';
-    return readPendingSelection()?.packageId ?? 'four-weeks-20';
+    if (isLoggedIn) {
+      const pendingPackageId = readPendingSelection()?.packageId;
+      if (pendingPackageId) return pendingPackageId;
+    }
+
+    return getPackageIdFromQuery() ?? 'four-weeks-20';
   });
   const [schedules, setSchedules] = useState<ScheduleOption[]>([]);
   const [selectedScheduleId, setSelectedScheduleId] = useState('');
@@ -255,14 +287,14 @@ export default function GroupClassPackages({
 
     if (paymentDetails.paymentEmail) {
       const subject = encodeURIComponent(
-        `Comprobante ${requestId}: ${selectedPackage.classes} clases`,
+        `Comprobante ${requestId}: ${selectedPackage.classes} ${classesLabel(selectedPackage.classes)}`,
       );
       const body = encodeURIComponent(
         [
           'Hola, Lau:',
           '',
           `Solicitud: ${requestId}`,
-          `Paquete: ${selectedPackage.name} (${selectedPackage.classes} clases)`,
+          `Paquete: ${selectedPackage.name} (${selectedPackage.classes} ${classesLabel(selectedPackage.classes)})`,
           `Monto: RD$${formatMoney(selectedPackage.price)}`,
           `Nivel: ${selectedSchedule.level.toUpperCase()}`,
           `Horario: ${selectedSchedule.label}, ${formatTime(selectedSchedule.starts_at)}–${formatTime(selectedSchedule.ends_at)}`,
@@ -281,7 +313,11 @@ export default function GroupClassPackages({
   return (
     <section id="comprar" className={styles.section} aria-labelledby="packages-title">
       <div className={styles.heading}>
-        <p className={styles.eyebrow}>INSCRIPCIÓN · 14 DE SEPTIEMBRE</p>
+        <p className={styles.eyebrow}>
+          {daysUntilStart > 0
+            ? `FALTAN ${daysUntilStart} DÍA${daysUntilStart === 1 ? '' : 'S'} PARA EL INICIO`
+            : 'INSCRIPCIÓN · 14 DE SEPTIEMBRE'}
+        </p>
         <h2 id="packages-title">Primero elige tu paquete y tu horario</h2>
         <p>
           Todas las clases comienzan el 14 de septiembre de 2026. Tu horario
@@ -315,7 +351,9 @@ export default function GroupClassPackages({
                 </span>
               ) : null}
               <span className={styles.packageName}>{item.name}</span>
-              <strong className={styles.classCount}>{item.classes} clases</strong>
+              <strong className={styles.classCount}>
+                {item.classes} {classesLabel(item.classes)}
+              </strong>
               <span className={styles.packagePrice}>
                 <small>RD$</small>{formatMoney(item.price)}
               </span>
@@ -388,7 +426,7 @@ export default function GroupClassPackages({
           <p>RESUMEN</p>
           <h3>{selectedPackage.name}</h3>
           <span>
-            {selectedPackage.classes} clases · RD${formatMoney(selectedPackage.price)}
+            {selectedPackage.classes} {classesLabel(selectedPackage.classes)} · RD${formatMoney(selectedPackage.price)}
           </span>
           <strong>
             {selectedSchedule

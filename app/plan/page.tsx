@@ -12,6 +12,21 @@ const platformBenefits = [
 
 const groupClassPackages = [
   {
+    id: '1',
+    name: 'Clase de prueba',
+    amount: '100',
+    period: '/1 clase',
+    badge: 'Pruébalo primero',
+    button: 'Comprar clase de prueba',
+    benefits: [
+      '1 clase grupal en vivo de una hora.',
+      'Conoce el método antes de comprar un paquete completo.',
+      'Puedes escoger entre A1, A2, B1 y B2.',
+      'Eliges la fecha y el horario de la clase.',
+      'Máximo 10 estudiantes por grupo.',
+    ],
+  },
+  {
     id: '5',
     name: 'Paquete flexible',
     amount: '600',
