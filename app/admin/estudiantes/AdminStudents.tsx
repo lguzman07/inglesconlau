@@ -59,6 +59,40 @@ function formatDate(value: string) {
   return `${day}/${month}/${year}`;
 }
 
+function getMonthKey(value: string) {
+  return value.slice(0, 7);
+}
+
+function formatMonthLabel(monthKey: string) {
+  const [year, month] = monthKey.split('-').map(Number);
+  const formatted = new Intl.DateTimeFormat('es-DO', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(Date.UTC(year, month - 1, 1)));
+
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+}
+
+function groupBookingsByMonth(bookings: StudentBooking[]) {
+  const groups = new Map<string, StudentBooking[]>();
+
+  for (const booking of bookings) {
+    const key = getMonthKey(booking.class_date);
+    const existing = groups.get(key);
+    if (existing) {
+      existing.push(booking);
+    } else {
+      groups.set(key, [booking]);
+    }
+  }
+
+  return Array.from(groups.entries()).map(([monthKey, monthBookings]) => ({
+    monthKey,
+    bookings: monthBookings,
+  }));
+}
+
 function formatTime(value: string) {
   const [hours, minutes] = value.split(':').map(Number);
   return new Intl.DateTimeFormat('es-DO', {
@@ -443,35 +477,45 @@ export default function AdminStudents({
                     ) : (bookingsByStudent[student.user_id]?.filter((booking) => booking.status === 'reserved').length ?? 0) === 0 ? (
                       <p className={styles.inlineError}>No tiene clases reservadas.</p>
                     ) : (
-                      <ul>
-                        {bookingsByStudent[student.user_id]
-                          ?.filter((booking) => booking.status === 'reserved')
-                          .map((booking) => (
-                            <li key={booking.booking_id}>
-                              <span>
-                                {new Intl.DateTimeFormat('es-DO', { dateStyle: 'medium' }).format(
-                                  new Date(`${booking.class_date}T00:00:00`),
-                                )}
-                              </span>
-                              <span>
-                                {booking.level.toUpperCase()} · {booking.label} ·{' '}
-                                {formatTime(booking.starts_at)}–{formatTime(booking.ends_at)}
-                              </span>
-                              <span className={styles.bookingRowEnd}>
-                                <button
-                                  type="button"
-                                  className={styles.cancelBookingButton}
-                                  onClick={() => cancelBooking(student.user_id, booking)}
-                                  disabled={cancellingBookingId === booking.booking_id}
-                                >
-                                  {cancellingBookingId === booking.booking_id
-                                    ? 'Cancelando…'
-                                    : 'Cancelar reserva'}
-                                </button>
-                              </span>
-                            </li>
-                          ))}
-                      </ul>
+                      groupBookingsByMonth(
+                        (bookingsByStudent[student.user_id] ?? [])
+                          .filter((booking) => booking.status === 'reserved')
+                          .sort((a, b) => a.class_date.localeCompare(b.class_date)),
+                      ).map(({ monthKey, bookings: monthBookings }) => (
+                        <details key={monthKey} className={styles.monthGroup}>
+                          <summary>
+                            {formatMonthLabel(monthKey)} ({monthBookings.length}{' '}
+                            {monthBookings.length === 1 ? 'clase' : 'clases'})
+                          </summary>
+                          <ul>
+                            {monthBookings.map((booking) => (
+                              <li key={booking.booking_id}>
+                                <span>
+                                  {new Intl.DateTimeFormat('es-DO', { dateStyle: 'medium' }).format(
+                                    new Date(`${booking.class_date}T00:00:00`),
+                                  )}
+                                </span>
+                                <span>
+                                  {booking.level.toUpperCase()} · {booking.label} ·{' '}
+                                  {formatTime(booking.starts_at)}–{formatTime(booking.ends_at)}
+                                </span>
+                                <span className={styles.bookingRowEnd}>
+                                  <button
+                                    type="button"
+                                    className={styles.cancelBookingButton}
+                                    onClick={() => cancelBooking(student.user_id, booking)}
+                                    disabled={cancellingBookingId === booking.booking_id}
+                                  >
+                                    {cancellingBookingId === booking.booking_id
+                                      ? 'Cancelando…'
+                                      : 'Cancelar reserva'}
+                                  </button>
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </details>
+                      ))
                     )}
                   </div>
                 ) : null}

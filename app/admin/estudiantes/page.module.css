@@ -307,13 +307,51 @@
 
 .bookingsList {
   margin-top: 1rem;
+  display: grid;
+  gap: 0.6rem;
 }
 
-.bookingsList ul {
+.monthGroup {
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  overflow: hidden;
+}
+
+.monthGroup summary {
+  padding: 0.75rem 0.9rem;
+  color: var(--text);
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+}
+
+.monthGroup summary::-webkit-details-marker {
+  display: none;
+}
+
+.monthGroup summary::before {
+  content: '▸';
+  display: inline-block;
+  margin-right: 0.5rem;
+  color: var(--primary);
+  transition: transform 0.15s ease;
+}
+
+.monthGroup[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.monthGroup summary:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.monthGroup ul {
   display: grid;
   gap: 0.6rem;
   margin: 0;
-  padding: 0;
+  padding: 0 0.9rem 0.9rem;
   list-style: none;
 }
 
