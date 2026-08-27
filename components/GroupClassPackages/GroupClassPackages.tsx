@@ -164,7 +164,7 @@ export default function GroupClassPackages({
 
     const requestId = String(data);
     setSuccess(
-      'Tu horario quedó apartado por 48 horas. Envía el comprobante para que Lau pueda aprobarlo.',
+      'Tu horario quedó apartado por 2 horas. Envía el comprobante para que Lau pueda aprobarlo.',
     );
 
     if (paymentDetails.paymentEmail) {
@@ -316,7 +316,7 @@ export default function GroupClassPackages({
           <h3>Realiza la transferencia</h3>
           <p className={styles.paymentIntro}>
             Transfiere exactamente RD${formatMoney(selectedPackage.price)}.
-            Al continuar, tu horario se apartará durante 48 horas.
+            Al continuar, tu horario se apartará durante 2 horas.
           </p>
 
           <dl className={styles.paymentDetails}>
