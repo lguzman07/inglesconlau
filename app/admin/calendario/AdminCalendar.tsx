@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 
 import styles from './page.module.css';
 
-export type WeekBooking = {
+export type CalendarBooking = {
   booking_id: string;
   class_date: string;
   status: string;
@@ -20,16 +20,47 @@ export type WeekBooking = {
   student_email: string;
 };
 
-const DAY_LABELS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+const WEEK_DAY_LABELS = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'];
 
-function addDays(isoDate: string, amount: number) {
-  const date = new Date(`${isoDate}T12:00:00-04:00`);
-  date.setDate(date.getDate() + amount);
-
+function toIsoDate(date: Date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+function getMonthStart(isoDate: string) {
+  return `${isoDate.slice(0, 7)}-01`;
+}
+
+function changeMonth(monthStart: string, amount: number) {
+  const [year, month] = monthStart.split('-').map(Number);
+  return toIsoDate(new Date(year, month - 1 + amount, 1));
+}
+
+function getGridDays(monthStart: string) {
+  const [year, month] = monthStart.split('-').map(Number);
+  const firstDay = new Date(year, month - 1, 1);
+  const mondayOffset = (firstDay.getDay() + 6) % 7;
+
+  const gridStart = new Date(firstDay);
+  gridStart.setDate(gridStart.getDate() - mondayOffset);
+
+  return Array.from({ length: 42 }, (_, index) => {
+    const day = new Date(gridStart);
+    day.setDate(day.getDate() + index);
+    return toIsoDate(day);
+  });
+}
+
+function formatMonthLabel(monthStart: string) {
+  const [year, month] = monthStart.split('-').map(Number);
+  const formatted = new Intl.DateTimeFormat('es-DO', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(Date.UTC(year, month - 1, 1)));
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
 
 function formatShortDate(isoDate: string) {
@@ -38,11 +69,6 @@ function formatShortDate(isoDate: string) {
     month: 'short',
     timeZone: 'UTC',
   }).format(new Date(`${isoDate}T12:00:00Z`));
-}
-
-function formatWeekRange(weekStart: string) {
-  const weekEnd = addDays(weekStart, 4);
-  return `${formatShortDate(weekStart)} – ${formatShortDate(weekEnd)}`;
 }
 
 function formatTime(value: string) {
@@ -55,6 +81,13 @@ function formatTime(value: string) {
   }).format(new Date(Date.UTC(2026, 0, 1, hours, minutes)));
 }
 
+function formatShortTime(value: string) {
+  const [hours24, minutes] = value.split(':').map(Number);
+  const period = hours24 >= 12 ? 'p' : 'a';
+  const hours12 = hours24 % 12 === 0 ? 12 : hours24 % 12;
+  return minutes === 0 ? `${hours12}${period}` : `${hours12}:${String(minutes).padStart(2, '0')}${period}`;
+}
+
 type ClassGroup = {
   key: string;
   class_date: string;
@@ -63,18 +96,18 @@ type ClassGroup = {
   label: string;
   starts_at: string;
   ends_at: string;
-  students: WeekBooking[];
+  students: CalendarBooking[];
 };
 
 export default function AdminCalendar({
-  initialWeekStart,
+  initialMonthStart,
   initialBookings,
 }: {
-  initialWeekStart: string;
-  initialBookings: WeekBooking[];
+  initialMonthStart: string;
+  initialBookings: CalendarBooking[];
 }) {
   const supabase = useMemo(() => createClient(), []);
-  const [weekStart, setWeekStart] = useState(initialWeekStart);
+  const [monthStart, setMonthStart] = useState(initialMonthStart);
   const [bookings, setBookings] = useState(initialBookings);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -82,10 +115,7 @@ export default function AdminCalendar({
   const [cancellingBookingId, setCancellingBookingId] = useState<string | null>(null);
   const [cancelError, setCancelError] = useState('');
 
-  const days = useMemo(
-    () => Array.from({ length: 5 }, (_, index) => addDays(weekStart, index)),
-    [weekStart],
-  );
+  const days = useMemo(() => getGridDays(monthStart), [monthStart]);
 
   const groupsByDay = useMemo(() => {
     const map = new Map<string, Map<string, ClassGroup>>();
@@ -131,13 +161,15 @@ export default function AdminCalendar({
     return null;
   }, [selectedKey, groupsByDay]);
 
-  async function loadWeek(nextWeekStart: string) {
+  async function loadMonth(nextMonthStart: string) {
     setIsLoading(true);
     setError('');
     setSelectedKey(null);
 
-    const { data, error: fetchError } = await supabase.rpc('admin_list_week_bookings', {
-      p_week_start: nextWeekStart,
+    const gridDays = getGridDays(nextMonthStart);
+    const { data, error: fetchError } = await supabase.rpc('admin_list_bookings_range', {
+      p_start_date: gridDays[0],
+      p_end_date: gridDays[gridDays.length - 1],
     });
 
     setIsLoading(false);
@@ -147,11 +179,11 @@ export default function AdminCalendar({
       return;
     }
 
-    setWeekStart(nextWeekStart);
-    setBookings((data ?? []) as WeekBooking[]);
+    setMonthStart(nextMonthStart);
+    setBookings((data ?? []) as CalendarBooking[]);
   }
 
-  async function cancelBooking(booking: WeekBooking) {
+  async function cancelBooking(booking: CalendarBooking) {
     if (cancellingBookingId) return;
     setCancellingBookingId(booking.booking_id);
     setCancelError('');
@@ -179,62 +211,59 @@ export default function AdminCalendar({
     <section className={styles.panel}>
       <div className={styles.toolbar}>
         <div>
-          <h2>Semana del {formatWeekRange(weekStart)}</h2>
+          <h2>{formatMonthLabel(monthStart)}</h2>
           <p>Haz clic en una clase para ver quién la reservó.</p>
         </div>
         <div className={styles.weekNav}>
-          <button type="button" onClick={() => loadWeek(addDays(weekStart, -7))} disabled={isLoading}>
-            ← Semana anterior
+          <button type="button" onClick={() => loadMonth(changeMonth(monthStart, -1))} disabled={isLoading}>
+            ← Mes anterior
           </button>
           <button
             type="button"
             className={styles.discardButton}
-            onClick={() => loadWeek(initialWeekStart)}
+            onClick={() => loadMonth(getMonthStart(initialMonthStart))}
             disabled={isLoading}
           >
-            Esta semana
+            Este mes
           </button>
-          <button type="button" onClick={() => loadWeek(addDays(weekStart, 7))} disabled={isLoading}>
-            Semana siguiente →
+          <button type="button" onClick={() => loadMonth(changeMonth(monthStart, 1))} disabled={isLoading}>
+            Mes siguiente →
           </button>
         </div>
       </div>
 
       {error ? <p className={styles.inlineError}>{error}</p> : null}
 
-      <div className={styles.calendarGrid}>
-        {days.map((day, index) => {
+      <div className={styles.monthGrid}>
+        {WEEK_DAY_LABELS.map((label) => (
+          <div key={label} className={styles.monthDayLabel}>{label}</div>
+        ))}
+
+        {days.map((day) => {
+          const isOutsideMonth = day.slice(0, 7) !== monthStart.slice(0, 7);
           const dayGroups = [...(groupsByDay.get(day)?.values() ?? [])].sort((a, b) =>
             a.starts_at.localeCompare(b.starts_at),
           );
+          const dayNumber = Number(day.slice(8, 10));
 
           return (
-            <div key={day} className={styles.dayColumn}>
-              <div className={styles.dayHeading}>
-                <strong>{DAY_LABELS[index]}</strong>
-                <span>{formatShortDate(day)}</span>
-              </div>
+            <div
+              key={day}
+              className={`${styles.monthCell} ${isOutsideMonth ? styles.monthCellOutside : ''}`}
+            >
+              <span className={styles.monthCellNumber}>{dayNumber}</span>
 
-              {isLoading ? (
-                <p className={styles.emptyDay}>Cargando…</p>
-              ) : dayGroups.length === 0 ? (
-                <p className={styles.emptyDay}>Sin clases reservadas</p>
-              ) : (
-                <div className={styles.classChips}>
+              {isLoading ? null : (
+                <div className={styles.monthChips}>
                   {dayGroups.map((group) => (
                     <button
                       key={group.key}
                       type="button"
-                      className={styles.classChip}
+                      className={styles.monthChip}
                       onClick={() => setSelectedKey(group.key)}
+                      title={`${group.level.toUpperCase()} · ${group.label} · ${formatTime(group.starts_at)}–${formatTime(group.ends_at)} · ${group.students.length} estudiante${group.students.length === 1 ? '' : 's'}`}
                     >
-                      <span className={styles.classChipTime}>
-                        {formatTime(group.starts_at)}–{formatTime(group.ends_at)}
-                      </span>
-                      <span>{group.level.toUpperCase()} · {group.label}</span>
-                      <span className={styles.classChipCount}>
-                        {group.students.length} estudiante{group.students.length === 1 ? '' : 's'}
-                      </span>
+                      {formatShortTime(group.starts_at)} {group.level.toUpperCase()} ({group.students.length})
                     </button>
                   ))}
                 </div>

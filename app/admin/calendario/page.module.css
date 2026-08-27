@@ -106,72 +106,76 @@
   border-color: var(--border) !important;
 }
 
-.calendarGrid {
+.monthGrid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1px;
   margin-top: 1.75rem;
-}
-
-.dayColumn {
-  min-width: 0;
-  padding: 1rem;
-  background: var(--surface-soft);
+  background: var(--border);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  overflow: hidden;
 }
 
-.dayHeading {
+.monthDayLabel {
+  padding: 0.6rem 0.5rem;
+  color: var(--text-light);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+  background: var(--surface-soft);
+}
+
+.monthCell {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  padding-bottom: 0.85rem;
-  margin-bottom: 0.85rem;
-  border-bottom: 1px solid var(--border);
+  gap: 0.35rem;
+  min-height: 110px;
+  padding: 0.5rem;
+  background: var(--surface-solid);
 }
 
-.dayHeading strong {
-  font-size: 0.95rem;
+.monthCellOutside {
+  background: var(--surface-soft);
 }
 
-.dayHeading span {
+.monthCellOutside .monthCellNumber {
   color: var(--text-light);
+}
+
+.monthCellNumber {
   font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.monthChips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.monthChip {
+  padding: 0.2rem 0.4rem;
+  text-align: left;
+  color: var(--primary);
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.3;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: var(--primary-light);
+  border: none;
+  border-radius: 7px;
 }
 
 .emptyDay {
   margin: 0;
   color: var(--text-light);
   font-size: 0.82rem;
-}
-
-.classChips {
-  display: grid;
-  gap: 0.6rem;
-}
-
-.classChip {
-  display: grid;
-  gap: 0.25rem;
-  padding: 0.7rem 0.8rem;
-  text-align: left;
-  color: var(--text);
-  font: inherit;
-  cursor: pointer;
-  background: var(--surface-solid);
-  border: 1px solid var(--border);
-  border-radius: 13px;
-}
-
-.classChipTime {
-  font-weight: 800;
-  font-size: 0.85rem;
-}
-
-.classChipCount {
-  color: var(--primary);
-  font-size: 0.78rem;
-  font-weight: 700;
 }
 
 .inlineError {
@@ -309,17 +313,11 @@
 
 .backLink:focus-visible,
 .weekNav button:focus-visible,
-.classChip:focus-visible,
+.monthChip:focus-visible,
 .modalHeading button:focus-visible,
 .cancelBookingButton:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
-}
-
-@media (max-width: 1000px) {
-  .calendarGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 680px) {
@@ -340,7 +338,16 @@
     flex-direction: column;
   }
 
-  .calendarGrid {
-    grid-template-columns: 1fr;
+  .monthGrid {
+    grid-template-columns: repeat(7, minmax(38px, 1fr));
+    overflow-x: auto;
+  }
+
+  .monthCell {
+    min-height: 70px;
+  }
+
+  .monthChip {
+    font-size: 0.6rem;
   }
 }

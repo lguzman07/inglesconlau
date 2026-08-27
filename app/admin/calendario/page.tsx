@@ -4,12 +4,12 @@ import { redirect } from 'next/navigation';
 
 import { createClient } from '@/lib/supabase/server';
 
-import AdminCalendar, { type WeekBooking } from './AdminCalendar';
+import AdminCalendar, { type CalendarBooking } from './AdminCalendar';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'Calendario de clases | Inglés con Lau',
-  description: 'Consulta qué clases grupales tienen estudiantes reservados cada semana.',
+  description: 'Consulta qué clases grupales tienen estudiantes reservados cada mes.',
 };
 
 function getDominicanToday() {
@@ -24,15 +24,30 @@ function getDominicanToday() {
   return `${values.year}-${values.month}-${values.day}`;
 }
 
-function getWeekStart(isoDate: string) {
-  const date = new Date(`${isoDate}T12:00:00-04:00`);
-  const mondayOffset = (date.getDay() + 6) % 7;
-  date.setDate(date.getDate() - mondayOffset);
-
+function toIsoDate(date: Date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+function getMonthStart(isoDate: string) {
+  return `${isoDate.slice(0, 7)}-01`;
+}
+
+// Monday-start 6-week (42 day) grid range that contains the given month.
+function getGridRange(monthStart: string) {
+  const [year, month] = monthStart.split('-').map(Number);
+  const firstDay = new Date(year, month - 1, 1);
+  const mondayOffset = (firstDay.getDay() + 6) % 7;
+
+  const gridStart = new Date(firstDay);
+  gridStart.setDate(gridStart.getDate() - mondayOffset);
+
+  const gridEnd = new Date(gridStart);
+  gridEnd.setDate(gridEnd.getDate() + 41);
+
+  return { start: toIsoDate(gridStart), end: toIsoDate(gridEnd) };
 }
 
 export default async function AdminCalendarPage() {
@@ -51,10 +66,12 @@ export default async function AdminCalendarPage() {
 
   if (profile?.role !== 'admin') redirect('/inicio');
 
-  const initialWeekStart = getWeekStart(getDominicanToday());
+  const initialMonthStart = getMonthStart(getDominicanToday());
+  const gridRange = getGridRange(initialMonthStart);
 
-  const { data: bookings, error } = await supabase.rpc('admin_list_week_bookings', {
-    p_week_start: initialWeekStart,
+  const { data: bookings, error } = await supabase.rpc('admin_list_bookings_range', {
+    p_start_date: gridRange.start,
+    p_end_date: gridRange.end,
   });
 
   return (
@@ -73,8 +90,8 @@ export default async function AdminCalendarPage() {
           </div>
         ) : (
           <AdminCalendar
-            initialWeekStart={initialWeekStart}
-            initialBookings={(bookings ?? []) as WeekBooking[]}
+            initialMonthStart={initialMonthStart}
+            initialBookings={(bookings ?? []) as CalendarBooking[]}
           />
         )}
       </div>
