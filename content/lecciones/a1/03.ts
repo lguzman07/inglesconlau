@@ -1,7 +1,7 @@
 import type { LessonContent } from '../types';
 
-const lessonA003: LessonContent = {
-  level: 'a0',
+const lessonA1003: LessonContent = {
+  level: 'a1',
 
   number: 3,
 
@@ -415,4 +415,4 @@ const lessonA003: LessonContent = {
   ],
 };
 
-export default lessonA003;
+export default lessonA1003;

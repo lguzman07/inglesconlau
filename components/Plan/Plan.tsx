@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from './Plan.module.css';
 
 const platformBenefits = [
-  'Acceso a todos los niveles, desde A0 hasta C1.',
+  'Acceso a todos los niveles, desde A1 hasta C1.',
   'Cada lección incluye su propio video explicativo.',
   'Ejercicios interactivos con corrección inmediata.',
   'Visualización de tu progreso dentro de la plataforma.',

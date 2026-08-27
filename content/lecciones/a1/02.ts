@@ -1,7 +1,7 @@
 import type { LessonContent } from '../types';
 
-const lessonA002: LessonContent = {
-  level: 'a0',
+const lessonA1002: LessonContent = {
+  level: 'a1',
   number: 2,
   title: 'Contracciones: I’m / My name’s',
   subtitle:
@@ -249,4 +249,4 @@ const lessonA002: LessonContent = {
   ],
 };
 
-export default lessonA002;
+export default lessonA1002;

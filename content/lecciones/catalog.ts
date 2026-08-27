@@ -3,9 +3,9 @@ export const lessonTitles: Record<
   Record<number, string>
 > = {
   a1: {
-    1: 'Presentarte: I am, I’m, My name is y My name’s',
-    2: 'Alfabeto completo A–Z: familias de sonidos, letras fáciles de confundir y dictado',
-    3: 'Las cinco vocales cortas y largas: contraste, identificación y dictado',
+    1: 'Presentarte: I am / My name is',
+    2: 'Contracciones: I’m / My name’s',
+    3: 'A, H, J, K: familia /eɪ/',
     4: 'How do you spell it?: deletrear nombre y apellido, mayúsculas y minúsculas',
     5: 'Correos electrónicos: at, dot, confirmar y corregir letras',
     6: 'Dictado de nombres, apellidos y correos electrónicos',
