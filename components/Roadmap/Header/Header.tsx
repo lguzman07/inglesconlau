@@ -9,7 +9,6 @@ const steps = [
   '🧠 Entender el significado',
   '💬 Practicar la conversación',
   '✍️ Realizar los ejercicios',
-  '📖 Leer en nuestro club',
   '🌎 Vivir el inglés',
 ];
 

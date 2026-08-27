@@ -5,7 +5,7 @@ import styles from "./Roadmap.module.css";
 
 export default function Roadmap() {
   return (
-    <section id="roadmap" className={styles.roadmap}>
+    <section id="methodology" className={styles.roadmap}>
       <div className={styles.container}>
         <Header />
         <StepOne />

@@ -4,24 +4,17 @@ import styles from './Methodology.module.css';
 
 export default function Methodology() {
   return (
-    <section id="methodology" className={styles.methodology}>
+    <section id="historia" className={styles.methodology}>
       <div className={styles.container}>
         <header className={styles.header}>
           <div className={styles.headerText}>
-            <p className={styles.eyebrow}>Nuestra historia</p>
+            <p className={styles.eyebrow}>Mi historia</p>
           </div>
         </header>
 
-        <details className={styles.storyDetails}>
-          <summary className={styles.storySummary}>
-            <span className={styles.closedLabel}>Leer nuestra historia</span>
-            <span className={styles.openLabel}>Cerrar nuestra historia</span>
-            <span className={styles.summaryIcon} aria-hidden="true">+</span>
-          </summary>
-
-          <div className={styles.storyExpanded}>
+        <div className={styles.storyExpanded}>
             <h2 className={styles.title}>
-              Una metodología creada por y para hispanohablantes.
+              El inglés es más fácil de lo que te pintaron.
             </h2>
 
             <div className={`${styles.imageWrapper} ${styles.desktopImage}`}>
@@ -174,8 +167,7 @@ export default function Methodology() {
                 <span> el español.</span>&rdquo;
               </h3>
             </div>
-          </div>
-        </details>
+        </div>
       </div>
     </section>
   );

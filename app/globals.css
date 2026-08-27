@@ -1025,6 +1025,18 @@ select:focus-visible {
   margin: 0 auto;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .section {
   padding: 4rem 0;
 }
@@ -1330,6 +1342,41 @@ html[data-theme='contrast'] .photo-placeholder {
    Hero
 ========================================== */
 
+/* ==========================================
+   Marketing page — fixed dark-navy brand look
+   for the public homepage, independent of the
+   accessibility theme picker (which stays fully
+   in effect for the logged-in app).
+========================================== */
+
+.marketing-page {
+  --background: #0c1220;
+  --surface: rgba(19, 27, 44, 0.92);
+  --surface-solid: #131b2c;
+  --surface-soft: #17213a;
+
+  --primary: #4a86dd;
+  --primary-hover: #6b9be4;
+  --primary-light: #1c2b46;
+
+  --accent: #f0975a;
+
+  --secondary: #1c2942;
+  --secondary-hover: #24314f;
+
+  --text: #f5f7fa;
+  --text-light: #a9b4c7;
+
+  --border: rgba(255, 255, 255, 0.14);
+  --focus: #ffd08a;
+
+  --shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --shadow-hover: 0 14px 34px rgba(0, 0, 0, 0.55);
+
+  background: var(--background);
+  color: var(--text);
+}
+
 .landing-intro {
   display: flow-root;
   padding-top: 116px;
@@ -1378,9 +1425,14 @@ html[data-theme='contrast'] .landing-intro {
 }
 
 .hero h1 {
+  color: var(--text);
   font-size: clamp(3.25rem, 7vw, 4.6rem);
   line-height: 1.05;
   margin-bottom: 0.6rem;
+}
+
+.hero-highlight {
+  color: var(--primary);
 }
 
 .hero-slogan {
@@ -1514,6 +1566,345 @@ html[data-theme='contrast'] .landing-intro {
 .feature-card p {
   color: var(--text-light);
   line-height: 1.8;
+}
+
+/* ==========================================
+   Hero layout: copy + visual columns
+========================================== */
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 3.5rem;
+  align-items: center;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.hero-grid .hero {
+  max-width: none;
+  text-align: left;
+}
+
+.hero-grid .hero-slogan,
+.hero-grid .hero p {
+  margin-left: 0;
+}
+
+.hero-grid .hero-buttons {
+  justify-content: flex-start;
+}
+
+.hero-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.hero-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.hero-checks li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hero-checks li::before {
+  content: '✓';
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+/* ==========================================
+   Learning outcomes strip
+========================================== */
+
+.learning-outcomes {
+  border-top: 1px dashed var(--border);
+  margin-top: 3.5rem;
+  padding: 2.5rem 2rem 0;
+}
+
+.learning-outcomes-grid {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.learning-outcome h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.05rem;
+}
+
+.learning-outcome p {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ==========================================
+   Diseño inclusivo band
+========================================== */
+
+.accessibility-band {
+  background: color-mix(in srgb, var(--surface-soft) 55%, var(--background));
+  border-top: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+}
+
+.accessibility-band .section-grid {
+  align-items: center;
+}
+
+.accessibility-band .section-content p {
+  max-width: 60ch;
+}
+
+.accessibility-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.accessibility-badges li {
+  padding: 0.75rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-solid);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* ==========================================
+   Planes (pricing teaser)
+========================================== */
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.pricing-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+  padding: 1.75rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface-solid);
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition),
+    transform var(--transition);
+}
+
+.pricing-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-4px);
+}
+
+.pricing-card-featured {
+  border-color: var(--primary);
+  box-shadow: var(--shadow);
+}
+
+.pricing-card-badge {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #22150a;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pricing-card-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.pricing-card-price {
+  margin: 0.25rem 0;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.pricing-card-price span {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.pricing-card-detail {
+  margin: 0 0 1rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.pricing-card .primary-button,
+.pricing-card .secondary-button {
+  width: 100%;
+  min-height: 52px;
+  padding: 0.75rem 1rem;
+}
+
+.pricing-card .button-title {
+  font-size: 1rem;
+}
+
+.waitlist-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding: 1.75rem 2rem;
+  border: 1px dashed var(--border);
+  border-radius: 20px;
+  background: var(--surface-solid);
+}
+
+.waitlist-card-text {
+  max-width: 46ch;
+}
+
+.waitlist-card-badge {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--secondary);
+  color: var(--text-light);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.waitlist-card-text h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.15rem;
+}
+
+.waitlist-card-text p {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.waitlist-form {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.waitlist-form input {
+  min-width: 220px;
+  min-height: 48px;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--background);
+  color: var(--text);
+  font: inherit;
+}
+
+.waitlist-form input:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.waitlist-form button {
+  min-height: 48px;
+  padding: 0.6rem 1.4rem;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #22150a;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter var(--transition), transform var(--transition);
+}
+
+.waitlist-form button:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.waitlist-form button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.waitlist-status {
+  width: 100%;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+/* ==========================================
+   Final CTA band
+========================================== */
+
+.final-cta {
+  text-align: center;
+  border-top: 1px dashed var(--border);
+}
+
+.final-cta .section-title {
+  margin-bottom: 0.75rem;
+}
+
+.final-cta p {
+  max-width: 52ch;
+  margin: 0 auto 2rem;
+  color: var(--text-light);
+  font-size: 1.1rem;
+}
+
+.final-cta .hero-buttons {
+  justify-content: center;
 }
 
 /* ==========================================
@@ -1786,6 +2177,45 @@ html[data-theme='contrast'] .faq-question:focus-visible {
     max-width: 420px;
     margin: auto;
   }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2.5rem;
+  }
+
+  .hero-grid .hero,
+  .hero-grid .hero-slogan,
+  .hero-grid .hero p {
+    text-align: center;
+  }
+
+  .hero-grid .hero-buttons,
+  .hero-grid .hero-checks {
+    justify-content: center;
+  }
+
+  .learning-outcomes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .waitlist-card {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .waitlist-card-text {
+    max-width: 100%;
+  }
+
+  .waitlist-form {
+    justify-content: center;
+    width: 100%;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1818,6 +2248,11 @@ html[data-theme='contrast'] .faq-question:focus-visible {
 
   .quote-card {
     padding: 2rem 1.25rem;
+  }
+
+  .learning-outcomes-grid,
+  .pricing-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -2512,11 +2947,17 @@ html[data-theme='contrast'] .complete-profile-button:hover:not(:disabled) {
 }
 
 /*
- * El landing contiene .landing-intro.
- * Solo cuando esa estructura existe en la página
- * activamos el efecto scroll-reveal.
+ * RevealOnScroll only adds "reveal-armed" to <body> on the
+ * landing page (and only when the visitor hasn't asked for
+ * reduced motion). We drive this from a JS-set class instead of
+ * a body:has(.landing-intro) selector: :has()-based specificity
+ * turned out not to reliably beat the plain .scroll-reveal rule
+ * above in every engine, which left hero text stuck at opacity: 0
+ * from the very first paint — the "gris oscuro sobre azul oscuro"
+ * bug the review flagged, and worse than a stuck scroll animation
+ * since it never resolves.
  */
-body:has(.landing-intro) .scroll-reveal {
+body.reveal-armed .scroll-reveal {
   opacity: 0;
   transform: translateY(28px);
   transition:
@@ -2526,18 +2967,9 @@ body:has(.landing-intro) .scroll-reveal {
   will-change: opacity, transform;
 }
 
-body:has(.landing-intro) .scroll-reveal.is-visible {
+body.reveal-armed .scroll-reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  body:has(.landing-intro) .scroll-reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-    will-change: auto;
-  }
 }
 
 /* Ajustes finales del navbar con el selector integrado */

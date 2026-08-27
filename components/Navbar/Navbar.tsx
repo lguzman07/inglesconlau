@@ -4,14 +4,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import logo from '@/app/assets/logo-transparent.png';
-import ThemeControls from '@/components/ThemeControls/ThemeControls';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
 
   useEffect(() => {
-    const sectionIds = ['methodology', 'why', 'roadmap', 'faq'];
+    const sectionIds = ['methodology', 'historia', 'why', 'faq'];
 
     function updateActiveSection() {
       const currentPosition = window.scrollY + 220;
@@ -45,7 +44,7 @@ export default function Navbar() {
       <div className="nav-header">
         <Link className="nav-brand" href="/" aria-label="Ir al inicio" onClick={closeMenu}>
           <Image src={logo} alt="Logo de Inglés con Lau" className="nav-logo" priority />
-          <span>Inglés Con Lau</span>
+          <span>Inglés con Lau</span>
         </Link>
         <button
           type="button"
@@ -70,20 +69,20 @@ export default function Navbar() {
             Metodología
           </a>
           <a
+            href="#historia"
+            className={activeSection === 'historia' ? 'active' : ''}
+            aria-current={activeSection === 'historia' ? 'location' : undefined}
+            onClick={closeMenu}
+          >
+            Mi historia
+          </a>
+          <a
             href="#why"
             className={activeSection === 'why' ? 'active' : ''}
             aria-current={activeSection === 'why' ? 'location' : undefined}
             onClick={closeMenu}
           >
-            ¿Por qué nosotros?
-          </a>
-          <a
-            href="#roadmap"
-            className={activeSection === 'roadmap' ? 'active' : ''}
-            aria-current={activeSection === 'roadmap' ? 'location' : undefined}
-            onClick={closeMenu}
-          >
-            Roadmap
+            Cómo aprendes
           </a>
           <a
             href="#faq"
@@ -91,18 +90,16 @@ export default function Navbar() {
             aria-current={activeSection === 'faq' ? 'location' : undefined}
             onClick={closeMenu}
           >
-            FAQ
+            Preguntas
           </a>
         </div>
-
-        <ThemeControls />
 
         <div className="nav-auth">
           <Link className="nav-login-button" href="/iniciar-sesion" onClick={closeMenu}>
             Iniciar sesión
           </Link>
-          <Link className="nav-register-button" href="/registro" onClick={closeMenu}>
-            Registrarse
+          <Link className="nav-register-button" href="/plan" onClick={closeMenu}>
+            Ver los planes
           </Link>
         </div>
       </div>
