@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 
 import GroupClassPackages from '@/components/GroupClassPackages/GroupClassPackages';
 import { createClient } from '@/lib/supabase/server';
@@ -27,10 +26,6 @@ export default async function ClasesGrupalesPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect('/iniciar-sesion?next=%2Fclases-grupales');
-  }
-
   const paymentDetails = {
     bankName: process.env.GROUP_CLASS_BANK_NAME ?? '',
     accountHolder: process.env.GROUP_CLASS_ACCOUNT_HOLDER ?? '',
@@ -56,8 +51,9 @@ export default async function ClasesGrupalesPage() {
             <h1>Elige primero el horario que funciona para ti</h1>
             <p className={styles.heroDescription}>
               Las clases duran 16 semanas. Antes de pagar verás el nivel, el
-              horario y los cupos disponibles. Tu compra apartará ese horario
-              principal mientras verificamos el comprobante.
+              horario y los cupos disponibles. No necesitas crear una cuenta
+              para explorarlos: solo te la pediremos al final, cuando vayas a
+              apartar tu horario.
             </p>
             <div className={styles.heroActions}>
               <a href="#comprar" className={styles.primaryButton}>
@@ -83,7 +79,7 @@ export default async function ClasesGrupalesPage() {
           </aside>
         </section>
 
-        <GroupClassPackages paymentDetails={paymentDetails} />
+        <GroupClassPackages paymentDetails={paymentDetails} isLoggedIn={!!user} />
 
         <section className={styles.benefitsSection} aria-labelledby="benefits-title">
           <div>
@@ -108,8 +104,9 @@ export default async function ClasesGrupalesPage() {
           <ol className={styles.processGrid}>
             <li className={styles.processCard}><span>01</span><h3>Escoge el paquete</h3><p>Selecciona 5, 20 u 80 clases.</p></li>
             <li className={styles.processCard}><span>02</span><h3>Escoge el horario</h3><p>Verás los niveles, horas y cupos antes de pagar.</p></li>
-            <li className={styles.processCard}><span>03</span><h3>Envía el comprobante</h3><p>El horario se aparta 2 horas mientras se verifica.</p></li>
-            <li className={styles.processCard}><span>04</span><h3>Recibe tus reservas</h3><p>Al aprobarse, las fechas aparecen automáticamente en tu cuenta.</p></li>
+            <li className={styles.processCard}><span>03</span><h3>Crea tu cuenta</h3><p>Solo te la pedimos al confirmar, no antes de explorar.</p></li>
+            <li className={styles.processCard}><span>04</span><h3>Envía el comprobante</h3><p>El horario se aparta 2 horas mientras se verifica.</p></li>
+            <li className={styles.processCard}><span>05</span><h3>Recibe tus reservas</h3><p>Al aprobarse, las fechas aparecen automáticamente en tu cuenta.</p></li>
           </ol>
         </section>
       </div>

@@ -1,9 +1,56 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
+
+import {
+  clearStoredSupabaseSessions,
+  createClient,
+  saveKeepSessionPreference,
+} from '@/lib/supabase/client';
+
 import styles from './page.module.css';
+
+const DEVICE_ID_STORAGE_KEY = 'ingles-con-lau-device-id';
+
+function getSafeNextPath(value: string | null) {
+  if (!value || !value.startsWith('/') || value.startsWith('//')) {
+    return '/inicio';
+  }
+
+  return value;
+}
+
+function getOrCreateDeviceId() {
+  const existingDeviceId = window.localStorage.getItem(
+    DEVICE_ID_STORAGE_KEY,
+  );
+
+  if (existingDeviceId) return existingDeviceId;
+
+  const newDeviceId =
+    typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random()
+          .toString(36)
+          .slice(2)}`;
+
+  window.localStorage.setItem(DEVICE_ID_STORAGE_KEY, newDeviceId);
+
+  return newDeviceId;
+}
+
+function getDeviceName() {
+  const userAgent = navigator.userAgent;
+
+  if (/iPad/i.test(userAgent)) return 'iPad';
+  if (/iPhone/i.test(userAgent)) return 'iPhone';
+  if (/Android/i.test(userAgent)) return 'Android';
+  if (/Macintosh|Mac OS X/i.test(userAgent)) return 'Mac';
+  if (/Windows/i.test(userAgent)) return 'Windows PC';
+
+  return 'Dispositivo';
+}
 
 export default function RegistroPage() {
   const [email, setEmail] = useState('');
@@ -17,20 +64,37 @@ export default function RegistroPage() {
   >('');
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [nextPath, setNextPath] = useState('/inicio');
 
   const isBusy = isLoading || isGoogleLoading;
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    setNextPath(getSafeNextPath(searchParams.get('next')));
+  }, []);
 
   async function handleGoogleSignIn() {
     setMessage('');
     setMessageType('');
     setIsGoogleLoading(true);
 
+    saveKeepSessionPreference(true);
+    clearStoredSupabaseSessions();
+
+    const deviceId = getOrCreateDeviceId();
+    const deviceName = getDeviceName();
     const supabase = createClient();
+
+    const callbackUrl = new URL('/auth/callback', window.location.origin);
+    callbackUrl.searchParams.set('keep_session', 'true');
+    callbackUrl.searchParams.set('device_id', deviceId);
+    callbackUrl.searchParams.set('device_name', deviceName);
+    callbackUrl.searchParams.set('next', nextPath);
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: callbackUrl.toString(),
       },
     });
 
@@ -69,7 +133,7 @@ export default function RegistroPage() {
       email: email.trim(),
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/iniciar-sesion`,
+        emailRedirectTo: `${window.location.origin}/iniciar-sesion?next=${encodeURIComponent(nextPath)}`,
       },
     });
 
@@ -269,7 +333,11 @@ export default function RegistroPage() {
 
         <p className={styles.loginText}>
           ¿Ya tienes una cuenta?{' '}
-          <Link href="/iniciar-sesion">Inicia sesión</Link>
+          <Link
+            href={`/iniciar-sesion?next=${encodeURIComponent(nextPath)}`}
+          >
+            Inicia sesión
+          </Link>
         </p>
       </section>
     </main>

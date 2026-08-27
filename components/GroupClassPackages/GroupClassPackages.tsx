@@ -19,7 +19,55 @@ type PaymentDetails = {
 
 type GroupClassPackagesProps = {
   paymentDetails: PaymentDetails;
+  isLoggedIn: boolean;
 };
+
+type PendingSelection = {
+  packageId: string;
+  scheduleId: string;
+};
+
+const PENDING_SELECTION_KEY = 'inglesconlau-pending-group-purchase';
+
+function readPendingSelection(): PendingSelection | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const raw = window.localStorage.getItem(PENDING_SELECTION_KEY);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw);
+    if (
+      typeof parsed?.packageId === 'string' &&
+      typeof parsed?.scheduleId === 'string'
+    ) {
+      return parsed as PendingSelection;
+    }
+  } catch {
+    // Ignore malformed/blocked storage; just skip restoring.
+  }
+
+  return null;
+}
+
+function savePendingSelection(selection: PendingSelection) {
+  try {
+    window.localStorage.setItem(
+      PENDING_SELECTION_KEY,
+      JSON.stringify(selection),
+    );
+  } catch {
+    // Storage may be unavailable (private mode, etc.); nothing to do.
+  }
+}
+
+function clearPendingSelection() {
+  try {
+    window.localStorage.removeItem(PENDING_SELECTION_KEY);
+  } catch {
+    // Ignore.
+  }
+}
 
 type ScheduleOption = {
   schedule_id: string;
@@ -93,10 +141,17 @@ function PaymentRow({ label, value }: { label: string; value: string }) {
 
 export default function GroupClassPackages({
   paymentDetails,
+  isLoggedIn,
 }: GroupClassPackagesProps) {
   const supabase = useMemo(() => createClient(), []);
-  const [selectedPackageId, setSelectedPackageId] =
-    useState<string>('four-weeks-20');
+
+  const [pendingScheduleId, setPendingScheduleId] = useState<string | null>(
+    () => (isLoggedIn ? (readPendingSelection()?.scheduleId ?? null) : null),
+  );
+  const [selectedPackageId, setSelectedPackageId] = useState<string>(() => {
+    if (!isLoggedIn) return 'four-weeks-20';
+    return readPendingSelection()?.packageId ?? 'four-weeks-20';
+  });
   const [schedules, setSchedules] = useState<ScheduleOption[]>([]);
   const [selectedScheduleId, setSelectedScheduleId] = useState('');
   const [isLoadingSchedules, setIsLoadingSchedules] = useState(true);
@@ -127,13 +182,32 @@ export default function GroupClassPackages({
         setSchedules([]);
         setError('No pudimos cargar los horarios disponibles.');
       } else {
-        setSchedules((data ?? []) as ScheduleOption[]);
+        const loadedSchedules = (data ?? []) as ScheduleOption[];
+        setSchedules(loadedSchedules);
+
+        if (
+          pendingScheduleId &&
+          loadedSchedules.some(
+            (schedule) => schedule.schedule_id === pendingScheduleId,
+          )
+        ) {
+          setSelectedScheduleId(pendingScheduleId);
+          setSuccess(
+            '¡Bienvenido de vuelta! Restauramos el horario que habías elegido, confírmalo abajo.',
+          );
+        }
+
+        setPendingScheduleId(null);
+        clearPendingSelection();
       }
 
       setIsLoadingSchedules(false);
     }
 
     void loadSchedules();
+    // pendingScheduleId is intentionally excluded: it should only be
+    // applied once, right after the schedules for the restored package load.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPackage.classes, supabase]);
 
   const schedulesByLevel = LEVEL_ORDER.map((level) => ({
@@ -143,6 +217,18 @@ export default function GroupClassPackages({
 
   async function handlePurchaseRequest() {
     if (!selectedSchedule || isSubmitting) return;
+
+    if (!isLoggedIn) {
+      savePendingSelection({
+        packageId: selectedPackageId,
+        scheduleId: selectedSchedule.schedule_id,
+      });
+
+      window.location.href = `/registro?next=${encodeURIComponent(
+        '/clases-grupales#comprar',
+      )}`;
+      return;
+    }
 
     setIsSubmitting(true);
     setError('');
@@ -335,8 +421,19 @@ export default function GroupClassPackages({
             disabled={!selectedSchedule || isSubmitting}
             onClick={handlePurchaseRequest}
           >
-            {isSubmitting ? 'Guardando solicitud…' : 'Apartar horario y enviar comprobante'}
+            {isSubmitting
+              ? 'Guardando solicitud…'
+              : isLoggedIn
+                ? 'Apartar horario y enviar comprobante'
+                : 'Crear cuenta y apartar este horario'}
           </button>
+
+          {!isLoggedIn ? (
+            <p className={styles.statusText}>
+              Guardaremos tu paquete y horario elegidos. Solo te pedimos
+              crear una cuenta para confirmarlos.
+            </p>
+          ) : null}
 
           {error ? <p className={styles.errorMessage} role="alert">{error}</p> : null}
           {success ? <p className={styles.successMessage} role="status">{success}</p> : null}
