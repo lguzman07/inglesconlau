@@ -435,26 +435,24 @@ export default function AdminStudents({
                     ) : null}
                     {bookingsLoading[student.user_id] ? (
                       <p className={styles.inlineError}>Cargando reservas…</p>
-                    ) : (bookingsByStudent[student.user_id]?.length ?? 0) === 0 ? (
+                    ) : (bookingsByStudent[student.user_id]?.filter((booking) => booking.status === 'reserved').length ?? 0) === 0 ? (
                       <p className={styles.inlineError}>No tiene clases reservadas.</p>
                     ) : (
                       <ul>
-                        {bookingsByStudent[student.user_id]?.map((booking) => (
-                          <li key={booking.booking_id}>
-                            <span>
-                              {new Intl.DateTimeFormat('es-DO', { dateStyle: 'medium' }).format(
-                                new Date(`${booking.class_date}T00:00:00`),
-                              )}
-                            </span>
-                            <span>
-                              {booking.level.toUpperCase()} · {booking.label} ·{' '}
-                              {formatTime(booking.starts_at)}–{formatTime(booking.ends_at)}
-                            </span>
-                            <span className={styles.bookingRowEnd}>
-                              <span className={styles.bookingStatus} data-status={booking.status}>
-                                {booking.status}
+                        {bookingsByStudent[student.user_id]
+                          ?.filter((booking) => booking.status === 'reserved')
+                          .map((booking) => (
+                            <li key={booking.booking_id}>
+                              <span>
+                                {new Intl.DateTimeFormat('es-DO', { dateStyle: 'medium' }).format(
+                                  new Date(`${booking.class_date}T00:00:00`),
+                                )}
                               </span>
-                              {booking.status === 'reserved' ? (
+                              <span>
+                                {booking.level.toUpperCase()} · {booking.label} ·{' '}
+                                {formatTime(booking.starts_at)}–{formatTime(booking.ends_at)}
+                              </span>
+                              <span className={styles.bookingRowEnd}>
                                 <button
                                   type="button"
                                   className={styles.cancelBookingButton}
@@ -465,10 +463,9 @@ export default function AdminStudents({
                                     ? 'Cancelando…'
                                     : 'Cancelar reserva'}
                                 </button>
-                              ) : null}
-                            </span>
-                          </li>
-                        ))}
+                              </span>
+                            </li>
+                          ))}
                       </ul>
                     )}
                   </div>
