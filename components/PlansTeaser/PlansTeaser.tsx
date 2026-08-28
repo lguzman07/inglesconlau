@@ -67,6 +67,19 @@ export default function PlansTeaser() {
       return;
     }
 
+    // Best-effort notification + confirmation emails. The signup itself
+    // already succeeded above (row saved via the RPC), so we don't fail
+    // the user-facing flow if this request errors.
+    try {
+      await fetch('/api/waitlist-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: trimmedEmail }),
+      });
+    } catch {
+      // Ignore — the signup is already saved.
+    }
+
     setStatus('success');
     setMessage('¡Listo! Te avisaré por correo el día que abra.');
     setEmail('');
