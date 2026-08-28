@@ -2,8 +2,8 @@
   min-height: 100vh;
   padding: 42px 0 80px;
 
-  color: #21363d;
-  background: #eef8f7;
+  color: var(--text);
+  background: var(--background);
 }
 
 .container {
@@ -22,7 +22,7 @@
 .eyebrow {
   margin: 0 0 10px;
 
-  color: #0a8588;
+  color: var(--primary);
 
   font-size: 0.78rem;
   font-weight: 800;
@@ -33,7 +33,7 @@
 .emptyState h2,
 .noResults h2 {
   margin: 0;
-  color: #21363d;
+  color: var(--text);
 }
 
 .header h1 {
@@ -45,7 +45,7 @@
   max-width: 660px;
   margin: 14px 0 0;
 
-  color: #537179;
+  color: var(--text-light);
 
   font-size: 1.02rem;
   line-height: 1.7;
@@ -56,25 +56,25 @@
 
   padding: 10px 14px;
 
-  color: #087e82;
+  color: var(--primary);
 
   font-size: 0.9rem;
   font-weight: 800;
   text-decoration: none;
 
-  background: #ffffff;
+  background: var(--surface-solid);
 
-  border: 1px solid #9bd7d8;
+  border: 1px solid var(--border);
 
   border-radius: 999px;
 
-  transition: 0.2s ease;
+  transition: var(--transition);
 }
 
 .backLink:hover,
 .backLink:focus-visible {
-  background: #d9f1f1;
-  border-color: #078589;
+  background: var(--primary-light);
+  border-color: var(--primary);
   transform: translateY(-1px);
 }
 
@@ -92,9 +92,9 @@
   margin-bottom: 28px;
   padding: 22px 24px;
 
-  background: #d7f0ef;
+  background: var(--primary-light);
 
-  border: 1px solid #9ed9d8;
+  border: 1px solid var(--primary);
 
   border-radius: 20px;
 }
@@ -106,7 +106,7 @@
 }
 
 .summaryLabel {
-  color: #3d666c;
+  color: var(--text-light);
 
   font-size: 0.76rem;
   font-weight: 800;
@@ -114,7 +114,7 @@
 }
 
 .summaryNumber {
-  color: #078589;
+  color: var(--primary);
 
   font-size: 2rem;
   line-height: 1;
@@ -123,7 +123,7 @@
 .summaryCard p {
   margin: 0;
 
-  color: #456c72;
+  color: var(--text-light);
 
   line-height: 1.55;
   text-align: right;
@@ -137,14 +137,14 @@
   margin: 0 0 22px;
   padding: 12px 14px;
 
-  color: #a43434;
+  color: var(--text);
 
   font-size: 0.9rem;
   font-weight: 700;
 
-  background: #fff2f2;
+  background: var(--surface);
 
-  border: 1px solid #e4a9a9;
+  border: 1px solid var(--border);
 
   border-radius: 12px;
 }
@@ -174,7 +174,7 @@
 }
 
 .searchLabel {
-  color: #21363d;
+  color: var(--text);
 
   font-size: 0.86rem;
   font-weight: 800;
@@ -186,35 +186,33 @@
 
   padding: 10px 14px;
 
-  color: #21363d;
+  color: var(--text);
 
   font: inherit;
 
-  background: #ffffff;
+  background: var(--surface-solid);
 
-  border: 1px solid #9ecfd1;
+  border: 1px solid var(--border);
 
   border-radius: 13px;
 
   outline: none;
 
-  transition: 0.2s ease;
+  transition: var(--transition);
 }
 
 .searchField input::placeholder {
-  color: #70868b;
+  color: var(--text-light);
 }
 
 .searchField input:focus-visible {
-  border-color: #078589;
+  border-color: var(--primary);
 
-  box-shadow:
-    0 0 0 4px
-    rgba(7, 133, 137, 0.13);
+  box-shadow: 0 0 0 4px var(--primary-light);
 }
 
 .resultCount {
-  color: #537179;
+  color: var(--text-light);
 
   font-size: 0.88rem;
   font-weight: 700;
@@ -265,50 +263,42 @@
 
   padding: 24px;
 
-  color: #21363d;
+  color: var(--text);
 
   font: inherit;
 
   text-align: center;
 
-  background: #ffffff;
+  background: var(--surface-solid);
 
-  border: 1px solid #9ed5d6;
+  border: 1px solid var(--border);
 
   border-radius: 22px;
 
-  box-shadow:
-    0 12px 30px
-    rgba(60, 110, 115, 0.08);
+  box-shadow: var(--shadow);
 
   cursor: pointer;
 
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: var(--transition);
 }
 
 .flashcard:hover,
 .flashcard:focus-visible {
-  border-color: #078589;
+  border-color: var(--primary);
 
-  box-shadow:
-    0 14px 32px
-    rgba(60, 110, 115, 0.13);
+  box-shadow: var(--shadow-hover);
 
   transform: translateY(-3px);
 }
 
 .flashcardFlipped {
-  background: #dff3f2;
+  background: var(--primary-light);
 
-  border-color: #83cdcd;
+  border-color: var(--primary);
 }
 
 .cardHint {
-  color: #078589;
+  color: var(--primary);
 
   font-size: 0.72rem;
   font-weight: 900;
@@ -318,7 +308,7 @@
 .cardWord {
   overflow-wrap: anywhere;
 
-  color: #21363d;
+  color: var(--text);
 
   font-size: clamp(1.7rem, 4vw, 2.3rem);
 
@@ -326,7 +316,7 @@
 }
 
 .flipHint {
-  color: #557278;
+  color: var(--text-light);
 
   font-size: 0.82rem;
   font-weight: 700;
@@ -353,27 +343,25 @@
 
   padding: 0;
 
-  color: #078589;
+  color: var(--primary);
 
   font: inherit;
   font-size: 1rem;
 
-  background: #d8f0ef;
+  background: var(--primary-light);
 
-  border: 1px solid #aad9da;
+  border: 1px solid var(--border);
 
   border-radius: 12px;
 
   cursor: pointer;
 
-  transition: 0.2s ease;
+  transition: var(--transition);
 }
 
 .audioButton:hover,
 .audioButton:focus-visible {
-  background: #c5e9e7;
-
-  border-color: #078589;
+  border-color: var(--primary);
 
   transform: translateY(-1px);
 }
@@ -395,15 +383,13 @@
 
   padding: 14px 16px;
 
-  background: #ffffff;
+  background: var(--surface-solid);
 
-  border: 1px solid #b7d9da;
+  border: 1px solid var(--border);
 
   border-radius: 15px;
 
-  box-shadow:
-    0 8px 22px
-    rgba(60, 110, 115, 0.05);
+  box-shadow: var(--shadow);
 }
 
 .exampleRow {
@@ -420,7 +406,7 @@
 .exampleSentence {
   margin: 0;
 
-  color: #21363d;
+  color: var(--text);
 
   font-size: 0.9rem;
 
@@ -439,30 +425,28 @@
 
   padding: 0;
 
-  color: #078589;
+  color: var(--primary);
 
   font: inherit;
 
-  background: #e4f5f4;
+  background: var(--primary-light);
 
-  border: 1px solid #aed9da;
+  border: 1px solid var(--border);
 
   border-radius: 10px;
 
   cursor: pointer;
 
-  transition: 0.2s ease;
+  transition: var(--transition);
 }
 
 .sentenceAudioButton:hover,
 .sentenceAudioButton:focus-visible {
-  background: #cdeceb;
-
-  border-color: #078589;
+  border-color: var(--primary);
 }
 
 .lessonLink {
-  color: #078589;
+  color: var(--primary);
 
   font-size: 0.82rem;
   font-weight: 800;
@@ -480,7 +464,7 @@
 
   padding: 0;
 
-  color: #b63d3d;
+  color: var(--text-light);
 
   font: inherit;
 
@@ -496,7 +480,7 @@
 
 .deleteButton:hover:not(:disabled),
 .deleteButton:focus-visible:not(:disabled) {
-  color: #8e2929;
+  color: var(--text);
   text-decoration: underline;
 }
 
@@ -518,15 +502,13 @@
 
   padding: 34px;
 
-  background: #ffffff;
+  background: var(--surface-solid);
 
-  border: 1px solid #a9d7d8;
+  border: 1px solid var(--border);
 
   border-radius: 24px;
 
-  box-shadow:
-    0 12px 30px
-    rgba(60, 110, 115, 0.08);
+  box-shadow: var(--shadow);
 }
 
 .emptyIcon {
@@ -539,12 +521,12 @@
 
   place-items: center;
 
-  color: #078589;
+  color: var(--primary);
 
   font-size: 1.6rem;
   font-weight: 900;
 
-  background: #d9f1f0;
+  background: var(--primary-light);
 
   border-radius: 22px;
 }
@@ -554,7 +536,7 @@
 
   margin: 10px 0 0;
 
-  color: #537179;
+  color: var(--text-light);
 
   line-height: 1.7;
 }
@@ -571,26 +553,26 @@
 
   padding: 0 17px;
 
-  color: #ffffff;
+  color: var(--surface-solid);
 
   font-weight: 800;
 
   text-decoration: none;
 
-  background: #078589;
+  background: var(--primary);
 
-  border: 1px solid #078589;
+  border: 1px solid var(--primary);
 
   border-radius: 999px;
 
-  transition: 0.2s ease;
+  transition: var(--transition);
 }
 
 .primaryLink:hover,
 .primaryLink:focus-visible {
-  background: #056f72;
+  background: var(--primary-hover);
 
-  border-color: #056f72;
+  border-color: var(--primary-hover);
 
   transform: translateY(-2px);
 }
@@ -600,22 +582,22 @@
 
   text-align: center;
 
-  background: #ffffff;
+  background: var(--surface-solid);
 
-  border: 1px solid #abd5d7;
+  border: 1px solid var(--border);
 
   border-radius: 20px;
 }
 
 .noResults p {
   margin: 10px 0 0;
-  color: #537179;
+  color: var(--text-light);
 }
 
 .loading {
   margin: 80px 0;
 
-  color: #537179;
+  color: var(--text-light);
 
   text-align: center;
 }
@@ -631,7 +613,7 @@
 .sentenceAudioButton:focus-visible,
 .lessonLink:focus-visible,
 .deleteButton:focus-visible {
-  outline: 3px solid #a9dfdf;
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
 
