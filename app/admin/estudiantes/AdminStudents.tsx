@@ -1,10 +1,19 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { createClient } from '@/lib/supabase/client';
 
 import styles from './page.module.css';
+
+type ActiveSchedule = {
+  schedule_id: string;
+  level: string;
+  label: string;
+  starts_at: string;
+  ends_at: string;
+  max_students: number;
+};
 
 export type AdminStudent = {
   user_id: string;
@@ -140,6 +149,19 @@ export default function AdminStudents({
   const [bookingsLoading, setBookingsLoading] = useState<Record<string, boolean>>({});
   const [bookingsError, setBookingsError] = useState<Record<string, string>>({});
   const [cancellingBookingId, setCancellingBookingId] = useState<string | null>(null);
+  const [activeSchedules, setActiveSchedules] = useState<ActiveSchedule[]>([]);
+  const [assignScheduleId, setAssignScheduleId] = useState<Record<string, string>>({});
+  const [assignDate, setAssignDate] = useState<Record<string, string>>({});
+  const [assigningId, setAssigningId] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadSchedules() {
+      const { data, error } = await supabase.rpc('admin_list_active_schedules');
+      if (!error) setActiveSchedules((data ?? []) as ActiveSchedule[]);
+    }
+
+    void loadSchedules();
+  }, [supabase]);
 
   const levels = useMemo(
     () =>
@@ -330,6 +352,27 @@ export default function AdminStudents({
     }));
   }
 
+  async function loadBookings(studentId: string) {
+    setBookingsLoading((current) => ({ ...current, [studentId]: true }));
+    setBookingsError((current) => ({ ...current, [studentId]: '' }));
+
+    const { data, error } = await supabase.rpc('admin_list_student_bookings', {
+      p_user_id: studentId,
+    });
+
+    setBookingsLoading((current) => ({ ...current, [studentId]: false }));
+
+    if (error) {
+      setBookingsError((current) => ({ ...current, [studentId]: error.message }));
+      return;
+    }
+
+    setBookingsByStudent((current) => ({
+      ...current,
+      [studentId]: (data ?? []) as StudentBooking[],
+    }));
+  }
+
   async function toggleBookings(student: AdminStudent) {
     if (expandedStudentId === student.user_id) {
       setExpandedStudentId(null);
@@ -340,27 +383,7 @@ export default function AdminStudents({
 
     if (bookingsByStudent[student.user_id]) return;
 
-    setBookingsLoading((current) => ({ ...current, [student.user_id]: true }));
-    setBookingsError((current) => ({ ...current, [student.user_id]: '' }));
-
-    const { data, error } = await supabase.rpc('admin_list_student_bookings', {
-      p_user_id: student.user_id,
-    });
-
-    setBookingsLoading((current) => ({ ...current, [student.user_id]: false }));
-
-    if (error) {
-      setBookingsError((current) => ({
-        ...current,
-        [student.user_id]: error.message,
-      }));
-      return;
-    }
-
-    setBookingsByStudent((current) => ({
-      ...current,
-      [student.user_id]: (data ?? []) as StudentBooking[],
-    }));
+    void loadBookings(student.user_id);
   }
 
   async function cancelBooking(studentId: string, booking: StudentBooking) {
@@ -385,6 +408,37 @@ export default function AdminStudents({
         item.booking_id === booking.booking_id ? { ...item, status: 'cancelled' } : item,
       ),
     }));
+  }
+
+  async function assignClass(student: AdminStudent) {
+    const scheduleId = assignScheduleId[student.user_id];
+    const classDate = assignDate[student.user_id];
+
+    if (!scheduleId || !classDate || assigningId) return;
+
+    setAssigningId(student.user_id);
+    setBookingsError((current) => ({ ...current, [student.user_id]: '' }));
+
+    const { error } = await supabase.rpc('admin_assign_class_to_student', {
+      p_user_id: student.user_id,
+      p_schedule_id: scheduleId,
+      p_class_date: classDate,
+    });
+
+    setAssigningId(null);
+
+    if (error) {
+      setBookingsError((current) => ({ ...current, [student.user_id]: error.message }));
+      return;
+    }
+
+    updateStudentBalance(student.user_id, student.available_classes - 1);
+    setAssignDate((current) => ({ ...current, [student.user_id]: '' }));
+
+    // Make sure the section is open and refresh the list so the new class
+    // shows up right away, whether or not it was already expanded.
+    setExpandedStudentId(student.user_id);
+    void loadBookings(student.user_id);
   }
 
   return (
@@ -515,6 +569,56 @@ export default function AdminStudents({
                 <div><dt>Total comprado</dt><dd>{student.total_purchased}</dd></div>
                 <div><dt>Registro</dt><dd>{new Intl.DateTimeFormat('es-DO', { dateStyle: 'medium' }).format(new Date(student.joined_at))}</dd></div>
               </dl>
+              <div className={styles.assignClassRow}>
+                <span>Asignar una clase</span>
+                <div className={styles.assignClassControls}>
+                  <select
+                    value={assignScheduleId[student.user_id] ?? ''}
+                    onChange={(event) =>
+                      setAssignScheduleId((current) => ({
+                        ...current,
+                        [student.user_id]: event.target.value,
+                      }))
+                    }
+                  >
+                    <option value="">Horario…</option>
+                    {activeSchedules.map((schedule) => (
+                      <option key={schedule.schedule_id} value={schedule.schedule_id}>
+                        {schedule.level.toUpperCase()} · {schedule.label} ·{' '}
+                        {formatTime(schedule.starts_at)}–{formatTime(schedule.ends_at)}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="date"
+                    value={assignDate[student.user_id] ?? ''}
+                    onChange={(event) =>
+                      setAssignDate((current) => ({
+                        ...current,
+                        [student.user_id]: event.target.value,
+                      }))
+                    }
+                  />
+                  <button
+                    type="button"
+                    onClick={() => assignClass(student)}
+                    disabled={
+                      assigningId === student.user_id ||
+                      !assignScheduleId[student.user_id] ||
+                      !assignDate[student.user_id] ||
+                      student.available_classes <= 0
+                    }
+                  >
+                    {assigningId === student.user_id ? 'Asignando…' : 'Asignar'}
+                  </button>
+                </div>
+                {student.available_classes <= 0 ? (
+                  <p className={styles.inlineError}>
+                    No tiene clases disponibles. Asigna un paquete primero.
+                  </p>
+                ) : null}
+              </div>
+
               <div className={styles.bookingsSection}>
                 <button
                   type="button"
