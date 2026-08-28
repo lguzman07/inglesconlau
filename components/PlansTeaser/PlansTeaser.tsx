@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 
 const plans = [
   {
+    packageId: 'trial-1',
     name: 'Clase de prueba',
     price: '100',
     classes: '1 clase',
@@ -15,6 +16,7 @@ const plans = [
     featured: false,
   },
   {
+    packageId: 'week-5',
     name: 'Paquete flexible',
     price: '600',
     classes: '5 clases',
@@ -23,6 +25,7 @@ const plans = [
     featured: false,
   },
   {
+    packageId: 'four-weeks-20',
     name: '4 semanas',
     price: '1,900',
     classes: '20 clases',
@@ -31,6 +34,7 @@ const plans = [
     featured: true,
   },
   {
+    packageId: 'complete-80',
     name: 'Curso completo',
     price: '7,000',
     classes: '80 clases',
@@ -116,7 +120,7 @@ export default function PlansTeaser() {
               <p className="pricing-card-detail">{plan.detail}</p>
 
               <Link
-                href="/plan"
+                href={`/clases-grupales?paquete=${plan.packageId}#comprar`}
                 className={plan.featured ? 'primary-button' : 'secondary-button'}
               >
                 <span className="button-title">{plan.cta}</span>

@@ -98,7 +98,7 @@ export default function Navbar() {
           <Link className="nav-login-button" href="/iniciar-sesion" onClick={closeMenu}>
             Iniciar sesión
           </Link>
-          <Link className="nav-register-button" href="/plan" onClick={closeMenu}>
+          <Link className="nav-register-button" href="/clases-grupales#comprar" onClick={closeMenu}>
             Ver los planes
           </Link>
         </div>

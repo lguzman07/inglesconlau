@@ -39,7 +39,7 @@ export default function StepOne() {
           Empieza hoy y aprende inglés con confianza.
         </p>
 
-        <Link href="/plan" className={styles.ctaButton}>
+        <Link href="/clases-grupales#comprar" className={styles.ctaButton}>
           Ver los planes →
         </Link>
       </div>

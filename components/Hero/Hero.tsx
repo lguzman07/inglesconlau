@@ -21,7 +21,7 @@ export default function Hero() {
           </p>
 
           <div className="hero-buttons">
-            <Link href="/plan" className="primary-button">
+            <Link href="/clases-grupales#comprar" className="primary-button">
               <span className="button-title">Ver los planes</span>
 
               <span className="button-subtitle">

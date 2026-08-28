@@ -14,7 +14,7 @@ export default function FinalCta() {
         </p>
 
         <div className="hero-buttons">
-          <Link href="/plan" className="primary-button">
+          <Link href="/clases-grupales#comprar" className="primary-button">
             <span className="button-title">Reservar mi clase de prueba</span>
           </Link>
 
