@@ -435,7 +435,15 @@ export default function GroupClassPackages({
           <div>
             <h3>¿En qué nivel estás?</h3>
             <p className={styles.stepHint}>
-              Si no lo sabes, empieza en A1 o{' '}
+              Si no lo sabes, empieza en A1,{' '}
+              <a
+                href="https://www.cambridgeenglish.org/test-your-english/general-english/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                toma un examen de nivel gratis
+              </a>{' '}
+              o{' '}
               <a
                 href="https://wa.me/18096504884?text=Hola%2C%20no%20s%C3%A9%20en%20qu%C3%A9%20nivel%20estoy"
                 target="_blank"
