@@ -119,6 +119,33 @@ const PACKAGES = [
 
 const LEVEL_ORDER = ['a1', 'a2', 'b1', 'b2'];
 
+const LEVELS = [
+  {
+    id: 'a1',
+    name: 'A1',
+    tag: 'Principiante',
+    description: 'Nunca has estudiado inglés, o empiezas de nuevo.',
+  },
+  {
+    id: 'a2',
+    name: 'A2',
+    tag: 'Básico',
+    description: 'Entiendes frases sencillas pero te cuesta responder.',
+  },
+  {
+    id: 'b1',
+    name: 'B1',
+    tag: 'Intermedio',
+    description: 'Te defiendes, pero no con confianza ni fluidez.',
+  },
+  {
+    id: 'b2',
+    name: 'B2',
+    tag: 'Intermedio alto',
+    description: 'Hablas, y quieres precisión y soltura real.',
+  },
+] as const;
+
 function getPackageIdFromQuery(): string | null {
   if (typeof window === 'undefined') return null;
 
@@ -185,6 +212,7 @@ export default function GroupClassPackages({
 
     return getPackageIdFromQuery() ?? 'four-weeks-20';
   });
+  const [selectedLevel, setSelectedLevel] = useState<string>('a1');
   const [schedules, setSchedules] = useState<ScheduleOption[]>([]);
   const [selectedScheduleId, setSelectedScheduleId] = useState('');
   const [isLoadingSchedules, setIsLoadingSchedules] = useState(true);
@@ -225,16 +253,18 @@ export default function GroupClassPackages({
         const loadedSchedules = (data ?? []) as ScheduleOption[];
         setSchedules(loadedSchedules);
 
-        if (
-          pendingScheduleId &&
-          loadedSchedules.some(
+        if (pendingScheduleId) {
+          const restoredSchedule = loadedSchedules.find(
             (schedule) => schedule.schedule_id === pendingScheduleId,
-          )
-        ) {
-          setSelectedScheduleId(pendingScheduleId);
-          setSuccess(
-            '¡Bienvenido de vuelta! Restauramos el horario que habías elegido, confírmalo abajo.',
           );
+
+          if (restoredSchedule) {
+            setSelectedScheduleId(pendingScheduleId);
+            setSelectedLevel(restoredSchedule.level);
+            setSuccess(
+              '¡Bienvenido de vuelta! Restauramos el horario que habías elegido, confírmalo abajo.',
+            );
+          }
         }
 
         setPendingScheduleId(null);
@@ -392,118 +422,175 @@ export default function GroupClassPackages({
             ? `FALTAN ${daysUntilStart} DÍA${daysUntilStart === 1 ? '' : 'S'} PARA EL INICIO`
             : 'INSCRIPCIÓN · 14 DE SEPTIEMBRE'}
         </p>
-        <h2 id="packages-title">Primero elige tu paquete y tu horario</h2>
+        <h2 id="packages-title">Elige tu grupo y empieza</h2>
         <p>
-          Todas las clases comienzan el 14 de septiembre de 2026. Tu horario
-          principal quedará reservado, pero podrás cambiar una fecha por otro
-          nivel u horario disponible cuando quieras explorar.
+          Eliges tu nivel y tu horario una sola vez. Ese es tu grupo, de lunes
+          a viernes, siempre a la misma hora.
         </p>
       </div>
 
-      <div className={styles.packageGrid} role="radiogroup" aria-label="Paquetes">
-        {PACKAGES.map((item) => {
-          const isSelected = item.id === selectedPackage.id;
-          const savings = item.regularPrice - item.price;
+      <div className={styles.wizardStep}>
+        <div className={styles.stepHeader}>
+          <span className={styles.stepNumber}>1</span>
+          <div>
+            <h3>¿En qué nivel estás?</h3>
+            <p className={styles.stepHint}>
+              Si no lo sabes, empieza en A1 o{' '}
+              <a
+                href="https://wa.me/18096504884?text=Hola%2C%20no%20s%C3%A9%20en%20qu%C3%A9%20nivel%20estoy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                escríbeme
+              </a>
+              .
+            </p>
+          </div>
+        </div>
 
-          return (
-            <button
-              key={item.id}
-              type="button"
-              role="radio"
-              aria-checked={isSelected}
-              className={`${styles.packageCard} ${
-                isSelected ? styles.packageCardSelected : ''
-              } ${item.id === 'complete-80' ? styles.bestValueCard : ''}`}
-              onClick={() => setSelectedPackageId(item.id)}
-            >
-              {item.id === 'complete-80' ? (
-                <span className={styles.bestValueBadge}>MEJOR VALOR</span>
-              ) : null}
-              {savings > 0 ? (
-                <span className={styles.savingsBadge}>
-                  Ahorra RD${formatMoney(savings)}
-                </span>
-              ) : null}
-              <span className={styles.packageName}>{item.name}</span>
-              <strong className={styles.classCount}>
-                {item.classes} {classesLabel(item.classes)}
-              </strong>
-              <span className={styles.packagePrice}>
-                <small>RD$</small>{formatMoney(item.price)}
-              </span>
-              <span className={styles.perClass}>
-                RD${formatMoney(item.price / item.classes)} por clase
-              </span>
-              <span className={styles.packageDescription}>{item.description}</span>
-              <span className={styles.selectLabel}>
-                {isSelected ? 'Paquete seleccionado' : 'Elegir este paquete'}
-              </span>
-            </button>
-          );
-        })}
+        <div className={styles.levelGrid} role="radiogroup" aria-label="Nivel">
+          {LEVELS.map((level) => {
+            const isSelected = level.id === selectedLevel;
+
+            return (
+              <button
+                key={level.id}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                className={`${styles.levelCard} ${
+                  isSelected ? styles.levelCardSelected : ''
+                }`}
+                onClick={() => {
+                  setSelectedLevel(level.id);
+                  setSelectedScheduleId('');
+                }}
+              >
+                <span className={styles.levelCardName}>{level.name}</span>
+                <span className={styles.levelCardTag}>{level.tag}</span>
+                <span className={styles.levelCardDescription}>{level.description}</span>
+              </button>
+            );
+          })}
+
+          <div className={styles.levelCardComingSoon}>
+            <span className={styles.levelCardName}>C1</span>
+            <span className={styles.levelCardTag}>Próximamente</span>
+          </div>
+        </div>
       </div>
 
-      <div className={styles.scheduleSection}>
-        <div className={styles.scheduleHeading}>
-          <p className={styles.eyebrow}>HORARIO PRINCIPAL</p>
-          <h3>Ahora escoge dónde guardar tu cupo</h3>
-          <p>Máximo 10 estudiantes por clase.</p>
+      <div className={styles.wizardStep}>
+        <div className={styles.stepHeader}>
+          <span className={styles.stepNumber}>2</span>
+          <div>
+            <h3>Elige tu paquete</h3>
+          </div>
+        </div>
+
+        <div className={styles.packageGrid} role="radiogroup" aria-label="Paquetes">
+          {PACKAGES.map((item) => {
+            const isSelected = item.id === selectedPackage.id;
+            const savings = item.regularPrice - item.price;
+
+            return (
+              <button
+                key={item.id}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                className={`${styles.packageCard} ${
+                  isSelected ? styles.packageCardSelected : ''
+                } ${item.id === 'complete-80' ? styles.bestValueCard : ''}`}
+                onClick={() => setSelectedPackageId(item.id)}
+              >
+                {item.id === 'complete-80' ? (
+                  <span className={styles.bestValueBadge}>MEJOR VALOR</span>
+                ) : null}
+                {savings > 0 ? (
+                  <span className={styles.savingsBadge}>
+                    Ahorra RD${formatMoney(savings)}
+                  </span>
+                ) : null}
+                <span className={styles.packageName}>{item.name}</span>
+                <strong className={styles.classCount}>
+                  {item.classes} {classesLabel(item.classes)}
+                </strong>
+                <span className={styles.packagePrice}>
+                  <small>RD$</small>{formatMoney(item.price)}
+                </span>
+                <span className={styles.perClass}>
+                  RD${formatMoney(item.price / item.classes)} por clase
+                </span>
+                <span className={styles.packageDescription}>{item.description}</span>
+                <span className={styles.selectLabel}>
+                  {isSelected ? 'Paquete seleccionado' : 'Elegir este paquete'}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className={styles.wizardStep}>
+        <div className={styles.stepHeader}>
+          <span className={styles.stepNumber}>3</span>
+          <div>
+            <h3>Elige tu horario de {selectedLevel.toUpperCase()}</h3>
+            <p className={styles.stepHint}>
+              Todos los grupos se reúnen de lunes a viernes, una hora al día. Máximo 10
+              personas por grupo.
+            </p>
+          </div>
         </div>
 
         {isLoadingSchedules ? (
           <p className={styles.statusText}>Cargando horarios…</p>
         ) : (
-          <div className={styles.levelGroups}>
-            {schedulesByLevel.map((group) => (
-              <div key={group.level} className={styles.levelGroup}>
-                <h4>{group.level.toUpperCase()}</h4>
-                <div className={styles.scheduleGrid}>
-                  {group.schedules.map((schedule) => {
-                    const isSelected =
-                      schedule.schedule_id === selectedScheduleId;
-                    const isFull = Number(schedule.spots_remaining) <= 0;
+          <div className={styles.scheduleGrid}>
+            {schedulesByLevel
+              .find((group) => group.level === selectedLevel)
+              ?.schedules.map((schedule) => {
+                const isSelected = schedule.schedule_id === selectedScheduleId;
+                const isFull = Number(schedule.spots_remaining) <= 0;
 
-                    return (
-                      <button
-                        key={schedule.schedule_id}
-                        type="button"
-                        disabled={isFull}
-                        aria-pressed={isSelected}
-                        className={`${styles.scheduleCard} ${
-                          isSelected ? styles.scheduleCardSelected : ''
-                        }`}
-                        onClick={() => setSelectedScheduleId(schedule.schedule_id)}
-                      >
-                        <span>
-                          <strong>{schedule.label}</strong>
-                          <small>
-                            {formatTime(schedule.starts_at)}–{formatTime(schedule.ends_at)}
-                          </small>
-                        </span>
-                        <em>
-                          {isFull
-                            ? 'Sin cupos'
-                            : `${schedule.spots_remaining} de 10 disponibles`}
-                        </em>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-
-            <div className={styles.levelGroup}>
-              <h4>C1</h4>
-              <div className={styles.scheduleGrid}>
-                <div className={styles.scheduleCardComingSoon}>
-                  <span>
-                    <strong>Grupo C1</strong>
-                    <small>Horario por anunciar</small>
-                  </span>
-                  <em>Próximamente</em>
-                </div>
-              </div>
-            </div>
+                return (
+                  <button
+                    key={schedule.schedule_id}
+                    type="button"
+                    disabled={isFull}
+                    aria-pressed={isSelected}
+                    className={`${styles.scheduleCard} ${
+                      isSelected ? styles.scheduleCardSelected : ''
+                    }`}
+                    onClick={() => setSelectedScheduleId(schedule.schedule_id)}
+                  >
+                    <span>
+                      <strong>{schedule.label}</strong>
+                      <small>
+                        {formatTime(schedule.starts_at)}–{formatTime(schedule.ends_at)}
+                      </small>
+                    </span>
+                    <em>
+                      {isFull
+                        ? 'Sin cupos'
+                        : `${schedule.spots_remaining} de 10 disponibles`}
+                    </em>
+                  </button>
+                );
+              }) ?? (
+              <p className={styles.statusText}>
+                No hay horarios disponibles para este nivel en este paquete.{' '}
+                <a
+                  href="https://wa.me/18096504884?text=Hola%2C%20no%20encuentro%20horario%20para%20mi%20nivel"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Escríbeme
+                </a>{' '}
+                y te aviso cuando abra uno.
+              </p>
+            )}
           </div>
         )}
       </div>

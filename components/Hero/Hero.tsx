@@ -54,10 +54,6 @@ export default function Hero() {
         </div>
 
         <div className="hero-visual">
-          <div className="photo-placeholder" aria-hidden="true">
-            <span>Foto de Lau</span>
-          </div>
-
           <HeroDemo />
         </div>
       </div>
