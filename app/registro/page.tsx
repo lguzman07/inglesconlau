@@ -12,6 +12,7 @@ import {
 import styles from './page.module.css';
 
 const DEVICE_ID_STORAGE_KEY = 'ingles-con-lau-device-id';
+const RECORDING_CONSENT_PENDING_KEY = 'inglesconlau-recording-consent-pending';
 
 function getSafeNextPath(value: string | null) {
   if (!value || !value.startsWith('/') || value.startsWith('//')) {
@@ -65,6 +66,7 @@ export default function RegistroPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [nextPath, setNextPath] = useState('/inicio');
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
   const isBusy = isLoading || isGoogleLoading;
 
@@ -74,9 +76,17 @@ export default function RegistroPage() {
   }, []);
 
   async function handleGoogleSignIn() {
+    if (!hasAcceptedTerms) {
+      setMessage('Debes aceptar los Términos y condiciones para continuar.');
+      setMessageType('error');
+      return;
+    }
+
     setMessage('');
     setMessageType('');
     setIsGoogleLoading(true);
+
+    window.localStorage.setItem(RECORDING_CONSENT_PENDING_KEY, '1');
 
     saveKeepSessionPreference(true);
     clearStoredSupabaseSessions();
@@ -113,6 +123,12 @@ export default function RegistroPage() {
     setMessage('');
     setMessageType('');
 
+    if (!hasAcceptedTerms) {
+      setMessage('Debes aceptar los Términos y condiciones para continuar.');
+      setMessageType('error');
+      return;
+    }
+
     if (password.length < 8) {
       setMessage('La contraseña debe tener al menos 8 caracteres.');
       setMessageType('error');
@@ -126,6 +142,8 @@ export default function RegistroPage() {
     }
 
     setIsLoading(true);
+
+    window.localStorage.setItem(RECORDING_CONSENT_PENDING_KEY, '1');
 
     const supabase = createClient();
 
@@ -178,11 +196,28 @@ export default function RegistroPage() {
         </div>
 
         <form className={styles.form} onSubmit={handleSubmit}>
+          <label className={styles.legalCheckbox}>
+            <input
+              type="checkbox"
+              checked={hasAcceptedTerms}
+              onChange={(event) => setHasAcceptedTerms(event.target.checked)}
+              required
+            />
+            <span>
+              He leído y acepto los{' '}
+              <Link href="/terminos-y-condiciones" target="_blank">
+                Términos y condiciones
+              </Link>
+              , incluyendo que mis clases en vivo podrían grabarse con fines
+              educativos (solo audio, nunca video).
+            </span>
+          </label>
+
           <button
             className={styles.googleButton}
             type="button"
             onClick={handleGoogleSignIn}
-            disabled={isBusy}
+            disabled={isBusy || !hasAcceptedTerms}
           >
             <svg
               className={styles.googleIcon}
@@ -325,7 +360,7 @@ export default function RegistroPage() {
           <button
             className={styles.submitButton}
             type="submit"
-            disabled={isBusy}
+            disabled={isBusy || !hasAcceptedTerms}
           >
             {isLoading ? 'Procesando...' : 'Crear mi cuenta'}
           </button>

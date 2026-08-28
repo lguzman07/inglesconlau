@@ -14,6 +14,7 @@ import styles from './Inicio.module.css';
 const TOTAL_LESSONS = 400;
 const LESSONS_PER_LEVEL = 80;
 const LAST_LESSON_STORAGE_KEY = 'inglesconlau-last-opened-lesson';
+const RECORDING_CONSENT_PENDING_KEY = 'inglesconlau-recording-consent-pending';
 const LEVEL_ORDER = ['a1', 'a2', 'b1', 'b2', 'c1'];
 
 function getValidLessonKey(value: string | null) {
@@ -52,6 +53,9 @@ export default function InicioPage() {
   const [lastLessonKey, setLastLessonKey] = useState('a1/1');
   const [furthestLessonKey, setFurthestLessonKey] = useState('a1/1');
   const [levelProgress, setLevelProgress] = useState<Record<string, number>>({});
+  const [needsRecordingConsent, setNeedsRecordingConsent] = useState(false);
+  const [hasCheckedConsentBox, setHasCheckedConsentBox] = useState(false);
+  const [isSavingConsent, setIsSavingConsent] = useState(false);
 
   useEffect(() => {
     function syncLastOpenedLesson() {
@@ -97,7 +101,7 @@ export default function InicioPage() {
         await Promise.all([
           supabase
             .from('profiles')
-            .select('full_name, english_level, gender, role')
+            .select('full_name, english_level, gender, role, recording_consent_at')
             .eq('id', user.id)
             .maybeSingle(),
           supabase
@@ -128,6 +132,35 @@ export default function InicioPage() {
       if (profile?.english_level) setIndicatedLevel(profile.english_level);
       if (profile?.gender) setGender(profile.gender);
       if (profile?.role) setRole(profile.role);
+
+      if (!profile?.recording_consent_at && profile?.role !== 'admin') {
+        let consentPending = false;
+        try {
+          consentPending =
+            window.localStorage.getItem(RECORDING_CONSENT_PENDING_KEY) === '1';
+        } catch {
+          // Ignore — treat as not pending, show the banner to be safe.
+        }
+
+        if (consentPending) {
+          // They already checked the box on /registro or /clases-grupales
+          // before this session existed — record it now that we have one.
+          const { error: consentError } = await supabase.rpc(
+            'record_recording_consent',
+          );
+          if (!consentError) {
+            try {
+              window.localStorage.removeItem(RECORDING_CONSENT_PENDING_KEY);
+            } catch {
+              // Ignore.
+            }
+          } else {
+            setNeedsRecordingConsent(true);
+          }
+        } else {
+          setNeedsRecordingConsent(true);
+        }
+      }
 
       const subscription = subscriptionResult.data;
       if (subscription?.status) {
@@ -163,8 +196,23 @@ export default function InicioPage() {
     void loadDashboard();
   }, []);
 
+  async function handleAcceptRecordingConsent() {
+    if (!hasCheckedConsentBox || isSavingConsent) return;
+
+    setIsSavingConsent(true);
+
+    const supabase = createClient();
+    const { error } = await supabase.rpc('record_recording_consent');
+
+    setIsSavingConsent(false);
+
+    if (!error) {
+      setNeedsRecordingConsent(false);
+    }
+  }
+
   async function handleOpenLiveClass() {
-    if (isOpeningLiveClass) return;
+    if (isOpeningLiveClass || needsRecordingConsent) return;
 
     setIsOpeningLiveClass(true);
     setLiveClassError('');
@@ -214,6 +262,40 @@ export default function InicioPage() {
   return (
     <main className={styles.main}>
       <div className={styles.container}>
+        {needsRecordingConsent ? (
+          <section className={styles.consentBanner} role="alert" aria-labelledby="consent-banner-title">
+            <p className={styles.cardLabel}>AVISO IMPORTANTE</p>
+            <h2 id="consent-banner-title">Tus clases en vivo podrían grabarse</h2>
+            <p>
+              Grabamos únicamente el <strong>audio</strong> de las clases en vivo, con fines
+              educativos, para usarlo como material de apoyo en la futura Plataforma Inglés
+              con Lau. Tu cámara y tu rostro <strong>nunca</strong> se graban ni se muestran.
+            </p>
+            <label className={styles.consentBannerCheckbox}>
+              <input
+                type="checkbox"
+                checked={hasCheckedConsentBox}
+                onChange={(event) => setHasCheckedConsentBox(event.target.checked)}
+              />
+              <span>
+                He leído y entiendo que mis clases en vivo podrían grabarse (solo audio,
+                nunca video). Ver{' '}
+                <Link href="/terminos-y-condiciones" target="_blank">
+                  Términos y condiciones
+                </Link>
+                .
+              </span>
+            </label>
+            <button
+              type="button"
+              onClick={handleAcceptRecordingConsent}
+              disabled={!hasCheckedConsentBox || isSavingConsent}
+            >
+              {isSavingConsent ? 'Guardando…' : 'Aceptar y continuar'}
+            </button>
+          </section>
+        ) : null}
+
         <section className={styles.welcome}>
           <div className={styles.welcomeTop}>
             <p className={styles.eyebrow}>MI ESPACIO DE APRENDIZAJE</p>
@@ -264,7 +346,7 @@ export default function InicioPage() {
           <button
             type="button"
             onClick={handleOpenLiveClass}
-            disabled={isOpeningLiveClass}
+            disabled={isOpeningLiveClass || needsRecordingConsent}
           >
             {isOpeningLiveClass
               ? 'Comprobando reserva…'
@@ -272,6 +354,11 @@ export default function InicioPage() {
                 ? 'Entrar como anfitriona'
                 : 'Entrar a clase'}
           </button>
+          {needsRecordingConsent ? (
+            <p className={styles.liveClassError}>
+              Debes aceptar el aviso de grabación de clases (arriba) antes de entrar.
+            </p>
+          ) : null}
           {liveClassError ? <p role="alert" className={styles.liveClassError}>{liveClassError}</p> : null}
         </aside>
 

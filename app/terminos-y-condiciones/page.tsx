@@ -74,6 +74,16 @@ export default function TerminosYCondicionesPage() {
               específico. El progreso depende, entre otros factores, de la
               práctica, continuidad y participación de cada persona.
             </p>
+
+            <p className={styles.paragraph}>
+              <strong>Grabación de las clases en vivo.</strong> Las clases
+              grupales en vivo podrían grabarse con fines educativos, para
+              usarse como material de apoyo dentro de la futura Plataforma
+              Inglés con Lau. Solo se graba el audio de la clase: la cámara y
+              el rostro de los estudiantes nunca se graban ni se muestran.
+              Cualquier grabación se usa exclusivamente con fines educativos
+              y no se comparte fuera de la plataforma.
+            </p>
           </section>
 
           <section className={styles.section}>

@@ -1,5 +1,16 @@
 .main { min-height: 100vh; color: var(--text); background: var(--background); }
 .container { width: min(1120px, 88%); margin: 0 auto; padding: 64px 0 80px; }
+.consentBanner { margin-bottom: 22px; padding: clamp(22px, 4vw, 32px); background: var(--surface-solid); border: 1px solid var(--border); border-left: 6px solid var(--accent); border-radius: 20px; box-shadow: var(--shadow); }
+.consentBanner h2 { margin: 6px 0 12px; font-size: clamp(1.4rem, 3vw, 1.9rem); }
+.consentBanner > p:not(.cardLabel) { margin: 0 0 18px; max-width: 70ch; color: var(--text-light); line-height: 1.7; font-size: 1.05rem; }
+.consentBannerCheckbox { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px; color: var(--text); font-weight: 600; line-height: 1.6; cursor: pointer; }
+.consentBannerCheckbox input { width: 20px; height: 20px; flex-shrink: 0; margin: 2px 0 0; accent-color: var(--primary); cursor: pointer; }
+.consentBannerCheckbox a { color: var(--primary); font-weight: 700; }
+.consentBanner > button { min-height: 50px; padding: 12px 24px; color: var(--surface-solid); font: inherit; font-weight: 850; background: var(--primary); border: 0; border-radius: 999px; cursor: pointer; }
+.consentBanner > button:hover:not(:disabled) { background: var(--primary-hover); }
+.consentBanner > button:disabled { cursor: not-allowed; opacity: .55; }
+.consentBanner > button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
 .welcome { padding: clamp(30px, 5vw, 48px); background: var(--surface-soft); border: 1px solid var(--border); border-radius: 24px; box-shadow: var(--shadow); }
 .welcomeTop { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .eyebrow, .cardLabel { margin: 0 0 10px; color: var(--primary); font-size: .8rem; font-weight: 850; letter-spacing: .12em; }

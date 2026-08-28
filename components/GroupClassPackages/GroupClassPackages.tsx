@@ -29,6 +29,7 @@ type PendingSelection = {
 };
 
 const PENDING_SELECTION_KEY = 'inglesconlau-pending-group-purchase';
+const RECORDING_CONSENT_PENDING_KEY = 'inglesconlau-recording-consent-pending';
 
 function readPendingSelection(): PendingSelection | null {
   if (typeof window === 'undefined') return null;
@@ -190,6 +191,7 @@ export default function GroupClassPackages({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
   const selectedPackage =
     PACKAGES.find((item) => item.id === selectedPackageId) ?? PACKAGES[1];
@@ -250,11 +252,22 @@ export default function GroupClassPackages({
   async function handlePurchaseRequest() {
     if (!selectedSchedule || isSubmitting) return;
 
+    if (!hasAcceptedTerms) {
+      setError('Debes aceptar los Términos y condiciones para continuar.');
+      return;
+    }
+
     if (!isLoggedIn) {
       savePendingSelection({
         packageId: selectedPackageId,
         scheduleId: selectedSchedule.schedule_id,
       });
+
+      try {
+        window.localStorage.setItem(RECORDING_CONSENT_PENDING_KEY, '1');
+      } catch {
+        // Ignore — the /inicio banner will still catch this on first login.
+      }
 
       window.location.href = `/registro?next=${encodeURIComponent(
         '/clases-grupales#comprar',
@@ -279,6 +292,11 @@ export default function GroupClassPackages({
       setIsSubmitting(false);
       return;
     }
+
+    // Best-effort: this schedule requires accepting the recording notice,
+    // so record consent now for logged-in users too (not just the /inicio
+    // banner path for pre-existing accounts).
+    void supabase.rpc('record_recording_consent');
 
     const requestId = String(data);
     setSuccess(
@@ -466,10 +484,26 @@ export default function GroupClassPackages({
             <PaymentRow label="Código SWIFT" value={paymentDetails.swiftCode} />
           </dl>
 
+          <label className={styles.consentCheckbox}>
+            <input
+              type="checkbox"
+              checked={hasAcceptedTerms}
+              onChange={(event) => setHasAcceptedTerms(event.target.checked)}
+            />
+            <span>
+              He leído y acepto los{' '}
+              <a href="/terminos-y-condiciones" target="_blank" rel="noopener noreferrer">
+                Términos y condiciones
+              </a>
+              , incluyendo que mis clases en vivo podrían grabarse con fines
+              educativos (solo audio, nunca video).
+            </span>
+          </label>
+
           <button
             type="button"
             className={styles.emailButton}
-            disabled={!selectedSchedule || isSubmitting}
+            disabled={!selectedSchedule || isSubmitting || !hasAcceptedTerms}
             onClick={handlePurchaseRequest}
           >
             {isSubmitting
