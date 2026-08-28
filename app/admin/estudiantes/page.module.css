@@ -286,6 +286,31 @@
   border-color: var(--border);
 }
 
+.receiptButton {
+  width: 100%;
+  min-height: 42px;
+  margin: 0.6rem 0;
+  padding: 0.6rem 1rem;
+  color: var(--primary);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+  border-radius: 12px;
+}
+
+.receiptButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.noReceiptNote {
+  margin: 0.6rem 0;
+  color: var(--text-light);
+  font-size: 0.85rem;
+}
+
 .bookingsSection,
 .purchaseEditor,
 .balanceEditor {

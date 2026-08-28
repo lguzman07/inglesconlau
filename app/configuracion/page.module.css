@@ -312,6 +312,32 @@
   border-top: 1px solid var(--border);
 }
 
+.purchaseList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.purchaseItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 0;
+  border-top: 1px solid var(--border);
+}
+
+.purchaseItem h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.purchaseItem p {
+  margin: 0 0 8px;
+  color: var(--text-light);
+  line-height: 1.55;
+}
+
 .securityAction h3 {
   margin: 0 0 6px;
   font-size: 1rem;

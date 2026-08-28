@@ -23,6 +23,29 @@ type SubscriptionInfo = {
   current_period_end: string | null;
 };
 
+type PurchaseRequestSummary = {
+  request_id: string;
+  package_name: string;
+  package_classes: number;
+  price_dop: number;
+  status: string;
+  created_at: string;
+  receipt_path: string | null;
+  receipt_uploaded_at: string | null;
+};
+
+const PURCHASE_STATUS_LABELS: Record<string, string> = {
+  pending_payment: 'Pendiente de pago',
+  pending_review: 'En revisión',
+  confirmed: 'Confirmado',
+  rejected: 'Rechazado',
+  cancelled: 'Cancelado',
+};
+
+function formatMoney(value: number) {
+  return new Intl.NumberFormat('es-DO').format(value);
+}
+
 function formatConsentDate(value: string | null) {
   if (!value) return null;
 
@@ -126,6 +149,12 @@ export default function ConfiguracionPage() {
   const [recordingConsentAt, setRecordingConsentAt] =
     useState<string | null>(null);
 
+  const [purchaseRequests, setPurchaseRequests] =
+    useState<PurchaseRequestSummary[]>([]);
+
+  const [loadingReceiptId, setLoadingReceiptId] =
+    useState<string | null>(null);
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -169,6 +198,7 @@ export default function ConfiguracionPage() {
       const [
         profileResult,
         subscriptionResult,
+        purchaseRequestsResult,
       ] = await Promise.all([
         supabase
           .from('profiles')
@@ -195,6 +225,8 @@ export default function ConfiguracionPage() {
           )
           .eq('user_id', user.id)
           .maybeSingle(),
+
+        supabase.rpc('list_my_purchase_requests'),
       ]);
 
       if (profileResult.data) {
@@ -237,6 +269,10 @@ export default function ConfiguracionPage() {
 
       setRecordingConsentAt(
         profileResult.data?.recording_consent_at ?? null,
+      );
+
+      setPurchaseRequests(
+        (purchaseRequestsResult.data ?? []) as PurchaseRequestSummary[],
       );
 
       setIsLoading(false);
@@ -359,6 +395,30 @@ export default function ConfiguracionPage() {
     setProfileMessage(
       'Tu configuración se actualizó correctamente.',
     );
+  }
+
+  async function handleViewReceipt(
+    requestId: string,
+    receiptPath: string,
+  ) {
+    if (loadingReceiptId) return;
+
+    setLoadingReceiptId(requestId);
+
+    const supabase = createClient();
+
+    const { data, error } = await supabase.storage
+      .from('payment-receipts')
+      .createSignedUrl(receiptPath, 120);
+
+    setLoadingReceiptId(null);
+
+    if (error || !data?.signedUrl) {
+      setSecurityMessage('No pudimos abrir el comprobante. Inténtalo de nuevo.');
+      return;
+    }
+
+    window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
   }
 
   async function handlePasswordReset() {
@@ -522,6 +582,10 @@ export default function ConfiguracionPage() {
 
           <a href="#pago">
             Pago
+          </a>
+
+          <a href="#comprobantes">
+            Comprobantes
           </a>
 
           <a href="#seguridad">
@@ -1158,6 +1222,99 @@ export default function ConfiguracionPage() {
           >
             Agregar o cambiar método de pago
           </button>
+        </section>
+
+        <section
+          id="comprobantes"
+          className={styles.card}
+        >
+          <div
+            className={
+              styles.cardHeading
+            }
+          >
+            <div>
+              <p
+                className={
+                  styles.cardLabel
+                }
+              >
+                COMPROBANTES
+              </p>
+
+              <h2>
+                Mis comprobantes de pago
+              </h2>
+            </div>
+          </div>
+
+          <p
+            className={
+              styles.cardDescription
+            }
+          >
+            Aquí verás cada paquete que has solicitado y el comprobante que
+            subiste para cada uno.
+          </p>
+
+          {purchaseRequests.length === 0 ? (
+            <p className={styles.pendingNote}>
+              Todavía no has solicitado ningún paquete.
+            </p>
+          ) : (
+            <ul className={styles.purchaseList}>
+              {purchaseRequests.map((request) => (
+                <li
+                  key={request.request_id}
+                  className={styles.purchaseItem}
+                >
+                  <div>
+                    <h3>
+                      {request.package_name} ({request.package_classes} clases)
+                    </h3>
+
+                    <p>
+                      RD${formatMoney(Number(request.price_dop))} ·{' '}
+                      {new Intl.DateTimeFormat('es-DO', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                        timeZone: 'America/Santo_Domingo',
+                      }).format(new Date(request.created_at))}
+                    </p>
+
+                    <span
+                      className={styles.statusBadge}
+                    >
+                      {PURCHASE_STATUS_LABELS[request.status] ?? request.status}
+                    </span>
+                  </div>
+
+                  {request.receipt_path ? (
+                    <button
+                      type="button"
+                      className={styles.secondaryButton}
+                      disabled={loadingReceiptId === request.request_id}
+                      onClick={() =>
+                        void handleViewReceipt(
+                          request.request_id,
+                          request.receipt_path as string,
+                        )
+                      }
+                    >
+                      {loadingReceiptId === request.request_id
+                        ? 'Abriendo…'
+                        : 'Ver comprobante'}
+                    </button>
+                  ) : (
+                    <span className={styles.pendingNote}>
+                      Sin comprobante subido
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
 
         <section
