@@ -6,6 +6,7 @@ import Link from 'next/link';
 import CountUp from '@/components/CountUp/CountUp';
 import GroupClassesDashboard from '@/components/GroupClassesDashboard/GroupClassesDashboard';
 import ProfileCompletionCard from '@/components/ProfileCompletionCard/ProfileCompletionCard';
+import WordOfTheDay from '@/components/WordOfTheDay/WordOfTheDay';
 import { getLessonTitle } from '@/content/lecciones/catalog';
 import { createClient } from '@/lib/supabase/client';
 
@@ -333,6 +334,8 @@ export default function InicioPage() {
         </section>
 
         <ProfileCompletionCard onCompleted={setStudentName} />
+
+        <WordOfTheDay />
 
         <section className={styles.sectionHeading}>
           <p className={styles.eyebrow}>PRIMERO</p>

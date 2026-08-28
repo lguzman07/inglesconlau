@@ -11,6 +11,7 @@ import {
 
 import AudioPlayer from '@/components/AudioPlayer/AudioPlayer';
 import VocabularyButton from '@/components/VocabularyButton/VocabularyButton';
+import SymbolShape from './SymbolShape';
 
 import type {
   MontessoriExercise as MontessoriExerciseContent,
@@ -183,21 +184,6 @@ const checkButtonStyle: CSSProperties = {
 const disabledButtonStyle: CSSProperties = {
   cursor: 'not-allowed',
   opacity: 0.55,
-};
-
-const SYMBOL_COLORS: Record<
-  string,
-  string
-> = {
-  red: '#d74b4b',
-  black: '#30363a',
-  blue: '#4169a8',
-  'light-blue': '#77a9d4',
-  purple: '#80599e',
-  green: '#4f8c67',
-  pink: '#c97891',
-  orange: '#d98243',
-  yellow: '#d6aa36',
 };
 
 function getWordId(
@@ -391,147 +377,6 @@ function getSymbolTooltip(
   return '';
 }
 
-function SymbolShape({
-  symbol,
-}: {
-  symbol: MontessoriSymbol;
-}) {
-  const shape = String(
-    symbol.shape,
-  );
-
-  const color =
-    SYMBOL_COLORS[symbol.color] ??
-    '#30363a';
-
-  if (
-    shape.includes('triangle')
-  ) {
-    const isSmall =
-      shape.includes('small');
-
-    return (
-      <span
-        aria-hidden="true"
-        style={{
-          width: 0,
-          height: 0,
-
-          borderLeft: `${
-            isSmall ? 13 : 19
-          }px solid transparent`,
-
-          borderRight: `${
-            isSmall ? 13 : 19
-          }px solid transparent`,
-
-          borderBottom: `${
-            isSmall ? 23 : 34
-          }px solid ${color}`,
-        }}
-      />
-    );
-  }
-
-  if (shape === 'bar') {
-    return (
-      <span
-        aria-hidden="true"
-        style={{
-          width: '38px',
-          height: '10px',
-          background: color,
-          borderRadius: '999px',
-        }}
-      />
-    );
-  }
-
-  if (shape === 'crescent') {
-    return (
-      <span
-        aria-hidden="true"
-        style={{
-          position: 'relative',
-          width: '38px',
-          height: '38px',
-          overflow: 'hidden',
-          borderRadius: '50%',
-          background: color,
-        }}
-      >
-        <span
-          style={{
-            position: 'absolute',
-            top: '7px',
-            left: '7px',
-            width: '34px',
-            height: '34px',
-            background:
-              'var(--surface-solid)',
-            borderRadius: '50%',
-          }}
-        />
-      </span>
-    );
-  }
-
-  if (shape === 'keyhole') {
-    return (
-      <span
-        aria-hidden="true"
-        style={{
-          position: 'relative',
-          display: 'inline-block',
-          width: '30px',
-          height: '38px',
-        }}
-      >
-        <span
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: '5px',
-            width: '20px',
-            height: '20px',
-            background: color,
-            borderRadius: '50%',
-          }}
-        />
-
-        <span
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: '9px',
-            width: '12px',
-            height: '23px',
-            background: color,
-            borderRadius: '3px',
-          }}
-        />
-      </span>
-    );
-  }
-
-  return (
-    <span
-      aria-hidden="true"
-      style={{
-        width: shape.includes('small')
-          ? '22px'
-          : '38px',
-
-        height: shape.includes('small')
-          ? '22px'
-          : '38px',
-
-        background: color,
-        borderRadius: '50%',
-      }}
-    />
-  );
-}
 
 export default function MontessoriExercise({
   exercise,
@@ -907,9 +752,8 @@ export default function MontessoriExercise({
                             >
                               {placedSymbol ? (
                                 <SymbolShape
-                                  symbol={
-                                    placedSymbol
-                                  }
+                                  shape={String(placedSymbol.shape)}
+                                  color={placedSymbol.color}
                                 />
                               ) : (
                                 <span
@@ -1034,9 +878,8 @@ export default function MontessoriExercise({
                           }}
                         >
                           <SymbolShape
-                            symbol={
-                              symbol
-                            }
+                            shape={String(symbol.shape)}
+                            color={symbol.color}
                           />
 
                           <span
