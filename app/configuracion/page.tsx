@@ -23,6 +23,17 @@ type SubscriptionInfo = {
   current_period_end: string | null;
 };
 
+function formatConsentDate(value: string | null) {
+  if (!value) return null;
+
+  return new Intl.DateTimeFormat('es-DO', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'America/Santo_Domingo',
+  }).format(new Date(value));
+}
+
 const EMPTY_PROFILE: ProfileForm = {
   full_name: '',
   birth_date: '',
@@ -112,6 +123,9 @@ export default function ConfiguracionPage() {
   const [subscription, setSubscription] =
     useState<SubscriptionInfo | null>(null);
 
+  const [recordingConsentAt, setRecordingConsentAt] =
+    useState<string | null>(null);
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -167,7 +181,8 @@ export default function ConfiguracionPage() {
               english_level,
               learning_goal,
               english_pronunciation,
-              translation_display
+              translation_display,
+              recording_consent_at
             `,
           )
           .eq('id', user.id)
@@ -219,6 +234,10 @@ export default function ConfiguracionPage() {
           subscriptionResult.data,
         );
       }
+
+      setRecordingConsentAt(
+        profileResult.data?.recording_consent_at ?? null,
+      );
 
       setIsLoading(false);
     }
@@ -1163,6 +1182,37 @@ export default function ConfiguracionPage() {
                 Contraseña y cuenta
               </h2>
             </div>
+          </div>
+
+          <div
+            className={
+              styles.securityAction
+            }
+          >
+            <div>
+              <h3>
+                Grabación de clases en vivo
+              </h3>
+
+              <p>
+                {recordingConsentAt
+                  ? `Aceptaste este aviso el ${formatConsentDate(recordingConsentAt)}.`
+                  : 'Aún no has aceptado el aviso de grabación de clases.'}
+              </p>
+            </div>
+
+            {recordingConsentAt ? (
+              <span className={styles.statusBadge}>
+                Aceptado
+              </span>
+            ) : (
+              <Link
+                href="/inicio"
+                className={styles.secondaryButton}
+              >
+                Revisar aviso
+              </Link>
+            )}
           </div>
 
           <div
