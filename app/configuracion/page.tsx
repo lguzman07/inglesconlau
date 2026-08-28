@@ -46,6 +46,14 @@ function formatMoney(value: number) {
   return new Intl.NumberFormat('es-DO').format(value);
 }
 
+function maskEmail(value: string) {
+  const [local, domain] = value.split('@');
+  if (!local || !domain) return value;
+
+  const visible = local.slice(0, 2);
+  return `${visible}${'.'.repeat(Math.max(local.length - 2, 3))}@${domain}`;
+}
+
 function formatConsentDate(value: string | null) {
   if (!value) return null;
 
@@ -1383,7 +1391,7 @@ export default function ConfiguracionPage() {
               </h3>
 
               <p>
-                Tu correo actual es {email}.
+                Tu correo actual es {maskEmail(email)}.
               </p>
             </div>
 
@@ -1485,7 +1493,7 @@ export default function ConfiguracionPage() {
 
               <p>
                 Recibirás un enlace seguro
-                en {email}.
+                en {maskEmail(email)}.
               </p>
             </div>
 

@@ -56,6 +56,7 @@ export default function InicioPage() {
   const [needsRecordingConsent, setNeedsRecordingConsent] = useState(false);
   const [hasCheckedConsentBox, setHasCheckedConsentBox] = useState(false);
   const [isSavingConsent, setIsSavingConsent] = useState(false);
+  const [consentError, setConsentError] = useState('');
 
   useEffect(() => {
     function syncLastOpenedLesson() {
@@ -200,15 +201,19 @@ export default function InicioPage() {
     if (!hasCheckedConsentBox || isSavingConsent) return;
 
     setIsSavingConsent(true);
+    setConsentError('');
 
     const supabase = createClient();
     const { error } = await supabase.rpc('record_recording_consent');
 
     setIsSavingConsent(false);
 
-    if (!error) {
-      setNeedsRecordingConsent(false);
+    if (error) {
+      setConsentError(error.message || 'No pudimos guardar tu aceptación. Inténtalo de nuevo.');
+      return;
     }
+
+    setNeedsRecordingConsent(false);
   }
 
   async function handleOpenLiveClass() {
@@ -293,6 +298,9 @@ export default function InicioPage() {
             >
               {isSavingConsent ? 'Guardando…' : 'Aceptar y continuar'}
             </button>
+            {consentError ? (
+              <p className={styles.liveClassError} role="alert">{consentError}</p>
+            ) : null}
           </section>
         ) : null}
 
