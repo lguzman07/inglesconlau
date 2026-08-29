@@ -11,7 +11,7 @@ export default function StepOne() {
 
         <a
           className={styles.lessonPdf}
-          href="/pdfs/lesson-1.pdf"
+          href="/pdfs/A1/lesson-1.pdf"
           target="_blank"
           rel="noreferrer"
           aria-label="Abrir el PDF de la lección 1"
