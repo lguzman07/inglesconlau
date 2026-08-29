@@ -58,6 +58,61 @@
   box-shadow: var(--shadow);
 }
 
+.availabilityPanel {
+  margin-bottom: 1.5rem;
+}
+
+.availabilityToggle {
+  min-height: 48px;
+  padding: 0.75rem 1.25rem;
+  color: var(--surface-solid);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 13px;
+}
+
+.availabilityToggle:hover {
+  background: var(--primary-hover);
+}
+
+.availabilityList {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.availabilityRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.availabilityRow strong {
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.availabilityRowFull {
+  border-color: var(--text-light);
+}
+
+.availabilityRowFull strong {
+  color: var(--text-light);
+}
+
 .panel {
   margin-top: 1.5rem;
 }

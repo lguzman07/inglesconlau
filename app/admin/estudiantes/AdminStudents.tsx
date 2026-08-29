@@ -6,6 +6,17 @@ import { createClient } from '@/lib/supabase/client';
 
 import styles from './page.module.css';
 
+type ScheduleAvailability = {
+  schedule_id: string;
+  level: string;
+  label: string;
+  starts_at: string;
+  ends_at: string;
+  max_students: number;
+  enrolled_count: number;
+  spots_remaining: number;
+};
+
 type ActiveSchedule = {
   schedule_id: string;
   level: string;
@@ -150,6 +161,10 @@ export default function AdminStudents({
   const [bookingsError, setBookingsError] = useState<Record<string, string>>({});
   const [cancellingBookingId, setCancellingBookingId] = useState<string | null>(null);
   const [activeSchedules, setActiveSchedules] = useState<ActiveSchedule[]>([]);
+  const [isAvailabilityOpen, setIsAvailabilityOpen] = useState(false);
+  const [availability, setAvailability] = useState<ScheduleAvailability[]>([]);
+  const [isLoadingAvailability, setIsLoadingAvailability] = useState(false);
+  const [availabilityError, setAvailabilityError] = useState('');
   const [assignScheduleId, setAssignScheduleId] = useState<Record<string, string>>({});
   const [assignDate, setAssignDate] = useState<Record<string, string>>({});
   const [assigningId, setAssigningId] = useState<string | null>(null);
@@ -352,6 +367,28 @@ export default function AdminStudents({
     }));
   }
 
+  async function toggleAvailability() {
+    if (isAvailabilityOpen) {
+      setIsAvailabilityOpen(false);
+      return;
+    }
+
+    setIsAvailabilityOpen(true);
+    setIsLoadingAvailability(true);
+    setAvailabilityError('');
+
+    const { data, error } = await supabase.rpc('admin_list_schedule_availability');
+
+    setIsLoadingAvailability(false);
+
+    if (error) {
+      setAvailabilityError(error.message);
+      return;
+    }
+
+    setAvailability((data ?? []) as ScheduleAvailability[]);
+  }
+
   async function loadBookings(studentId: string) {
     setBookingsLoading((current) => ({ ...current, [studentId]: true }));
     setBookingsError((current) => ({ ...current, [studentId]: '' }));
@@ -443,6 +480,43 @@ export default function AdminStudents({
 
   return (
     <>
+      <section className={styles.availabilityPanel}>
+        <button type="button" className={styles.availabilityToggle} onClick={toggleAvailability}>
+          {isAvailabilityOpen ? 'Ocultar cupos actuales' : 'Ver cupos actuales'}
+        </button>
+
+        {isAvailabilityOpen ? (
+          <div className={styles.availabilityList}>
+            {isLoadingAvailability ? (
+              <p className={styles.inlineError}>Cargando cupos…</p>
+            ) : availabilityError ? (
+              <p className={styles.inlineError}>{availabilityError}</p>
+            ) : (
+              availability.map((schedule) => {
+                const isFull = schedule.spots_remaining <= 0;
+
+                return (
+                  <div
+                    key={schedule.schedule_id}
+                    className={`${styles.availabilityRow} ${isFull ? styles.availabilityRowFull : ''}`}
+                  >
+                    <span>
+                      {schedule.level.toUpperCase()} · {schedule.label} ·{' '}
+                      {formatTime(schedule.starts_at)}–{formatTime(schedule.ends_at)}
+                    </span>
+                    <strong>
+                      {isFull
+                        ? 'Sin cupos'
+                        : `${schedule.spots_remaining} de ${schedule.max_students} cupos`}
+                    </strong>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        ) : null}
+      </section>
+
       <section className={styles.requestsPanel}>
         <div className={styles.requestsHeading}>
           <div>
