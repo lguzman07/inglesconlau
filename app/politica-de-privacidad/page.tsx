@@ -12,7 +12,7 @@ export default function PoliticaDePrivacidadPage() {
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-        <Link href="/" className={styles.backLink}>
+        <Link href="/en-vivo" className={styles.backLink}>
           ← Volver a Inglés con Lau
         </Link>
 

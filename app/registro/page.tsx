@@ -180,7 +180,7 @@ export default function RegistroPage() {
         className={styles.card}
         aria-labelledby="registration-title"
       >
-        <Link className={styles.backLink} href="/">
+        <Link className={styles.backLink} href="/en-vivo">
           ← Volver al inicio
         </Link>
 

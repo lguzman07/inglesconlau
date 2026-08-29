@@ -83,7 +83,7 @@ export default function Plan() {
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-        <Link href="/" className={styles.backLink}>
+        <Link href="/en-vivo" className={styles.backLink}>
           ← Volver al inicio
         </Link>
 

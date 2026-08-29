@@ -89,7 +89,7 @@ export default function StudentNavbar() {
     }
 
     await supabase.auth.signOut();
-    router.replace('/');
+    router.replace('/en-vivo');
     router.refresh();
   }
 

@@ -60,7 +60,7 @@ export default async function ClasesGrupalesPage() {
   return (
     <main className={styles.main}>
       <div className={styles.container}>
-        <Link href={user ? '/inicio' : '/'} className={styles.backLink}>
+        <Link href={user ? '/inicio' : '/en-vivo'} className={styles.backLink}>
           {user ? '← Volver a Inicio' : '← Volver al inicio'}
         </Link>
 

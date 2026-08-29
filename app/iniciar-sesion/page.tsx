@@ -447,7 +447,7 @@ export default function IniciarSesionPage() {
     <main className={styles.page}>
       <Link
         className={styles.backLink}
-        href="/"
+        href="/en-vivo"
       >
         ← Volver al inicio
       </Link>

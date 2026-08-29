@@ -1,19 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import Navbar from '@/components/Navbar/Navbar';
-import Hero from '@/components/Hero/Hero';
-import LearningOutcomes from '@/components/Hero/LearningOutcomes';
-import Methodology from '@/components/Methodology/Methodology';
-import WhyDifferent from '@/components/WhyUs/WhyUs';
-import AccessibilityBand from '@/components/AccessibilityBand/AccessibilityBand';
-import Roadmap from '@/components/Roadmap/Roadmap/Roadmap';
-import PlansTeaser from '@/components/PlansTeaser/PlansTeaser';
-import FAQ from '@/components/FAQ/FAQ';
-import FinalCta from '@/components/FinalCta/FinalCta';
-import ScrollToTop from '@/components/ScrollToTop/ScrollToTop';
+
 import { createClient } from '@/lib/supabase/client';
+
+import styles from './Home.module.css';
 
 export default function Home() {
   const router = useRouter();
@@ -35,21 +28,38 @@ export default function Home() {
   }, [router]);
 
   return (
-    <main className="marketing-page">
-      <div className="landing-intro">
-        <Navbar />
-        <Hero />
-        <LearningOutcomes />
+    <main className={`${styles.page} marketing-page`}>
+      <div className={styles.logo}>Inglés con Lau</div>
+
+      <div className={styles.intro}>
+        <p className="section-eyebrow">INGLÉS PARA HISPANOHABLANTES</p>
+        <h1 className={styles.title}>¿Cómo quieres aprender?</h1>
+        <p className={styles.subtitle}>Elige tu camino para empezar.</p>
       </div>
 
-      <WhyDifferent />
-      <AccessibilityBand />
-      <Methodology />
-      <Roadmap />
-      <PlansTeaser />
-      <FAQ />
-      <FinalCta />
-      <ScrollToTop />
+      <div className={styles.choices}>
+        <Link href="/en-vivo" className={styles.choiceCard}>
+          <span className={styles.choiceBadge}>Disponible ahora</span>
+          <h2>Clases en vivo</h2>
+          <p>
+            Grupos pequeños, en vivo, con un horario fijo que eliges una sola
+            vez. Empieza probando por RD$100.
+          </p>
+          <span className={styles.choiceLink}>Ver clases en vivo →</span>
+        </Link>
+
+        <Link href="/plataforma" className={styles.choiceCard}>
+          <span className={`${styles.choiceBadge} ${styles.choiceBadgeSoon}`}>
+            Próximamente
+          </span>
+          <h2>Plataforma de lecciones grabadas</h2>
+          <p>
+            Lecciones grabadas, ejercicios interactivos y tu progreso, a tu
+            ritmo y sin horario fijo. Todavía en construcción.
+          </p>
+          <span className={styles.choiceLink}>Anotarme en la lista →</span>
+        </Link>
+      </div>
     </main>
   );
 }
