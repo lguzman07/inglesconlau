@@ -305,6 +305,34 @@ export default function InicioPage() {
           </section>
         ) : null}
 
+        <aside className={styles.liveClass}>
+          <div>
+            <p className={styles.cardLabel}>CLASE EN VIVO</p>
+            <h2>Entra a la sala cuando llegue tu horario</h2>
+            <p>
+              El acceso depende de una reserva aprobada para la fecha y hora actuales,
+              no del estado de la suscripción.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleOpenLiveClass}
+            disabled={isOpeningLiveClass || needsRecordingConsent}
+          >
+            {isOpeningLiveClass
+              ? 'Comprobando reserva…'
+              : role === 'admin'
+                ? 'Entrar como anfitriona'
+                : 'Entrar a clase'}
+          </button>
+          {needsRecordingConsent ? (
+            <p className={styles.liveClassError}>
+              Debes aceptar el aviso de grabación de clases (arriba) antes de entrar.
+            </p>
+          ) : null}
+          {liveClassError ? <p role="alert" className={styles.liveClassError}>{liveClassError}</p> : null}
+        </aside>
+
         <section className={styles.welcome}>
           <div className={styles.welcomeTop}>
             <p className={styles.eyebrow}>MI ESPACIO DE APRENDIZAJE</p>
@@ -344,34 +372,6 @@ export default function InicioPage() {
         </section>
 
         <GroupClassesDashboard />
-
-        <aside className={styles.liveClass}>
-          <div>
-            <p className={styles.cardLabel}>CLASE EN VIVO</p>
-            <h2>Entra a la sala cuando llegue tu horario</h2>
-            <p>
-              El acceso depende de una reserva aprobada para la fecha y hora actuales,
-              no del estado de la suscripción.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={handleOpenLiveClass}
-            disabled={isOpeningLiveClass || needsRecordingConsent}
-          >
-            {isOpeningLiveClass
-              ? 'Comprobando reserva…'
-              : role === 'admin'
-                ? 'Entrar como anfitriona'
-                : 'Entrar a clase'}
-          </button>
-          {needsRecordingConsent ? (
-            <p className={styles.liveClassError}>
-              Debes aceptar el aviso de grabación de clases (arriba) antes de entrar.
-            </p>
-          ) : null}
-          {liveClassError ? <p role="alert" className={styles.liveClassError}>{liveClassError}</p> : null}
-        </aside>
 
         <section className={styles.sectionHeading}>
           <p className={styles.eyebrow}>DESPUÉS</p>
