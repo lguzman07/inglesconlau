@@ -27,7 +27,7 @@
 .sectionHeading h2 { margin: 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
 .sectionHeading > p:not(.eyebrow) { max-width: 680px; margin: 12px 0 0; color: var(--text-light); line-height: 1.6; }
 
-.liveClass { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: center; margin-top: 22px; padding: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow); }
+.liveClass { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: center; margin-top: 22px; margin-bottom: 32px; padding: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow); }
 .liveClass h2 { margin: 0; font-size: 1.45rem; }
 .liveClass div > p:not(.cardLabel) { margin: 10px 0 0; color: var(--text-light); line-height: 1.6; }
 .liveClass button { min-height: 50px; padding: 12px 20px; color: var(--surface-solid); font: inherit; font-weight: 850; background: var(--primary); border: 0; border-radius: 999px; cursor: pointer; }
