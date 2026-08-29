@@ -231,5 +231,6 @@ export type LessonContent = {
   videoTitle: string;
   videoDescription: string;
   objective: string;
+  pdfUrl?: string;
   exercises: LessonExercise[];
 };

@@ -18,6 +18,8 @@ const lessonA1001: LessonContent = {
   objective:
     'Al terminar, podrás decir tu nombre, tu profesión y de dónde eres.',
 
+  pdfUrl: '/pdfs/A1/lesson-1.pdf',
+
   exercises: [
     {
       type: 'fill-in-the-blanks',

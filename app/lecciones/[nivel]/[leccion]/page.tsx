@@ -555,6 +555,53 @@ export default async function LeccionPage({
           </div>
         </section>
 
+        {lesson?.pdfUrl ? (
+          <section
+            className={
+              styles.pdfCard
+            }
+            aria-labelledby="pdf-heading"
+          >
+            <div
+              className={
+                styles.objectiveIcon
+              }
+              aria-hidden="true"
+            >
+              📄
+            </div>
+
+            <div>
+              <p
+                className={
+                  styles.eyebrow
+                }
+              >
+                MATERIAL DE APOYO
+              </p>
+
+              <h2 id="pdf-heading">
+                PDF de esta lección
+              </h2>
+
+              <p>
+                Descarga el resumen en PDF para repasar cuando quieras.
+              </p>
+
+              <a
+                href={lesson.pdfUrl}
+                target="_blank"
+                rel="noreferrer"
+                className={
+                  styles.pdfLink
+                }
+              >
+                Ver el PDF →
+              </a>
+            </div>
+          </section>
+        ) : null}
+
         <section
           className={
             styles.practiceSection

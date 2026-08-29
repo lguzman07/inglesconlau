@@ -157,7 +157,8 @@
 }
 
 .objectiveCard,
-.completionCard {
+.completionCard,
+.pdfCard {
   display: flex;
   align-items: center;
   gap: 22px;
@@ -166,6 +167,25 @@
   background: var(--surface-soft);
   border: 1px solid var(--primary-light);
   border-radius: 20px;
+}
+
+.pdfCard p {
+  margin: 6px 0 0;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.pdfLink {
+  display: inline-flex;
+  margin-top: 14px;
+  color: var(--primary);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.pdfLink:hover,
+.pdfLink:focus-visible {
+  text-decoration: underline;
 }
 
 .objectiveIcon {
@@ -352,7 +372,8 @@
   }
 
   .objectiveCard,
-  .completionCard {
+  .completionCard,
+  .pdfCard {
     padding: 24px;
   }
 
@@ -378,7 +399,8 @@
     margin-bottom: 32px;
   }
 
-  .objectiveCard {
+  .objectiveCard,
+  .pdfCard {
     align-items: flex-start;
   }
 
