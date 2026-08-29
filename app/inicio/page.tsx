@@ -44,8 +44,7 @@ export default function InicioPage() {
   const [gender, setGender] = useState('');
   const [role, setRole] = useState('student');
   const [indicatedLevel, setIndicatedLevel] = useState('');
-  const [subscriptionStatus, setSubscriptionStatus] = useState('inactive');
-  const [subscriptionEndsAt, setSubscriptionEndsAt] = useState<string | null>(null);
+  const [hasClassAccess, setHasClassAccess] = useState(false);
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
   const [isOpeningLiveClass, setIsOpeningLiveClass] = useState(false);
   const [liveClassError, setLiveClassError] = useState('');
@@ -99,18 +98,14 @@ export default function InicioPage() {
         setStudentName(accountName.trim().split(/\s+/)[0] ?? '');
       }
 
-      const [profileResult, subscriptionResult, completedResult, flashcardsResult, progressResult] =
+      const [profileResult, accessResult, completedResult, flashcardsResult, progressResult] =
         await Promise.all([
           supabase
             .from('profiles')
             .select('full_name, english_level, gender, role, recording_consent_at')
             .eq('id', user.id)
             .maybeSingle(),
-          supabase
-            .from('subscriptions')
-            .select('status, current_period_end')
-            .eq('user_id', user.id)
-            .maybeSingle(),
+          supabase.rpc('student_has_access'),
           supabase
             .from('lesson_progress')
             .select('lesson_key', { count: 'exact', head: true })
@@ -164,11 +159,7 @@ export default function InicioPage() {
         }
       }
 
-      const subscription = subscriptionResult.data;
-      if (subscription?.status) {
-        setSubscriptionStatus(subscription.status);
-        setSubscriptionEndsAt(subscription.current_period_end);
-      }
+      setHasClassAccess(accessResult.data === true);
 
       setCompletedLessons(completedResult.count ?? 0);
       setSavedFlashcards(flashcardsResult.count ?? 0);
@@ -252,11 +243,7 @@ export default function InicioPage() {
     return `¡Hola${name}! ¿Lista para continuar?`;
   }
 
-  const hasCurrentSubscription =
-    subscriptionStatus === 'active' &&
-    subscriptionEndsAt !== null &&
-    new Date(subscriptionEndsAt).getTime() > Date.now();
-  const hasActiveAccess = role === 'admin' || hasCurrentSubscription;
+  const hasActiveAccess = role === 'admin' || hasClassAccess;
   const accessLabel =
     role === 'admin'
       ? 'Acceso administrativo'

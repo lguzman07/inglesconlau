@@ -159,7 +159,7 @@ export default async function NivelPage({
 
   const [
     profileResult,
-    subscriptionResult,
+    accessResult,
     progressResult,
   ] = await Promise.all([
     supabase
@@ -168,13 +168,7 @@ export default async function NivelPage({
       .eq('id', user.id)
       .maybeSingle(),
 
-    supabase
-      .from('subscriptions')
-      .select(
-        'status, current_period_end',
-      )
-      .eq('user_id', user.id)
-      .maybeSingle(),
+    supabase.rpc('student_has_access'),
 
     supabase
       .from('lesson_progress')
@@ -189,21 +183,9 @@ export default async function NivelPage({
     profileResult.data?.role ===
     'admin';
 
-  const subscription =
-    subscriptionResult.data;
-
-  const hasCurrentSubscription =
-    subscription?.status ===
-      'active' &&
-    subscription.current_period_end !==
-      null &&
-    new Date(
-      subscription.current_period_end,
-    ).getTime() > Date.now();
-
   const hasLessonAccess =
     isAdmin ||
-    hasCurrentSubscription;
+    accessResult.data === true;
 
   const completedLessonKeys =
     new Set(
