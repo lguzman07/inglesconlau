@@ -136,13 +136,13 @@ const LEVELS = [
     id: 'b1',
     name: 'B1',
     tag: 'Intermedio',
-    description: 'Te defiendes, pero no con confianza ni fluidez.',
+    description: 'Ya hablas con confianza en el día a día, y quieres ampliar tu vocabulario y fluidez.',
   },
   {
     id: 'b2',
     name: 'B2',
     tag: 'Intermedio alto',
-    description: 'Hablas, y quieres precisión y soltura real.',
+    description: 'Te comunicas con soltura, y quieres perfeccionar tu precisión y naturalidad.',
   },
 ] as const;
 
