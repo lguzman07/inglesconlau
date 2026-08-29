@@ -1096,7 +1096,7 @@ export default function ConfiguracionPage() {
               </p>
 
               <h2>
-                Plan Inglés con Lau
+                Plataforma Inglés con Lau
               </h2>
             </div>
 
@@ -1111,7 +1111,7 @@ export default function ConfiguracionPage() {
             >
               {subscriptionIsActive
                 ? 'Activa'
-                : 'Inactiva'}
+                : 'Próximamente'}
             </span>
           </div>
 
@@ -1121,7 +1121,7 @@ export default function ConfiguracionPage() {
             }
           >
             <div>
-              <span>Precio</span>
+              <span>Precio estimado</span>
 
               <strong>
                 RD$1,200 al mes
@@ -1155,14 +1155,15 @@ export default function ConfiguracionPage() {
               Cancelar suscripción
             </button>
           ) : (
-            <Link
-              href="/plan"
+            <button
+              type="button"
               className={
-                styles.primaryButton
+                styles.secondaryButton
               }
+              disabled
             >
-              Empezar el plan
-            </Link>
+              Disponible próximamente
+            </button>
           )}
 
           <p
@@ -1170,11 +1171,9 @@ export default function ConfiguracionPage() {
               styles.pendingNote
             }
           >
-            La cancelación automática se
-            habilitará al conectar Pagos
-            Recurrentes de Azul. Hasta
-            entonces este botón no realizará
-            cambios.
+            {subscriptionIsActive
+              ? 'La cancelación automática se habilitará al conectar Pagos Recurrentes de Azul. Hasta entonces este botón no realizará cambios.'
+              : 'Esta es la futura plataforma de lecciones grabadas, todavía en construcción. Lo que tienes activo hoy son tus clases grupales en vivo — puedes ver tus reservas y comprar más clases desde el botón "Comprar clases grupales" en Inicio.'}
           </p>
         </section>
 

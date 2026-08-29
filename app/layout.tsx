@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
 
   description:
-    'Aprende inglés con confianza mediante lecciones grabadas, ejercicios interactivos y una ruta diseñada especialmente para hispanohablantes.',
+    'Clases grupales de inglés en vivo, en grupos pequeños, diseñadas especialmente para hispanohablantes. Empieza con una clase de prueba desde RD$100.',
 
   applicationName: 'Inglés con Lau',
   creator: 'Laura Guzmán',
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     title: 'Inglés con Lau | Aprende conmigo',
 
     description:
-      'Lecciones grabadas, ejercicios interactivos y una ruta clara para aprender inglés con confianza y a tu propio ritmo.',
+      'Clases grupales de inglés en vivo, en grupos pequeños, con un horario fijo que eliges una sola vez. Empieza con una clase de prueba desde RD$100.',
 
     url: '/',
 

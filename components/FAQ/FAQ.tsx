@@ -11,7 +11,7 @@ const faqs = [
   { question: '¿Cuánto cuestan los paquetes y puedo cancelarlos cuando quiera?', answer: 'Los paquetes van desde RD$100 la clase de prueba hasta RD$7,000 el curso completo de 80 clases. No hay suscripción ni renovación automática: compras el paquete que quieras y usas tus clases dentro del período que corresponde.' },
   { question: '¿Puedo cambiar de nivel más adelante?', answer: 'Sí. Si sientes que el grupo te queda corto o quieres reforzar, escríbeme y te ayudo a cambiar de nivel para tu próximo paquete.' },
   { question: '¿Puedo utilizar la plataforma desde el celular, la tableta y la computadora?', answer: 'Sí. He diseñado la plataforma para que puedas utilizarla desde el celular, la tableta o la computadora, sin necesidad de descargar una aplicación.' },
-  { question: '¿Qué hago si tengo dudas sobre una lección o un ejercicio?', answer: '', includesEmail: true },
+  { question: '¿Qué hago si tengo dudas fuera de horario de clase?', answer: '', includesEmail: true },
   { question: '¿Qué hace diferente a Inglés con Lau de otras plataformas?', answer: 'Mi compromiso con la accesibilidad va más allá de ofrecer educación a un precio accesible. También quiero que la plataforma sea fácil de leer y utilizar, por eso incluye una tipografía clara y diferentes modos de visualización para que elijas el que te resulte más cómodo. Además, parto completamente del español y no espero que ya sepas inglés. Soy una profesora dominicana que conoce de primera mano los retos de aprender este idioma y lo difícil que puede ser dominar su pronunciación.' },
   { question: '¿No sería mejor aprender inglés con un profesor nativo?', answer: 'Depende de tu nivel y de lo que quieras lograr. Si tienes un nivel avanzado y solo quieres practicar conversación, un profesor nativo que no hable español puede ser tu mejor opción, porque te verás obligado a comunicarte siempre en inglés. Sin embargo, he creado Inglés con Lau para todo tipo de estudiantes. La ventaja de aprender conmigo es que conozco tanto el idioma que quieres aprender como tu idioma natal. Esto me permite comprender por qué cometes ciertos errores, explicarte los conceptos partiendo del español y ayudarte con las dificultades de pronunciación que suelen tener los hispanohablantes.' },
 ];
@@ -52,9 +52,9 @@ export default function FAQ() {
                   <div className="faq-answer">
                     {faq.includesEmail ? (
                       <p>
-                        Puedes escribirme a{' '}
+                        Puedes escribirme por WhatsApp al 809-650-4884 o a{' '}
                         <a href="mailto:lau@inglesconlau.com">lau@inglesconlau.com</a>{' '}
-                        y te ayudaré con tus dudas sobre las lecciones o los ejercicios. Aunque estudies a tu propio ritmo, no quiero que sientas que estás aprendiendo completamente solo.
+                        y te ayudaré con cualquier duda sobre tu clase o tu paquete.
                       </p>
                     ) : (
                       <p>{faq.answer}</p>
