@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import HeroDemo from '@/components/Hero/HeroDemo';
 import PlatformWaitlistForm from '@/components/PlatformWaitlistForm/PlatformWaitlistForm';
 
 import styles from './Plataforma.module.css';
@@ -46,6 +47,10 @@ export default function PlataformaPage() {
 
         <div className={styles.waitlistBlock}>
           <PlatformWaitlistForm />
+        </div>
+
+        <div className={styles.demoBlock}>
+          <HeroDemo />
         </div>
 
         <p className={styles.switchNote}>
