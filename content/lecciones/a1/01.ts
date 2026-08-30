@@ -5,18 +5,18 @@ const lessonA1001: LessonContent = {
 
   number: 1,
 
-  title: 'Presentarte: I am / My name is',
+  title: 'Presentarte: I am / My name is (con contracciones I’m / My name’s)',
 
   subtitle:
-    'Aprende a decir quién eres, de dónde eres y cómo decir tu nombre en inglés.',
+    'Aprende a decir quién eres, de dónde eres y cómo decir tu nombre en inglés, incluyendo las formas cortas I’m y My name’s.',
 
   videoTitle: 'Preséntate en inglés',
 
   videoDescription:
-    'En este video aprenderás a usar “I am” y “My name is” para hablar de ti.',
+    'En este video aprenderás a usar “I am” y “My name is”, y sus contracciones “I’m” y “My name’s”, para hablar de ti.',
 
   objective:
-    'Al terminar, podrás decir tu nombre, tu profesión y de dónde eres.',
+    'Al terminar, podrás decir tu nombre, tu profesión y de dónde eres, usando tanto la forma completa como la contracción.',
 
   pdfUrl: '/pdfs/A1/lesson-1.pdf',
 
@@ -344,6 +344,240 @@ const lessonA1001: LessonContent = {
 
           explanation:
             'Usamos a antes de una profesión singular: a teacher.',
+        },
+      ],
+    },
+
+    {
+      type: 'drag-and-drop',
+      title: 'Ordena las palabras (contracciones)',
+      instructions:
+        'Arrastra las palabras para formar la oración correcta usando I’m o name’s. Las opciones aparecen en orden aleatorio.',
+
+      questions: [
+        {
+          id: 11,
+          tokens: [
+            {
+              id: 'q11-im',
+              word: 'I’m',
+              translation: 'yo soy / yo estoy',
+            },
+            {
+              id: 'q11-laura',
+              word: 'Laura.',
+              translation: 'Laura',
+            },
+          ],
+          correctOrder: ['q11-im', 'q11-laura'],
+          sentenceTranslation: 'Soy Laura.',
+        },
+
+        {
+          id: 12,
+          tokens: [
+            {
+              id: 'q12-my',
+              word: 'My',
+              translation: 'mi',
+            },
+            {
+              id: 'q12-names',
+              word: 'name’s',
+              translation: 'nombre es',
+            },
+            {
+              id: 'q12-ana',
+              word: 'Ana.',
+              translation: 'Ana',
+            },
+          ],
+          correctOrder: ['q12-my', 'q12-names', 'q12-ana'],
+          sentenceTranslation: 'Mi nombre es Ana.',
+        },
+
+        {
+          id: 13,
+          tokens: [
+            {
+              id: 'q13-im',
+              word: 'I’m',
+              translation: 'yo soy / yo estoy',
+            },
+            {
+              id: 'q13-a',
+              word: 'a',
+              translation: 'un / una',
+            },
+            {
+              id: 'q13-student',
+              word: 'student.',
+              translation: 'estudiante',
+            },
+          ],
+          correctOrder: ['q13-im', 'q13-a', 'q13-student'],
+          sentenceTranslation: 'Soy estudiante.',
+        },
+
+        {
+          id: 14,
+          tokens: [
+            {
+              id: 'q14-my',
+              word: 'My',
+              translation: 'mi',
+            },
+            {
+              id: 'q14-names',
+              word: 'name’s',
+              translation: 'nombre es',
+            },
+            {
+              id: 'q14-daniel',
+              word: 'Daniel.',
+              translation: 'Daniel',
+            },
+          ],
+          correctOrder: ['q14-my', 'q14-names', 'q14-daniel'],
+          sentenceTranslation: 'Mi nombre es Daniel.',
+        },
+
+        {
+          id: 15,
+          tokens: [
+            {
+              id: 'q15-im',
+              word: 'I’m',
+              translation: 'yo soy / yo estoy',
+            },
+            {
+              id: 'q15-happy',
+              word: 'happy.',
+              translation: 'feliz',
+            },
+          ],
+          correctOrder: ['q15-im', 'q15-happy'],
+          sentenceTranslation: 'Estoy feliz.',
+        },
+
+        {
+          id: 16,
+          tokens: [
+            {
+              id: 'q16-my',
+              word: 'My',
+              translation: 'mi',
+            },
+            {
+              id: 'q16-names',
+              word: 'name’s',
+              translation: 'nombre es',
+            },
+            {
+              id: 'q16-sofia',
+              word: 'Sofia.',
+              translation: 'Sofía',
+            },
+          ],
+          correctOrder: ['q16-my', 'q16-names', 'q16-sofia'],
+          sentenceTranslation: 'Mi nombre es Sofía.',
+        },
+
+        {
+          id: 17,
+          tokens: [
+            {
+              id: 'q17-im',
+              word: 'I’m',
+              translation: 'yo soy / yo estoy',
+            },
+            {
+              id: 'q17-from',
+              word: 'from',
+              translation: 'de',
+            },
+            {
+              id: 'q17-santo',
+              word: 'Santo',
+              translation: 'Santo',
+            },
+            {
+              id: 'q17-domingo',
+              word: 'Domingo.',
+              translation: 'Domingo',
+            },
+          ],
+          correctOrder: [
+            'q17-im',
+            'q17-from',
+            'q17-santo',
+            'q17-domingo',
+          ],
+          sentenceTranslation: 'Soy de Santo Domingo.',
+        },
+
+        {
+          id: 18,
+          tokens: [
+            {
+              id: 'q18-my',
+              word: 'My',
+              translation: 'mi',
+            },
+            {
+              id: 'q18-names',
+              word: 'name’s',
+              translation: 'nombre es',
+            },
+            {
+              id: 'q18-carlos',
+              word: 'Carlos.',
+              translation: 'Carlos',
+            },
+          ],
+          correctOrder: ['q18-my', 'q18-names', 'q18-carlos'],
+          sentenceTranslation: 'Mi nombre es Carlos.',
+        },
+
+        {
+          id: 19,
+          tokens: [
+            {
+              id: 'q19-im',
+              word: 'I’m',
+              translation: 'yo soy / yo estoy',
+            },
+            {
+              id: 'q19-dominican',
+              word: 'Dominican.',
+              translation: 'dominicano / dominicana',
+            },
+          ],
+          correctOrder: ['q19-im', 'q19-dominican'],
+          sentenceTranslation: 'Soy dominicano o dominicana.',
+        },
+
+        {
+          id: 20,
+          tokens: [
+            {
+              id: 'q20-im',
+              word: 'I’m',
+              translation: 'yo soy / yo estoy',
+            },
+            {
+              id: 'q20-a',
+              word: 'a',
+              translation: 'un / una',
+            },
+            {
+              id: 'q20-teacher',
+              word: 'teacher.',
+              translation: 'profesor / profesora',
+            },
+          ],
+          correctOrder: ['q20-im', 'q20-a', 'q20-teacher'],
+          sentenceTranslation: 'Soy profesor o profesora.',
         },
       ],
     },
