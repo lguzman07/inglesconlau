@@ -749,7 +749,7 @@ export default function GroupClassesDashboard() {
 
             <button
               type="button"
-              className={styles.levelButton}
+              className={`${styles.levelButton} ${styles.levelButtonFullWidth}`}
               disabled
               title="Próximamente"
             >

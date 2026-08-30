@@ -149,6 +149,11 @@
   border-color: var(--border);
 }
 
+.levelButtonFullWidth {
+  grid-column: 1 / -1;
+  white-space: nowrap;
+}
+
 .dateField {
   position: relative;
   display: grid;
