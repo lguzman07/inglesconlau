@@ -4,7 +4,7 @@ export const lessonTitles: Record<
 > = {
   a1: {
     1: 'Presentarte: I am / My name is (con contracciones I’m / My name’s)',
-    2: 'Números del 20 al 100: precios, direcciones y teléfonos',
+    2: 'Tu familia: this is my..., mother, father, sister y brother',
     3: 'El alfabeto y sus grupos de sonido: familias /eɪ/, /iː/, /ɛ/, /aɪ/, /oʊ/, /uː/ y /ɑːr/',
     4: 'How do you spell it?: deletrear nombre y apellido, mayúsculas y minúsculas',
     5: 'Correos electrónicos: at, dot, confirmar y corregir letras',
