@@ -25,10 +25,10 @@ const levelOrder = [
   { slug: 'c1', code: 'C1' },
 ];
 
-function pdfFileExists(pdfUrl: string | undefined) {
-  if (!pdfUrl) return false;
+function publicFileExists(publicUrl: string | undefined) {
+  if (!publicUrl) return false;
 
-  const relativePath = pdfUrl.replace(/^\/+/, '');
+  const relativePath = publicUrl.replace(/^\/+/, '');
   const absolutePath = path.join(process.cwd(), 'public', relativePath);
 
   try {
@@ -57,9 +57,10 @@ function buildLessonRoster(): LessonChecklistItem[] {
         level,
         number: lessonNumber,
         title,
-        hasPdf: pdfFileExists(content?.pdfUrl),
+        hasPdf: publicFileExists(content?.pdfUrl),
         hasExercises: (content?.exercises?.length ?? 0) > 0,
         hasVideo: false,
+        videoSrcBroken: Boolean(content?.videoSrc) && !publicFileExists(content?.videoSrc),
       });
     }
   }

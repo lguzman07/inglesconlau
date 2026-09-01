@@ -270,6 +270,17 @@
   border-color: var(--primary);
 }
 
+.partPillWarning {
+  padding: 0.4rem 0.7rem;
+  color: #92400e;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 999px;
+}
+
 .backLink:focus-visible,
 .levelFilter button:focus-visible,
 .activeToggle input:focus-visible,

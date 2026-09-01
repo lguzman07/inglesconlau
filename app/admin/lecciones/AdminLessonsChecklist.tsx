@@ -13,6 +13,7 @@ export type LessonChecklistItem = {
   hasPdf: boolean;
   hasExercises: boolean;
   hasVideo: boolean;
+  videoSrcBroken: boolean;
 };
 
 type LevelInfo = { slug: string; code: string };
@@ -196,6 +197,15 @@ export default function AdminLessonsChecklist({
                         >
                           {lesson.hasVideo ? '✓' : '○'} Video
                         </button>
+
+                        {!lesson.hasVideo && lesson.videoSrcBroken ? (
+                          <span
+                            className={styles.partPillWarning}
+                            title="El código ya tiene un videoSrc para esta lección, pero el archivo no existe en public/videos. Es un placeholder, no un video real."
+                          >
+                            ⚠️ link roto
+                          </span>
+                        ) : null}
 
                         <span
                           className={`${styles.partPill} ${lesson.hasPdf ? styles.partPillDone : styles.partPillPending} ${styles.partPillReadOnly}`}
