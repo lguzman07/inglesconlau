@@ -21,6 +21,7 @@ const navigationItems = [
 const adminNavigationItems = [
   { href: '/admin/estudiantes', label: 'Estudiantes' },
   { href: '/admin/calendario', label: 'Calendario (todos)' },
+  { href: '/admin/lecciones', label: 'Contenido de lecciones' },
 ];
 
 export default function StudentNavbar() {
