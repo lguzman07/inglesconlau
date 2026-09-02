@@ -10,9 +10,6 @@ const lessonA1052: LessonContent = {
   subtitle:
     'Aprende a formar oraciones afirmativas para hablar de rutinas, hábitos y hechos.',
 
-  videoSrc:
-    '/videos/a1/052-placeholder.mp4',
-
   videoTitle:
     'Cómo usar el presente simple afirmativo',
 

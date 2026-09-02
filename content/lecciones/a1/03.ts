@@ -10,8 +10,6 @@ const lessonA1003: LessonContent = {
   subtitle:
     'Practica A, H, J y K al escuchar, mientras comienzas a reconocer nouns y verbs en oraciones sencillas.',
 
-  videoSrc: '/videos/a0/03-placeholder.mp4',
-
   videoTitle: 'A, H, J y K en inglés',
 
   videoDescription:
