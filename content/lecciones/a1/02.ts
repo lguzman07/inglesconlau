@@ -39,19 +39,20 @@ const lessonA1002: LessonContent = {
               word: 'This',
               translation: 'esta / este',
             },
-            {
-              word: 'is',
-              translation: 'es',
-            },
+          ],
+
+          after: [
             {
               word: 'my',
               translation: 'mi',
             },
+            {
+              word: 'mother.',
+              translation: 'madre',
+            },
           ],
 
-          after: [],
-
-          answer: 'mother.',
+          answer: 'is',
 
           sentenceTranslation: 'Esta es mi madre.',
         },
@@ -64,19 +65,20 @@ const lessonA1002: LessonContent = {
               word: 'This',
               translation: 'esta / este',
             },
-            {
-              word: 'is',
-              translation: 'es',
-            },
+          ],
+
+          after: [
             {
               word: 'my',
               translation: 'mi',
             },
+            {
+              word: 'father.',
+              translation: 'padre',
+            },
           ],
 
-          after: [],
-
-          answer: 'father.',
+          answer: 'is',
 
           sentenceTranslation: 'Este es mi padre.',
         },
@@ -93,15 +95,16 @@ const lessonA1002: LessonContent = {
               word: 'is',
               translation: 'es',
             },
+          ],
+
+          after: [
             {
-              word: 'my',
-              translation: 'mi',
+              word: 'sister.',
+              translation: 'hermana',
             },
           ],
 
-          after: [],
-
-          answer: 'sister.',
+          answer: 'my',
 
           sentenceTranslation: 'Esta es mi hermana.',
         },
@@ -114,19 +117,20 @@ const lessonA1002: LessonContent = {
               word: 'This',
               translation: 'esta / este',
             },
-            {
-              word: 'is',
-              translation: 'es',
-            },
+          ],
+
+          after: [
             {
               word: 'my',
               translation: 'mi',
             },
+            {
+              word: 'brother.',
+              translation: 'hermano',
+            },
           ],
 
-          after: [],
-
-          answer: 'brother.',
+          answer: 'is',
 
           sentenceTranslation: 'Este es mi hermano.',
         },
@@ -143,15 +147,16 @@ const lessonA1002: LessonContent = {
               word: 'is',
               translation: 'es',
             },
+          ],
+
+          after: [
             {
-              word: 'my',
-              translation: 'mi',
+              word: 'family.',
+              translation: 'familia',
             },
           ],
 
-          after: [],
-
-          answer: 'family.',
+          answer: 'my',
 
           sentenceTranslation: 'Esta es mi familia.',
         },
@@ -345,6 +350,16 @@ const lessonA1002: LessonContent = {
           id: 11,
           tokens: [
             {
+              id: 'q11-mother',
+              word: 'mother.',
+              translation: 'madre',
+            },
+            {
+              id: 'q11-my',
+              word: 'my',
+              translation: 'mi',
+            },
+            {
               id: 'q11-this',
               word: 'This',
               translation: 'esta / este',
@@ -353,16 +368,6 @@ const lessonA1002: LessonContent = {
               id: 'q11-is',
               word: 'is',
               translation: 'es',
-            },
-            {
-              id: 'q11-my',
-              word: 'my',
-              translation: 'mi',
-            },
-            {
-              id: 'q11-mother',
-              word: 'mother.',
-              translation: 'madre',
             },
           ],
           correctOrder: [
@@ -378,14 +383,14 @@ const lessonA1002: LessonContent = {
           id: 12,
           tokens: [
             {
+              id: 'q12-father',
+              word: 'father.',
+              translation: 'padre',
+            },
+            {
               id: 'q12-this',
               word: 'This',
               translation: 'esta / este',
-            },
-            {
-              id: 'q12-is',
-              word: 'is',
-              translation: 'es',
             },
             {
               id: 'q12-my',
@@ -393,9 +398,9 @@ const lessonA1002: LessonContent = {
               translation: 'mi',
             },
             {
-              id: 'q12-father',
-              word: 'father.',
-              translation: 'padre',
+              id: 'q12-is',
+              word: 'is',
+              translation: 'es',
             },
           ],
           correctOrder: [
@@ -411,6 +416,16 @@ const lessonA1002: LessonContent = {
           id: 13,
           tokens: [
             {
+              id: 'q13-sister',
+              word: 'sister.',
+              translation: 'hermana',
+            },
+            {
+              id: 'q13-my',
+              word: 'my',
+              translation: 'mi',
+            },
+            {
               id: 'q13-this',
               word: 'This',
               translation: 'esta / este',
@@ -419,16 +434,6 @@ const lessonA1002: LessonContent = {
               id: 'q13-is',
               word: 'is',
               translation: 'es',
-            },
-            {
-              id: 'q13-my',
-              word: 'my',
-              translation: 'mi',
-            },
-            {
-              id: 'q13-sister',
-              word: 'sister.',
-              translation: 'hermana',
             },
           ],
           correctOrder: [
@@ -444,24 +449,24 @@ const lessonA1002: LessonContent = {
           id: 14,
           tokens: [
             {
-              id: 'q14-this',
-              word: 'This',
-              translation: 'esta / este',
-            },
-            {
               id: 'q14-is',
               word: 'is',
               translation: 'es',
             },
             {
-              id: 'q14-my',
-              word: 'my',
-              translation: 'mi',
-            },
-            {
               id: 'q14-brother',
               word: 'brother.',
               translation: 'hermano',
+            },
+            {
+              id: 'q14-this',
+              word: 'This',
+              translation: 'esta / este',
+            },
+            {
+              id: 'q14-my',
+              word: 'my',
+              translation: 'mi',
             },
           ],
           correctOrder: [
@@ -477,9 +482,9 @@ const lessonA1002: LessonContent = {
           id: 15,
           tokens: [
             {
-              id: 'q15-this',
-              word: 'This',
-              translation: 'esta / este',
+              id: 'q15-family',
+              word: 'family.',
+              translation: 'familia',
             },
             {
               id: 'q15-is',
@@ -487,14 +492,14 @@ const lessonA1002: LessonContent = {
               translation: 'es',
             },
             {
+              id: 'q15-this',
+              word: 'This',
+              translation: 'esta / este',
+            },
+            {
               id: 'q15-my',
               word: 'my',
               translation: 'mi',
-            },
-            {
-              id: 'q15-family',
-              word: 'family.',
-              translation: 'familia',
             },
           ],
           correctOrder: [
@@ -510,9 +515,19 @@ const lessonA1002: LessonContent = {
           id: 16,
           tokens: [
             {
+              id: 'q16-sofia',
+              word: 'Sofia.',
+              translation: 'Sofía',
+            },
+            {
               id: 'q16-this',
               word: 'This',
               translation: 'esta / este',
+            },
+            {
+              id: 'q16-sister',
+              word: 'sister',
+              translation: 'hermana',
             },
             {
               id: 'q16-is',
@@ -523,16 +538,6 @@ const lessonA1002: LessonContent = {
               id: 'q16-my',
               word: 'my',
               translation: 'mi',
-            },
-            {
-              id: 'q16-sister',
-              word: 'sister',
-              translation: 'hermana',
-            },
-            {
-              id: 'q16-sofia',
-              word: 'Sofia.',
-              translation: 'Sofía',
             },
           ],
           correctOrder: [
@@ -549,9 +554,19 @@ const lessonA1002: LessonContent = {
           id: 17,
           tokens: [
             {
+              id: 'q17-brother',
+              word: 'brother.',
+              translation: 'hermano',
+            },
+            {
               id: 'q17-this',
               word: 'This',
               translation: 'esta / este',
+            },
+            {
+              id: 'q17-happy',
+              word: 'happy',
+              translation: 'feliz',
             },
             {
               id: 'q17-is',
@@ -562,16 +577,6 @@ const lessonA1002: LessonContent = {
               id: 'q17-my',
               word: 'my',
               translation: 'mi',
-            },
-            {
-              id: 'q17-happy',
-              word: 'happy',
-              translation: 'feliz',
-            },
-            {
-              id: 'q17-brother',
-              word: 'brother.',
-              translation: 'hermano',
             },
           ],
           correctOrder: [
@@ -588,14 +593,14 @@ const lessonA1002: LessonContent = {
           id: 18,
           tokens: [
             {
+              id: 'q18-happy',
+              word: 'happy.',
+              translation: 'feliz',
+            },
+            {
               id: 'q18-my',
               word: 'My',
               translation: 'mi',
-            },
-            {
-              id: 'q18-family',
-              word: 'family',
-              translation: 'familia',
             },
             {
               id: 'q18-is',
@@ -603,9 +608,9 @@ const lessonA1002: LessonContent = {
               translation: 'es / está',
             },
             {
-              id: 'q18-happy',
-              word: 'happy.',
-              translation: 'feliz',
+              id: 'q18-family',
+              word: 'family',
+              translation: 'familia',
             },
           ],
           correctOrder: [

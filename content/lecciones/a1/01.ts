@@ -359,14 +359,14 @@ const lessonA1001: LessonContent = {
           id: 11,
           tokens: [
             {
-              id: 'q11-im',
-              word: 'I’m',
-              translation: 'yo soy / yo estoy',
-            },
-            {
               id: 'q11-laura',
               word: 'Laura.',
               translation: 'Laura',
+            },
+            {
+              id: 'q11-im',
+              word: 'I’m',
+              translation: 'yo soy / yo estoy',
             },
           ],
           correctOrder: ['q11-im', 'q11-laura'],
@@ -377,9 +377,9 @@ const lessonA1001: LessonContent = {
           id: 12,
           tokens: [
             {
-              id: 'q12-my',
-              word: 'My',
-              translation: 'mi',
+              id: 'q12-ana',
+              word: 'Ana.',
+              translation: 'Ana',
             },
             {
               id: 'q12-names',
@@ -387,9 +387,9 @@ const lessonA1001: LessonContent = {
               translation: 'nombre es',
             },
             {
-              id: 'q12-ana',
-              word: 'Ana.',
-              translation: 'Ana',
+              id: 'q12-my',
+              word: 'My',
+              translation: 'mi',
             },
           ],
           correctOrder: ['q12-my', 'q12-names', 'q12-ana'],
@@ -400,6 +400,11 @@ const lessonA1001: LessonContent = {
           id: 13,
           tokens: [
             {
+              id: 'q13-student',
+              word: 'student.',
+              translation: 'estudiante',
+            },
+            {
               id: 'q13-im',
               word: 'I’m',
               translation: 'yo soy / yo estoy',
@@ -408,11 +413,6 @@ const lessonA1001: LessonContent = {
               id: 'q13-a',
               word: 'a',
               translation: 'un / una',
-            },
-            {
-              id: 'q13-student',
-              word: 'student.',
-              translation: 'estudiante',
             },
           ],
           correctOrder: ['q13-im', 'q13-a', 'q13-student'],
@@ -423,6 +423,11 @@ const lessonA1001: LessonContent = {
           id: 14,
           tokens: [
             {
+              id: 'q14-daniel',
+              word: 'Daniel.',
+              translation: 'Daniel',
+            },
+            {
               id: 'q14-my',
               word: 'My',
               translation: 'mi',
@@ -431,11 +436,6 @@ const lessonA1001: LessonContent = {
               id: 'q14-names',
               word: 'name’s',
               translation: 'nombre es',
-            },
-            {
-              id: 'q14-daniel',
-              word: 'Daniel.',
-              translation: 'Daniel',
             },
           ],
           correctOrder: ['q14-my', 'q14-names', 'q14-daniel'],
@@ -446,14 +446,14 @@ const lessonA1001: LessonContent = {
           id: 15,
           tokens: [
             {
-              id: 'q15-im',
-              word: 'I’m',
-              translation: 'yo soy / yo estoy',
-            },
-            {
               id: 'q15-happy',
               word: 'happy.',
               translation: 'feliz',
+            },
+            {
+              id: 'q15-im',
+              word: 'I’m',
+              translation: 'yo soy / yo estoy',
             },
           ],
           correctOrder: ['q15-im', 'q15-happy'],
@@ -464,9 +464,9 @@ const lessonA1001: LessonContent = {
           id: 16,
           tokens: [
             {
-              id: 'q16-my',
-              word: 'My',
-              translation: 'mi',
+              id: 'q16-sofia',
+              word: 'Sofia.',
+              translation: 'Sofía',
             },
             {
               id: 'q16-names',
@@ -474,9 +474,9 @@ const lessonA1001: LessonContent = {
               translation: 'nombre es',
             },
             {
-              id: 'q16-sofia',
-              word: 'Sofia.',
-              translation: 'Sofía',
+              id: 'q16-my',
+              word: 'My',
+              translation: 'mi',
             },
           ],
           correctOrder: ['q16-my', 'q16-names', 'q16-sofia'],
@@ -487,14 +487,14 @@ const lessonA1001: LessonContent = {
           id: 17,
           tokens: [
             {
+              id: 'q17-domingo',
+              word: 'Domingo.',
+              translation: 'Domingo',
+            },
+            {
               id: 'q17-im',
               word: 'I’m',
               translation: 'yo soy / yo estoy',
-            },
-            {
-              id: 'q17-from',
-              word: 'from',
-              translation: 'de',
             },
             {
               id: 'q17-santo',
@@ -502,9 +502,9 @@ const lessonA1001: LessonContent = {
               translation: 'Santo',
             },
             {
-              id: 'q17-domingo',
-              word: 'Domingo.',
-              translation: 'Domingo',
+              id: 'q17-from',
+              word: 'from',
+              translation: 'de',
             },
           ],
           correctOrder: [
@@ -520,6 +520,11 @@ const lessonA1001: LessonContent = {
           id: 18,
           tokens: [
             {
+              id: 'q18-carlos',
+              word: 'Carlos.',
+              translation: 'Carlos',
+            },
+            {
               id: 'q18-my',
               word: 'My',
               translation: 'mi',
@@ -528,11 +533,6 @@ const lessonA1001: LessonContent = {
               id: 'q18-names',
               word: 'name’s',
               translation: 'nombre es',
-            },
-            {
-              id: 'q18-carlos',
-              word: 'Carlos.',
-              translation: 'Carlos',
             },
           ],
           correctOrder: ['q18-my', 'q18-names', 'q18-carlos'],
@@ -543,14 +543,14 @@ const lessonA1001: LessonContent = {
           id: 19,
           tokens: [
             {
-              id: 'q19-im',
-              word: 'I’m',
-              translation: 'yo soy / yo estoy',
-            },
-            {
               id: 'q19-dominican',
               word: 'Dominican.',
               translation: 'dominicano / dominicana',
+            },
+            {
+              id: 'q19-im',
+              word: 'I’m',
+              translation: 'yo soy / yo estoy',
             },
           ],
           correctOrder: ['q19-im', 'q19-dominican'],
@@ -561,9 +561,9 @@ const lessonA1001: LessonContent = {
           id: 20,
           tokens: [
             {
-              id: 'q20-im',
-              word: 'I’m',
-              translation: 'yo soy / yo estoy',
+              id: 'q20-teacher',
+              word: 'teacher.',
+              translation: 'profesor / profesora',
             },
             {
               id: 'q20-a',
@@ -571,9 +571,9 @@ const lessonA1001: LessonContent = {
               translation: 'un / una',
             },
             {
-              id: 'q20-teacher',
-              word: 'teacher.',
-              translation: 'profesor / profesora',
+              id: 'q20-im',
+              word: 'I’m',
+              translation: 'yo soy / yo estoy',
             },
           ],
           correctOrder: ['q20-im', 'q20-a', 'q20-teacher'],
