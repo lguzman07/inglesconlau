@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { createClient } from '@/lib/supabase/server';
 import WherebyRoom from '@/components/WherebyRoom/WherebyRoom';
+import { extractCanvaEmbedUrl } from '@/lib/canvaEmbed';
 
 import styles from './ClaseEnVivo.module.css';
 
@@ -18,17 +19,6 @@ type LiveClassRoom = {
   whereby_host_room_url?: string | null;
   canva_embed_url: string | null;
 };
-
-function isSafeCanvaUrl(url: string | null | undefined): url is string {
-  if (!url) return false;
-
-  try {
-    const parsed = new URL(url);
-    return parsed.hostname === 'www.canva.com' || parsed.hostname === 'canva.com';
-  } catch {
-    return false;
-  }
-}
 
 export default async function ClaseEnVivoPage() {
   const supabase = createClient();
@@ -105,22 +95,22 @@ export default async function ClaseEnVivoPage() {
     );
   }
 
-  const hasCanva = isSafeCanvaUrl(settings.canva_embed_url);
+  const canvaSrc = extractCanvaEmbedUrl(settings.canva_embed_url);
 
   return (
     <main className={styles.page}>
       <div className={styles.container}>
         <Link href="/inicio" className={styles.backLink}>← Volver al inicio</Link>
 
-        <div className={hasCanva ? styles.splitLayout : styles.videoOnlyLayout}>
+        <div className={canvaSrc ? styles.splitLayout : styles.videoOnlyLayout}>
           <section className={styles.videoPane} aria-label="Video de la clase">
             <WherebyRoom roomUrl={roomUrl} displayName={user.email ?? undefined} />
           </section>
 
-          {hasCanva ? (
+          {canvaSrc ? (
             <section className={styles.canvaPane} aria-label="Presentación de la clase">
               <iframe
-                src={settings.canva_embed_url as string}
+                src={canvaSrc}
                 title="Presentación de la clase"
                 className={styles.canvaFrame}
                 allow="fullscreen"

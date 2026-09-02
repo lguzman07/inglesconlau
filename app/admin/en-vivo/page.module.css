@@ -114,7 +114,8 @@
   font-weight: 700;
 }
 
-.field input {
+.field input,
+.field textarea {
   min-height: 48px;
   padding: 0.8rem 1rem;
   color: var(--text);
@@ -122,6 +123,26 @@
   background: var(--surface-soft);
   border: 1px solid var(--border);
   border-radius: 14px;
+}
+
+.field textarea {
+  resize: vertical;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.field span strong {
+  color: var(--text);
+}
+
+.fieldHintOk {
+  color: #14532d;
+  font-weight: 700;
+}
+
+.fieldHintError {
+  color: #92400e;
+  font-weight: 700;
 }
 
 .saveButton {

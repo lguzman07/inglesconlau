@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { createClient } from '@/lib/supabase/client';
+import { extractCanvaEmbedUrl } from '@/lib/canvaEmbed';
 
 import styles from './page.module.css';
 
@@ -88,13 +89,27 @@ export default function AdminLiveClassSettings({
       </label>
 
       <label className={styles.field}>
-        <span>Link del diseño de Canva de esta clase (opcional)</span>
-        <input
-          type="url"
-          placeholder="https://www.canva.com/design/..."
+        <span>
+          Diseño de Canva de esta clase (opcional) — en Canva: abre el diseño → Compartir →{' '}
+          <strong>Insertar (Embed)</strong> → pega aquí el código completo que te da (no el link
+          normal de &ldquo;Compartir&rdquo;, ese no funciona dentro de un iframe)
+        </span>
+        <textarea
+          rows={3}
+          placeholder='<iframe src="https://www.canva.com/design/.../view?embed" ...></iframe>'
           value={canvaEmbedUrl}
           onChange={(event) => setCanvaEmbedUrl(event.target.value)}
         />
+        {canvaEmbedUrl.trim() ? (
+          extractCanvaEmbedUrl(canvaEmbedUrl) ? (
+            <span className={styles.fieldHintOk}>✓ Reconocido, se va a insertar correctamente.</span>
+          ) : (
+            <span className={styles.fieldHintError}>
+              ⚠️ No pudimos reconocer esto como un código de Insertar (Embed) de Canva. Revisa que
+              hayas copiado desde Compartir → Insertar, no desde Compartir normal.
+            </span>
+          )
+        ) : null}
       </label>
 
       {feedback ? (
