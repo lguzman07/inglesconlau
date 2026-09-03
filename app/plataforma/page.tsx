@@ -8,7 +8,7 @@ import PlatformWaitlistForm from '@/components/PlatformWaitlistForm/PlatformWait
 import styles from './Plataforma.module.css';
 
 export const metadata: Metadata = {
-  title: 'Plataforma Inglés con Lau (Próximamente)',
+  title: 'Plataforma de lecciones (Próximamente)',
   description:
     'Lecciones grabadas, ejercicios interactivos y tu progreso, a tu ritmo. Todavía en construcción — apúntate para que te avise el día que abra.',
 };

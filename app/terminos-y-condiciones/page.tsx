@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
-  title: 'Términos y condiciones | Inglés con Lau',
+  title: 'Términos y condiciones',
   description:
     'Términos y condiciones de uso de la plataforma Inglés con Lau.',
 };

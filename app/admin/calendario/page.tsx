@@ -8,7 +8,7 @@ import AdminCalendar, { type CalendarBooking } from './AdminCalendar';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
-  title: 'Calendario de clases | Inglés con Lau',
+  title: 'Calendario de clases',
   description: 'Consulta qué clases grupales tienen estudiantes reservados cada mes.',
 };
 

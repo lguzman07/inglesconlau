@@ -55,7 +55,7 @@ export default function LeccionesPage() {
 
           <p className={styles.description}>
             Puedes avanzar a tu ritmo y explorar cualquier nivel cuando lo
-            necesites. No hay contenido bloqueado.
+            necesites.
           </p>
 
           <div className={styles.heroActions}>
@@ -88,12 +88,13 @@ export default function LeccionesPage() {
 
           <div>
             <h2 className={styles.infoTitle}>
-              Todo el contenido está disponible
+              Las primeras 3 lecciones de cada nivel son gratis
             </h2>
 
             <p className={styles.infoText}>
               Elige el nivel que quieres explorar. Dentro encontrarás las
               lecciones en un orden claro para saber por dónde empezar.
+              Activa tu suscripción para desbloquear el resto.
             </p>
           </div>
         </section>

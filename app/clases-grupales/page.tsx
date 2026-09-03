@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/server';
 import styles from './ClasesGrupales.module.css';
 
 export const metadata: Metadata = {
-  title: 'Clases grupales en vivo | Inglés con Lau',
+  title: 'Clases grupales en vivo',
   description:
     'Escoge un paquete y reserva tu horario para las clases grupales de A1, A2, B1 o B2.',
 };

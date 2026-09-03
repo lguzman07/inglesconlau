@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
-  title: 'Política de privacidad | Inglés con Lau',
+  title: 'Política de privacidad',
   description:
     'Política de privacidad y tratamiento de datos personales de Inglés con Lau.',
 };

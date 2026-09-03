@@ -8,7 +8,7 @@ import StudentCalendar, { type MyBooking } from './StudentCalendar';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
-  title: 'Mi calendario | Inglés con Lau',
+  title: 'Mi calendario',
   description: 'Consulta tus clases grupales reservadas cada mes.',
 };
 

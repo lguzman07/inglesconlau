@@ -13,7 +13,7 @@ import AdminLessonsChecklist, { type LessonChecklistItem } from './AdminLessonsC
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
-  title: 'Contenido de lecciones | Inglés con Lau',
+  title: 'Contenido de lecciones',
   description: 'Revisa qué lecciones tienen video, PDF y ejercicios listos.',
 };
 

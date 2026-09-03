@@ -8,7 +8,7 @@ import AdminStudents, { type AdminStudent, type PurchaseRequest } from './AdminS
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
-  title: 'Administrar estudiantes | Inglés con Lau',
+  title: 'Administrar estudiantes',
   description: 'Aprueba pagos, consulta estudiantes y administra sus clases.',
 };
 
