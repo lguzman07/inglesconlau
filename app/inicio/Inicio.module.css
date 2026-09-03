@@ -27,11 +27,6 @@
 .sectionHeading h2 { margin: 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
 .sectionHeading > p:not(.eyebrow) { max-width: 680px; margin: 12px 0 0; color: var(--text-light); line-height: 1.6; }
 
-.liveClass { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: center; margin-top: 22px; margin-bottom: 32px; padding: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--shadow); }
-.liveClass h2 { margin: 0; font-size: 1.45rem; }
-.liveClass div > p:not(.cardLabel) { margin: 10px 0 0; color: var(--text-light); line-height: 1.6; }
-.liveClass button { min-height: 50px; padding: 12px 20px; color: var(--surface-solid); font: inherit; font-weight: 850; background: var(--primary); border: 0; border-radius: 999px; cursor: pointer; }
-.liveClass button:disabled { cursor: wait; opacity: .65; }
 .liveClassError { grid-column: 1 / -1; margin: 0; padding: 12px 14px; background: var(--surface-soft); border: 1px solid var(--border); border-radius: 12px; }
 
 .lessonGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
@@ -90,16 +85,16 @@
 }
 .exploreButton { display: flex; width: fit-content; min-height: 50px; align-items: center; justify-content: center; margin: 30px auto 0; padding: 12px 22px; color: var(--primary); font-weight: 850; text-decoration: none; border: 1px solid var(--primary); border-radius: 999px; }
 .exploreButton:hover { color: var(--surface-solid); background: var(--primary); }
-.buyClassesButton:focus-visible, .liveClass button:focus-visible, .lessonCard a:focus-visible, .exploreButton:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.buyClassesButton:focus-visible, .lessonCard a:focus-visible, .exploreButton:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 
 @media (max-width: 900px) {
   .summaryGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 700px) {
   .container { width: min(92%, 1120px); padding-top: 36px; }
-  .welcomeTop, .liveClass { align-items: flex-start; grid-template-columns: 1fr; flex-direction: column; }
+  .welcomeTop { align-items: flex-start; grid-template-columns: 1fr; flex-direction: column; }
   .lessonGrid, .summaryGrid { grid-template-columns: 1fr; }
-  .buyClassesButton, .liveClass button { width: 100%; box-sizing: border-box; }
+  .buyClassesButton { width: 100%; box-sizing: border-box; }
 }
 @media (prefers-reduced-motion: reduce) {
   .buyClassesButton { transition: none; }

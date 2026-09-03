@@ -14,7 +14,6 @@ const DEVICE_ID_STORAGE_KEY = 'ingles-con-lau-device-id';
 const navigationItems = [
   { href: '/inicio', label: 'Inicio' },
   { href: '/lecciones', label: 'Lecciones' },
-  { href: '/clase-en-vivo', label: 'Clase en vivo' },
   { href: '/calendario', label: 'Calendario' },
   { href: '/configuracion', label: 'Configuración' },
 ];
@@ -23,7 +22,6 @@ const adminNavigationItems = [
   { href: '/admin/estudiantes', label: 'Estudiantes' },
   { href: '/admin/calendario', label: 'Calendario (todos)' },
   { href: '/admin/lecciones', label: 'Contenido de lecciones' },
-  { href: '/admin/en-vivo', label: 'Config. clase en vivo' },
 ];
 
 export default function StudentNavbar() {
@@ -35,7 +33,6 @@ export default function StudentNavbar() {
   const isStudentArea =
     pathname === '/inicio' ||
     pathname.startsWith('/lecciones') ||
-    pathname.startsWith('/clase-en-vivo') ||
     pathname.startsWith('/calendario') ||
     pathname.startsWith('/configuracion') ||
     pathname.startsWith('/admin');

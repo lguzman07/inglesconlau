@@ -46,8 +46,6 @@ export default function InicioPage() {
   const [indicatedLevel, setIndicatedLevel] = useState('');
   const [hasClassAccess, setHasClassAccess] = useState(false);
   const [isLoadingProfile, setIsLoadingProfile] = useState(true);
-  const [isOpeningLiveClass, setIsOpeningLiveClass] = useState(false);
-  const [liveClassError, setLiveClassError] = useState('');
   const [completedLessons, setCompletedLessons] = useState(0);
   const [savedFlashcards, setSavedFlashcards] = useState(0);
   const [lastLessonKey, setLastLessonKey] = useState('a1/1');
@@ -208,34 +206,6 @@ export default function InicioPage() {
     setNeedsRecordingConsent(false);
   }
 
-  async function handleOpenLiveClass() {
-    if (isOpeningLiveClass || needsRecordingConsent) return;
-
-    setIsOpeningLiveClass(true);
-    setLiveClassError('');
-
-    try {
-      const response = await fetch('/api/clases-en-vivo', {
-        method: 'GET',
-        cache: 'no-store',
-      });
-      const data = await response.json();
-
-      if (!response.ok || !data?.roomUrl) {
-        setLiveClassError(
-          data?.error ?? 'No pudimos abrir la clase. Inténtalo de nuevo.',
-        );
-        setIsOpeningLiveClass(false);
-        return;
-      }
-
-      window.location.href = data.roomUrl;
-    } catch {
-      setLiveClassError('No pudimos abrir la clase. Inténtalo de nuevo.');
-      setIsOpeningLiveClass(false);
-    }
-  }
-
   function getGreeting() {
     const name = studentName ? `, ${studentName}` : '';
     if (gender === 'Masculino') return `¡Hola${name}! ¿Listo para continuar?`;
@@ -291,34 +261,6 @@ export default function InicioPage() {
             ) : null}
           </section>
         ) : null}
-
-        <aside className={styles.liveClass}>
-          <div>
-            <p className={styles.cardLabel}>CLASE EN VIVO</p>
-            <h2>Entra a la sala cuando llegue tu horario</h2>
-            <p>
-              El acceso depende de una reserva aprobada para la fecha y hora actuales,
-              no del estado de la suscripción.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={handleOpenLiveClass}
-            disabled={isOpeningLiveClass || needsRecordingConsent}
-          >
-            {isOpeningLiveClass
-              ? 'Comprobando reserva…'
-              : role === 'admin'
-                ? 'Entrar como anfitriona'
-                : 'Entrar a clase'}
-          </button>
-          {needsRecordingConsent ? (
-            <p className={styles.liveClassError}>
-              Debes aceptar el aviso de grabación de clases (arriba) antes de entrar.
-            </p>
-          ) : null}
-          {liveClassError ? <p role="alert" className={styles.liveClassError}>{liveClassError}</p> : null}
-        </aside>
 
         <section className={styles.welcome}>
           <div className={styles.welcomeTop}>
