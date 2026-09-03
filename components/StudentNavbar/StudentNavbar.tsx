@@ -62,7 +62,10 @@ export default function StudentNavbar() {
   }
 
   const visibleNavigationItems = isAdmin
-    ? [...navigationItems, ...adminNavigationItems]
+    ? [
+        ...navigationItems.filter((item) => item.href !== '/calendario'),
+        ...adminNavigationItems,
+      ]
     : navigationItems;
 
   async function handleLogout() {
