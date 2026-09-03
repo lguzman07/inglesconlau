@@ -15,7 +15,7 @@ const cards = [
     icon: '💻',
     title: 'Te enseño inglés, no a usar una plataforma confusa',
     description:
-      'Todas las clases entran por el mismo enlace. Botones grandes, lecciones cortas, nada que descifrar.',
+      'Todas las clases entran por el mismo enlace. Botones grandes, nada que descifrar.',
   },
   {
     icon: '💬',

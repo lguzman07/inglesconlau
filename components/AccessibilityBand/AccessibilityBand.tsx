@@ -2,7 +2,6 @@ const badges = [
   'Contraste AA verificado',
   'Respeta «reducir movimiento»',
   'Sin rachas ni rankings',
-  'Lecciones cortas',
 ];
 
 export default function AccessibilityBand() {
@@ -20,8 +19,8 @@ export default function AccessibilityBand() {
 
             <p>
               Alto contraste real, tipografía diseñada para la legibilidad,
-              lecciones cortas, sin cronómetros ni rachas que perder, y
-              respeto por quien prefiere menos movimiento en pantalla.
+              sin cronómetros ni rachas que perder, y respeto por quien
+              prefiere menos movimiento en pantalla.
             </p>
           </div>
 
