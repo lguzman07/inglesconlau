@@ -262,37 +262,41 @@ export default function InicioPage() {
           </section>
         ) : null}
 
-        <section className={styles.welcome}>
-          <div className={styles.welcomeTop}>
-            <p className={styles.eyebrow}>MI ESPACIO DE APRENDIZAJE</p>
-            {!isLoadingProfile ? (
-              <div className={styles.accessStatus}>
-                <span
-                  className={`${styles.statusLight} ${
-                    hasActiveAccess
-                      ? styles.statusLightActive
-                      : styles.statusLightInactive
-                  }`}
-                  aria-hidden="true"
-                />
-                <span>{accessLabel}</span>
-              </div>
-            ) : null}
+        <div className={styles.heroRow}>
+          <section className={styles.welcome}>
+            <div className={styles.welcomeTop}>
+              <p className={styles.eyebrow}>MI ESPACIO DE APRENDIZAJE</p>
+              {!isLoadingProfile ? (
+                <div className={styles.accessStatus}>
+                  <span
+                    className={`${styles.statusLight} ${
+                      hasActiveAccess
+                        ? styles.statusLightActive
+                        : styles.statusLightInactive
+                    }`}
+                    aria-hidden="true"
+                  />
+                  <span>{accessLabel}</span>
+                </div>
+              ) : null}
+            </div>
+            <h1>{isLoadingProfile ? '¡Hola!' : getGreeting()}</h1>
+            <p>Reserva tus clases en vivo y continúa tus lecciones a tu ritmo.</p>
+            <Link href="/clases-grupales" className={styles.buyClassesButton}>
+              Comprar clases grupales
+              <span aria-hidden="true">→</span>
+            </Link>
+            <p className={styles.courseNote}>
+              Inicio: 14 de septiembre de 2026 · Duración: 16 semanas
+            </p>
+          </section>
+
+          <div className={styles.heroWordOfDay}>
+            <WordOfTheDay />
           </div>
-          <h1>{isLoadingProfile ? '¡Hola!' : getGreeting()}</h1>
-          <p>Reserva tus clases en vivo y continúa tus lecciones a tu ritmo.</p>
-          <Link href="/clases-grupales" className={styles.buyClassesButton}>
-            Comprar clases grupales
-            <span aria-hidden="true">→</span>
-          </Link>
-          <p className={styles.courseNote}>
-            Inicio: 14 de septiembre de 2026 · Duración: 16 semanas
-          </p>
-        </section>
+        </div>
 
         <ProfileCompletionCard onCompleted={setStudentName} />
-
-        <WordOfTheDay />
 
         <section className={styles.sectionHeading}>
           <p className={styles.eyebrow}>PRIMERO</p>

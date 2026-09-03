@@ -11,6 +11,11 @@
 .consentBanner > button:disabled { cursor: not-allowed; opacity: .55; }
 .consentBanner > button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 
+.heroRow { display: flex; align-items: stretch; gap: 24px; }
+.heroRow .welcome { flex: 1.6; min-width: 0; }
+.heroWordOfDay { flex: 1; min-width: 280px; }
+.heroWordOfDay > * { height: 100%; }
+
 .welcome { padding: clamp(30px, 5vw, 48px); background: var(--surface-soft); border: 1px solid var(--border); border-radius: 24px; box-shadow: var(--shadow); }
 .welcomeTop { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .eyebrow, .cardLabel { margin: 0 0 10px; color: var(--primary); font-size: .8rem; font-weight: 850; letter-spacing: .12em; }
@@ -89,6 +94,8 @@
 
 @media (max-width: 900px) {
   .summaryGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .heroRow { flex-direction: column; }
+  .heroWordOfDay { min-width: 0; }
 }
 @media (max-width: 700px) {
   .container { width: min(92%, 1120px); padding-top: 36px; }
