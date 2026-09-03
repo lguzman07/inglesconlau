@@ -165,7 +165,7 @@ export default function LessonVideo({ src, title }: LessonVideoProps) {
             isFullscreen ? 'Salir de pantalla completa' : 'Pantalla completa'
           }
         >
-          {isFullscreen ? '⛶' : '⛶'}
+          {isFullscreen ? '⤡' : '⤢'}
         </button>
       </div>
 
