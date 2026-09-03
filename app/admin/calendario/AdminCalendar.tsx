@@ -399,7 +399,10 @@ export default function AdminCalendar({
         <div className={styles.timeGridWrapper}>
           <div
             className={styles.timeGridHeaderRow}
-            style={{ gridTemplateColumns: `56px repeat(${days.length}, minmax(0, 1fr))` }}
+            style={{
+              gridTemplateColumns: `56px repeat(${days.length}, minmax(0, 1fr))`,
+              minWidth: 56 + days.length * 90,
+            }}
           >
             <div />
             {days.map((day) => {
@@ -420,7 +423,10 @@ export default function AdminCalendar({
 
           <div
             className={styles.timeGridBody}
-            style={{ gridTemplateColumns: `56px repeat(${days.length}, minmax(0, 1fr))` }}
+            style={{
+              gridTemplateColumns: `56px repeat(${days.length}, minmax(0, 1fr))`,
+              minWidth: 56 + days.length * 90,
+            }}
           >
             <div className={styles.timeGridHourLabels} style={{ height: GRID_TOTAL_HEIGHT }}>
               {GRID_HOUR_MARKS.map((hour) => (
