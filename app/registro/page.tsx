@@ -145,13 +145,23 @@ export default function RegistroPage() {
 
     window.localStorage.setItem(RECORDING_CONSENT_PENDING_KEY, '1');
 
+    saveKeepSessionPreference(true);
+
+    const deviceId = getOrCreateDeviceId();
+    const deviceName = getDeviceName();
     const supabase = createClient();
+
+    const callbackUrl = new URL('/auth/callback', window.location.origin);
+    callbackUrl.searchParams.set('keep_session', 'true');
+    callbackUrl.searchParams.set('device_id', deviceId);
+    callbackUrl.searchParams.set('device_name', deviceName);
+    callbackUrl.searchParams.set('next', nextPath);
 
     const { error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/iniciar-sesion?next=${encodeURIComponent(nextPath)}`,
+        emailRedirectTo: callbackUrl.toString(),
       },
     });
 

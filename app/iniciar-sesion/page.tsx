@@ -271,13 +271,21 @@ export default function IniciarSesionPage() {
     const supabase =
       createClient();
 
+    const deviceId = getOrCreateDeviceId();
+    const deviceName = getDeviceName();
+
+    const callbackUrl = new URL('/auth/callback', window.location.origin);
+    callbackUrl.searchParams.set('keep_session', 'true');
+    callbackUrl.searchParams.set('device_id', deviceId);
+    callbackUrl.searchParams.set('device_name', deviceName);
+    callbackUrl.searchParams.set('next', nextPath);
+
     const { error } =
       await supabase.auth.resend({
         type: 'signup',
         email: unconfirmedEmail,
         options: {
-          emailRedirectTo:
-            `${window.location.origin}/iniciar-sesion?next=${encodeURIComponent(nextPath)}`,
+          emailRedirectTo: callbackUrl.toString(),
         },
       });
 
