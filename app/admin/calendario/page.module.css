@@ -58,6 +58,48 @@
   box-shadow: var(--shadow);
 }
 
+.viewTabs {
+  display: inline-flex;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  padding: 0.3rem;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.viewTab,
+.viewTabActive {
+  min-height: 38px;
+  padding: 0.4rem 1rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+}
+
+.viewTab {
+  color: var(--text-light);
+  background: transparent;
+}
+
+.viewTab:hover {
+  color: var(--text);
+}
+
+.viewTabActive {
+  color: var(--surface-solid);
+  background: var(--primary);
+}
+
+.viewTab:disabled,
+.viewTabActive:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
 .toolbar {
   display: flex;
   align-items: flex-end;
@@ -144,9 +186,52 @@
   color: var(--text-light);
 }
 
+.monthCellToday {
+  box-shadow: inset 0 0 0 2px var(--primary);
+}
+
 .monthCellNumber {
   font-size: 0.8rem;
   font-weight: 800;
+}
+
+.dayList {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1.75rem;
+}
+
+.dayListItem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  cursor: pointer;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.dayListItem:hover {
+  border-color: var(--primary);
+}
+
+.dayListTime {
+  min-width: 130px;
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.dayListLevel {
+  flex: 1 1 auto;
+  font-weight: 700;
+}
+
+.dayListCount {
+  color: var(--text-light);
+  font-size: 0.85rem;
 }
 
 .monthChips {
@@ -313,7 +398,10 @@
 
 .backLink:focus-visible,
 .weekNav button:focus-visible,
+.viewTab:focus-visible,
+.viewTabActive:focus-visible,
 .monthChip:focus-visible,
+.dayListItem:focus-visible,
 .modalHeading button:focus-visible,
 .cancelBookingButton:focus-visible {
   outline: 3px solid var(--focus);
