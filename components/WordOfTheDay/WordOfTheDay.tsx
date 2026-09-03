@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import AudioPlayer from '@/components/AudioPlayer/AudioPlayer';
 import SymbolShape from '@/components/MontessoriExercise/SymbolShape';
 import VocabularyButton from '@/components/VocabularyButton/VocabularyButton';
@@ -85,7 +87,11 @@ function getDayOfYear(dateKey: string) {
   return Math.floor((date.getTime() - startOfYear.getTime()) / 86_400_000);
 }
 
-export default function WordOfTheDay() {
+export default function WordOfTheDay({
+  savedFlashcards,
+}: {
+  savedFlashcards?: number;
+}) {
   const todayKey = getDominicanToday();
   const index = getDayOfYear(todayKey) % WORDS.length;
   const entry = WORDS[index];
@@ -121,6 +127,16 @@ export default function WordOfTheDay() {
           exampleSentence={entry.example}
         />
       </div>
+
+      {typeof savedFlashcards === 'number' ? (
+        <div className={styles.flashcardsFooter}>
+          <span className={styles.flashcardsLabel}>Vocabulary Building</span>
+          <strong className={styles.flashcardsCount}>{savedFlashcards}</strong>
+          <Link href="/flashcards" className={styles.flashcardsLink}>
+            Repasar flashcards →
+          </Link>
+        </div>
+      ) : null}
     </section>
   );
 }

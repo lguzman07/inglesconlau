@@ -292,7 +292,7 @@ export default function InicioPage() {
           </section>
 
           <div className={styles.heroWordOfDay}>
-            <WordOfTheDay />
+            <WordOfTheDay savedFlashcards={isLoadingProfile ? undefined : savedFlashcards} />
           </div>
         </div>
 
