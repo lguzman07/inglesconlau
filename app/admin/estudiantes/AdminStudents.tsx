@@ -178,6 +178,11 @@ export default function AdminStudents({
     void loadSchedules();
   }, [supabase]);
 
+  const sortedAvailability = useMemo(
+    () => [...availability].sort((a, b) => a.starts_at.localeCompare(b.starts_at)),
+    [availability],
+  );
+
   const levels = useMemo(
     () =>
       Array.from(new Set(students.map((student) => student.english_level))).sort((a, b) =>
@@ -492,7 +497,7 @@ export default function AdminStudents({
             ) : availabilityError ? (
               <p className={styles.inlineError}>{availabilityError}</p>
             ) : (
-              availability.map((schedule) => {
+              sortedAvailability.map((schedule) => {
                 const isFull = schedule.spots_remaining <= 0;
 
                 return (
