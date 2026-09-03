@@ -2,8 +2,6 @@
 
 import { useMemo, useState } from 'react';
 
-import { createClient } from '@/lib/supabase/client';
-
 import styles from './page.module.css';
 
 export type LessonChecklistItem = {
@@ -13,7 +11,6 @@ export type LessonChecklistItem = {
   hasPdf: boolean;
   hasExercises: boolean;
   hasVideo: boolean;
-  videoSrcBroken: boolean;
 };
 
 type LevelInfo = { slug: string; code: string };
@@ -37,11 +34,9 @@ export default function AdminLessonsChecklist({
   levels: LevelInfo[];
   initialLessons: LessonChecklistItem[];
 }) {
-  const [lessons, setLessons] = useState(initialLessons);
+  const [lessons] = useState(initialLessons);
   const [activeLevel, setActiveLevel] = useState<string>('all');
   const [onlyPending, setOnlyPending] = useState(false);
-  const [pendingKeys, setPendingKeys] = useState<Set<string>>(new Set());
-  const [inlineError, setInlineError] = useState<string | null>(null);
 
   const totals = useMemo(() => {
     const byLevel = new Map<string, { total: number; video: number; pdf: number; exercises: number }>();
@@ -75,35 +70,6 @@ export default function AdminLessonsChecklist({
   }, [lessons]);
 
   const visibleLevels = activeLevel === 'all' ? levels : levels.filter((level) => level.slug === activeLevel);
-
-  async function toggleVideo(lesson: LessonChecklistItem) {
-    const key = lessonKey(lesson);
-    setPendingKeys((previous) => new Set(previous).add(key));
-    setInlineError(null);
-
-    const supabase = createClient();
-    const nextValue = !lesson.hasVideo;
-
-    const { error } = await supabase.rpc('admin_set_lesson_video_status', {
-      p_level: lesson.level,
-      p_lesson_number: lesson.number,
-      p_is_recorded: nextValue,
-    });
-
-    if (error) {
-      setInlineError(`No pudimos actualizar ${lesson.level.toUpperCase()} · Lección ${lesson.number}: ${error.message}`);
-    } else {
-      setLessons((previous) =>
-        previous.map((item) => (lessonKey(item) === key ? { ...item, hasVideo: nextValue } : item)),
-      );
-    }
-
-    setPendingKeys((previous) => {
-      const next = new Set(previous);
-      next.delete(key);
-      return next;
-    });
-  }
 
   return (
     <div className={styles.panel}>
@@ -148,10 +114,6 @@ export default function AdminLessonsChecklist({
         </label>
       </div>
 
-      {inlineError ? (
-        <div className={styles.inlineError} role="alert">{inlineError}</div>
-      ) : null}
-
       {visibleLevels.map((level) => {
         const levelLessons = lessons
           .filter((lesson) => lesson.level === level.slug)
@@ -176,7 +138,6 @@ export default function AdminLessonsChecklist({
               <ul className={styles.lessonChecklist}>
                 {levelLessons.map((lesson) => {
                   const key = lessonKey(lesson);
-                  const isSaving = pendingKeys.has(key);
 
                   return (
                     <li key={key} className={styles.lessonChecklistRow}>
@@ -187,25 +148,12 @@ export default function AdminLessonsChecklist({
                       <span className={styles.lessonChecklistTitle}>{lesson.title}</span>
 
                       <span className={styles.lessonChecklistParts}>
-                        <button
-                          type="button"
-                          className={`${styles.partPill} ${lesson.hasVideo ? styles.partPillDone : styles.partPillPending}`}
-                          onClick={() => toggleVideo(lesson)}
-                          disabled={isSaving}
-                          aria-pressed={lesson.hasVideo}
-                          title="Toca para marcar si el video ya está grabado y subido"
+                        <span
+                          className={`${styles.partPill} ${lesson.hasVideo ? styles.partPillDone : styles.partPillPending} ${styles.partPillReadOnly}`}
+                          title="Se detecta automáticamente del contenido publicado"
                         >
                           {lesson.hasVideo ? '✓' : '○'} Video
-                        </button>
-
-                        {!lesson.hasVideo && lesson.videoSrcBroken ? (
-                          <span
-                            className={styles.partPillWarning}
-                            title="El código ya tiene un videoSrc para esta lección, pero el archivo no existe en public/videos. Es un placeholder, no un video real."
-                          >
-                            ⚠️ link roto
-                          </span>
-                        ) : null}
+                        </span>
 
                         <span
                           className={`${styles.partPill} ${lesson.hasPdf ? styles.partPillDone : styles.partPillPending} ${styles.partPillReadOnly}`}

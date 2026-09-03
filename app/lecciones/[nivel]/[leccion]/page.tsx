@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
+import BunnyVideoEmbed from '@/components/BunnyVideoEmbed/BunnyVideoEmbed';
 import DragAndDrop from '@/components/DragAndDrop/DragAndDrop';
 import FillInTheBlanks from '@/components/FillInTheBlanks/FillInTheBlanks';
 import LessonOpenedTracker from '@/components/LessonOpenedTracker/LessonOpenedTracker';
-import LessonVideo from '@/components/LessonVideo/LessonVideo';
 import ListeningChoice from '@/components/ListeningChoice/ListeningChoice';
 import MontessoriExercise from '@/components/MontessoriExercise/MontessoriExercise';
 import SentenceConstruction from '@/components/SentenceConstruction/SentenceConstruction';
@@ -15,6 +15,8 @@ import {
   lessonTitles,
 } from '@/content/lecciones/catalog';
 import type { LessonExercise } from '@/content/lecciones/types';
+import { getSignedBunnyEmbedUrl } from '@/lib/bunnyStream';
+import { createClient } from '@/lib/supabase/server';
 
 import styles from './Leccion.module.css';
 
@@ -257,6 +259,72 @@ export default async function LeccionPage({
     notFound();
   }
 
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect(
+      `/iniciar-sesion?next=${encodeURIComponent(`/lecciones/${normalizedLevel}/${lessonNumber}`)}`,
+    );
+  }
+
+  const [profileResult, accessResult] = await Promise.all([
+    supabase.from('profiles').select('role').eq('id', user.id).maybeSingle(),
+    supabase.rpc('student_has_access'),
+  ]);
+
+  const isAdmin = profileResult.data?.role === 'admin';
+  const hasLessonAccess =
+    isAdmin ||
+    accessResult.data === true ||
+    lessonNumber <= 3;
+
+  if (!hasLessonAccess) {
+    return (
+      <main className={styles.main}>
+        <div className={styles.container}>
+          <Link
+            href={`/lecciones/${normalizedLevel}`}
+            className={styles.backLink}
+          >
+            ← Volver a {level.code}
+          </Link>
+
+          <section
+            className={styles.objectiveCard}
+            aria-labelledby="paywall-heading"
+          >
+            <div className={styles.objectiveIcon} aria-hidden="true">
+              🔒
+            </div>
+
+            <div>
+              <p className={styles.eyebrow}>SUSCRIPCIÓN REQUERIDA</p>
+
+              <h2 id="paywall-heading">
+                Activa tu suscripción para abrir esta lección
+              </h2>
+
+              <p>
+                Las primeras 3 lecciones de cada nivel son gratis. Para el
+                resto, necesitas una suscripción activa.
+              </p>
+
+              <Link
+                href="/clases-grupales"
+                className={styles.pdfLink}
+              >
+                Ver planes →
+              </Link>
+            </div>
+          </section>
+        </div>
+      </main>
+    );
+  }
+
   const lessonKey =
     `${normalizedLevel}/${lessonNumber}`;
 
@@ -386,6 +454,10 @@ export default async function LeccionPage({
     lesson?.subtitle ??
     'Esta página será tu guía completa: video, práctica y avance de la lección en un mismo lugar.';
 
+  const bunnyEmbedUrl = lesson?.videoSrc
+    ? getSignedBunnyEmbedUrl(lesson.videoSrc)
+    : null;
+
   return (
     <main
       className={styles.main}
@@ -459,10 +531,10 @@ export default async function LeccionPage({
           }
           aria-labelledby="video-heading"
         >
-          {lesson?.videoSrc ? (
-            <LessonVideo
-              src={lesson.videoSrc}
-              title={lesson.title}
+          {bunnyEmbedUrl ? (
+            <BunnyVideoEmbed
+              src={bunnyEmbedUrl}
+              title={lessonTitle}
             />
           ) : (
             <div

@@ -59,8 +59,7 @@ function buildLessonRoster(): LessonChecklistItem[] {
         title,
         hasPdf: publicFileExists(content?.pdfUrl),
         hasExercises: (content?.exercises?.length ?? 0) > 0,
-        hasVideo: false,
-        videoSrcBroken: Boolean(content?.videoSrc) && !publicFileExists(content?.videoSrc),
+        hasVideo: Boolean(content?.videoSrc),
       });
     }
   }
@@ -77,18 +76,7 @@ export default async function AdminLeccionesPage() {
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle();
   if (profile?.role !== 'admin') redirect('/inicio');
 
-  const { data: videoStatusRows, error } = await supabase.rpc('admin_list_lesson_video_status');
-
-  const recordedKeys = new Set(
-    (videoStatusRows ?? [])
-      .filter((row: { is_recorded: boolean }) => row.is_recorded)
-      .map((row: { level: string; lesson_number: number }) => `${row.level}/${row.lesson_number}`),
-  );
-
-  const roster = buildLessonRoster().map((lesson) => ({
-    ...lesson,
-    hasVideo: recordedKeys.has(`${lesson.level}/${lesson.number}`),
-  }));
+  const roster = buildLessonRoster();
 
   return (
     <main className={styles.page}>
@@ -99,18 +87,10 @@ export default async function AdminLeccionesPage() {
           <h1>Contenido de lecciones</h1>
           <p>
             Revisa, nivel por nivel, qué lecciones ya tienen video, PDF y ejercicios interactivos.
-            El PDF y los ejercicios se detectan automáticamente del contenido publicado; marca el
-            video a mano cuando lo grabes y subas.
+            Los tres se detectan automáticamente del contenido publicado.
           </p>
         </header>
-        {error ? (
-          <div className={styles.errorBox} role="alert">
-            <p>No pudimos cargar el estado de los videos.</p>
-            <p>{error.message}</p>
-          </div>
-        ) : (
-          <AdminLessonsChecklist levels={levelOrder} initialLessons={roster} />
-        )}
+        <AdminLessonsChecklist levels={levelOrder} initialLessons={roster} />
       </div>
     </main>
   );
