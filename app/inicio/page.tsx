@@ -282,10 +282,16 @@ export default function InicioPage() {
             </div>
             <h1>{isLoadingProfile ? '¡Hola!' : getGreeting()}</h1>
             <p>Reserva tus clases en vivo y continúa tus lecciones a tu ritmo.</p>
-            <Link href="/clases-grupales" className={styles.buyClassesButton}>
-              Comprar clases grupales
-              <span aria-hidden="true">→</span>
-            </Link>
+            <div className={styles.heroButtonRow}>
+              <Link href="/clases-grupales" className={styles.buyClassesButton}>
+                Comprar clases grupales
+                <span aria-hidden="true">→</span>
+              </Link>
+              <Link href="/clase-en-vivo" className={styles.joinClassButton}>
+                Entrar a clase
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
             <p className={styles.courseNote}>
               Inicio: 14 de septiembre de 2026 · Duración: 16 semanas
             </p>
