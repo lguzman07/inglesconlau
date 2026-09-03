@@ -98,6 +98,15 @@ export default async function ClaseEnVivoPage() {
       <div className={styles.container}>
         <Link href="/inicio" className={styles.backLink}>← Volver al inicio</Link>
 
+        <div className={styles.helpTip}>
+          <p>
+            <strong>¿No te reconoce la cámara o el micrófono?</strong> Cuando cargue la página, tu
+            navegador te va a preguntar si puede usarlos — dale &ldquo;Permitir&rdquo;. Si ya lo
+            permitiste y sigue sin funcionar, cierra otras apps que puedan estar usando la cámara
+            (Zoom, Teams, etc.) y recarga la página.
+          </p>
+        </div>
+
         <section className={styles.videoPane} aria-label="Video de la clase">
           <WherebyRoom roomUrl={roomUrl} displayName={user.email ?? undefined} />
         </section>
