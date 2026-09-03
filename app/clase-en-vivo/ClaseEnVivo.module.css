@@ -1,0 +1,80 @@
+.page {
+  min-height: 100vh;
+  padding: 2.5rem 2rem 4rem;
+  color: var(--text);
+  background: var(--surface-soft);
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.backLink {
+  display: inline-flex;
+  margin-bottom: 1.5rem;
+  color: var(--text-light);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: var(--primary);
+}
+
+.stateCard {
+  max-width: 560px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  text-align: center;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.stateCard h1 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+.stateCard p {
+  margin: 0 0 1.5rem;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.primaryLink {
+  display: inline-flex;
+  padding: 0.75rem 1.5rem;
+  color: var(--surface-solid);
+  font-weight: 800;
+  text-decoration: none;
+  background: var(--primary);
+  border-radius: 13px;
+}
+
+.videoPane {
+  overflow: hidden;
+  height: calc(100vh - 140px);
+  min-height: 480px;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 700px) {
+  .videoPane {
+    height: 70vh;
+  }
+}

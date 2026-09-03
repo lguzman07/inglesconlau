@@ -1,0 +1,170 @@
+.page {
+  min-height: 100vh;
+  padding: 3rem 2rem 7rem;
+  color: var(--text);
+  background: var(--surface-soft);
+}
+
+.container {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.backLink {
+  display: inline-flex;
+  margin-bottom: 3.5rem;
+  color: var(--text-light);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: var(--primary);
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  line-height: 1.1;
+}
+
+.header > p:not(.eyebrow) {
+  margin: 1.25rem 0 0;
+  color: var(--text-light);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.header code {
+  padding: 0.1rem 0.4rem;
+  background: var(--surface-solid);
+  border-radius: 6px;
+}
+
+.panel {
+  display: grid;
+  gap: 1.25rem;
+  padding: 2rem;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.statusRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.statusRow h2 {
+  margin: 0;
+}
+
+.statusRow p {
+  margin: 0.35rem 0 0;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.statusButtonOpen,
+.statusButtonClosed {
+  min-height: 48px;
+  padding: 0.75rem 1.25rem;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  border-radius: 13px;
+}
+
+.statusButtonOpen {
+  color: #14532d;
+  background: #dcfce7;
+  border: 1px solid #16a34a;
+}
+
+.statusButtonClosed {
+  color: var(--text-light);
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+}
+
+.field {
+  display: grid;
+  gap: 0.5rem;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.field input {
+  min-height: 48px;
+  padding: 0.8rem 1rem;
+  color: var(--text);
+  font: inherit;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.saveButton {
+  min-height: 48px;
+  padding: 0.75rem 1.25rem;
+  color: var(--surface-solid);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 13px;
+}
+
+.saveButton:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.inlineSuccess,
+.inlineError,
+.errorBox {
+  padding: 0.8rem 1rem;
+  line-height: 1.5;
+  border-radius: 12px;
+}
+
+.inlineSuccess {
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+}
+
+.inlineError,
+.errorBox {
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+}
+
+.backLink:focus-visible,
+.statusButtonOpen:focus-visible,
+.statusButtonClosed:focus-visible,
+.field input:focus-visible,
+.saveButton:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
