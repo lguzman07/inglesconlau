@@ -138,6 +138,47 @@ function formatShortTime(value: string) {
   return minutes === 0 ? `${hours12}${period}` : `${hours12}:${String(minutes).padStart(2, '0')}${period}`;
 }
 
+function timeToMinutes(value: string) {
+  const [hours, minutes] = value.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+function formatHourLabel(hour: number) {
+  const period = hour >= 12 ? 'PM' : 'AM';
+  const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+  return `${hour12} ${period}`;
+}
+
+const GRID_START_HOUR = 7;
+const GRID_END_HOUR = 22;
+const HOUR_HEIGHT = 48;
+const GRID_TOTAL_HEIGHT = (GRID_END_HOUR - GRID_START_HOUR) * HOUR_HEIGHT;
+const GRID_HOUR_MARKS = Array.from(
+  { length: GRID_END_HOUR - GRID_START_HOUR },
+  (_, index) => GRID_START_HOUR + index,
+);
+
+function layoutDayEvents<T extends { starts_at: string; ends_at: string }>(events: T[]) {
+  const sorted = [...events].sort(
+    (a, b) => timeToMinutes(a.starts_at) - timeToMinutes(b.starts_at),
+  );
+  const laneEndTimes: number[] = [];
+  const placed = sorted.map((event) => {
+    const start = timeToMinutes(event.starts_at);
+    const end = timeToMinutes(event.ends_at);
+    let lane = laneEndTimes.findIndex((endTime) => endTime <= start);
+    if (lane === -1) {
+      lane = laneEndTimes.length;
+      laneEndTimes.push(end);
+    } else {
+      laneEndTimes[lane] = end;
+    }
+    return { event, lane };
+  });
+  const laneCount = Math.max(laneEndTimes.length, 1);
+  return placed.map(({ event, lane }) => ({ event, lane, laneCount }));
+}
+
 export default function StudentCalendar({
   initialMonthStart,
   initialBookings,
@@ -260,9 +301,8 @@ export default function StudentCalendar({
     viewMode === 'month' ? 'Mes siguiente →' : viewMode === 'week' ? 'Semana siguiente →' : 'Día siguiente →';
   const todayButtonLabel = viewMode === 'day' ? 'Hoy' : viewMode === 'week' ? 'Esta semana' : 'Este mes';
 
-  const dayListBookings = viewMode === 'day'
-    ? [...(bookingsByDay.get(anchorDate) ?? [])].sort((a, b) => a.starts_at.localeCompare(b.starts_at))
-    : [];
+  const now = new Date();
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
   return (
     <section className={styles.panel}>
@@ -318,27 +358,102 @@ export default function StudentCalendar({
 
       {error ? <p className={styles.inlineError}>{error}</p> : null}
 
-      {viewMode === 'day' ? (
-        <div className={styles.dayList}>
-          {isLoading ? null : dayListBookings.length === 0 ? (
-            <p className={styles.emptyDay}>No tienes clases este día.</p>
-          ) : (
-            dayListBookings.map((booking) => (
-              <button
-                key={booking.booking_id}
-                type="button"
-                className={styles.dayListItem}
-                onClick={() => setSelectedBookingId(booking.booking_id)}
-              >
-                <span className={styles.dayListTime}>
-                  {formatTime(booking.starts_at)}–{formatTime(booking.ends_at)}
+      {viewMode !== 'month' ? (
+        <div className={styles.timeGridWrapper}>
+          <div
+            className={styles.timeGridHeaderRow}
+            style={{ gridTemplateColumns: `56px repeat(${days.length}, minmax(0, 1fr))` }}
+          >
+            <div />
+            {days.map((day) => {
+              const isToday = day === todayIso;
+              const [year, month, dayOfMonth] = day.split('-').map(Number);
+              const dayIndex = (new Date(year, month - 1, dayOfMonth).getDay() + 6) % 7;
+              return (
+                <div
+                  key={day}
+                  className={`${styles.timeGridDayHeader} ${isToday ? styles.timeGridDayHeaderToday : ''}`}
+                >
+                  <span className={styles.timeGridDayName}>{WEEK_DAY_LABELS[dayIndex]}</span>
+                  <span className={styles.timeGridDayNumber}>{Number(day.slice(8, 10))}</span>
+                </div>
+              );
+            })}
+          </div>
+
+          <div
+            className={styles.timeGridBody}
+            style={{ gridTemplateColumns: `56px repeat(${days.length}, minmax(0, 1fr))` }}
+          >
+            <div className={styles.timeGridHourLabels} style={{ height: GRID_TOTAL_HEIGHT }}>
+              {GRID_HOUR_MARKS.map((hour) => (
+                <span
+                  key={hour}
+                  className={styles.timeGridHourLabel}
+                  style={{ top: (hour - GRID_START_HOUR) * HOUR_HEIGHT }}
+                >
+                  {formatHourLabel(hour)}
                 </span>
-                <span className={styles.dayListLevel}>
-                  {booking.level.toUpperCase()} · {booking.label}
-                </span>
-              </button>
-            ))
-          )}
+              ))}
+            </div>
+
+            {days.map((day) => {
+              const isToday = day === todayIso;
+              const dayBookings = bookingsByDay.get(day) ?? [];
+              const laidOut = layoutDayEvents(dayBookings);
+
+              return (
+                <div key={day} className={styles.timeGridDayColumn} style={{ height: GRID_TOTAL_HEIGHT }}>
+                  {GRID_HOUR_MARKS.map((hour) => (
+                    <div
+                      key={hour}
+                      className={styles.timeGridLine}
+                      style={{ top: (hour - GRID_START_HOUR) * HOUR_HEIGHT }}
+                    />
+                  ))}
+
+                  {isToday && nowMinutes >= GRID_START_HOUR * 60 && nowMinutes <= GRID_END_HOUR * 60 ? (
+                    <div
+                      className={styles.timeGridNowLine}
+                      style={{ top: (nowMinutes - GRID_START_HOUR * 60) / 60 * HOUR_HEIGHT }}
+                    />
+                  ) : null}
+
+                  {isLoading
+                    ? null
+                    : laidOut.map(({ event: booking, lane, laneCount }) => {
+                        const start = timeToMinutes(booking.starts_at);
+                        const end = timeToMinutes(booking.ends_at);
+                        const top = (start - GRID_START_HOUR * 60) / 60 * HOUR_HEIGHT;
+                        const height = Math.max(((end - start) / 60) * HOUR_HEIGHT, 22);
+                        const widthPct = 100 / laneCount;
+
+                        return (
+                          <button
+                            key={booking.booking_id}
+                            type="button"
+                            className={styles.timeGridEvent}
+                            style={{
+                              top,
+                              height,
+                              width: `calc(${widthPct}% - 4px)`,
+                              left: `calc(${lane * widthPct}% + 2px)`,
+                            }}
+                            onClick={() => setSelectedBookingId(booking.booking_id)}
+                          >
+                            <span className={styles.timeGridEventTitle}>
+                              {booking.level.toUpperCase()} · {booking.label}
+                            </span>
+                            <span className={styles.timeGridEventMeta}>
+                              {formatTime(booking.starts_at)}–{formatTime(booking.ends_at)}
+                            </span>
+                          </button>
+                        );
+                      })}
+                </div>
+              );
+            })}
+          </div>
         </div>
       ) : (
         <div className={styles.monthGrid}>

@@ -195,43 +195,139 @@
   font-weight: 800;
 }
 
-.dayList {
-  display: grid;
-  gap: 0.6rem;
+.timeGridWrapper {
   margin-top: 1.75rem;
+  overflow-x: auto;
 }
 
-.dayListItem {
+.timeGridHeaderRow {
+  display: grid;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  min-width: 560px;
+  background: var(--surface-solid);
+  border-bottom: 1px solid var(--border);
+}
+
+.timeGridDayHeader {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.9rem 1.1rem;
-  text-align: left;
-  cursor: pointer;
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 13px;
+  gap: 0.15rem;
+  padding: 0.5rem 0.25rem 0.75rem;
+  border-left: 1px solid var(--border);
 }
 
-.dayListItem:hover {
-  border-color: var(--primary);
-}
-
-.dayListTime {
-  min-width: 130px;
-  color: var(--primary);
-  font-weight: 800;
-}
-
-.dayListLevel {
-  flex: 1 1 auto;
-  font-weight: 700;
-}
-
-.dayListCount {
+.timeGridDayName {
   color: var(--text-light);
-  font-size: 0.85rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.timeGridDayNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  font-size: 1rem;
+  font-weight: 800;
+  border-radius: 999px;
+}
+
+.timeGridDayHeaderToday .timeGridDayName {
+  color: var(--primary);
+}
+
+.timeGridDayHeaderToday .timeGridDayNumber {
+  color: var(--surface-solid);
+  background: var(--primary);
+}
+
+.timeGridBody {
+  display: grid;
+  min-width: 560px;
+}
+
+.timeGridHourLabels {
+  position: relative;
+}
+
+.timeGridHourLabel {
+  position: absolute;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.timeGridDayColumn {
+  position: relative;
+  border-left: 1px solid var(--border);
+}
+
+.timeGridLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--border);
+}
+
+.timeGridNowLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  border-top: 2px solid #e11d48;
+}
+
+.timeGridNowLine::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -3px;
+  width: 8px;
+  height: 8px;
+  background: #e11d48;
+  border-radius: 999px;
+}
+
+.timeGridEvent {
+  position: absolute;
+  overflow: hidden;
+  padding: 0.25rem 0.4rem;
+  text-align: left;
+  color: var(--primary);
+  font: inherit;
+  cursor: pointer;
+  background: var(--primary-light);
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+}
+
+.timeGridEventTitle {
+  display: block;
+  overflow: hidden;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.25;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.timeGridEventMeta {
+  display: block;
+  overflow: hidden;
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .monthChips {
@@ -364,7 +460,7 @@
 .viewTab:focus-visible,
 .viewTabActive:focus-visible,
 .monthChip:focus-visible,
-.dayListItem:focus-visible,
+.timeGridEvent:focus-visible,
 .modalHeading button:focus-visible,
 .cancelBookingButton:focus-visible {
   outline: 3px solid var(--focus);
