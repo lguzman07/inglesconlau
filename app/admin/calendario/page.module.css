@@ -330,6 +330,17 @@
   text-overflow: ellipsis;
 }
 
+.timeGridEventCount {
+  display: block;
+  overflow: hidden;
+  color: var(--text-light);
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .monthChips {
   display: flex;
   flex-direction: column;

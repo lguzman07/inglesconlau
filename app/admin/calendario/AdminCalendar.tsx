@@ -479,11 +479,13 @@ export default function AdminCalendar({
                             onClick={() => setSelectedKey(group.key)}
                           >
                             <span className={styles.timeGridEventTitle}>
-                              {group.level.toUpperCase()} · {group.label}
+                              {group.level.toUpperCase()}
                             </span>
                             <span className={styles.timeGridEventMeta}>
-                              {formatTime(group.starts_at)}–{formatTime(group.ends_at)} ·{' '}
-                              {group.students.length} est.
+                              {formatTime(group.starts_at)}–{formatTime(group.ends_at)}
+                            </span>
+                            <span className={styles.timeGridEventCount}>
+                              {group.students.length} estudiante{group.students.length === 1 ? '' : 's'}
                             </span>
                           </button>
                         );
