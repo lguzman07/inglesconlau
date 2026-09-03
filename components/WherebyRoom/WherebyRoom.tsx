@@ -42,6 +42,8 @@ export default function WherebyRoom({
         people="on"
         background="off"
         leaveButton="off"
+        recording="cloud"
+        screenshare="on"
         style={{ width: '100%', height: '100%', border: '0', display: 'block' }}
       />
     </div>
