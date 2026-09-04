@@ -273,12 +273,12 @@ export default async function ClasesGrupalesPage() {
                 02
               </span>
 
-              <h3>Envía el comprobante</h3>
+              <h3>Realiza la transferencia</h3>
 
               <p>
-                Después de reservar, envía el
-                comprobante de pago siguiendo las
-                instrucciones del correo.
+                Después de reservar, realiza la
+                transferencia siguiendo las
+                instrucciones que recibirás.
               </p>
             </li>
 

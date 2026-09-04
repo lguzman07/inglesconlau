@@ -160,9 +160,6 @@ export default function ConfiguracionPage() {
   const [purchaseRequests, setPurchaseRequests] =
     useState<PurchaseRequestSummary[]>([]);
 
-  const [loadingReceiptId, setLoadingReceiptId] =
-    useState<string | null>(null);
-
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -405,30 +402,6 @@ export default function ConfiguracionPage() {
     );
   }
 
-  async function handleViewReceipt(
-    requestId: string,
-    receiptPath: string,
-  ) {
-    if (loadingReceiptId) return;
-
-    setLoadingReceiptId(requestId);
-
-    const supabase = createClient();
-
-    const { data, error } = await supabase.storage
-      .from('payment-receipts')
-      .createSignedUrl(receiptPath, 120);
-
-    setLoadingReceiptId(null);
-
-    if (error || !data?.signedUrl) {
-      setSecurityMessage('No pudimos abrir el comprobante. Inténtalo de nuevo.');
-      return;
-    }
-
-    window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
-  }
-
   async function handlePasswordReset() {
     if (
       !email ||
@@ -592,8 +565,8 @@ export default function ConfiguracionPage() {
             Pago
           </a>
 
-          <a href="#comprobantes">
-            Comprobantes
+          <a href="#mis-compras">
+            Mis compras
           </a>
 
           <a href="#seguridad">
@@ -1232,7 +1205,7 @@ export default function ConfiguracionPage() {
         </section>
 
         <section
-          id="comprobantes"
+          id="mis-compras"
           className={styles.card}
         >
           <div
@@ -1246,11 +1219,11 @@ export default function ConfiguracionPage() {
                   styles.cardLabel
                 }
               >
-                COMPROBANTES
+                MIS COMPRAS
               </p>
 
               <h2>
-                Mis comprobantes de pago
+                Mis paquetes solicitados
               </h2>
             </div>
           </div>
@@ -1260,8 +1233,7 @@ export default function ConfiguracionPage() {
               styles.cardDescription
             }
           >
-            Aquí verás cada paquete que has solicitado y el comprobante que
-            subiste para cada uno.
+            Aquí verás cada paquete que has solicitado y su estado.
           </p>
 
           {purchaseRequests.length === 0 ? (
@@ -1296,28 +1268,6 @@ export default function ConfiguracionPage() {
                       {PURCHASE_STATUS_LABELS[request.status] ?? request.status}
                     </span>
                   </div>
-
-                  {request.receipt_path ? (
-                    <button
-                      type="button"
-                      className={styles.secondaryButton}
-                      disabled={loadingReceiptId === request.request_id}
-                      onClick={() =>
-                        void handleViewReceipt(
-                          request.request_id,
-                          request.receipt_path as string,
-                        )
-                      }
-                    >
-                      {loadingReceiptId === request.request_id
-                        ? 'Abriendo…'
-                        : 'Ver comprobante'}
-                    </button>
-                  ) : (
-                    <span className={styles.pendingNote}>
-                      Sin comprobante subido
-                    </span>
-                  )}
                 </li>
               ))}
             </ul>

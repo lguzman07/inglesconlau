@@ -134,7 +134,7 @@ export default async function ClasesGrupalesPage() {
             <li className={styles.processCard}><span>01</span><h3>Escoge el paquete</h3><p>Selecciona 5, 20 u 80 clases.</p></li>
             <li className={styles.processCard}><span>02</span><h3>Escoge el horario</h3><p>Verás los niveles, horas y cupos antes de pagar.</p></li>
             <li className={styles.processCard}><span>03</span><h3>Crea tu cuenta</h3><p>Solo te la pedimos al confirmar, no antes de explorar.</p></li>
-            <li className={styles.processCard}><span>04</span><h3>Envía el comprobante</h3><p>El horario se aparta 2 horas mientras se verifica.</p></li>
+            <li className={styles.processCard}><span>04</span><h3>Realiza la transferencia</h3><p>El horario se aparta 2 horas mientras confirmamos tu pago.</p></li>
             <li className={styles.processCard}><span>05</span><h3>Recibe tus reservas</h3><p>Al aprobarse, las fechas aparecen automáticamente en tu cuenta.</p></li>
           </ol>
         </section>

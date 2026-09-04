@@ -220,12 +220,6 @@ export default function GroupClassPackages({
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
-  const [submittedRequestId, setSubmittedRequestId] = useState('');
-  const [isUploadingReceipt, setIsUploadingReceipt] = useState(false);
-  const [receiptUploadStatus, setReceiptUploadStatus] = useState<
-    'idle' | 'success' | 'error'
-  >('idle');
-  const [receiptUploadMessage, setReceiptUploadMessage] = useState('');
 
   const selectedPackage =
     PACKAGES.find((item) => item.id === selectedPackageId) ?? PACKAGES[1];
@@ -315,7 +309,7 @@ export default function GroupClassPackages({
     setError('');
     setSuccess('');
 
-    const { data, error: requestError } = await supabase.rpc(
+    const { error: requestError } = await supabase.rpc(
       'create_group_class_purchase_request',
       {
         p_schedule_id: selectedSchedule.schedule_id,
@@ -334,84 +328,11 @@ export default function GroupClassPackages({
     // banner path for pre-existing accounts).
     void supabase.rpc('record_recording_consent');
 
-    const requestId = String(data);
     setSuccess(
-      'Tu horario quedó apartado por 2 horas. Envía el comprobante para que Lau pueda aprobarlo.',
+      'Tu horario quedó apartado por 2 horas mientras confirmamos tu pago. Te avisaremos cuando quede reservado.',
     );
 
-    if (paymentDetails.paymentEmail) {
-      const subject = encodeURIComponent(
-        `Comprobante ${requestId}: ${selectedPackage.classes} ${classesLabel(selectedPackage.classes)}`,
-      );
-      const body = encodeURIComponent(
-        [
-          'Hola, Lau:',
-          '',
-          `Solicitud: ${requestId}`,
-          `Paquete: ${selectedPackage.name} (${selectedPackage.classes} ${classesLabel(selectedPackage.classes)})`,
-          `Monto: RD$${formatMoney(selectedPackage.price)}`,
-          `Nivel: ${selectedSchedule.level.toUpperCase()}`,
-          `Horario: ${selectedSchedule.label}, ${formatTime(selectedSchedule.starts_at)}–${formatTime(selectedSchedule.ends_at)}`,
-          'Inicio: 14 de septiembre de 2026',
-          '',
-          'Adjunto mi comprobante de pago.',
-        ].join('\n'),
-      );
-
-      window.location.href = `mailto:${paymentDetails.paymentEmail}?subject=${subject}&body=${body}`;
-    }
-
-    setSubmittedRequestId(requestId);
     setIsSubmitting(false);
-  }
-
-  async function handleReceiptUpload(file: File) {
-    if (!submittedRequestId || isUploadingReceipt) return;
-
-    setIsUploadingReceipt(true);
-    setReceiptUploadStatus('idle');
-    setReceiptUploadMessage('');
-
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      setIsUploadingReceipt(false);
-      setReceiptUploadStatus('error');
-      setReceiptUploadMessage('Tu sesión terminó. Inicia sesión nuevamente.');
-      return;
-    }
-
-    const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg';
-    const path = `${user.id}/${submittedRequestId}.${extension}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from('payment-receipts')
-      .upload(path, file, { upsert: true });
-
-    if (uploadError) {
-      setIsUploadingReceipt(false);
-      setReceiptUploadStatus('error');
-      setReceiptUploadMessage('No pudimos subir el comprobante. Inténtalo de nuevo.');
-      return;
-    }
-
-    const { error: attachError } = await supabase.rpc('attach_payment_receipt', {
-      p_request_id: submittedRequestId,
-      p_receipt_path: path,
-    });
-
-    setIsUploadingReceipt(false);
-
-    if (attachError) {
-      setReceiptUploadStatus('error');
-      setReceiptUploadMessage('Subimos el archivo, pero no pudimos vincularlo a tu solicitud.');
-      return;
-    }
-
-    setReceiptUploadStatus('success');
-    setReceiptUploadMessage('¡Comprobante recibido! Lau lo revisará pronto.');
   }
 
   return (
@@ -660,7 +581,7 @@ export default function GroupClassPackages({
             {isSubmitting
               ? 'Guardando solicitud…'
               : isLoggedIn
-                ? 'Apartar horario y enviar comprobante'
+                ? 'Apartar horario'
                 : 'Crear cuenta y apartar este horario'}
           </button>
 
@@ -673,34 +594,6 @@ export default function GroupClassPackages({
 
           {error ? <p className={styles.errorMessage} role="alert">{error}</p> : null}
           {success ? <p className={styles.successMessage} role="status">{success}</p> : null}
-
-          {submittedRequestId ? (
-            <div className={styles.receiptUpload}>
-              <p className={styles.receiptUploadLabel}>Sube tu comprobante aquí</p>
-              <input
-                type="file"
-                accept="image/*,application/pdf"
-                disabled={isUploadingReceipt || receiptUploadStatus === 'success'}
-                onChange={(event) => {
-                  const file = event.target.files?.[0];
-                  if (file) void handleReceiptUpload(file);
-                }}
-              />
-              <p className={styles.statusText}>
-                O envíame el comprobante por correo desde el botón de abajo si prefieres.
-              </p>
-              {receiptUploadMessage ? (
-                <p
-                  className={
-                    receiptUploadStatus === 'error' ? styles.errorMessage : styles.successMessage
-                  }
-                  role={receiptUploadStatus === 'error' ? 'alert' : 'status'}
-                >
-                  {receiptUploadMessage}
-                </p>
-              ) : null}
-            </div>
-          ) : null}
         </div>
       </div>
     </section>

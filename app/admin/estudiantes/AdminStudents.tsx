@@ -150,7 +150,6 @@ export default function AdminStudents({
       ),
   );
   const [busyId, setBusyId] = useState<string | null>(null);
-  const [loadingReceiptId, setLoadingReceiptId] = useState<string | null>(null);
   const [notices, setNotices] = useState<Record<string, Notice | undefined>>({});
   const [requestNotice, setRequestNotice] = useState<Notice | null>(null);
   const [expandedStudentId, setExpandedStudentId] = useState<string | null>(null);
@@ -237,25 +236,6 @@ export default function AdminStudents({
       ...current,
       [userId]: String(availableClasses),
     }));
-  }
-
-  async function viewReceipt(request: PurchaseRequest) {
-    if (loadingReceiptId || !request.receipt_path) return;
-
-    setLoadingReceiptId(request.request_id);
-
-    const { data, error } = await supabase.storage
-      .from('payment-receipts')
-      .createSignedUrl(request.receipt_path, 120);
-
-    setLoadingReceiptId(null);
-
-    if (error || !data?.signedUrl) {
-      setRequestNotice({ type: 'error', text: 'No pudimos abrir el comprobante.' });
-      return;
-    }
-
-    window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
   }
 
   async function reviewRequest(request: PurchaseRequest, approve: boolean) {
@@ -553,18 +533,6 @@ export default function AdminStudents({
                   <div><dt>Horario</dt><dd>{formatTime(request.starts_at)}–{formatTime(request.ends_at)}</dd></div>
                   <div><dt>Periodo</dt><dd>{formatDate(request.week_start)} → {formatDate(request.reservation_end_date)}</dd></div>
                 </dl>
-                {request.receipt_path ? (
-                  <button
-                    type="button"
-                    className={styles.receiptButton}
-                    disabled={loadingReceiptId === request.request_id}
-                    onClick={() => void viewReceipt(request)}
-                  >
-                    {loadingReceiptId === request.request_id ? 'Abriendo…' : '📎 Ver comprobante'}
-                  </button>
-                ) : (
-                  <p className={styles.noReceiptNote}>Sin comprobante subido aún</p>
-                )}
                 <div className={styles.requestActions}>
                   <button type="button" className={styles.rejectButton} disabled={busyId === request.request_id} onClick={() => reviewRequest(request, false)}>Rechazar</button>
                   <button type="button" disabled={busyId === request.request_id} onClick={() => reviewRequest(request, true)}>{busyId === request.request_id ? 'Procesando…' : 'Aprobar y reservar'}</button>
