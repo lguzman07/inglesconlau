@@ -61,6 +61,14 @@
   line-height: 1.25;
 }
 
+.definitionText {
+  display: block;
+  margin-bottom: 26px;
+  color: var(--text);
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+
 .choices {
   display: grid;
   gap: 12px;
@@ -333,13 +341,6 @@
   line-height: 1.5;
 }
 
-.contextSentence {
-  margin: 0 0 22px;
-  color: var(--text-light);
-  font-size: 1rem;
-  font-style: italic;
-  line-height: 1.5;
-}
 
 .primaryLink {
   display: inline-flex;

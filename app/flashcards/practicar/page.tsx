@@ -18,6 +18,7 @@ type SourceCard = ReviewFields & {
   translation: string;
   example_sentence: string | null;
   definition_en: string | null;
+  definition_es: string | null;
 };
 
 type Level = 'easy' | 'medium' | 'hard';
@@ -49,7 +50,7 @@ const LEVEL_INFO: Record<
   medium: {
     label: 'Medio',
     description:
-      'Te damos la palabra en español y su definición en inglés, y escoges entre 4 opciones.',
+      'Te damos solo la definición en español (sin la palabra) y escoges entre 4 opciones en inglés.',
     exerciseType: 'choice',
   },
   hard: {
@@ -121,6 +122,46 @@ async function fetchDictionaryDefinition(
   } catch {
     return null;
   }
+}
+
+async function translateToSpanish(
+  text: string,
+): Promise<string | null> {
+  try {
+    const response = await fetch(
+      `/api/translate?text=${encodeURIComponent(text)}`,
+    );
+
+    if (!response.ok) return null;
+
+    const data = (await response.json()) as {
+      translation: string | null;
+    };
+
+    return data.translation;
+  } catch {
+    return null;
+  }
+}
+
+async function ensureSpanishDefinition(
+  card: SourceCard,
+): Promise<SourceCard> {
+  if (card.definition_es) return card;
+
+  const definitionEn =
+    card.definition_en ??
+    (await fetchDictionaryDefinition(card.word));
+
+  if (!definitionEn) return card;
+
+  const definitionEs = await translateToSpanish(definitionEn);
+
+  return {
+    ...card,
+    definition_en: definitionEn,
+    definition_es: definitionEs,
+  };
 }
 
 function computeNextReview(
@@ -208,7 +249,7 @@ export default function PracticarPage() {
         supabase
           .from('user_flashcards')
           .select(
-            'id, word, translation, example_sentence, definition_en, ease_factor, interval_days, repetitions',
+            'id, word, translation, example_sentence, definition_en, definition_es, ease_factor, interval_days, repetitions',
           )
           .eq('user_id', user.id)
           .lte('due_at', new Date().toISOString())
@@ -259,7 +300,7 @@ export default function PracticarPage() {
     const { data, error } = await supabase
       .from('user_flashcards')
       .select(
-        'id, word, translation, example_sentence, definition_en, ease_factor, interval_days, repetitions',
+        'id, word, translation, example_sentence, definition_en, definition_es, ease_factor, interval_days, repetitions',
       )
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
@@ -293,20 +334,22 @@ export default function PracticarPage() {
 
       const withDefinitions = await Promise.all(
         sample.map(async (card) => {
-          if (card.definition_en) return card;
+          const updated = await ensureSpanishDefinition(card);
 
-          const definition = await fetchDictionaryDefinition(
-            card.word,
-          );
-
-          if (definition) {
+          if (
+            updated.definition_en !== card.definition_en ||
+            updated.definition_es !== card.definition_es
+          ) {
             await supabase
               .from('user_flashcards')
-              .update({ definition_en: definition })
+              .update({
+                definition_en: updated.definition_en,
+                definition_es: updated.definition_es,
+              })
               .eq('id', card.id);
           }
 
-          return { ...card, definition_en: definition };
+          return updated;
         }),
       );
 
@@ -651,14 +694,15 @@ export default function PracticarPage() {
               : 'Escribe la palabra en inglés'}
           </p>
 
-          <strong className={styles.translation}>
-            {currentCard.translation}
-          </strong>
-
-          {currentCard.definition_en && (
-            <p className={styles.contextSentence}>
-              {currentCard.definition_en}
-            </p>
+          {level === 'medium' ? (
+            <strong className={styles.definitionText}>
+              {currentCard.definition_es ??
+                currentCard.translation}
+            </strong>
+          ) : (
+            <strong className={styles.translation}>
+              {currentCard.translation}
+            </strong>
           )}
 
           {currentCard.exerciseType === 'choice' ? (
