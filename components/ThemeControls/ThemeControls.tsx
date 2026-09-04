@@ -7,8 +7,6 @@ import {
   useState,
 } from 'react';
 
-import WinterOverlay from '@/components/WinterOverlay/WinterOverlay';
-
 type ColorTheme =
   | 'red'
   | 'coral'
@@ -27,8 +25,7 @@ type ColorTheme =
   | 'pink'
   | 'fuchsia'
   | 'brown'
-  | 'grayscale'
-  | 'winter';
+  | 'grayscale';
 
 type ColorChoice = 'none' | ColorTheme;
 
@@ -61,7 +58,6 @@ type ColorOption = {
   swatch: string;
   paletteLight: ColorPalette;
   paletteDark: ColorPalette;
-  decorative?: 'snow';
 };
 
 const MODE_STORAGE_KEY = 'display-mode-v2';
@@ -869,50 +865,6 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
     },
   },
-  {
-    value: 'winter',
-    label: 'Winter Wonderland',
-    swatch: '#dceef7',
-    decorative: 'snow',
-    paletteLight: {
-      '--background': '#f2fbff',
-      '--surface': 'rgb(248 253 255 / 97%)',
-      '--surface-solid': '#f8fdff',
-      '--surface-soft': '#dceef7',
-      '--primary': '#1f6f8b',
-      '--primary-hover': '#185670',
-      '--primary-light': '#bfe3f0',
-      '--accent': '#164f66',
-      '--secondary': '#cfe8f2',
-      '--secondary-hover': '#b6dbe9',
-      '--text': '#1c3440',
-      '--text-light': '#4d6b78',
-      '--border': '#a8d3e3',
-      '--focus': '#0f3f52',
-      '--shadow':
-        '0 10px 28px rgb(31 111 139 / 11%)',
-      '--shadow-hover':
-        '0 14px 30px rgb(31 111 139 / 17%)',
-    },
-    paletteDark: {
-      '--background': '#0d1826',
-      '--surface': 'rgba(24, 38, 54, 0.96)',
-      '--surface-solid': '#182636',
-      '--surface-soft': '#223347',
-      '--primary': '#a9d9f0',
-      '--primary-hover': '#c3e6f7',
-      '--primary-light': '#24425a',
-      '--accent': '#c3e6f7',
-      '--secondary': '#28394d',
-      '--secondary-hover': '#32475f',
-      '--text': '#f3f8fb',
-      '--text-light': '#cfe0ea',
-      '--border': '#4d7590',
-      '--focus': '#d6f0fb',
-      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.35)',
-      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.45)',
-    },
-  },
 ];
 
 function isMode(value: string | null): value is Mode {
@@ -1167,21 +1119,11 @@ export default function ThemeControls() {
   const resolvedMode = resolveMode(mode);
   const isContrastActive = resolvedMode === 'contrast';
 
-  const selectedColorOption = colorOptions.find(
-    (option) => option.value === colorChoice
-  );
-
-  const showWinterDecoration =
-    !isContrastActive &&
-    selectedColorOption?.decorative === 'snow';
-
   return (
     <div
       className="theme-selector"
       ref={selectorRef}
     >
-      {showWinterDecoration && <WinterOverlay />}
-
       <button
         type="button"
         className="theme-trigger"
