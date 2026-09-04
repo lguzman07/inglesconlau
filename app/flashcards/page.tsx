@@ -52,6 +52,11 @@ export default function FlashcardsPage() {
       null,
     );
 
+  const [pendingDeleteId, setPendingDeleteId] =
+    useState<string | null>(
+      null,
+    );
+
   const [search, setSearch] =
     useState('');
 
@@ -467,6 +472,7 @@ export default function FlashcardsPage() {
       return;
     }
 
+    setPendingDeleteId(null);
     setDeletingId(id);
     setErrorMessage('');
 
@@ -949,26 +955,79 @@ export default function FlashcardsPage() {
                             </Link>
                           )}
 
-                          <button
-                            type="button"
-                            className={
-                              styles.deleteButton
-                            }
-                            disabled={
-                              deletingId ===
-                              flashcard.id
-                            }
-                            onClick={() =>
-                              void handleDelete(
-                                flashcard.id,
-                              )
-                            }
-                          >
-                            {deletingId ===
-                            flashcard.id
-                              ? 'Eliminando...'
-                              : 'Eliminar'}
-                          </button>
+                          {pendingDeleteId ===
+                          flashcard.id ? (
+                            <div
+                              className={
+                                styles.deleteConfirm
+                              }
+                              role="group"
+                              aria-label="Confirmar eliminación"
+                            >
+                              <span>
+                                ¿Eliminar esta palabra?
+                              </span>
+
+                              <div
+                                className={
+                                  styles.deleteConfirmButtons
+                                }
+                              >
+                                <button
+                                  type="button"
+                                  className={
+                                    styles.deleteConfirmYes
+                                  }
+                                  disabled={
+                                    deletingId ===
+                                    flashcard.id
+                                  }
+                                  onClick={() =>
+                                    void handleDelete(
+                                      flashcard.id,
+                                    )
+                                  }
+                                >
+                                  {deletingId ===
+                                  flashcard.id
+                                    ? 'Eliminando...'
+                                    : 'Sí, eliminar'}
+                                </button>
+
+                                <button
+                                  type="button"
+                                  className={
+                                    styles.deleteConfirmNo
+                                  }
+                                  disabled={
+                                    deletingId ===
+                                    flashcard.id
+                                  }
+                                  onClick={() =>
+                                    setPendingDeleteId(
+                                      null,
+                                    )
+                                  }
+                                >
+                                  No
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              className={
+                                styles.deleteButton
+                              }
+                              onClick={() =>
+                                setPendingDeleteId(
+                                  flashcard.id,
+                                )
+                              }
+                            >
+                              Eliminar
+                            </button>
+                          )}
                         </div>
                       </article>
                     );

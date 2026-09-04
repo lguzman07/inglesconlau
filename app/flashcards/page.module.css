@@ -489,6 +489,58 @@
   opacity: 0.6;
 }
 
+.deleteConfirm {
+  display: grid;
+  margin-top: auto;
+  gap: 8px;
+}
+
+.deleteConfirm > span {
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.deleteConfirmButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.deleteConfirmYes,
+.deleteConfirmNo {
+  min-height: 40px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.deleteConfirmYes {
+  color: #ffffff;
+  background: #9f2d25;
+  border: 1px solid #9f2d25;
+}
+
+.deleteConfirmNo {
+  color: var(--text-light);
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+.deleteConfirmYes:disabled,
+.deleteConfirmNo:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.deleteConfirmYes:focus-visible,
+.deleteConfirmNo:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
 /* ==========================================
    Sin palabras
 ========================================== */

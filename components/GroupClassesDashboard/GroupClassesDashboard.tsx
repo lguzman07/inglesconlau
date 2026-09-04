@@ -319,6 +319,9 @@ export default function GroupClassesDashboard() {
   const [cancellingId, setCancellingId] =
     useState<string | null>(null);
 
+  const [pendingCancelId, setPendingCancelId] =
+    useState<string | null>(null);
+
   const [message, setMessage] =
     useState('');
 
@@ -644,6 +647,7 @@ export default function GroupClassesDashboard() {
   ) {
     if (cancellingId) return;
 
+    setPendingCancelId(null);
     setCancellingId(bookingId);
     setError('');
     setMessage('');
@@ -1078,19 +1082,62 @@ export default function GroupClassesDashboard() {
                       </span>
                     ) : null}
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCancel(booking.id)
-                      }
-                      disabled={
-                        cancellingId === booking.id
-                      }
-                    >
-                      {cancellingId === booking.id
-                        ? 'Cancelando...'
-                        : 'Cancelar'}
-                    </button>
+                    {pendingCancelId === booking.id ? (
+                      <div
+                        className={styles.cancelConfirm}
+                        role="group"
+                        aria-label="Confirmar cancelación"
+                      >
+                        <span>¿Cancelar esta clase?</span>
+
+                        <div
+                          className={
+                            styles.cancelConfirmButtons
+                          }
+                        >
+                          <button
+                            type="button"
+                            className={
+                              styles.cancelConfirmYes
+                            }
+                            onClick={() =>
+                              handleCancel(booking.id)
+                            }
+                            disabled={
+                              cancellingId === booking.id
+                            }
+                          >
+                            {cancellingId === booking.id
+                              ? 'Cancelando...'
+                              : 'Sí, cancelar'}
+                          </button>
+
+                          <button
+                            type="button"
+                            className={
+                              styles.cancelConfirmNo
+                            }
+                            onClick={() =>
+                              setPendingCancelId(null)
+                            }
+                            disabled={
+                              cancellingId === booking.id
+                            }
+                          >
+                            No
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setPendingCancelId(booking.id)
+                        }
+                      >
+                        Cancelar
+                      </button>
+                    )}
                   </div>
                 );
               })}

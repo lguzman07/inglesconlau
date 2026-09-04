@@ -570,6 +570,59 @@
   opacity: 0.5;
 }
 
+.cancelConfirm {
+  display: grid;
+  flex-shrink: 0;
+  gap: 8px;
+  justify-items: start;
+}
+
+.cancelConfirm > span {
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.cancelConfirmButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.bookingItem .cancelConfirmYes,
+.bookingItem .cancelConfirmNo {
+  min-height: 40px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.bookingItem .cancelConfirmYes {
+  color: #ffffff;
+  background: #9f2d25;
+  border: 1px solid #9f2d25;
+}
+
+.bookingItem .cancelConfirmNo {
+  color: var(--text-light);
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+.bookingItem .cancelConfirmYes:disabled,
+.bookingItem .cancelConfirmNo:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.bookingItem .cancelConfirmYes:focus-visible,
+.bookingItem .cancelConfirmNo:focus-visible {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 3px;
+}
+
 .emptyState {
   margin-top: 20px;
   padding: 22px;
