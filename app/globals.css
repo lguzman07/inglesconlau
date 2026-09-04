@@ -290,6 +290,12 @@ body {
   background-color: #aeb4bf !important;
 }
 
+.theme-color-options
+  .theme-color-option:nth-child(19)
+  .theme-color-swatch {
+  background-color: #8fd9f5 !important;
+}
+
 .theme-option:focus-visible,
 .theme-color-option:focus-visible {
   outline: 3px solid var(--focus);
