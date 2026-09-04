@@ -27,14 +27,11 @@ type ColorTheme =
   | 'brown'
   | 'grayscale';
 
-type DisplayPreference =
-  | 'auto'
-  | 'normal'
-  | 'dark'
-  | 'contrast'
-  | ColorTheme;
+type ColorChoice = 'none' | ColorTheme;
 
-type AppliedTheme = Exclude<DisplayPreference, 'auto'>;
+type Mode = 'auto' | 'normal' | 'dark' | 'contrast';
+
+type ResolvedMode = Exclude<Mode, 'auto'>;
 
 type ColorPalette = {
   '--background': string;
@@ -59,13 +56,15 @@ type ColorOption = {
   value: ColorTheme;
   label: string;
   swatch: string;
-  palette: ColorPalette;
+  paletteLight: ColorPalette;
+  paletteDark: ColorPalette;
 };
 
-const STORAGE_KEY = 'display-mode-v2';
+const MODE_STORAGE_KEY = 'display-mode-v2';
+const COLOR_STORAGE_KEY = 'display-color-v1';
 
 const options: Array<{
-  value: Exclude<DisplayPreference, ColorTheme>;
+  value: Mode;
   icon: string;
   label: string;
 }> = [
@@ -96,7 +95,7 @@ const colorOptions: ColorOption[] = [
     value: 'red',
     label: 'Garnet',
     swatch: '#f9dede',
-    palette: {
+    paletteLight: {
       '--background': '#fff6f6',
       '--surface': 'rgb(255 251 251 / 97%)',
       '--surface-solid': '#fffbfb',
@@ -116,12 +115,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(179 38 46 / 17%)',
     },
+    paletteDark: {
+      '--background': '#1f1414',
+      '--surface': 'rgba(50, 32, 33, 0.96)',
+      '--surface-solid': '#322021',
+      '--surface-soft': '#42292a',
+      '--primary': '#d69a9d',
+      '--primary-hover': '#e4b4b6',
+      '--primary-light': '#502f31',
+      '--accent': '#e4b4b6',
+      '--secondary': '#513435',
+      '--secondary-hover': '#653e40',
+      '--text': '#f3f5f6',
+      '--text-light': '#ded3d4',
+      '--border': '#8a5154',
+      '--focus': '#eec9cb',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'coral',
     label: 'Padparadscha',
     swatch: '#fbe0dc',
-    palette: {
+    paletteLight: {
       '--background': '#fff7f5',
       '--surface': 'rgb(255 252 251 / 97%)',
       '--surface-solid': '#fffcfb',
@@ -141,12 +158,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(173 70 61 / 17%)',
     },
+    paletteDark: {
+      '--background': '#1f1514',
+      '--surface': 'rgba(50, 33, 32, 0.96)',
+      '--surface-solid': '#322120',
+      '--surface-soft': '#422b29',
+      '--primary': '#d69f9a',
+      '--primary-hover': '#e4b8b4',
+      '--primary-light': '#50322f',
+      '--accent': '#e4b8b4',
+      '--secondary': '#513634',
+      '--secondary-hover': '#65413e',
+      '--text': '#f3f5f6',
+      '--text-light': '#ded4d3',
+      '--border': '#8a5651',
+      '--focus': '#eeccc9',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'orange',
     label: 'Carnelian',
     swatch: '#fbe2d0',
-    palette: {
+    paletteLight: {
       '--background': '#fff8f2',
       '--surface': 'rgb(255 252 249 / 97%)',
       '--surface-solid': '#fffcf9',
@@ -166,12 +201,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(184 79 18 / 17%)',
     },
+    paletteDark: {
+      '--background': '#1f1814',
+      '--surface': 'rgba(50, 38, 32, 0.96)',
+      '--surface-solid': '#322620',
+      '--surface-soft': '#423229',
+      '--primary': '#d6b09a',
+      '--primary-hover': '#e4c5b4',
+      '--primary-light': '#503b2f',
+      '--accent': '#e4c5b4',
+      '--secondary': '#513e34',
+      '--secondary-hover': '#654c3e',
+      '--text': '#f3f5f6',
+      '--text-light': '#ded7d3',
+      '--border': '#8a6651',
+      '--focus': '#eed6c9',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'yellow',
     label: 'Yellow Diamond',
     swatch: '#f8efbd',
-    palette: {
+    paletteLight: {
       '--background': '#fffdf2',
       '--surface': 'rgb(255 254 249 / 97%)',
       '--surface-solid': '#fffef9',
@@ -191,12 +244,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(120 96 0 / 16%)',
     },
+    paletteDark: {
+      '--background': '#1f1d14',
+      '--surface': 'rgba(50, 46, 32, 0.96)',
+      '--surface-solid': '#322e20',
+      '--surface-soft': '#423d29',
+      '--primary': '#d6ca9a',
+      '--primary-hover': '#e4dbb4',
+      '--primary-light': '#504a2f',
+      '--accent': '#e4dbb4',
+      '--secondary': '#514b34',
+      '--secondary-hover': '#655d3e',
+      '--text': '#f3f5f6',
+      '--text-light': '#dedcd3',
+      '--border': '#8a7f51',
+      '--focus': '#eee6c9',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'golden',
     label: 'Topaz',
     swatch: '#f4e5bc',
-    palette: {
+    paletteLight: {
       '--background': '#fffaf0',
       '--surface': 'rgb(255 253 248 / 97%)',
       '--surface-solid': '#fffdf8',
@@ -216,12 +287,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(138 101 0 / 17%)',
     },
+    paletteDark: {
+      '--background': '#1f1c14',
+      '--surface': 'rgba(50, 45, 32, 0.96)',
+      '--surface-solid': '#322d20',
+      '--surface-soft': '#423c29',
+      '--primary': '#d6c69a',
+      '--primary-hover': '#e4d7b4',
+      '--primary-light': '#50472f',
+      '--accent': '#e4d7b4',
+      '--secondary': '#514934',
+      '--secondary-hover': '#655b3e',
+      '--text': '#f3f5f6',
+      '--text-light': '#dedbd3',
+      '--border': '#8a7b51',
+      '--focus': '#eee4c9',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'cream',
     label: 'Moonstone',
     swatch: '#f7efd9',
-    palette: {
+    paletteLight: {
       '--background': '#fffdf7',
       '--surface': 'rgb(255 254 250 / 97%)',
       '--surface-solid': '#fffefa',
@@ -241,12 +330,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(139 111 71 / 16%)',
     },
+    paletteDark: {
+      '--background': '#1f1a14',
+      '--surface': 'rgba(50, 42, 32, 0.96)',
+      '--surface-solid': '#322a20',
+      '--surface-soft': '#423829',
+      '--primary': '#d6bd9a',
+      '--primary-hover': '#e4d0b4',
+      '--primary-light': '#50432f',
+      '--accent': '#e4d0b4',
+      '--secondary': '#514534',
+      '--secondary-hover': '#65553e',
+      '--text': '#f3f5f6',
+      '--text-light': '#dedad3',
+      '--border': '#8a7251',
+      '--focus': '#eedec9',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'lime',
     label: 'Peridot',
     swatch: '#edf4c7',
-    palette: {
+    paletteLight: {
       '--background': '#fafced',
       '--surface': 'rgb(253 255 246 / 97%)',
       '--surface-solid': '#fdfff6',
@@ -266,12 +373,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(100 122 0 / 17%)',
     },
+    paletteDark: {
+      '--background': '#1d1f14',
+      '--surface': 'rgba(46, 50, 32, 0.96)',
+      '--surface-solid': '#2e3220',
+      '--surface-soft': '#3e4229',
+      '--primary': '#cbd69a',
+      '--primary-hover': '#dce4b4',
+      '--primary-light': '#4a502f',
+      '--accent': '#dce4b4',
+      '--secondary': '#4c5134',
+      '--secondary-hover': '#5e653e',
+      '--text': '#f3f5f6',
+      '--text-light': '#dcded3',
+      '--border': '#808a51',
+      '--focus': '#e7eec9',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'green',
     label: 'Emerald',
     swatch: '#deefe2',
-    palette: {
+    paletteLight: {
       '--background': '#f5fbf6',
       '--surface': 'rgb(250 254 250 / 97%)',
       '--surface-solid': '#fafffa',
@@ -291,12 +416,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(47 122 75 / 17%)',
     },
+    paletteDark: {
+      '--background': '#141f18',
+      '--surface': 'rgba(32, 50, 38, 0.96)',
+      '--surface-solid': '#203226',
+      '--surface-soft': '#294232',
+      '--primary': '#9ad6b0',
+      '--primary-hover': '#b4e4c5',
+      '--primary-light': '#2f503b',
+      '--accent': '#b4e4c5',
+      '--secondary': '#34513e',
+      '--secondary-hover': '#3e654c',
+      '--text': '#f3f5f6',
+      '--text-light': '#d3ded7',
+      '--border': '#518a66',
+      '--focus': '#c9eed6',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'mint',
     label: 'Jade',
     swatch: '#d9f2ea',
-    palette: {
+    paletteLight: {
       '--background': '#f3fcf9',
       '--surface': 'rgb(249 255 253 / 97%)',
       '--surface-solid': '#f9fffd',
@@ -316,12 +459,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(40 122 103 / 17%)',
     },
+    paletteDark: {
+      '--background': '#141f1c',
+      '--surface': 'rgba(32, 50, 46, 0.96)',
+      '--surface-solid': '#20322e',
+      '--surface-soft': '#29423c',
+      '--primary': '#9ad6c8',
+      '--primary-hover': '#b4e4d9',
+      '--primary-light': '#2f5049',
+      '--accent': '#b4e4d9',
+      '--secondary': '#34514a',
+      '--secondary-hover': '#3e655c',
+      '--text': '#f3f5f6',
+      '--text-light': '#d3dedc',
+      '--border': '#518a7d',
+      '--focus': '#c9eee5',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'teal',
     label: 'Aquamarine',
     swatch: '#d6f0ef',
-    palette: {
+    paletteLight: {
       '--background': '#f2fbfb',
       '--surface': 'rgb(249 255 255 / 97%)',
       '--surface-solid': '#f9ffff',
@@ -341,12 +502,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(25 122 120 / 17%)',
     },
+    paletteDark: {
+      '--background': '#141f1f',
+      '--surface': 'rgba(32, 50, 49, 0.96)',
+      '--surface-solid': '#203231',
+      '--surface-soft': '#294242',
+      '--primary': '#9ad6d5',
+      '--primary-hover': '#b4e4e4',
+      '--primary-light': '#2f5050',
+      '--accent': '#b4e4e4',
+      '--secondary': '#345150',
+      '--secondary-hover': '#3e6565',
+      '--text': '#f3f5f6',
+      '--text-light': '#d3dede',
+      '--border': '#518a89',
+      '--focus': '#c9eeed',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'sky-blue',
     label: 'Lapis Lazuli',
     swatch: '#dff3ff',
-    palette: {
+    paletteLight: {
       '--background': '#f3fbff',
       '--surface': 'rgb(249 253 255 / 97%)',
       '--surface-solid': '#f9fdff',
@@ -366,12 +545,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(37 108 157 / 17%)',
     },
+    paletteDark: {
+      '--background': '#141b1f',
+      '--surface': 'rgba(32, 43, 50, 0.96)',
+      '--surface-solid': '#202b32',
+      '--surface-soft': '#293842',
+      '--primary': '#9abed6',
+      '--primary-hover': '#b4d1e4',
+      '--primary-light': '#2f4350',
+      '--accent': '#b4d1e4',
+      '--secondary': '#344551',
+      '--secondary-hover': '#3e5665',
+      '--text': '#f3f5f6',
+      '--text-light': '#d3dade',
+      '--border': '#51738a',
+      '--focus': '#c9dfee',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'blue-gray',
     label: 'Sapphire',
     swatch: '#dce8f1',
-    palette: {
+    paletteLight: {
       '--background': '#f4f8fb',
       '--surface': 'rgb(250 253 255 / 97%)',
       '--surface-solid': '#fafdff',
@@ -391,12 +588,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(85 122 153 / 17%)',
     },
+    paletteDark: {
+      '--background': '#141a1f',
+      '--surface': 'rgba(32, 42, 50, 0.96)',
+      '--surface-solid': '#202a32',
+      '--surface-soft': '#293742',
+      '--primary': '#9abbd6',
+      '--primary-hover': '#b4cee4',
+      '--primary-light': '#2f4150',
+      '--accent': '#b4cee4',
+      '--secondary': '#344451',
+      '--secondary-hover': '#3e5465',
+      '--text': '#f3f5f6',
+      '--text-light': '#d3d9de',
+      '--border': '#51718a',
+      '--focus': '#c9ddee',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'purple',
     label: 'Amethyst',
     swatch: '#eadff5',
-    palette: {
+    paletteLight: {
       '--background': '#faf6ff',
       '--surface': 'rgb(253 250 255 / 97%)',
       '--surface-solid': '#fdfaff',
@@ -416,12 +631,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(112 64 160 / 17%)',
     },
+    paletteDark: {
+      '--background': '#1a141f',
+      '--surface': 'rgba(41, 32, 50, 0.96)',
+      '--surface-solid': '#292032',
+      '--surface-soft': '#362942',
+      '--primary': '#b89ad6',
+      '--primary-hover': '#ccb4e4',
+      '--primary-light': '#402f50',
+      '--accent': '#ccb4e4',
+      '--secondary': '#423451',
+      '--secondary-hover': '#523e65',
+      '--text': '#f3f5f6',
+      '--text-light': '#d9d3de',
+      '--border': '#6e518a',
+      '--focus': '#dbc9ee',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'lilac',
     label: 'Fluorite',
     swatch: '#eee4fb',
-    palette: {
+    paletteLight: {
       '--background': '#fbf8ff',
       '--surface': 'rgb(254 252 255 / 97%)',
       '--surface-solid': '#fefcff',
@@ -441,12 +674,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(111 77 152 / 17%)',
     },
+    paletteDark: {
+      '--background': '#19141f',
+      '--surface': 'rgba(40, 32, 50, 0.96)',
+      '--surface-solid': '#282032',
+      '--surface-soft': '#342942',
+      '--primary': '#b59ad6',
+      '--primary-hover': '#cab4e4',
+      '--primary-light': '#3e2f50',
+      '--accent': '#cab4e4',
+      '--secondary': '#413451',
+      '--secondary-hover': '#503e65',
+      '--text': '#f3f5f6',
+      '--text-light': '#d8d3de',
+      '--border': '#6b518a',
+      '--focus': '#d9c9ee',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'pink',
     label: 'Rose Quartz',
     swatch: '#f9deec',
-    palette: {
+    paletteLight: {
       '--background': '#fff7fb',
       '--surface': 'rgb(255 251 253 / 97%)',
       '--surface-solid': '#fffbfd',
@@ -466,12 +717,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(178 60 114 / 17%)',
     },
+    paletteDark: {
+      '--background': '#1f1419',
+      '--surface': 'rgba(50, 32, 40, 0.96)',
+      '--surface-solid': '#322028',
+      '--surface-soft': '#422934',
+      '--primary': '#d69ab5',
+      '--primary-hover': '#e4b4ca',
+      '--primary-light': '#502f3e',
+      '--accent': '#e4b4ca',
+      '--secondary': '#513441',
+      '--secondary-hover': '#653e50',
+      '--text': '#f3f5f6',
+      '--text-light': '#ded3d8',
+      '--border': '#8a516b',
+      '--focus': '#eec9d9',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'fuchsia',
     label: 'Pink Diamond',
     swatch: '#fbe0ef',
-    palette: {
+    paletteLight: {
       '--background': '#fff5fb',
       '--surface': 'rgb(255 250 253 / 97%)',
       '--surface-solid': '#fffafd',
@@ -491,12 +760,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(139 28 85 / 18%)',
     },
+    paletteDark: {
+      '--background': '#1f141a',
+      '--surface': 'rgba(50, 32, 42, 0.96)',
+      '--surface-solid': '#32202a',
+      '--surface-soft': '#422937',
+      '--primary': '#d69abb',
+      '--primary-hover': '#e4b4ce',
+      '--primary-light': '#502f41',
+      '--accent': '#e4b4ce',
+      '--secondary': '#513444',
+      '--secondary-hover': '#653e54',
+      '--text': '#f3f5f6',
+      '--text-light': '#ded3d9',
+      '--border': '#8a5171',
+      '--focus': '#eec9dd',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'brown',
     label: 'Smoky Quartz',
     swatch: '#eee0d5',
-    palette: {
+    paletteLight: {
       '--background': '#faf6f2',
       '--surface': 'rgb(254 251 248 / 97%)',
       '--surface-solid': '#fefbf8',
@@ -516,12 +803,30 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(121 82 58 / 17%)',
     },
+    paletteDark: {
+      '--background': '#1f1814',
+      '--surface': 'rgba(50, 39, 32, 0.96)',
+      '--surface-solid': '#322720',
+      '--surface-soft': '#423329',
+      '--primary': '#d6b19a',
+      '--primary-hover': '#e4c6b4',
+      '--primary-light': '#503c2f',
+      '--accent': '#e4c6b4',
+      '--secondary': '#513f34',
+      '--secondary-hover': '#654d3e',
+      '--text': '#f3f5f6',
+      '--text-light': '#ded8d3',
+      '--border': '#8a6751',
+      '--focus': '#eed7c9',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
   {
     value: 'grayscale',
     label: 'Pearl',
     swatch: '#e7e7e8',
-    palette: {
+    paletteLight: {
       '--background': '#f5f5f5',
       '--surface': 'rgb(252 252 252 / 97%)',
       '--surface-solid': '#fcfcfc',
@@ -541,31 +846,45 @@ const colorOptions: ColorOption[] = [
       '--shadow-hover':
         '0 14px 30px rgb(35 35 39 / 16%)',
     },
+    paletteDark: {
+      '--background': '#1a1a1a',
+      '--surface': 'rgba(41, 41, 41, 0.96)',
+      '--surface-solid': '#292929',
+      '--surface-soft': '#343437',
+      '--primary': '#b8b8b8',
+      '--primary-hover': '#c9c9cf',
+      '--primary-light': '#3d3d42',
+      '--accent': '#c9c9cf',
+      '--secondary': '#424242',
+      '--secondary-hover': '#505053',
+      '--text': '#f3f5f6',
+      '--text-light': '#d9d9d9',
+      '--border': '#696972',
+      '--focus': '#d8d8df',
+      '--shadow': '0 10px 28px rgba(0, 0, 0, 0.3)',
+      '--shadow-hover': '0 14px 30px rgba(0, 0, 0, 0.4)',
+    },
   },
 ];
 
+function isMode(value: string | null): value is Mode {
+  return (
+    value === 'auto' ||
+    value === 'normal' ||
+    value === 'dark' ||
+    value === 'contrast'
+  );
+}
+
 function isColorTheme(
-  value: DisplayPreference
+  value: string | null
 ): value is ColorTheme {
   return colorOptions.some(
     (option) => option.value === value
   );
 }
 
-function isDisplayPreference(
-  value: string | null
-): value is DisplayPreference {
-  return (
-    options.some(
-      (option) => option.value === value
-    ) ||
-    colorOptions.some(
-      (option) => option.value === value
-    )
-  );
-}
-
-function getSystemTheme(): AppliedTheme {
+function getSystemTheme(): 'normal' | 'dark' {
   return window.matchMedia(
     '(prefers-color-scheme: dark)'
   ).matches
@@ -573,12 +892,16 @@ function getSystemTheme(): AppliedTheme {
     : 'normal';
 }
 
+function resolveMode(mode: Mode): ResolvedMode {
+  return mode === 'auto' ? getSystemTheme() : mode;
+}
+
 function clearCustomPalette() {
   const rootStyle =
     document.documentElement.style;
 
   const paletteVariables = Object.keys(
-    colorOptions[0].palette
+    colorOptions[0].paletteLight
   );
 
   paletteVariables.forEach((variableName) => {
@@ -586,11 +909,19 @@ function clearCustomPalette() {
   });
 }
 
-function applyCustomPalette(option: ColorOption) {
+function applyCustomPalette(
+  option: ColorOption,
+  resolved: ResolvedMode
+) {
   const rootStyle =
     document.documentElement.style;
 
-  Object.entries(option.palette).forEach(
+  const palette =
+    resolved === 'dark'
+      ? option.paletteDark
+      : option.paletteLight;
+
+  Object.entries(palette).forEach(
     ([variableName, value]) => {
       rootStyle.setProperty(variableName, value);
     }
@@ -598,8 +929,9 @@ function applyCustomPalette(option: ColorOption) {
 }
 
 export default function ThemeControls() {
-  const [displayPreference, setDisplayPreference] =
-    useState<DisplayPreference>('auto');
+  const [mode, setMode] = useState<Mode>('auto');
+  const [colorChoice, setColorChoice] =
+    useState<ColorChoice>('none');
 
   const [isOpen, setIsOpen] = useState(false);
   const [isColorOpen, setIsColorOpen] =
@@ -608,53 +940,82 @@ export default function ThemeControls() {
   const selectorRef =
     useRef<HTMLDivElement>(null);
 
-  const applyDisplayPreference = useCallback(
-    (preference: DisplayPreference) => {
+  const applyTheme = useCallback(
+    (nextMode: Mode, nextColor: ColorChoice) => {
       clearCustomPalette();
 
-      const selectedColor = colorOptions.find(
-        (option) => option.value === preference
+      const resolved = resolveMode(nextMode);
+
+      document.documentElement.setAttribute(
+        'data-theme',
+        resolved
       );
 
-      if (selectedColor) {
-        document.documentElement.setAttribute(
-          'data-theme',
-          selectedColor.value
+      if (
+        resolved !== 'contrast' &&
+        nextColor !== 'none'
+      ) {
+        const selectedColor = colorOptions.find(
+          (option) => option.value === nextColor
         );
 
-        applyCustomPalette(selectedColor);
-      } else {
-        const theme =
-          preference === 'auto'
-            ? getSystemTheme()
-            : preference;
-
-        document.documentElement.setAttribute(
-          'data-theme',
-          theme
-        );
+        if (selectedColor) {
+          applyCustomPalette(
+            selectedColor,
+            resolved
+          );
+        }
       }
 
       localStorage.setItem(
-        STORAGE_KEY,
-        preference
+        MODE_STORAGE_KEY,
+        nextMode
       );
 
-      setDisplayPreference(preference);
+      localStorage.setItem(
+        COLOR_STORAGE_KEY,
+        nextColor
+      );
+
+      setMode(nextMode);
+      setColorChoice(nextColor);
     },
     []
   );
 
   useEffect(() => {
-    const savedPreference =
-      localStorage.getItem(STORAGE_KEY);
-
-    applyDisplayPreference(
-      isDisplayPreference(savedPreference)
-        ? savedPreference
-        : 'auto'
+    const storedMode = localStorage.getItem(
+      MODE_STORAGE_KEY
     );
-  }, [applyDisplayPreference]);
+
+    const storedColor = localStorage.getItem(
+      COLOR_STORAGE_KEY
+    );
+
+    if (isColorTheme(storedColor)) {
+      // Ya había un color guardado con el esquema nuevo.
+      applyTheme(
+        isMode(storedMode) ? storedMode : 'auto',
+        storedColor
+      );
+
+      return;
+    }
+
+    if (isColorTheme(storedMode)) {
+      // Esquema viejo: el color se guardaba como si fuera
+      // el modo, y siempre se veía en versión clara.
+      applyTheme('normal', storedMode);
+
+      return;
+    }
+
+    applyTheme(
+      isMode(storedMode) ? storedMode : 'auto',
+      'none'
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const systemTheme = window.matchMedia(
@@ -662,15 +1023,8 @@ export default function ThemeControls() {
     );
 
     function handleSystemThemeChange() {
-      if (displayPreference === 'auto') {
-        clearCustomPalette();
-
-        document.documentElement.setAttribute(
-          'data-theme',
-          systemTheme.matches
-            ? 'dark'
-            : 'normal'
-        );
+      if (mode === 'auto') {
+        applyTheme('auto', colorChoice);
       }
     }
 
@@ -685,7 +1039,7 @@ export default function ThemeControls() {
         handleSystemThemeChange
       );
     };
-  }, [displayPreference]);
+  }, [mode, colorChoice, applyTheme]);
 
   useEffect(() => {
     function closeMenus() {
@@ -739,24 +1093,25 @@ export default function ThemeControls() {
     };
   }, [isColorOpen]);
 
-  function selectPreference(
-    preference: DisplayPreference
-  ) {
-    applyDisplayPreference(preference);
+  function selectMode(nextMode: Mode) {
+    applyTheme(nextMode, colorChoice);
     setIsOpen(false);
     setIsColorOpen(false);
   }
 
   function selectColorPreference(
-    preference: ColorTheme
+    nextColor: ColorChoice
   ) {
-    applyDisplayPreference(preference);
+    applyTheme(mode, nextColor);
 
     // Mantiene ambos menús abiertos para
     // comparar los colores inmediatamente.
     setIsOpen(true);
     setIsColorOpen(true);
   }
+
+  const resolvedMode = resolveMode(mode);
+  const isContrastActive = resolvedMode === 'contrast';
 
   return (
     <div
@@ -791,17 +1146,13 @@ export default function ThemeControls() {
             <button
               type="button"
               role="menuitemradio"
-              aria-checked={
-                displayPreference === option.value
-              }
+              aria-checked={mode === option.value}
               className={`theme-option ${
-                displayPreference === option.value
-                  ? 'active'
-                  : ''
+                mode === option.value ? 'active' : ''
               }`}
               key={option.value}
               onClick={() =>
-                selectPreference(option.value)
+                selectMode(option.value)
               }
             >
               <span aria-hidden="true">
@@ -814,9 +1165,7 @@ export default function ThemeControls() {
                 className="theme-check"
                 aria-hidden="true"
               >
-                {displayPreference === option.value
-                  ? '✓'
-                  : ''}
+                {mode === option.value ? '✓' : ''}
               </span>
             </button>
           ))}
@@ -826,9 +1175,7 @@ export default function ThemeControls() {
               type="button"
               role="menuitem"
               className={`theme-option theme-color-toggle ${
-                isColorTheme(displayPreference)
-                  ? 'active'
-                  : ''
+                colorChoice !== 'none' ? 'active' : ''
               }`}
               aria-expanded={isColorOpen}
               aria-controls="theme-color-options"
@@ -862,12 +1209,10 @@ export default function ThemeControls() {
                     type="button"
                     role="menuitemradio"
                     aria-checked={
-                      displayPreference ===
-                      option.value
+                      colorChoice === option.value
                     }
                     className={`theme-color-option ${
-                      displayPreference ===
-                      option.value
+                      colorChoice === option.value
                         ? 'active'
                         : ''
                     }`}
@@ -893,13 +1238,33 @@ export default function ThemeControls() {
                       className="theme-check"
                       aria-hidden="true"
                     >
-                      {displayPreference ===
+                      {colorChoice ===
                       option.value
                         ? '✓'
                         : ''}
                     </span>
                   </button>
                 ))}
+
+                {isContrastActive && (
+                  <p className="theme-color-note">
+                    El color no se aplica en Alto
+                    contraste.
+                  </p>
+                )}
+
+                {colorChoice !== 'none' && (
+                  <button
+                    type="button"
+                    className="theme-color-clear"
+                    onClick={() =>
+                      selectColorPreference('none')
+                    }
+                  >
+                    Quitar color (usar el
+                    predeterminado)
+                  </button>
+                )}
               </div>
             )}
           </div>
