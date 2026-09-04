@@ -104,16 +104,37 @@ function buildSessionQueue(
   });
 }
 
+const EXTERNAL_FETCH_TIMEOUT_MS = 6000;
+
+async function fetchWithTimeout(
+  url: string,
+): Promise<Response | null> {
+  const controller = new AbortController();
+
+  const timeoutId = setTimeout(
+    () => controller.abort(),
+    EXTERNAL_FETCH_TIMEOUT_MS,
+  );
+
+  try {
+    return await fetch(url, { signal: controller.signal });
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 async function fetchDictionaryDefinition(
   word: string,
 ): Promise<string | null> {
+  const response = await fetchWithTimeout(
+    `/api/dictionary?word=${encodeURIComponent(word)}`,
+  );
+
+  if (!response || !response.ok) return null;
+
   try {
-    const response = await fetch(
-      `/api/dictionary?word=${encodeURIComponent(word)}`,
-    );
-
-    if (!response.ok) return null;
-
     const data = (await response.json()) as {
       definition: string | null;
     };
@@ -127,13 +148,13 @@ async function fetchDictionaryDefinition(
 async function translateToSpanish(
   text: string,
 ): Promise<string | null> {
+  const response = await fetchWithTimeout(
+    `/api/translate?text=${encodeURIComponent(text)}`,
+  );
+
+  if (!response || !response.ok) return null;
+
   try {
-    const response = await fetch(
-      `/api/translate?text=${encodeURIComponent(text)}`,
-    );
-
-    if (!response.ok) return null;
-
     const data = (await response.json()) as {
       translation: string | null;
     };
@@ -329,36 +350,52 @@ export default function PracticarPage() {
 
     if (level === 'medium') {
       setIsPreparingSession(true);
+      setErrorMessage('');
 
-      const supabase = createClient();
+      try {
+        const supabase = createClient();
 
-      const withDefinitions = await Promise.all(
-        sample.map(async (card) => {
-          const updated = await ensureSpanishDefinition(card);
+        const withDefinitions = await Promise.all(
+          sample.map(async (card) => {
+            const updated = await ensureSpanishDefinition(card);
 
-          if (
-            updated.definition_en !== card.definition_en ||
-            updated.definition_es !== card.definition_es
-          ) {
-            await supabase
-              .from('user_flashcards')
-              .update({
-                definition_en: updated.definition_en,
-                definition_es: updated.definition_es,
-              })
-              .eq('id', card.id);
-          }
+            if (
+              updated.definition_en !== card.definition_en ||
+              updated.definition_es !== card.definition_es
+            ) {
+              try {
+                await supabase
+                  .from('user_flashcards')
+                  .update({
+                    definition_en: updated.definition_en,
+                    definition_es: updated.definition_es,
+                  })
+                  .eq('id', card.id);
+              } catch {
+                // Si falla el guardado, seguimos con la sesión
+                // igual — la próxima vez se vuelve a intentar.
+              }
+            }
 
-          return updated;
-        }),
-      );
+            return updated;
+          }),
+        );
 
-      setIsPreparingSession(false);
-      setHasStarted(true);
-      setQueue(buildSessionQueue(withDefinitions, allWords, level));
-      setCurrentIndex(0);
-      setSessionCorrect(0);
-      resetAnswerState();
+        setHasStarted(true);
+        setQueue(
+          buildSessionQueue(withDefinitions, allWords, level),
+        );
+        setCurrentIndex(0);
+        setSessionCorrect(0);
+        resetAnswerState();
+      } catch {
+        setErrorMessage(
+          'No pudimos preparar las definiciones. Inténtalo de nuevo.',
+        );
+      } finally {
+        setIsPreparingSession(false);
+      }
+
       return;
     }
 
