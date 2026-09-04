@@ -60,6 +60,9 @@ export default function FlashcardsPage() {
   const [search, setSearch] =
     useState('');
 
+  const [dueCount, setDueCount] =
+    useState<number | null>(null);
+
   const [
     englishPronunciation,
     setEnglishPronunciation,
@@ -185,6 +188,16 @@ export default function FlashcardsPage() {
       }
 
       setIsLoading(false);
+
+      const dueResult = await supabase
+        .from('user_flashcards')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+        .lte('due_at', new Date().toISOString());
+
+      if (!dueResult.error) {
+        setDueCount(dueResult.count ?? 0);
+      }
     }
 
     void loadFlashcards();
@@ -639,12 +652,35 @@ export default function FlashcardsPage() {
             </strong>
           </div>
 
-          <p>
-            Tu colección crece
-            solamente con las
-            palabras que tú
-            decides guardar.
-          </p>
+          <div
+            className={
+              styles.summaryActions
+            }
+          >
+            {dueCount !== null &&
+            dueCount > 0 ? (
+              <span
+                className={
+                  styles.dueBadge
+                }
+              >
+                {dueCount}{' '}
+                {dueCount === 1
+                  ? 'palabra'
+                  : 'palabras'}{' '}
+                para repasar hoy
+              </span>
+            ) : null}
+
+            <Link
+              href="/flashcards/practicar"
+              className={
+                styles.practiceButton
+              }
+            >
+              Practicar →
+            </Link>
+          </div>
         </section>
 
         {errorMessage && (
