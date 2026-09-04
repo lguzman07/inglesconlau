@@ -885,6 +885,12 @@ function isColorTheme(
 }
 
 function getSystemTheme(): 'normal' | 'dark' {
+  if (typeof window === 'undefined') {
+    // Prerenderizado en el servidor: no hay preferencia de
+    // sistema disponible todavía, se ajusta en el cliente.
+    return 'normal';
+  }
+
   return window.matchMedia(
     '(prefers-color-scheme: dark)'
   ).matches

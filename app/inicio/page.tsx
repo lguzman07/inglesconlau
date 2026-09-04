@@ -173,8 +173,12 @@ export default function InicioPage() {
       setSavedFlashcards(flashcardsResult.count ?? 0);
 
       const progressKeys = (progressResult.data ?? [])
-        .map((item) => getValidLessonKey(item.lesson_key))
-        .filter((key): key is string => key !== null);
+        .map((item: { lesson_key: string }) =>
+          getValidLessonKey(item.lesson_key),
+        )
+        .filter(
+          (key: string | null): key is string => key !== null,
+        );
 
       const databaseLast = progressKeys[0] ?? 'a1/1';
       const storedLast = getValidLessonKey(
