@@ -232,6 +232,115 @@
   align-items: center;
 }
 
+.levelPicker {
+  padding: 32px 28px;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.levelPicker h1 {
+  margin: 0 0 20px;
+  color: var(--text);
+  font-size: 1.5rem;
+}
+
+.levelOptions {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 26px;
+}
+
+.levelOption {
+  display: grid;
+  gap: 6px;
+  padding: 16px 18px;
+  text-align: left;
+  color: var(--text);
+  font: inherit;
+  background: var(--surface-soft);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.levelOption strong {
+  font-size: 1.05rem;
+}
+
+.levelOption span {
+  color: var(--text-light);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.levelOption em {
+  color: #9f2d25;
+  font-size: 0.82rem;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.levelOption:hover:not(:disabled) {
+  border-color: var(--primary);
+}
+
+.levelOption:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.levelOptionSelected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.sizeOptions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.sizeOption {
+  min-height: 44px;
+  padding: 0 20px;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  background: var(--surface-soft);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sizeOption:hover {
+  border-color: var(--primary);
+}
+
+.sizeOptionSelected {
+  color: #ffffff;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.sizeNote {
+  margin: 0 0 20px;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.contextSentence {
+  margin: 0 0 22px;
+  color: var(--text-light);
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.5;
+}
+
 .primaryLink {
   display: inline-flex;
   align-items: center;
@@ -251,6 +360,11 @@
 .primaryLink:hover,
 .primaryLink:focus-visible {
   background: var(--primary-hover);
+}
+
+.primaryLink:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .secondaryLink {

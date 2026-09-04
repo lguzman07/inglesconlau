@@ -16,13 +16,17 @@ type SourceCard = ReviewFields & {
   id: string;
   word: string;
   translation: string;
+  example_sentence: string | null;
 };
+
+type Level = 'easy' | 'medium' | 'hard';
 
 type ExerciseType = 'choice' | 'type';
 
 type SessionCard = SourceCard & {
   exerciseType: ExerciseType;
   choices: string[];
+  redactedSentence: string | null;
 };
 
 type AnswerState = {
@@ -30,6 +34,30 @@ type AnswerState = {
   isCorrect: boolean;
   selectedChoice: string | null;
   typedValue: string;
+};
+
+const LEVEL_INFO: Record<
+  Level,
+  { label: string; description: string; exerciseType: ExerciseType }
+> = {
+  easy: {
+    label: 'Fácil',
+    description:
+      'Te decimos la palabra en español y escoges entre 4 opciones en inglés.',
+    exerciseType: 'choice',
+  },
+  medium: {
+    label: 'Medio',
+    description:
+      'Te damos la palabra en español y una oración en inglés con un espacio en blanco, y escoges entre 4 opciones.',
+    exerciseType: 'choice',
+  },
+  hard: {
+    label: 'Difícil',
+    description:
+      'Te decimos la palabra en español y la escribes en inglés desde cero.',
+    exerciseType: 'type',
+  },
 };
 
 function shuffle<T>(items: T[]): T[] {
@@ -41,23 +69,48 @@ function shuffle<T>(items: T[]): T[] {
   return copy;
 }
 
+function normalizeAnswer(value: string): string {
+  return value
+    .normalize('NFKC')
+    .trim()
+    .toLocaleLowerCase()
+    .replace(/\s+/g, ' ')
+    .replace(/[.,!?;:'"¿¡]/g, '');
+}
+
+function redactWordFromSentence(
+  sentence: string,
+  word: string,
+): string {
+  const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const pattern = new RegExp(`\\b${escaped}\\b`, 'gi');
+  return sentence.replace(pattern, '____');
+}
+
 function buildSessionQueue(
   cards: SourceCard[],
   wordPool: string[],
+  level: Level,
 ): SessionCard[] {
   const distinctPool = Array.from(new Set(wordPool));
+  const exerciseType = LEVEL_INFO[level].exerciseType;
 
   return shuffle(cards).map((card) => {
-    const canUseChoice = distinctPool.length >= 4;
-    const exerciseType: ExerciseType =
-      canUseChoice && Math.random() < 0.5
-        ? 'choice'
-        : canUseChoice
-          ? 'type'
-          : 'type';
+    const redactedSentence =
+      level === 'medium' && card.example_sentence
+        ? redactWordFromSentence(
+            card.example_sentence,
+            card.word,
+          )
+        : null;
 
     if (exerciseType !== 'choice') {
-      return { ...card, exerciseType, choices: [] };
+      return {
+        ...card,
+        exerciseType,
+        choices: [],
+        redactedSentence: null,
+      };
     }
 
     const distractors = shuffle(
@@ -68,6 +121,7 @@ function buildSessionQueue(
       ...card,
       exerciseType,
       choices: shuffle([card.word, ...distractors]),
+      redactedSentence,
     };
   });
 }
@@ -105,7 +159,10 @@ function computeNextReview(
   };
 }
 
-const SESSION_LIMIT = 15;
+type SessionSize = 5 | 10;
+
+const SESSION_SIZES: SessionSize[] = [5, 10];
+const MAX_POOL_SIZE = 50;
 
 export default function PracticarPage() {
   const router = useRouter();
@@ -113,7 +170,14 @@ export default function PracticarPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [totalSavedWords, setTotalSavedWords] = useState(0);
+  const [allWords, setAllWords] = useState<string[]>([]);
   const [dueCards, setDueCards] = useState<SourceCard[] | null>(null);
+  const [practiceAllCards, setPracticeAllCards] = useState<
+    SourceCard[] | null
+  >(null);
+  const [level, setLevel] = useState<Level | null>(null);
+  const [sessionSize, setSessionSize] = useState<SessionSize>(5);
+  const [hasStarted, setHasStarted] = useState(false);
   const [queue, setQueue] = useState<SessionCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answer, setAnswer] = useState<AnswerState>({
@@ -145,12 +209,12 @@ export default function PracticarPage() {
         supabase
           .from('user_flashcards')
           .select(
-            'id, word, translation, ease_factor, interval_days, repetitions',
+            'id, word, translation, example_sentence, ease_factor, interval_days, repetitions',
           )
           .eq('user_id', user.id)
           .lte('due_at', new Date().toISOString())
           .order('due_at', { ascending: true })
-          .limit(SESSION_LIMIT),
+          .limit(MAX_POOL_SIZE),
         supabase
           .from('user_flashcards')
           .select('word')
@@ -166,13 +230,13 @@ export default function PracticarPage() {
       }
 
       const due = (dueResult.data ?? []) as SourceCard[];
-      const allWords = (
+      const words = (
         (allResult.data ?? []) as { word: string }[]
       ).map((row) => row.word);
 
-      setTotalSavedWords(allWords.length);
+      setTotalSavedWords(words.length);
+      setAllWords(words);
       setDueCards(due);
-      setQueue(buildSessionQueue(due, allWords));
       setIsLoading(false);
     }
 
@@ -196,11 +260,11 @@ export default function PracticarPage() {
     const { data, error } = await supabase
       .from('user_flashcards')
       .select(
-        'id, word, translation, ease_factor, interval_days, repetitions',
+        'id, word, translation, example_sentence, ease_factor, interval_days, repetitions',
       )
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
-      .limit(SESSION_LIMIT);
+      .limit(MAX_POOL_SIZE);
 
     if (error) {
       setErrorMessage(
@@ -211,11 +275,29 @@ export default function PracticarPage() {
     }
 
     const cards = (data ?? []) as SourceCard[];
-    setDueCards(cards);
-    setQueue(buildSessionQueue(cards, cards.map((c) => c.word)));
+    setPracticeAllCards(cards);
+    setAllWords(cards.map((c) => c.word));
+    setIsLoading(false);
+  }
+
+  const sourceCards = practiceAllCards ?? dueCards;
+
+  function startSession() {
+    if (!sourceCards || !level) return;
+
+    const sample = shuffle(sourceCards).slice(0, sessionSize);
+
+    setHasStarted(true);
+    setQueue(buildSessionQueue(sample, allWords, level));
     setCurrentIndex(0);
     setSessionCorrect(0);
-    setIsLoading(false);
+    resetAnswerState();
+  }
+
+  function backToPicker() {
+    setHasStarted(false);
+    setQueue([]);
+    setCurrentIndex(0);
   }
 
   function resetAnswerState() {
@@ -273,8 +355,8 @@ export default function PracticarPage() {
     if (answer.isAnswered || !currentCard) return;
 
     const isCorrect =
-      answer.typedValue.trim().toLocaleLowerCase() ===
-      currentCard.word.trim().toLocaleLowerCase();
+      normalizeAnswer(answer.typedValue) ===
+      normalizeAnswer(currentCard.word);
 
     setAnswer((current) => ({
       ...current,
@@ -336,7 +418,11 @@ export default function PracticarPage() {
     );
   }
 
-  if (dueCards && dueCards.length === 0 && queue.length === 0) {
+  if (
+    dueCards &&
+    dueCards.length === 0 &&
+    !practiceAllCards
+  ) {
     return (
       <main className={styles.page}>
         <div className={styles.container}>
@@ -366,6 +452,99 @@ export default function PracticarPage() {
     );
   }
 
+  if (!hasStarted) {
+    const notEnoughForChoice = totalSavedWords < 4;
+    const availableCount = sourceCards?.length ?? 0;
+
+    return (
+      <main className={styles.page}>
+        <div className={styles.container}>
+          <header className={styles.header}>
+            <Link href="/flashcards" className={styles.backLink}>
+              ← Salir de la práctica
+            </Link>
+          </header>
+
+          <section className={styles.levelPicker}>
+            <p className={styles.eyebrow}>ELIGE TU NIVEL</p>
+            <h1>¿Cómo quieres practicar?</h1>
+
+            <div className={styles.levelOptions}>
+              {(Object.keys(LEVEL_INFO) as Level[]).map(
+                (levelKey) => {
+                  const info = LEVEL_INFO[levelKey];
+                  const isDisabled =
+                    info.exerciseType === 'choice' &&
+                    notEnoughForChoice;
+                  const isSelected = level === levelKey;
+
+                  return (
+                    <button
+                      key={levelKey}
+                      type="button"
+                      className={`${styles.levelOption} ${
+                        isSelected ? styles.levelOptionSelected : ''
+                      }`}
+                      disabled={isDisabled}
+                      aria-pressed={isSelected}
+                      onClick={() => setLevel(levelKey)}
+                    >
+                      <strong>{info.label}</strong>
+                      <span>{info.description}</span>
+                      {isDisabled && (
+                        <em>
+                          Necesitas al menos 4 palabras guardadas
+                          para este nivel.
+                        </em>
+                      )}
+                    </button>
+                  );
+                },
+              )}
+            </div>
+
+            <p className={styles.eyebrow}>¿CUÁNTAS PALABRAS?</p>
+
+            <div className={styles.sizeOptions}>
+              {SESSION_SIZES.map((size) => (
+                <button
+                  key={size}
+                  type="button"
+                  className={`${styles.sizeOption} ${
+                    sessionSize === size
+                      ? styles.sizeOptionSelected
+                      : ''
+                  }`}
+                  aria-pressed={sessionSize === size}
+                  onClick={() => setSessionSize(size)}
+                >
+                  {size} palabras
+                </button>
+              ))}
+            </div>
+
+            {availableCount > 0 && availableCount < sessionSize && (
+              <p className={styles.sizeNote}>
+                Solo tienes {availableCount}{' '}
+                {availableCount === 1 ? 'palabra' : 'palabras'}{' '}
+                disponibles ahora, así que la práctica será con esas.
+              </p>
+            )}
+
+            <button
+              type="button"
+              className={styles.primaryLink}
+              disabled={!level}
+              onClick={startSession}
+            >
+              Comenzar práctica
+            </button>
+          </section>
+        </div>
+      </main>
+    );
+  }
+
   if (!currentCard) {
     const total = queue.length;
     return (
@@ -383,8 +562,15 @@ export default function PracticarPage() {
                 : 'Sigue practicando: las palabras que fallaste volverán a aparecer pronto.'}
             </p>
             <div className={styles.emptyActions}>
-              <Link href="/flashcards" className={styles.primaryLink}>
-                Volver a mis flashcards
+              <button
+                type="button"
+                className={styles.primaryLink}
+                onClick={backToPicker}
+              >
+                Elegir otro nivel
+              </button>
+              <Link href="/flashcards" className={styles.secondaryLink}>
+                ← Volver a mis flashcards
               </Link>
             </div>
           </section>
@@ -401,6 +587,7 @@ export default function PracticarPage() {
             ← Salir de la práctica
           </Link>
           <span className={styles.progress}>
+            {level ? `${LEVEL_INFO[level].label} · ` : ''}
             {currentIndex + 1} de {queue.length}
           </span>
         </header>
@@ -415,6 +602,12 @@ export default function PracticarPage() {
           <strong className={styles.translation}>
             {currentCard.translation}
           </strong>
+
+          {currentCard.redactedSentence && (
+            <p className={styles.contextSentence}>
+              “{currentCard.redactedSentence}”
+            </p>
+          )}
 
           {currentCard.exerciseType === 'choice' ? (
             <div className={styles.choices}>
