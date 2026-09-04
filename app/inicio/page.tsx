@@ -20,7 +20,15 @@ const LEVEL_ORDER = ['a1', 'a2', 'b1', 'b2', 'c1'];
 
 function getValidLessonKey(value: string | null) {
   if (!value || !/^[a-z0-9-]+\/\d+$/i.test(value)) return null;
-  return value.toLowerCase();
+
+  const normalized = value.toLowerCase();
+  const [level] = normalized.split('/');
+
+  // Descarta niveles que ya no existen (p. ej. progreso viejo en A0),
+  // para que no aparezcan como "punto más avanzado" ni como última lección.
+  if (!LEVEL_ORDER.includes(level)) return null;
+
+  return normalized;
 }
 
 function compareLessonKeys(firstKey: string, secondKey: string) {
