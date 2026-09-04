@@ -17,6 +17,7 @@ type SourceCard = ReviewFields & {
   word: string;
   translation: string;
   example_sentence: string | null;
+  definition_en: string | null;
 };
 
 type Level = 'easy' | 'medium' | 'hard';
@@ -26,7 +27,6 @@ type ExerciseType = 'choice' | 'type';
 type SessionCard = SourceCard & {
   exerciseType: ExerciseType;
   choices: string[];
-  redactedSentence: string | null;
 };
 
 type AnswerState = {
@@ -49,7 +49,7 @@ const LEVEL_INFO: Record<
   medium: {
     label: 'Medio',
     description:
-      'Te damos la palabra en español y una oración en inglés con un espacio en blanco, y escoges entre 4 opciones.',
+      'Te damos la palabra en español y su definición en inglés, y escoges entre 4 opciones.',
     exerciseType: 'choice',
   },
   hard: {
@@ -78,15 +78,6 @@ function normalizeAnswer(value: string): string {
     .replace(/[.,!?;:'"¿¡]/g, '');
 }
 
-function redactWordFromSentence(
-  sentence: string,
-  word: string,
-): string {
-  const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const pattern = new RegExp(`\\b${escaped}\\b`, 'gi');
-  return sentence.replace(pattern, '____');
-}
-
 function buildSessionQueue(
   cards: SourceCard[],
   wordPool: string[],
@@ -96,21 +87,8 @@ function buildSessionQueue(
   const exerciseType = LEVEL_INFO[level].exerciseType;
 
   return shuffle(cards).map((card) => {
-    const redactedSentence =
-      level === 'medium' && card.example_sentence
-        ? redactWordFromSentence(
-            card.example_sentence,
-            card.word,
-          )
-        : null;
-
     if (exerciseType !== 'choice') {
-      return {
-        ...card,
-        exerciseType,
-        choices: [],
-        redactedSentence: null,
-      };
+      return { ...card, exerciseType, choices: [] };
     }
 
     const distractors = shuffle(
@@ -121,9 +99,28 @@ function buildSessionQueue(
       ...card,
       exerciseType,
       choices: shuffle([card.word, ...distractors]),
-      redactedSentence,
     };
   });
+}
+
+async function fetchDictionaryDefinition(
+  word: string,
+): Promise<string | null> {
+  try {
+    const response = await fetch(
+      `/api/dictionary?word=${encodeURIComponent(word)}`,
+    );
+
+    if (!response.ok) return null;
+
+    const data = (await response.json()) as {
+      definition: string | null;
+    };
+
+    return data.definition;
+  } catch {
+    return null;
+  }
 }
 
 function computeNextReview(
@@ -178,6 +175,8 @@ export default function PracticarPage() {
   const [level, setLevel] = useState<Level | null>(null);
   const [sessionSize, setSessionSize] = useState<SessionSize>(5);
   const [hasStarted, setHasStarted] = useState(false);
+  const [isPreparingSession, setIsPreparingSession] =
+    useState(false);
   const [queue, setQueue] = useState<SessionCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answer, setAnswer] = useState<AnswerState>({
@@ -209,7 +208,7 @@ export default function PracticarPage() {
         supabase
           .from('user_flashcards')
           .select(
-            'id, word, translation, example_sentence, ease_factor, interval_days, repetitions',
+            'id, word, translation, example_sentence, definition_en, ease_factor, interval_days, repetitions',
           )
           .eq('user_id', user.id)
           .lte('due_at', new Date().toISOString())
@@ -260,7 +259,7 @@ export default function PracticarPage() {
     const { data, error } = await supabase
       .from('user_flashcards')
       .select(
-        'id, word, translation, example_sentence, ease_factor, interval_days, repetitions',
+        'id, word, translation, example_sentence, definition_en, ease_factor, interval_days, repetitions',
       )
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
@@ -282,10 +281,43 @@ export default function PracticarPage() {
 
   const sourceCards = practiceAllCards ?? dueCards;
 
-  function startSession() {
+  async function startSession() {
     if (!sourceCards || !level) return;
 
     const sample = shuffle(sourceCards).slice(0, sessionSize);
+
+    if (level === 'medium') {
+      setIsPreparingSession(true);
+
+      const supabase = createClient();
+
+      const withDefinitions = await Promise.all(
+        sample.map(async (card) => {
+          if (card.definition_en) return card;
+
+          const definition = await fetchDictionaryDefinition(
+            card.word,
+          );
+
+          if (definition) {
+            await supabase
+              .from('user_flashcards')
+              .update({ definition_en: definition })
+              .eq('id', card.id);
+          }
+
+          return { ...card, definition_en: definition };
+        }),
+      );
+
+      setIsPreparingSession(false);
+      setHasStarted(true);
+      setQueue(buildSessionQueue(withDefinitions, allWords, level));
+      setCurrentIndex(0);
+      setSessionCorrect(0);
+      resetAnswerState();
+      return;
+    }
 
     setHasStarted(true);
     setQueue(buildSessionQueue(sample, allWords, level));
@@ -372,6 +404,24 @@ export default function PracticarPage() {
     resetAnswerState();
     setCurrentIndex((index) => index + 1);
   }
+
+  useEffect(() => {
+    if (!answer.isAnswered) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleNext();
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [answer.isAnswered]);
 
   if (isLoading) {
     return (
@@ -534,10 +584,12 @@ export default function PracticarPage() {
             <button
               type="button"
               className={styles.primaryLink}
-              disabled={!level}
-              onClick={startSession}
+              disabled={!level || isPreparingSession}
+              onClick={() => void startSession()}
             >
-              Comenzar práctica
+              {isPreparingSession
+                ? 'Preparando...'
+                : 'Comenzar práctica'}
             </button>
           </section>
         </div>
@@ -603,9 +655,9 @@ export default function PracticarPage() {
             {currentCard.translation}
           </strong>
 
-          {currentCard.redactedSentence && (
+          {currentCard.definition_en && (
             <p className={styles.contextSentence}>
-              “{currentCard.redactedSentence}”
+              {currentCard.definition_en}
             </p>
           )}
 
