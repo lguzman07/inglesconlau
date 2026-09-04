@@ -99,9 +99,17 @@ function getGeneralNextLessonHref(
   lessonNumber: number,
   lessonCount: number,
 ) {
-  return lessonNumber < lessonCount
-    ? `/lecciones/${level}/${lessonNumber + 1}`
-    : undefined;
+  // No solo debe estar dentro del número planeado de lecciones: la
+  // siguiente lección debe existir de verdad, o el botón llevaría a
+  // una lección todavía en preparación.
+  if (
+    lessonNumber >= lessonCount ||
+    !getLessonContent(level, lessonNumber + 1)
+  ) {
+    return undefined;
+  }
+
+  return `/lecciones/${level}/${lessonNumber + 1}`;
 }
 
 function getVerbTensesLessonHref(
@@ -384,6 +392,44 @@ export default async function LeccionPage({
     routeValue ===
       'verb-tenses' &&
     labLessonIndex >= 0;
+
+  if (!lesson) {
+    return (
+      <main className={styles.main}>
+        <div className={styles.container}>
+          <Link
+            href={`/lecciones/${normalizedLevel}`}
+            className={styles.backLink}
+          >
+            ← Volver a {level.code}
+          </Link>
+
+          <section
+            className={styles.objectiveCard}
+            aria-labelledby="coming-soon-heading"
+          >
+            <div className={styles.objectiveIcon} aria-hidden="true">
+              🛠️
+            </div>
+
+            <div>
+              <p className={styles.eyebrow}>EN PREPARACIÓN</p>
+
+              <h2 id="coming-soon-heading">
+                Esta lección todavía no está lista
+              </h2>
+
+              <p>
+                Estamos preparando el video y los ejercicios de esta
+                lección. Vuelve pronto o continúa con las lecciones ya
+                disponibles.
+              </p>
+            </div>
+          </section>
+        </div>
+      </main>
+    );
+  }
 
   const previousLabLesson =
     isVerbTensesRoute &&
