@@ -27,6 +27,7 @@ type MontessoriExerciseProps = {
   instructions?: string;
   questions?: MontessoriQuestion[];
   lessonKey: string;
+  englishVariant?: 'en' | 'en-GB';
 };
 
 type Answers = Record<
@@ -384,6 +385,7 @@ export default function MontessoriExercise({
   instructions,
   questions,
   lessonKey,
+  englishVariant = 'en',
 }: MontessoriExerciseProps) {
   const resolvedExercise =
     useMemo<MontessoriExerciseContent>(
@@ -781,7 +783,7 @@ export default function MontessoriExercise({
                               text={
                                 word.word
                               }
-                              language="en"
+                              language={englishVariant}
                             />
 
                             <VocabularyButton

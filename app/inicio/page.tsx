@@ -42,6 +42,7 @@ function formatLessonLabel(lessonKey: string) {
 export default function InicioPage() {
   const [studentName, setStudentName] = useState('');
   const [gender, setGender] = useState('');
+  const [englishVariant, setEnglishVariant] = useState<'en' | 'en-GB'>('en');
   const [role, setRole] = useState('student');
   const [indicatedLevel, setIndicatedLevel] = useState('');
   const [hasClassAccess, setHasClassAccess] = useState(false);
@@ -100,7 +101,7 @@ export default function InicioPage() {
         await Promise.all([
           supabase
             .from('profiles')
-            .select('full_name, english_level, gender, role, recording_consent_at')
+            .select('full_name, english_level, gender, role, recording_consent_at, english_pronunciation')
             .eq('id', user.id)
             .maybeSingle(),
           supabase.rpc('student_has_access'),
@@ -127,6 +128,7 @@ export default function InicioPage() {
       if (profile?.english_level) setIndicatedLevel(profile.english_level);
       if (profile?.gender) setGender(profile.gender);
       if (profile?.role) setRole(profile.role);
+      if (profile?.english_pronunciation === 'british') setEnglishVariant('en-GB');
 
       if (!profile?.recording_consent_at && profile?.role !== 'admin') {
         let consentPending = false;
@@ -298,7 +300,10 @@ export default function InicioPage() {
           </section>
 
           <div className={styles.heroWordOfDay}>
-            <WordOfTheDay savedFlashcards={isLoadingProfile ? undefined : savedFlashcards} />
+            <WordOfTheDay
+              savedFlashcards={isLoadingProfile ? undefined : savedFlashcards}
+              englishVariant={englishVariant}
+            />
           </div>
         </div>
 

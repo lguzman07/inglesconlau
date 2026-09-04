@@ -46,6 +46,7 @@ type SentenceConstructionProps = {
   questions: SentenceConstructionQuestion[];
   nextLessonHref?: string;
   englishVariant?: 'en' | 'en-GB';
+  translationDisplay?: 'always' | 'hover' | 'hidden';
 };
 
 type OpenVocabulary = {
@@ -151,6 +152,7 @@ export default function SentenceConstruction({
   showLessonProgress = true,
   nextLessonHref,
   englishVariant = 'en',
+  translationDisplay = 'hover',
 }: SentenceConstructionProps) {
   const headingId = useId();
 
@@ -678,6 +680,13 @@ export default function SentenceConstruction({
     questionId: number,
     wordIndex: number,
   ) {
+    if (
+      translationDisplay === 'always' ||
+      translationDisplay === 'hidden'
+    ) {
+      return;
+    }
+
     const isOpen =
       openVocabulary
         ?.questionId ===
@@ -987,12 +996,16 @@ export default function SentenceConstruction({
                             wordIndex,
                           ) => {
                             const vocabularyIsOpen =
-                              openVocabulary
-                                ?.questionId ===
-                                question.id &&
-                              openVocabulary
-                                .wordIndex ===
-                                wordIndex;
+                              translationDisplay === 'always'
+                                ? true
+                                : translationDisplay === 'hidden'
+                                  ? false
+                                  : openVocabulary
+                                      ?.questionId ===
+                                      question.id &&
+                                    openVocabulary
+                                      .wordIndex ===
+                                      wordIndex;
 
                             return (
                               <div

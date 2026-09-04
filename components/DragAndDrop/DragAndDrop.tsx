@@ -57,6 +57,8 @@ type DragAndDropProps = {
   questions: DragAndDropQuestion[];
   nextLessonHref?: string;
   exerciseIndex?: number;
+  englishVariant?: 'en' | 'en-GB';
+  translationDisplay?: TranslationDisplay;
 };
 
 function shuffle<T>(items: T[]) {
@@ -201,6 +203,8 @@ export default function DragAndDrop({
   questions,
   nextLessonHref,
   exerciseIndex = 0,
+  englishVariant = 'en',
+  translationDisplay = 'hover',
 }: DragAndDropProps) {
   const supabaseRef =
     useRef<
@@ -313,14 +317,6 @@ export default function DragAndDrop({
     string | null
   >(null);
 
-  const [
-    translationDisplay,
-    setTranslationDisplay,
-  ] =
-    useState<TranslationDisplay>(
-      'hover',
-    );
-
   const correctAnswers =
     questions.filter(
       (question) =>
@@ -426,49 +422,6 @@ export default function DragAndDrop({
     // al abrir la lección.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    async function loadTranslationPreference() {
-      const {
-        data: { user },
-      } =
-        await supabase.auth.getUser();
-
-      if (!user) {
-        return;
-      }
-
-      const { data } =
-        await supabase
-          .from('profiles')
-          .select(
-            'translation_display',
-          )
-          .eq(
-            'id',
-            user.id,
-          )
-          .maybeSingle();
-
-      const preference =
-        data?.translation_display;
-
-      if (
-        preference ===
-          'always' ||
-        preference ===
-          'hover' ||
-        preference ===
-          'hidden'
-      ) {
-        setTranslationDisplay(
-          preference,
-        );
-      }
-    }
-
-    void loadTranslationPreference();
-  }, [supabase]);
 
   useEffect(() => {
     hasLoadedProgressRef.current =
@@ -1539,7 +1492,7 @@ export default function DragAndDrop({
                                 text={
                                   token.word
                                 }
-                                language="en"
+                                language={englishVariant}
                               />
 
                               <VocabularyButton
@@ -1716,7 +1669,7 @@ export default function DragAndDrop({
                                   text={
                                     token.word
                                   }
-                                  language="en"
+                                  language={englishVariant}
                                 />
 
                                 <VocabularyButton
@@ -1798,7 +1751,7 @@ export default function DragAndDrop({
                             text={
                               exampleSentence
                             }
-                            language="en"
+                            language={englishVariant}
                           />
                         </div>
                       </div>

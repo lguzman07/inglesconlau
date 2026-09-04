@@ -90,8 +90,10 @@ function getDayOfYear(dateKey: string) {
 
 export default function WordOfTheDay({
   savedFlashcards,
+  englishVariant = 'en',
 }: {
   savedFlashcards?: number;
+  englishVariant?: 'en' | 'en-GB';
 }) {
   const todayKey = getDominicanToday();
   const index = getDayOfYear(todayKey) % WORDS.length;
@@ -108,7 +110,7 @@ export default function WordOfTheDay({
             <h2 id="word-of-the-day-title" className={styles.word}>
               {entry.word}
             </h2>
-            <AudioPlayer text={entry.word} language="en" />
+            <AudioPlayer text={entry.word} language={englishVariant} />
           </div>
 
           <p className={styles.translation}>{entry.translation}</p>

@@ -64,6 +64,7 @@ type FillInTheBlanksProps = {
   questions: FillInTheBlanksQuestion[];
   nextLessonHref?: string;
   englishVariant?: 'en' | 'en-GB';
+  translationDisplay?: 'always' | 'hover' | 'hidden';
 };
 
 const SILENT_AUDIO_SRC =
@@ -128,6 +129,7 @@ export default function FillInTheBlanks({
   showLessonProgress = true,
   nextLessonHref,
   englishVariant = 'en',
+  translationDisplay = 'hover',
 }: FillInTheBlanksProps) {
   const supabaseRef =
     useRef<
@@ -778,12 +780,16 @@ export default function FillInTheBlanks({
     wordIndex: number,
   ) {
     const isOpen =
-      activeBubble?.type ===
-        'word' &&
-      activeBubble.questionId ===
-        questionId &&
-      activeBubble.wordIndex ===
-        wordIndex;
+      translationDisplay === 'always'
+        ? true
+        : translationDisplay === 'hidden'
+          ? false
+          : activeBubble?.type ===
+              'word' &&
+            activeBubble.questionId ===
+              questionId &&
+            activeBubble.wordIndex ===
+              wordIndex;
 
     const question =
       questions.find(
@@ -810,7 +816,14 @@ export default function FillInTheBlanks({
             styles.wordButton
           }
           tabIndex={-1}
-          onClick={() =>
+          onClick={() => {
+            if (
+              translationDisplay === 'always' ||
+              translationDisplay === 'hidden'
+            ) {
+              return;
+            }
+
             setActiveBubble(
               isOpen
                 ? null
@@ -819,8 +832,8 @@ export default function FillInTheBlanks({
                     questionId,
                     wordIndex,
                   },
-            )
-          }
+            );
+          }}
         >
           {item.word}
         </button>

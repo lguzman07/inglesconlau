@@ -118,6 +118,8 @@ function renderExercise({
   lessonTotalQuestions,
   showLessonProgress,
   nextLessonHref,
+  englishVariant,
+  translationDisplay,
 }: {
   exercise: LessonExercise;
   lessonKey: string;
@@ -125,6 +127,8 @@ function renderExercise({
   lessonTotalQuestions: number;
   showLessonProgress: boolean;
   nextLessonHref?: string;
+  englishVariant: 'en' | 'en-GB';
+  translationDisplay: 'always' | 'hover' | 'hidden';
 }) {
   if (
     exercise.type ===
@@ -146,6 +150,8 @@ function renderExercise({
         nextLessonHref={
           nextLessonHref
         }
+        englishVariant={englishVariant}
+        translationDisplay={translationDisplay}
       />
     );
   }
@@ -167,6 +173,8 @@ function renderExercise({
         nextLessonHref={
           nextLessonHref
         }
+        englishVariant={englishVariant}
+        translationDisplay={translationDisplay}
       />
     );
   }
@@ -185,6 +193,8 @@ function renderExercise({
         showLessonProgress={showLessonProgress}
         questions={exercise.questions}
         nextLessonHref={nextLessonHref}
+        englishVariant={englishVariant}
+        translationDisplay={translationDisplay}
       />
     );
   }
@@ -197,6 +207,7 @@ function renderExercise({
       <MontessoriExercise
         exercise={exercise}
         lessonKey={lessonKey}
+        englishVariant={englishVariant}
       />
     );
   }
@@ -271,11 +282,25 @@ export default async function LeccionPage({
   }
 
   const [profileResult, accessResult] = await Promise.all([
-    supabase.from('profiles').select('role').eq('id', user.id).maybeSingle(),
+    supabase
+      .from('profiles')
+      .select('role, english_pronunciation, translation_display')
+      .eq('id', user.id)
+      .maybeSingle(),
     supabase.rpc('student_has_access'),
   ]);
 
   const isAdmin = profileResult.data?.role === 'admin';
+
+  const englishVariant: 'en' | 'en-GB' =
+    profileResult.data?.english_pronunciation === 'british' ? 'en-GB' : 'en';
+
+  const translationDisplay: 'always' | 'hover' | 'hidden' =
+    profileResult.data?.translation_display === 'always'
+      ? 'always'
+      : profileResult.data?.translation_display === 'hidden'
+        ? 'hidden'
+        : 'hover';
   const hasLessonAccess =
     isAdmin ||
     accessResult.data === true ||
@@ -745,6 +770,8 @@ export default async function LeccionPage({
                         1
                         ? nextLessonHref
                         : undefined,
+                    englishVariant,
+                    translationDisplay,
                   })}
                 </div>
               ),
