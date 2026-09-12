@@ -31,71 +31,76 @@
   letter-spacing: 0.08em;
 }
 
-.totalLines {
+.playButton {
+  display: flex;
   flex-shrink: 0;
-  padding: 8px 12px;
-  color: var(--text-light);
-  font-size: 0.88rem;
-  font-weight: 700;
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 12px 24px;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  white-space: nowrap;
+  background: var(--primary);
+  border: 1px solid var(--primary);
   border-radius: 999px;
+  cursor: pointer;
+}
+
+.playButton:hover {
+  filter: brightness(1.05);
+}
+
+.playButton:active {
+  transform: scale(0.98);
 }
 
 .lines {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
 }
 
 .line {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
-  max-width: 82%;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease;
 }
 
-.speakerA {
-  align-self: flex-start;
+.activeLine {
+  background: var(--primary-light);
+  border-color: var(--primary);
 }
 
-.speakerB {
-  align-self: flex-end;
-  flex-direction: row-reverse;
-}
-
-.speakerLabel {
+.speakerAvatar {
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   color: #fff;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 800;
   background: var(--primary);
   border-radius: 50%;
 }
 
-.speakerB .speakerLabel {
+.lineOdd .speakerAvatar {
   background: var(--text);
 }
 
-.bubble {
-  padding: 14px 20px;
-  background: var(--surface-solid);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-}
-
-.speakerA .bubble {
-  border-top-left-radius: 4px;
-}
-
-.speakerB .bubble {
-  border-top-right-radius: 4px;
+.lineContent {
+  min-width: 0;
 }
 
 .speakerName {
@@ -107,7 +112,7 @@
   text-transform: uppercase;
 }
 
-.speakerB .speakerName {
+.lineOdd .speakerName {
   color: var(--text-light);
 }
 
@@ -126,7 +131,11 @@
 }
 
 @media (max-width: 600px) {
-  .line {
-    max-width: 100%;
+  .exerciseHeader {
+    flex-direction: column;
+  }
+
+  .playButton {
+    width: 100%;
   }
 }
