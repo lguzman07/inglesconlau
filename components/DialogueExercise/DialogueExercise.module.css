@@ -1,0 +1,132 @@
+.exercise {
+  margin-top: 32px;
+}
+
+.exerciseHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.exerciseHeader h3 {
+  margin: 6px 0 8px;
+  color: var(--text);
+  font-size: 1.55rem;
+  line-height: 1.2;
+}
+
+.exerciseHeader p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+.exerciseType {
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.totalLines {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  color: var(--text-light);
+  font-size: 0.88rem;
+  font-weight: 700;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.line {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  max-width: 82%;
+}
+
+.speakerA {
+  align-self: flex-start;
+}
+
+.speakerB {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.speakerLabel {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  background: var(--primary);
+  border-radius: 50%;
+}
+
+.speakerB .speakerLabel {
+  background: var(--text);
+}
+
+.bubble {
+  padding: 14px 20px;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+}
+
+.speakerA .bubble {
+  border-top-left-radius: 4px;
+}
+
+.speakerB .bubble {
+  border-top-right-radius: 4px;
+}
+
+.speakerName {
+  margin: 0 0 4px;
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.speakerB .speakerName {
+  color: var(--text-light);
+}
+
+.english {
+  margin: 0 0 4px;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.spanish {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+  .line {
+    max-width: 100%;
+  }
+}
