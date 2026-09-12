@@ -594,6 +594,7 @@ const lessonA1001: LessonContent = {
         {
           id: 1,
           speaker: 'Ana',
+          gender: 'female',
           english: 'Hi! What’s your name?',
           spanish: '¡Hola! ¿Cómo te llamas?',
         },
@@ -601,6 +602,7 @@ const lessonA1001: LessonContent = {
         {
           id: 2,
           speaker: 'Carlos',
+          gender: 'male',
           english: 'Hi! My name’s Carlos.',
           spanish: '¡Hola! Mi nombre es Carlos.',
         },
@@ -608,6 +610,7 @@ const lessonA1001: LessonContent = {
         {
           id: 3,
           speaker: 'Ana',
+          gender: 'female',
           english: 'Nice to meet you! Are you a student?',
           spanish: '¡Mucho gusto! ¿Eres estudiante?',
         },
@@ -615,6 +618,7 @@ const lessonA1001: LessonContent = {
         {
           id: 4,
           speaker: 'Carlos',
+          gender: 'male',
           english: 'No, I’m a teacher.',
           spanish: 'No, soy profesor.',
         },
@@ -622,6 +626,7 @@ const lessonA1001: LessonContent = {
         {
           id: 5,
           speaker: 'Ana',
+          gender: 'female',
           english: 'Where are you from?',
           spanish: '¿De dónde eres?',
         },
@@ -629,6 +634,7 @@ const lessonA1001: LessonContent = {
         {
           id: 6,
           speaker: 'Carlos',
+          gender: 'male',
           english: 'I’m from Santo Domingo. And you?',
           spanish: 'Soy de Santo Domingo. ¿Y tú?',
         },
@@ -636,6 +642,7 @@ const lessonA1001: LessonContent = {
         {
           id: 7,
           speaker: 'Ana',
+          gender: 'female',
           english: 'I’m Dominican too!',
           spanish: '¡Yo también soy dominicana!',
         },
