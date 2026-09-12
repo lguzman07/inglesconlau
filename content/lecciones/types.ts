@@ -218,6 +218,11 @@ export type DialogueLine = {
    */
   speaker: string;
 
+  /*
+   * Género de la voz para el audio del diálogo (por defecto 'female' si no se indica).
+   */
+  gender?: 'male' | 'female';
+
   english: string;
 
   spanish: string;
