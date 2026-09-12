@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 
 import BunnyVideoEmbed from '@/components/BunnyVideoEmbed/BunnyVideoEmbed';
+import DialogueExercise from '@/components/DialogueExercise/DialogueExercise';
 import DragAndDrop from '@/components/DragAndDrop/DragAndDrop';
 import FillInTheBlanks from '@/components/FillInTheBlanks/FillInTheBlanks';
 import LessonOpenedTracker from '@/components/LessonOpenedTracker/LessonOpenedTracker';
@@ -232,6 +233,17 @@ function renderExercise({
     );
   }
 
+  if (
+    exercise.type ===
+    'dialogue'
+  ) {
+    return (
+      <DialogueExercise
+        exercise={exercise}
+      />
+    );
+  }
+
   return null;
 }
 
@@ -370,7 +382,10 @@ export default async function LeccionPage({
   const lessonTotalQuestions =
     lesson?.exercises?.reduce(
       (total, exercise) =>
-        total + exercise.questions.length,
+        total +
+        ('questions' in exercise
+          ? exercise.questions.length
+          : 0),
       0,
     ) ?? 0;
 
