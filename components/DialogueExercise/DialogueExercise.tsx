@@ -37,8 +37,8 @@ export default function DialogueExercise({
     };
   }, []);
 
-  async function fetchLineAudio(text: string) {
-    let blob = await getAudio(text, 'en');
+  async function fetchLineAudio(text: string, voiceKey: string) {
+    let blob = await getAudio(text, voiceKey);
 
     if (!blob) {
       const response = await fetch('/api/tts', {
@@ -50,7 +50,7 @@ export default function DialogueExercise({
 
         body: JSON.stringify({
           text,
-          language: 'en',
+          language: voiceKey,
         }),
       });
 
@@ -62,7 +62,7 @@ export default function DialogueExercise({
 
       blob = await response.blob();
 
-      await saveAudio(text, 'en', blob);
+      await saveAudio(text, voiceKey, blob);
     }
 
     return blob;
@@ -110,8 +110,12 @@ export default function DialogueExercise({
 
         setActiveIndex(index);
 
+        const voiceKey =
+          line.gender === 'male' ? 'en-male' : 'en';
+
         const blob = await fetchLineAudio(
           line.english,
+          voiceKey,
         );
 
         if (stopRequestedRef.current) {
