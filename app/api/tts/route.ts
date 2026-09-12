@@ -3,6 +3,7 @@ import { ElevenLabsClient } from 'elevenlabs';
 
 const VOICE_IDS: Record<string, string | undefined> = {
   en: process.env.ELEVENLABS_ENGLISH_VOICE_ID,
+  'en-male': process.env.ELEVENLABS_ENGLISH_MALE_VOICE_ID,
   'en-GB': process.env.ELEVENLABS_BRITISH_VOICE_ID,
   es: process.env.ELEVENLABS_SPANISH_VOICE_ID,
 };
