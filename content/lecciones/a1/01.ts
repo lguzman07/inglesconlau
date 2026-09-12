@@ -581,6 +581,66 @@ const lessonA1001: LessonContent = {
         },
       ],
     },
+
+    {
+      type: 'dialogue',
+
+      title: 'Practica en una conversación',
+
+      instructions:
+        'Lee el diálogo en voz alta (puedes hacer los dos papeles) y toca el ícono de audio para escuchar la pronunciación de cada línea.',
+
+      lines: [
+        {
+          id: 1,
+          speaker: 'Ana',
+          english: 'Hi! What’s your name?',
+          spanish: '¡Hola! ¿Cómo te llamas?',
+        },
+
+        {
+          id: 2,
+          speaker: 'Carlos',
+          english: 'Hi! My name’s Carlos.',
+          spanish: '¡Hola! Mi nombre es Carlos.',
+        },
+
+        {
+          id: 3,
+          speaker: 'Ana',
+          english: 'Nice to meet you! Are you a student?',
+          spanish: '¡Mucho gusto! ¿Eres estudiante?',
+        },
+
+        {
+          id: 4,
+          speaker: 'Carlos',
+          english: 'No, I’m a teacher.',
+          spanish: 'No, soy profesor.',
+        },
+
+        {
+          id: 5,
+          speaker: 'Ana',
+          english: 'Where are you from?',
+          spanish: '¿De dónde eres?',
+        },
+
+        {
+          id: 6,
+          speaker: 'Carlos',
+          english: 'I’m from Santo Domingo. And you?',
+          spanish: 'Soy de Santo Domingo. ¿Y tú?',
+        },
+
+        {
+          id: 7,
+          speaker: 'Ana',
+          english: 'I’m Dominican too!',
+          spanish: '¡Yo también soy dominicana!',
+        },
+      ],
+    },
   ],
 };
 
