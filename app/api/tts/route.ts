@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ElevenLabsClient } from 'elevenlabs';
 
+/*
+ * Requires these env vars: ELEVENLABS_API_KEY, ELEVENLABS_ENGLISH_VOICE_ID,
+ * ELEVENLABS_ENGLISH_MALE_VOICE_ID, ELEVENLABS_BRITISH_VOICE_ID, ELEVENLABS_SPANISH_VOICE_ID.
+ */
 const VOICE_IDS: Record<string, string | undefined> = {
   en: process.env.ELEVENLABS_ENGLISH_VOICE_ID,
   'en-male': process.env.ELEVENLABS_ENGLISH_MALE_VOICE_ID,
