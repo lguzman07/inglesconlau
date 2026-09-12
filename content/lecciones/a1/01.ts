@@ -588,7 +588,7 @@ const lessonA1001: LessonContent = {
       title: 'Practica en una conversación',
 
       instructions:
-        'Lee el diálogo en voz alta (puedes hacer los dos papeles) y toca el ícono de audio para escuchar la pronunciación de cada línea.',
+        'Toca “Reproducir diálogo” para escuchar la conversación completa, y léela en voz alta (puedes hacer los dos papeles) para practicar.',
 
       lines: [
         {
