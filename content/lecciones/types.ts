@@ -207,6 +207,30 @@ export type ErrorCorrectionExercise = {
 };
 
 /* ==========================================
+   Diálogo de práctica
+========================================== */
+
+export type DialogueLine = {
+  id: number;
+
+  /*
+   * Nombre de quién habla en esa línea (por ejemplo "Ana" o "Carlos").
+   */
+  speaker: string;
+
+  english: string;
+
+  spanish: string;
+};
+
+export type DialogueExercise = {
+  type: 'dialogue';
+  title: string;
+  instructions: string;
+  lines: DialogueLine[];
+};
+
+/* ==========================================
    Todos los tipos de ejercicios
 ========================================== */
 
@@ -216,7 +240,8 @@ export type LessonExercise =
   | MontessoriExercise
   | ListeningChoiceExercise
   | SentenceConstructionExercise
-  | ErrorCorrectionExercise;
+  | ErrorCorrectionExercise
+  | DialogueExercise;
 
 /* ==========================================
    Contenido de una lección
