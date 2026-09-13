@@ -165,7 +165,7 @@ export default function AdminStudents({
   const [enrollmentsBySchedule, setEnrollmentsBySchedule] = useState<
     Record<string, ScheduleEnrollment[]>
   >({});
-  const [expandedScheduleId, setExpandedScheduleId] = useState<string | null>(null);
+  const [expandedScheduleIds, setExpandedScheduleIds] = useState<Set<string>>(new Set());
 
   const sortedAvailability = useMemo(
     () => [...availability].sort((a, b) => a.starts_at.localeCompare(b.starts_at)),
@@ -376,7 +376,15 @@ export default function AdminStudents({
   }
 
   function toggleScheduleStudents(scheduleId: string) {
-    setExpandedScheduleId((current) => (current === scheduleId ? null : scheduleId));
+    setExpandedScheduleIds((current) => {
+      const next = new Set(current);
+      if (next.has(scheduleId)) {
+        next.delete(scheduleId);
+      } else {
+        next.add(scheduleId);
+      }
+      return next;
+    });
   }
 
   async function loadBookings(studentId: string) {
@@ -453,7 +461,7 @@ export default function AdminStudents({
             ) : (
               sortedAvailability.map((schedule) => {
                 const isFull = schedule.spots_remaining <= 0;
-                const isExpanded = expandedScheduleId === schedule.schedule_id;
+                const isExpanded = expandedScheduleIds.has(schedule.schedule_id);
                 const enrolledStudents = enrollmentsBySchedule[schedule.schedule_id] ?? [];
 
                 return (
