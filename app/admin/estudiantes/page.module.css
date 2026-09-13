@@ -94,7 +94,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  width: 100%;
   padding: 0.85rem 1rem;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
   background: var(--surface-soft);
   border: 1px solid var(--border);
   border-radius: 13px;
@@ -111,6 +116,40 @@
 
 .availabilityRowFull strong {
   color: var(--text-light);
+}
+
+.enrolledList {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.enrolledList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  font-size: 0.9rem;
+}
+
+.enrolledList li > span:first-child {
+  font-weight: 700;
+}
+
+.enrolledList li > span:nth-child(2) {
+  color: var(--text-light);
+}
+
+.enrolledEmpty {
+  margin: 0.6rem 0 0;
+  color: var(--text-light);
+  font-size: 0.85rem;
 }
 
 .panel {
