@@ -17,6 +17,14 @@ type ScheduleAvailability = {
   spots_remaining: number;
 };
 
+type ScheduleEnrollment = {
+  schedule_id: string;
+  user_id: string;
+  full_name: string;
+  email: string;
+  next_class_date: string | null;
+};
+
 export type AdminStudent = {
   user_id: string;
   email: string;
@@ -154,6 +162,10 @@ export default function AdminStudents({
   const [availability, setAvailability] = useState<ScheduleAvailability[]>([]);
   const [isLoadingAvailability, setIsLoadingAvailability] = useState(false);
   const [availabilityError, setAvailabilityError] = useState('');
+  const [enrollmentsBySchedule, setEnrollmentsBySchedule] = useState<
+    Record<string, ScheduleEnrollment[]>
+  >({});
+  const [expandedScheduleId, setExpandedScheduleId] = useState<string | null>(null);
 
   const sortedAvailability = useMemo(
     () => [...availability].sort((a, b) => a.starts_at.localeCompare(b.starts_at)),
@@ -340,16 +352,31 @@ export default function AdminStudents({
     setIsLoadingAvailability(true);
     setAvailabilityError('');
 
-    const { data, error } = await supabase.rpc('admin_list_schedule_availability');
+    const [availabilityResult, enrollmentsResult] = await Promise.all([
+      supabase.rpc('admin_list_schedule_availability'),
+      supabase.rpc('admin_list_schedule_enrollments'),
+    ]);
 
     setIsLoadingAvailability(false);
 
-    if (error) {
-      setAvailabilityError(error.message);
+    if (availabilityResult.error) {
+      setAvailabilityError(availabilityResult.error.message);
       return;
     }
 
-    setAvailability((data ?? []) as ScheduleAvailability[]);
+    setAvailability((availabilityResult.data ?? []) as ScheduleAvailability[]);
+
+    if (!enrollmentsResult.error) {
+      const grouped: Record<string, ScheduleEnrollment[]> = {};
+      for (const row of (enrollmentsResult.data ?? []) as ScheduleEnrollment[]) {
+        (grouped[row.schedule_id] ??= []).push(row);
+      }
+      setEnrollmentsBySchedule(grouped);
+    }
+  }
+
+  function toggleScheduleStudents(scheduleId: string) {
+    setExpandedScheduleId((current) => (current === scheduleId ? null : scheduleId));
   }
 
   async function loadBookings(studentId: string) {
@@ -426,21 +453,40 @@ export default function AdminStudents({
             ) : (
               sortedAvailability.map((schedule) => {
                 const isFull = schedule.spots_remaining <= 0;
+                const isExpanded = expandedScheduleId === schedule.schedule_id;
+                const enrolledStudents = enrollmentsBySchedule[schedule.schedule_id] ?? [];
 
                 return (
-                  <div
-                    key={schedule.schedule_id}
-                    className={`${styles.availabilityRow} ${isFull ? styles.availabilityRowFull : ''}`}
-                  >
-                    <span>
-                      {schedule.level.toUpperCase()} · {schedule.label} ·{' '}
-                      {formatTime(schedule.starts_at)}–{formatTime(schedule.ends_at)}
-                    </span>
-                    <strong>
-                      {isFull
-                        ? 'Sin cupos'
-                        : `${schedule.spots_remaining} de ${schedule.max_students} cupos`}
-                    </strong>
+                  <div key={schedule.schedule_id}>
+                    <button
+                      type="button"
+                      onClick={() => toggleScheduleStudents(schedule.schedule_id)}
+                      className={`${styles.availabilityRow} ${isFull ? styles.availabilityRowFull : ''}`}
+                    >
+                      <span>
+                        {schedule.level.toUpperCase()} · {schedule.label} ·{' '}
+                        {formatTime(schedule.starts_at)}–{formatTime(schedule.ends_at)}
+                      </span>
+                      <strong>
+                        {isFull
+                          ? 'Sin cupos'
+                          : `${schedule.spots_remaining} de ${schedule.max_students} cupos`}
+                      </strong>
+                    </button>
+                    {isExpanded ? (
+                      enrolledStudents.length > 0 ? (
+                        <ul className={styles.enrolledList}>
+                          {enrolledStudents.map((enrolled) => (
+                            <li key={enrolled.user_id}>
+                              <span>{enrolled.full_name}</span>
+                              <span>{enrolled.email}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className={styles.enrolledEmpty}>Nadie inscrito todavía.</p>
+                      )
+                    ) : null}
                   </div>
                 );
               })
