@@ -203,6 +203,18 @@
   font-weight: 700;
 }
 
+.lessonLink {
+  display: contents;
+  text-decoration: none;
+  color: inherit;
+}
+
+.lessonLink:hover .lessonChecklistTitle,
+.lessonLink:focus-visible .lessonChecklistTitle {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
 .givenButton {
   padding: 0.45rem 0.85rem;
   color: var(--text-light);

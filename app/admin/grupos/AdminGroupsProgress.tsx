@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 
 import { lessonTitles } from '@/content/lecciones/catalog';
 import { createClient } from '@/lib/supabase/client';
@@ -220,19 +221,31 @@ export default function AdminGroupsProgress({
                       key={key}
                       className={styles.lessonChecklistRow}
                     >
-                      <span
-                        className={
-                          styles.lessonChecklistNumber
-                        }
+                      <Link
+                        href={`/lecciones/${schedule.level}/${number}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.lessonLink}
+                        title="Abrir esta lección en una pestaña nueva"
                       >
-                        {String(number).padStart(2, '0')}
-                      </span>
+                        <span
+                          className={
+                            styles.lessonChecklistNumber
+                          }
+                        >
+                          {String(number).padStart(2, '0')}
+                        </span>
 
-                      <span
-                        className={styles.lessonChecklistTitle}
-                      >
-                        {lessonTitles[schedule.level]?.[number]}
-                      </span>
+                        <span
+                          className={
+                            styles.lessonChecklistTitle
+                          }
+                        >
+                          {lessonTitles[schedule.level]?.[
+                            number
+                          ]}
+                        </span>
+                      </Link>
 
                       <button
                         type="button"
