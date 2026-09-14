@@ -1,6 +1,3 @@
-import fs from 'node:fs';
-import path from 'node:path';
-
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -14,7 +11,7 @@ import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'Contenido de lecciones',
-  description: 'Revisa qué lecciones tienen video, PDF y ejercicios listos.',
+  description: 'Revisa qué lecciones tienen video y ejercicios listos.',
 };
 
 const levelOrder = [
@@ -24,19 +21,6 @@ const levelOrder = [
   { slug: 'b2', code: 'B2' },
   { slug: 'c1', code: 'C1' },
 ];
-
-function publicFileExists(publicUrl: string | undefined) {
-  if (!publicUrl) return false;
-
-  const relativePath = publicUrl.replace(/^\/+/, '');
-  const absolutePath = path.join(process.cwd(), 'public', relativePath);
-
-  try {
-    return fs.existsSync(absolutePath);
-  } catch {
-    return false;
-  }
-}
 
 function buildLessonRoster(): LessonChecklistItem[] {
   const roster: LessonChecklistItem[] = [];
@@ -57,7 +41,6 @@ function buildLessonRoster(): LessonChecklistItem[] {
         level,
         number: lessonNumber,
         title,
-        hasPdf: publicFileExists(content?.pdfUrl),
         hasExercises: (content?.exercises?.length ?? 0) > 0,
         hasVideo: Boolean(content?.videoSrc),
       });
@@ -86,8 +69,8 @@ export default async function AdminLeccionesPage() {
           <p className={styles.eyebrow}>ADMINISTRACIÓN</p>
           <h1>Contenido de lecciones</h1>
           <p>
-            Revisa, nivel por nivel, qué lecciones ya tienen video, PDF y ejercicios interactivos.
-            Los tres se detectan automáticamente del contenido publicado.
+            Revisa, nivel por nivel, qué lecciones ya tienen video y ejercicios interactivos.
+            Los dos se detectan automáticamente del contenido publicado.
           </p>
         </header>
         <AdminLessonsChecklist levels={levelOrder} initialLessons={roster} />
