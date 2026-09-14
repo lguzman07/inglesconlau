@@ -61,6 +61,14 @@ export default async function AdminLeccionesPage() {
 
   const roster = buildLessonRoster();
 
+  const { data: givenRows } = await supabase
+    .from('lesson_taught_log')
+    .select('level, lesson_number');
+
+  const givenLessons = (
+    (givenRows ?? []) as { level: string; lesson_number: number }[]
+  ).map((row) => `${row.level}/${row.lesson_number}`);
+
   return (
     <main className={styles.page}>
       <div className={styles.container}>
@@ -69,11 +77,16 @@ export default async function AdminLeccionesPage() {
           <p className={styles.eyebrow}>ADMINISTRACIÓN</p>
           <h1>Contenido de lecciones</h1>
           <p>
-            Revisa, nivel por nivel, qué lecciones ya tienen video y ejercicios interactivos.
-            Los dos se detectan automáticamente del contenido publicado.
+            Revisa, nivel por nivel, qué lecciones ya tienen video y ejercicios interactivos
+            (se detectan automáticamente del contenido publicado), y marca cuáles ya diste
+            en vivo.
           </p>
         </header>
-        <AdminLessonsChecklist levels={levelOrder} initialLessons={roster} />
+        <AdminLessonsChecklist
+          levels={levelOrder}
+          initialLessons={roster}
+          initialGiven={givenLessons}
+        />
       </div>
     </main>
   );

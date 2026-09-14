@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from 'react';
 
+import { createClient } from '@/lib/supabase/client';
+
 import styles from './page.module.css';
 
 export type LessonChecklistItem = {
@@ -29,41 +31,106 @@ function lessonKey(lesson: { level: string; number: number }) {
 export default function AdminLessonsChecklist({
   levels,
   initialLessons,
+  initialGiven,
 }: {
   levels: LevelInfo[];
   initialLessons: LessonChecklistItem[];
+  initialGiven: string[];
 }) {
   const [lessons] = useState(initialLessons);
   const [activeLevel, setActiveLevel] = useState<string>('all');
   const [onlyPending, setOnlyPending] = useState(false);
+  const [given, setGiven] = useState(
+    () => new Set(initialGiven),
+  );
+  const [savingKey, setSavingKey] = useState<string | null>(
+    null,
+  );
+
+  async function toggleGiven(
+    lesson: { level: string; number: number },
+  ) {
+    const key = lessonKey(lesson);
+
+    if (savingKey) return;
+
+    setSavingKey(key);
+
+    const supabase = createClient();
+    const isCurrentlyGiven = given.has(key);
+
+    if (isCurrentlyGiven) {
+      const { error } = await supabase
+        .from('lesson_taught_log')
+        .delete()
+        .eq('level', lesson.level)
+        .eq('lesson_number', lesson.number);
+
+      if (!error) {
+        setGiven((current) => {
+          const next = new Set(current);
+          next.delete(key);
+          return next;
+        });
+      }
+    } else {
+      const { error } = await supabase
+        .from('lesson_taught_log')
+        .upsert({
+          level: lesson.level,
+          lesson_number: lesson.number,
+        });
+
+      if (!error) {
+        setGiven((current) => {
+          const next = new Set(current);
+          next.add(key);
+          return next;
+        });
+      }
+    }
+
+    setSavingKey(null);
+  }
 
   const totals = useMemo(() => {
-    const byLevel = new Map<string, { total: number; video: number; exercises: number }>();
+    const byLevel = new Map<
+      string,
+      { total: number; video: number; exercises: number; given: number }
+    >();
 
     for (const lesson of lessons) {
-      const current = byLevel.get(lesson.level) ?? { total: 0, video: 0, exercises: 0 };
+      const current = byLevel.get(lesson.level) ?? {
+        total: 0,
+        video: 0,
+        exercises: 0,
+        given: 0,
+      };
       current.total += 1;
       if (lesson.hasVideo) current.video += 1;
       if (lesson.hasExercises) current.exercises += 1;
+      if (given.has(lessonKey(lesson))) current.given += 1;
       byLevel.set(lesson.level, current);
     }
 
     return byLevel;
-  }, [lessons]);
+  }, [lessons, given]);
 
   const overall = useMemo(() => {
     let total = 0;
     let video = 0;
     let exercises = 0;
+    let givenCount = 0;
 
     for (const lesson of lessons) {
       total += 1;
       if (lesson.hasVideo) video += 1;
       if (lesson.hasExercises) exercises += 1;
+      if (given.has(lessonKey(lesson))) givenCount += 1;
     }
 
-    return { total, video, exercises };
-  }, [lessons]);
+    return { total, video, exercises, given: givenCount };
+  }, [lessons, given]);
 
   const visibleLevels = activeLevel === 'all' ? levels : levels.filter((level) => level.slug === activeLevel);
 
@@ -74,7 +141,8 @@ export default function AdminLessonsChecklist({
           <h2>Resumen general</h2>
           <p>
             {overall.video} / {overall.total} con video ·{' '}
-            {overall.exercises} / {overall.total} con ejercicios
+            {overall.exercises} / {overall.total} con ejercicios ·{' '}
+            {overall.given} / {overall.total} dadas en vivo
           </p>
         </div>
       </div>
@@ -115,7 +183,12 @@ export default function AdminLessonsChecklist({
           .filter((lesson) => lesson.level === level.slug)
           .filter((lesson) => !onlyPending || !(lesson.hasVideo && lesson.hasExercises));
 
-        const levelTotals = totals.get(level.slug) ?? { total: 0, video: 0, exercises: 0 };
+        const levelTotals = totals.get(level.slug) ?? {
+          total: 0,
+          video: 0,
+          exercises: 0,
+          given: 0,
+        };
 
         return (
           <details key={level.slug} className={styles.levelGroup} open={activeLevel !== 'all'}>
@@ -124,7 +197,8 @@ export default function AdminLessonsChecklist({
               <span className={styles.levelGroupTitle}>{levelLabels[level.slug] ?? level.slug}</span>
               <span className={styles.levelGroupCounts}>
                 🎬 {levelTotals.video}/{levelTotals.total} · 📝{' '}
-                {levelTotals.exercises}/{levelTotals.total}
+                {levelTotals.exercises}/{levelTotals.total} · 🎓{' '}
+                {levelTotals.given}/{levelTotals.total}
               </span>
             </summary>
 
@@ -157,6 +231,17 @@ export default function AdminLessonsChecklist({
                         >
                           {lesson.hasExercises ? '✓' : '○'} Ejercicios
                         </span>
+
+                        <button
+                          type="button"
+                          className={`${styles.partPill} ${given.has(key) ? styles.partPillDone : styles.partPillPending}`}
+                          title="Toca para marcar si ya diste esta clase en vivo"
+                          disabled={savingKey === key}
+                          onClick={() => void toggleGiven(lesson)}
+                        >
+                          {given.has(key) ? '✓' : '○'} Dada en
+                          vivo
+                        </button>
                       </span>
                     </li>
                   );
