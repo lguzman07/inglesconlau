@@ -122,8 +122,18 @@ export default async function ClaseEnVivoPage() {
             <li>
               Si ya los permitiste en el navegador y sigue con la X
               roja, revisa la configuración de privacidad de tu
-              computadora (esto bloquea el micrófono para todas las
+              dispositivo (esto bloquea el micrófono para todas las
               apps, aunque el navegador tenga permiso):
+              <br />
+              <strong>En el celular (iPhone):</strong> Ajustes → baja
+              hasta encontrar Safari o Chrome (el navegador que
+              usaste) → activa Micrófono y Cámara. Si usas Safari,
+              también revisa Ajustes → Safari → Cámara y Micrófono →
+              &ldquo;Permitir&rdquo;.
+              <br />
+              <strong>En el celular (Android):</strong> Ajustes → Apps
+              → el navegador que usaste (Chrome, etc.) → Permisos →
+              activa Micrófono y Cámara.
               <br />
               <strong>En Windows:</strong> Inicio → Configuración →
               Privacidad y seguridad → Micrófono (y Cámara) →
@@ -137,6 +147,15 @@ export default async function ClaseEnVivoPage() {
               <br />
               Después de cambiarlo, cierra el navegador por completo y
               vuelve a abrirlo.
+            </li>
+
+            <li>
+              <strong>¿Abriste el enlace desde Instagram, Facebook o
+              WhatsApp?</strong> Esos navegadores dentro de la app casi
+              nunca dejan usar la cámara y el micrófono. Copia el
+              enlace y ábrelo directamente en Safari o Chrome (o toca
+              los tres puntos ⋮ arriba y elige &ldquo;Abrir en el
+              navegador&rdquo;).
             </li>
 
             <li>
