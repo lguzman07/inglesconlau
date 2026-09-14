@@ -60,6 +60,7 @@ export default function AdminGroupsProgress({
   const [savingKey, setSavingKey] = useState<string | null>(
     null,
   );
+  const [errorMessage, setErrorMessage] = useState('');
 
   const levelsWithSchedules = useMemo(
     () =>
@@ -85,6 +86,7 @@ export default function AdminGroupsProgress({
     if (savingKey) return;
 
     setSavingKey(key);
+    setErrorMessage('');
 
     const supabase = createClient();
     const isCurrentlyGiven = given.has(key);
@@ -96,7 +98,11 @@ export default function AdminGroupsProgress({
         .eq('schedule_id', schedule.id)
         .eq('lesson_number', lessonNumber);
 
-      if (!error) {
+      if (error) {
+        setErrorMessage(
+          'No pudimos guardar el cambio. ' + error.message,
+        );
+      } else {
         setGiven((current) => {
           const next = new Set(current);
           next.delete(key);
@@ -111,7 +117,11 @@ export default function AdminGroupsProgress({
           lesson_number: lessonNumber,
         });
 
-      if (!error) {
+      if (error) {
+        setErrorMessage(
+          'No pudimos guardar el cambio. ' + error.message,
+        );
+      } else {
         setGiven((current) => {
           const next = new Set(current);
           next.add(key);
@@ -155,6 +165,12 @@ export default function AdminGroupsProgress({
           ))}
         </div>
       </div>
+
+      {errorMessage && (
+        <p className={styles.errorBox} role="alert">
+          {errorMessage}
+        </p>
+      )}
 
       {visibleSchedules.length === 0 ? (
         <p className={styles.emptyState}>
