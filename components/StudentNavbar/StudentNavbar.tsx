@@ -22,6 +22,7 @@ const navigationItems = [
 const adminNavigationItems = [
   { href: '/admin/estudiantes', label: 'Estudiantes' },
   { href: '/admin/calendario', label: 'Calendario (todos)' },
+  { href: '/admin/grupos', label: 'Progreso por grupo' },
   { href: '/admin/lecciones', label: 'Contenido de lecciones' },
   { href: '/admin/en-vivo', label: 'Config. clase en vivo' },
 ];
