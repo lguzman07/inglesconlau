@@ -120,6 +120,26 @@ export default async function ClaseEnVivoPage() {
             </li>
 
             <li>
+              Si ya los permitiste en el navegador y sigue con la X
+              roja, revisa la configuración de privacidad de tu
+              computadora (esto bloquea el micrófono para todas las
+              apps, aunque el navegador tenga permiso):
+              <br />
+              <strong>En Windows:</strong> Inicio → Configuración →
+              Privacidad y seguridad → Micrófono (y Cámara) →
+              asegúrate de que &ldquo;Acceso al micrófono&rdquo; esté
+              activado, y que tu navegador aparezca permitido en la
+              lista.
+              <br />
+              <strong>En Mac:</strong> Preferencias del Sistema →
+              Privacidad y seguridad → Micrófono (y Cámara) → activa
+              la casilla de tu navegador.
+              <br />
+              Después de cambiarlo, cierra el navegador por completo y
+              vuelve a abrirlo.
+            </li>
+
+            <li>
               Si ya los permitiste y sigue sin funcionar, cierra otras
               apps que puedan estar usando la cámara o el micrófono
               (Zoom, Teams, etc.) y recarga la página.
