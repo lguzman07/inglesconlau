@@ -428,10 +428,10 @@ export default async function LeccionPage({
             </div>
 
             <div>
-              <p className={styles.eyebrow}>EN PREPARACIÓN</p>
+              <p className={styles.eyebrow}>OBJETIVO DE LA LECCIÓN</p>
 
               <h2 id="coming-soon-heading">
-                Esta lección todavía no está lista
+                {getLessonTitle(normalizedLevel, lessonNumber)}
               </h2>
 
               <p>
