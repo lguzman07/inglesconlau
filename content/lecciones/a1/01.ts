@@ -10,6 +10,8 @@ const lessonA1001: LessonContent = {
   subtitle:
     'Aprende a decir quién eres, de dónde eres y cómo decir tu nombre en inglés, incluyendo las formas cortas I’m y My name’s.',
 
+  videoSrc: '13a21b28-cbcf-442c-a1cd-b974a696bc09',
+
   videoTitle: 'Preséntate en inglés',
 
   videoDescription:
@@ -17,8 +19,6 @@ const lessonA1001: LessonContent = {
 
   objective:
     'Al terminar, podrás decir tu nombre, tu profesión y de dónde eres, usando tanto la forma completa como la contracción.',
-
-  pdfUrl: '/pdfs/A1/lesson-1.pdf',
 
   exercises: [
     {
