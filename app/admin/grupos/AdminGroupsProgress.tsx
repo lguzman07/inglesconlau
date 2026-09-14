@@ -14,7 +14,6 @@ export type GroupSchedule = {
   level: string;
   starts_at: string;
   ends_at: string;
-  is_active: boolean;
 };
 
 const levelOrder = [
@@ -189,12 +188,6 @@ export default function AdminGroupsProgress({
                   {formatTime(schedule.starts_at)}–
                   {formatTime(schedule.ends_at)}
                 </span>
-
-                {!schedule.is_active && (
-                  <span className={styles.inactiveBadge}>
-                    Inactivo
-                  </span>
-                )}
 
                 <span className={styles.groupCounts}>
                   🎓 {givenCount}/{lessonNumbers.length} dadas

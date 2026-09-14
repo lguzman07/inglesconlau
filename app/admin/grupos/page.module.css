@@ -156,17 +156,6 @@
   border-radius: 999px;
 }
 
-.inactiveBadge {
-  flex: 0 0 auto;
-  padding: 0.35rem 0.7rem;
-  color: var(--text-light);
-  font-size: 0.78rem;
-  font-weight: 800;
-  background: var(--surface-solid);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-}
-
 .groupTitle {
   font-weight: 800;
 }

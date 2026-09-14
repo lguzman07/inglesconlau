@@ -34,9 +34,8 @@ export default async function AdminGruposPage() {
   const [schedulesResult, givenResult] = await Promise.all([
     supabase
       .from('group_class_schedules')
-      .select(
-        'id, code, label, level, starts_at, ends_at, is_active',
-      )
+      .select('id, code, label, level, starts_at, ends_at')
+      .eq('is_active', true)
       .order('level', { ascending: true })
       .order('starts_at', { ascending: true }),
     supabase
