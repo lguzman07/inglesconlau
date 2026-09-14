@@ -100,11 +100,31 @@ export default async function ClaseEnVivoPage() {
 
         <div className={styles.helpTip}>
           <p>
-            <strong>¿No te reconoce la cámara o el micrófono?</strong> Cuando cargue la página, tu
-            navegador te va a preguntar si puede usarlos — dale &ldquo;Permitir&rdquo;. Si ya lo
-            permitiste y sigue sin funcionar, cierra otras apps que puedan estar usando la cámara
-            (Zoom, Teams, etc.) y recarga la página.
+            <strong>¿No te reconoce la cámara o el micrófono?</strong>
           </p>
+
+          <ul className={styles.helpTipList}>
+            <li>
+              Cuando cargue la página, tu navegador te va a preguntar si
+              puede usarlos — dale &ldquo;Permitir&rdquo;.
+            </li>
+
+            <li>
+              <strong>¿Ves una X roja sobre el ícono del micrófono o la
+              cámara?</strong> Eso quiere decir que los bloqueaste sin
+              querer antes. Para arreglarlo: toca el candado 🔒 (o el
+              ícono de información ⓘ) justo a la izquierda de la
+              dirección de la página, arriba del navegador. Busca
+              &ldquo;Micrófono&rdquo; y &ldquo;Cámara&rdquo; y cambia
+              ambos a &ldquo;Permitir&rdquo;. Luego recarga la página.
+            </li>
+
+            <li>
+              Si ya los permitiste y sigue sin funcionar, cierra otras
+              apps que puedan estar usando la cámara o el micrófono
+              (Zoom, Teams, etc.) y recarga la página.
+            </li>
+          </ul>
         </div>
 
         <section className={styles.videoPane} aria-label="Video de la clase">
