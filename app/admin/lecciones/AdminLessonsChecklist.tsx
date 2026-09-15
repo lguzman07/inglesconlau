@@ -67,8 +67,6 @@ export default function AdminLessonsChecklist({
     return { total, video, exercises, ready };
   }, [lessons]);
 
-  const videoPercent = overall.total === 0 ? 0 : Math.round((overall.video / overall.total) * 100);
-  const exercisesPercent = overall.total === 0 ? 0 : Math.round((overall.exercises / overall.total) * 100);
   const readyPercent = overall.total === 0 ? 0 : Math.round((overall.ready / overall.total) * 100);
 
   const visibleLevels = activeLevel === 'all' ? levels : levels.filter((level) => level.slug === activeLevel);
@@ -79,8 +77,8 @@ export default function AdminLessonsChecklist({
         <div>
           <h2>Resumen general</h2>
           <p>
-            {overall.video} / {overall.total} con video ({videoPercent}%) ·{' '}
-            {overall.exercises} / {overall.total} con ejercicios ({exercisesPercent}%)
+            {overall.video} / {overall.total} con video ·{' '}
+            {overall.exercises} / {overall.total} con ejercicios
           </p>
 
           <div className={styles.summaryBarRow}>
