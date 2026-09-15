@@ -38,6 +38,7 @@ const lessonA2001: LessonContent = {
           ],
           after: [{ word: 'water.', translation: 'agua' }],
           answer: 'drinks',
+          hint: 'drink',
           sentenceTranslation: 'El perro toma agua.',
         },
 
@@ -50,6 +51,7 @@ const lessonA2001: LessonContent = {
             { word: 'upstairs.', translation: 'arriba' },
           ],
           answer: 'carries',
+          hint: 'carry',
           sentenceTranslation: 'Él carga las cajas al piso de arriba.',
         },
 
@@ -61,6 +63,7 @@ const lessonA2001: LessonContent = {
           ],
           after: [{ word: 'loudly.', translation: 'alto' }],
           answer: 'buzzes',
+          hint: 'buzz',
           sentenceTranslation: 'La abeja zumba alto.',
         },
 
@@ -73,6 +76,7 @@ const lessonA2001: LessonContent = {
             { word: 'every day.', translation: 'todos los días' },
           ],
           answer: 'goes',
+          hint: 'go',
           sentenceTranslation: 'Ella va a la escuela todos los días.',
         },
 
@@ -90,6 +94,7 @@ const lessonA2001: LessonContent = {
             { word: 'sky.', translation: 'cielo' },
           ],
           answer: 'flying',
+          hint: 'fly',
           sentenceTranslation: 'El águila está volando alto en el cielo.',
         },
 
@@ -104,6 +109,7 @@ const lessonA2001: LessonContent = {
             { word: 'CV.', translation: 'currículum' },
           ],
           answer: 'printing',
+          hint: 'print',
           sentenceTranslation: 'Ella está imprimiendo su currículum.',
         },
 
@@ -121,6 +127,7 @@ const lessonA2001: LessonContent = {
             { word: 'items.', translation: 'artículos' },
           ],
           answer: 'getting',
+          hint: 'get',
           sentenceTranslation:
             'Voy a hacer una devolución para estos productos.',
         },
@@ -137,6 +144,7 @@ const lessonA2001: LessonContent = {
             { word: 'shoe.', translation: 'zapato' },
           ],
           answer: 'tying',
+          hint: 'tie',
           sentenceTranslation: 'El niño está atando sus zapatos.',
         },
       ],

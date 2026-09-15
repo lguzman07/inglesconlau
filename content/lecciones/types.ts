@@ -12,6 +12,7 @@ export type FillInTheBlanksQuestion = {
   before: TranslatableWord[];
   after: TranslatableWord[];
   answer: string;
+  hint?: string;
   sentenceTranslation: string;
 };
 

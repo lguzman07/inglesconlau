@@ -20,6 +20,7 @@ export type FillInTheBlanksQuestion = {
   before: TranslatableWord[];
   after: TranslatableWord[];
   answer: string;
+  hint?: string;
   sentenceTranslation: string;
 };
 
@@ -1076,6 +1077,16 @@ export default function FillInTheBlanks({
                             ] ?? ''
                           }
                         />
+
+                        {question.hint && (
+                          <span
+                            className={
+                              styles.hint
+                            }
+                          >
+                            ({question.hint})
+                          </span>
+                        )}
 
                         {question.after.map(
                           (

@@ -43,6 +43,7 @@ const lessonB2001: LessonContent = {
             { word: 'week.', translation: 'semana' },
           ],
           answer: 'finished',
+          hint: 'finish',
           sentenceTranslation: 'Ella ha terminado tres informes esta semana.',
         },
 
@@ -62,6 +63,7 @@ const lessonB2001: LessonContent = {
             { word: 'exhausted.', translation: 'agotada' },
           ],
           answer: 'studying',
+          hint: 'study',
           sentenceTranslation:
             'He estado estudiando por dos horas y estoy agotada.',
         },
@@ -80,6 +82,7 @@ const lessonB2001: LessonContent = {
             { word: '2015.', translation: '2015' },
           ],
           answer: 'lived',
+          hint: 'live',
           sentenceTranslation: 'Ellos han vivido en esa casa desde el 2015.',
         },
 
@@ -101,6 +104,7 @@ const lessonB2001: LessonContent = {
             { word: 'amazing.', translation: 'increíble' },
           ],
           answer: 'cooking',
+          hint: 'cook',
           sentenceTranslation:
             'Él ha estado cocinando toda la mañana y la cocina todavía huele increíble.',
         },
@@ -117,6 +121,7 @@ const lessonB2001: LessonContent = {
             { word: 'project.', translation: 'proyecto' },
           ],
           answer: 'finished',
+          hint: 'finish',
           sentenceTranslation: 'Hemos terminado todo el proyecto.',
         },
 
@@ -139,6 +144,7 @@ const lessonB2001: LessonContent = {
             { word: 'day.', translation: 'el día' },
           ],
           answer: 'looking',
+          hint: 'look',
           sentenceTranslation:
             'Me duelen los ojos porque he estado mirando una pantalla todo el día.',
         },
@@ -155,6 +161,7 @@ const lessonB2001: LessonContent = {
             { word: 'again.', translation: 'otra vez' },
           ],
           answer: 'lost',
+          hint: 'lose',
           sentenceTranslation: 'Ella ha perdido sus llaves otra vez.',
         },
 
@@ -177,6 +184,7 @@ const lessonB2001: LessonContent = {
             { word: 'yet.', translation: 'todavía' },
           ],
           answer: 'talking',
+          hint: 'talk',
           sentenceTranslation:
             'Ellos han estado hablando sobre mudarse por meses, pero nada está decidido todavía.',
         },
