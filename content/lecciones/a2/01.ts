@@ -178,6 +178,8 @@ const lessonA2001: LessonContent = {
           acceptedAnswers: [
             'They are swimming in the lake',
             'They are swimming in the lake.',
+            'They’re swimming in the lake',
+            'They’re swimming in the lake.',
           ],
           modelAnswer: [
             { word: 'They', translation: 'ellos' },
@@ -199,6 +201,8 @@ const lessonA2001: LessonContent = {
             'He is not baking the cookies.',
             'He isn’t baking the cookies',
             'He isn’t baking the cookies.',
+            'He’s not baking the cookies',
+            'He’s not baking the cookies.',
           ],
           modelAnswer: [
             { word: 'He', translation: 'él' },
@@ -239,6 +243,8 @@ const lessonA2001: LessonContent = {
             'They are not walking together.',
             'They aren’t walking together',
             'They aren’t walking together.',
+            'They’re not walking together',
+            'They’re not walking together.',
           ],
           modelAnswer: [
             { word: 'They', translation: 'ellos' },
@@ -288,11 +294,10 @@ const lessonA2001: LessonContent = {
           language: 'en',
           prompt: '¿Qué describe esta oración?',
           options: [
-            { id: 'habit', text: 'Un hábito', translation: 'Un hábito' },
+            { id: 'habit', text: 'Un hábito' },
             {
               id: 'temp',
               text: 'Algo que pasa ahora mismo',
-              translation: 'Algo que pasa ahora mismo',
             },
           ],
           correctOptionIds: ['habit'],
@@ -306,11 +311,10 @@ const lessonA2001: LessonContent = {
           language: 'en',
           prompt: '¿Qué describe esta oración?',
           options: [
-            { id: 'habit', text: 'Un hábito', translation: 'Un hábito' },
+            { id: 'habit', text: 'Un hábito' },
             {
               id: 'temp',
               text: 'Algo que pasa ahora mismo',
-              translation: 'Algo que pasa ahora mismo',
             },
           ],
           correctOptionIds: ['temp'],
@@ -324,11 +328,10 @@ const lessonA2001: LessonContent = {
           language: 'en',
           prompt: '¿Qué describe esta oración?',
           options: [
-            { id: 'habit', text: 'Un hábito', translation: 'Un hábito' },
+            { id: 'habit', text: 'Un hábito' },
             {
               id: 'temp',
               text: 'Algo que pasa ahora mismo',
-              translation: 'Algo que pasa ahora mismo',
             },
           ],
           correctOptionIds: ['habit'],
@@ -342,11 +345,10 @@ const lessonA2001: LessonContent = {
           language: 'en',
           prompt: '¿Qué describe esta oración?',
           options: [
-            { id: 'habit', text: 'Un hábito', translation: 'Un hábito' },
+            { id: 'habit', text: 'Un hábito' },
             {
               id: 'temp',
               text: 'Algo que pasa ahora mismo',
-              translation: 'Algo que pasa ahora mismo',
             },
           ],
           correctOptionIds: ['temp'],
@@ -360,11 +362,10 @@ const lessonA2001: LessonContent = {
           language: 'en',
           prompt: '¿Qué describe esta oración?',
           options: [
-            { id: 'habit', text: 'Un hábito', translation: 'Un hábito' },
+            { id: 'habit', text: 'Un hábito' },
             {
               id: 'temp',
               text: 'Algo que pasa ahora mismo',
-              translation: 'Algo que pasa ahora mismo',
             },
           ],
           correctOptionIds: ['habit'],
@@ -378,11 +379,10 @@ const lessonA2001: LessonContent = {
           language: 'en',
           prompt: '¿Qué describe esta oración?',
           options: [
-            { id: 'habit', text: 'Un hábito', translation: 'Un hábito' },
+            { id: 'habit', text: 'Un hábito' },
             {
               id: 'temp',
               text: 'Algo que pasa ahora mismo',
-              translation: 'Algo que pasa ahora mismo',
             },
           ],
           correctOptionIds: ['temp'],

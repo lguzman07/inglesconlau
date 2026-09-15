@@ -206,6 +206,8 @@ const lessonB2001: LessonContent = {
           acceptedAnswers: [
             'She has finished the report',
             'She has finished the report.',
+            'She’s finished the report',
+            'She’s finished the report.',
           ],
           modelAnswer: [
             { word: 'She', translation: 'ella' },
@@ -249,6 +251,8 @@ const lessonB2001: LessonContent = {
             'They have not finished the house yet.',
             'They haven’t finished the house yet',
             'They haven’t finished the house yet.',
+            'They’ve not finished the house yet',
+            'They’ve not finished the house yet.',
           ],
           modelAnswer: [
             { word: 'They', translation: 'ellos' },
@@ -271,6 +275,8 @@ const lessonB2001: LessonContent = {
             'She has not been sleeping well this week.',
             'She hasn’t been sleeping well this week',
             'She hasn’t been sleeping well this week.',
+            'She’s not been sleeping well this week',
+            'She’s not been sleeping well this week.',
           ],
           modelAnswer: [
             { word: 'She', translation: 'ella' },
@@ -328,12 +334,10 @@ const lessonB2001: LessonContent = {
             {
               id: 'result',
               text: 'Un resultado completado',
-              translation: 'Un resultado completado',
             },
             {
               id: 'duration',
               text: 'Una acción en progreso, con duración',
-              translation: 'Una acción en progreso, con duración',
             },
           ],
           correctOptionIds: ['result'],
@@ -350,12 +354,10 @@ const lessonB2001: LessonContent = {
             {
               id: 'result',
               text: 'Un resultado completado',
-              translation: 'Un resultado completado',
             },
             {
               id: 'duration',
               text: 'Una acción en progreso, con duración',
-              translation: 'Una acción en progreso, con duración',
             },
           ],
           correctOptionIds: ['duration'],
@@ -372,12 +374,10 @@ const lessonB2001: LessonContent = {
             {
               id: 'result',
               text: 'Un resultado completado',
-              translation: 'Un resultado completado',
             },
             {
               id: 'duration',
               text: 'Una acción en progreso, con duración',
-              translation: 'Una acción en progreso, con duración',
             },
           ],
           correctOptionIds: ['duration'],
@@ -394,12 +394,10 @@ const lessonB2001: LessonContent = {
             {
               id: 'result',
               text: 'Un resultado completado',
-              translation: 'Un resultado completado',
             },
             {
               id: 'duration',
               text: 'Una acción en progreso, con duración',
-              translation: 'Una acción en progreso, con duración',
             },
           ],
           correctOptionIds: ['result'],
@@ -416,12 +414,10 @@ const lessonB2001: LessonContent = {
             {
               id: 'result',
               text: 'Un resultado completado',
-              translation: 'Un resultado completado',
             },
             {
               id: 'duration',
               text: 'Una acción en progreso, con duración',
-              translation: 'Una acción en progreso, con duración',
             },
           ],
           correctOptionIds: ['duration'],
@@ -438,12 +434,10 @@ const lessonB2001: LessonContent = {
             {
               id: 'result',
               text: 'Un resultado completado',
-              translation: 'Un resultado completado',
             },
             {
               id: 'duration',
               text: 'Una acción en progreso, con duración',
-              translation: 'Una acción en progreso, con duración',
             },
           ],
           correctOptionIds: ['result'],

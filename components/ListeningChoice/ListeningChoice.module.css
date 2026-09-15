@@ -1,5 +1,10 @@
 .exercise {
-  margin-top: 32px;
+  width: 100%;
+  padding: 30px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
 }
 
 .exerciseHeader {
@@ -7,7 +12,9 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 24px;
+  padding-bottom: 24px;
   margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
 }
 
 .exerciseHeader h3 {

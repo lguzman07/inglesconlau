@@ -183,6 +183,8 @@ const lessonA1001: LessonContent = {
           acceptedAnswers: [
             'I am a student',
             'I am a student.',
+            'I’m a student',
+            'I’m a student.',
           ],
 
           modelAnswer: [
@@ -217,6 +219,8 @@ const lessonA1001: LessonContent = {
           acceptedAnswers: [
             'I am Dominican',
             'I am Dominican.',
+            'I’m Dominican',
+            'I’m Dominican.',
           ],
 
           modelAnswer: [
@@ -248,6 +252,8 @@ const lessonA1001: LessonContent = {
           acceptedAnswers: [
             'My name is María',
             'My name is María.',
+            'My name’s María',
+            'My name’s María.',
           ],
 
           modelAnswer: [
@@ -282,6 +288,8 @@ const lessonA1001: LessonContent = {
           acceptedAnswers: [
             'I am from Santo Domingo',
             'I am from Santo Domingo.',
+            'I’m from Santo Domingo',
+            'I’m from Santo Domingo.',
           ],
 
           modelAnswer: [
@@ -320,6 +328,8 @@ const lessonA1001: LessonContent = {
           acceptedAnswers: [
             'I am a teacher',
             'I am a teacher.',
+            'I’m a teacher',
+            'I’m a teacher.',
           ],
 
           modelAnswer: [
