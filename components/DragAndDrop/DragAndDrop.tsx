@@ -54,11 +54,21 @@ type DragAndDropProps = {
   title: string;
   instructions: string;
   lessonKey: string;
+  exerciseKey?: string;
+  lessonTotalQuestions?: number;
+  showLessonProgress?: boolean;
   questions: DragAndDropQuestion[];
   nextLessonHref?: string;
   exerciseIndex?: number;
   englishVariant?: 'en' | 'en-GB';
   translationDisplay?: TranslationDisplay;
+};
+
+type ExerciseProgressRow = {
+  answers: Record<string, string>;
+  score: number;
+  total_questions: number;
+  has_attempted: boolean;
 };
 
 function shuffle<T>(items: T[]) {
@@ -200,7 +210,10 @@ export default function DragAndDrop({
   title,
   instructions,
   lessonKey,
+  exerciseKey = 'drag-and-drop-1',
   questions,
+  lessonTotalQuestions = questions.length,
+  showLessonProgress = true,
   nextLessonHref,
   exerciseIndex = 0,
   englishVariant = 'en',
@@ -435,11 +448,28 @@ export default function DragAndDrop({
       userIdRef.current =
         user?.id ?? null;
 
-      const {
-        data,
-        error,
-      } =
-        await supabase
+      const [
+        exerciseResult,
+        lessonResult,
+      ] = await Promise.all([
+        supabase
+          .from(
+            'lesson_exercise_progress',
+          )
+          .select(
+            'answers, score, total_questions, has_attempted',
+          )
+          .eq(
+            'lesson_key',
+            lessonKey,
+          )
+          .eq(
+            'exercise_key',
+            exerciseKey,
+          )
+          .maybeSingle(),
+
+        supabase
           .from(
             'lesson_progress',
           )
@@ -450,11 +480,14 @@ export default function DragAndDrop({
             'lesson_key',
             lessonKey,
           )
-          .maybeSingle();
+          .maybeSingle(),
+      ]);
 
-      if (error) {
+      if (exerciseResult.error || lessonResult.error) {
         setProgressError(
-          error.message,
+          exerciseResult.error?.message ??
+            lessonResult.error?.message ??
+            'No se pudo cargar el progreso.',
         );
 
         setIsLoadingProgress(
@@ -467,25 +500,27 @@ export default function DragAndDrop({
         return;
       }
 
-      if (data) {
-        const progress =
-          data as ProgressRow;
+      if (exerciseResult.data) {
+        const exerciseProgress =
+          exerciseResult.data as ExerciseProgressRow;
 
         setAnswers(
           getAnswersFromDatabase(
-            progress.answers,
+            exerciseProgress.answers,
           ),
         );
 
         setHasChecked(
-          progress.has_attempted,
+          exerciseProgress.has_attempted,
         );
 
-        applyProgress(
-          progress,
-        );
+        if (lessonResult.data) {
+          applyProgress(
+            lessonResult.data as ProgressRow,
+          );
+        }
 
-        if (progress.has_attempted) {
+        if (exerciseProgress.has_attempted) {
           setIsLoadingProgress(
             false,
           );
@@ -495,6 +530,10 @@ export default function DragAndDrop({
 
           return;
         }
+      } else if (lessonResult.data) {
+        applyProgress(
+          lessonResult.data as ProgressRow,
+        );
       }
 
       let restoredDraftAnswers:
@@ -601,6 +640,7 @@ export default function DragAndDrop({
   }, [
     draftStorageKey,
     exerciseIndex,
+    exerciseKey,
     lessonKey,
     supabase,
   ]);
@@ -1095,10 +1135,13 @@ export default function DragAndDrop({
       error,
     } =
       await supabase.rpc(
-        'save_lesson_attempt',
+        'save_lesson_exercise_attempt',
         {
           p_lesson_key:
             lessonKey,
+
+          p_exercise_key:
+            exerciseKey,
 
           p_answers:
             answersForDatabase,
@@ -1108,6 +1151,9 @@ export default function DragAndDrop({
 
           p_total_questions:
             questions.length,
+
+          p_lesson_total_questions:
+            lessonTotalQuestions,
         },
       );
 
@@ -1849,6 +1895,7 @@ export default function DragAndDrop({
         )}
       </section>
 
+      {showLessonProgress && (
       <section
         className={
           styles.resultCard
@@ -1875,10 +1922,13 @@ export default function DragAndDrop({
               </h4>
 
               <p>
-                Aprobaste el
-                ejercicio con 7 de
-                10 o más respuestas
-                correctas.
+                Alcanzaste al menos{' '}
+                {Math.ceil(
+                  lessonTotalQuestions * 0.7,
+                )}{' '}
+                de{' '}
+                {lessonTotalQuestions}{' '}
+                preguntas correctas.
               </p>
             </>
           ) : isCompleted &&
@@ -1925,10 +1975,14 @@ export default function DragAndDrop({
                 Ya hiciste un
                 intento. Para
                 completarla
-                necesitas obtener
-                al menos 7 de 10
-                respuestas
-                correctas.
+                necesitas obtener al
+                menos{' '}
+                {Math.ceil(
+                  lessonTotalQuestions * 0.7,
+                )}{' '}
+                de{' '}
+                {lessonTotalQuestions}{' '}
+                preguntas correctas.
               </p>
             </>
           ) : (
@@ -2014,6 +2068,7 @@ export default function DragAndDrop({
           )}
         </div>
       </section>
+      )}
     </>
   );
 }

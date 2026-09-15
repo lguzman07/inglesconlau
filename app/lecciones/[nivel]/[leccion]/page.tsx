@@ -176,6 +176,9 @@ function renderExercise({
           exercise.instructions
         }
         lessonKey={lessonKey}
+        exerciseKey={exerciseKey}
+        lessonTotalQuestions={lessonTotalQuestions}
+        showLessonProgress={showLessonProgress}
         questions={
           exercise.questions
         }
@@ -229,6 +232,10 @@ function renderExercise({
       <ListeningChoice
         exercise={exercise}
         lessonKey={lessonKey}
+        exerciseKey={exerciseKey}
+        lessonTotalQuestions={lessonTotalQuestions}
+        showLessonProgress={showLessonProgress}
+        nextLessonHref={nextLessonHref}
       />
     );
   }

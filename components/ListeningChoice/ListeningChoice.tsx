@@ -1,7 +1,10 @@
 'use client';
 
+import Link from 'next/link';
 import {
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -13,6 +16,8 @@ import type {
   ListeningChoiceQuestion,
 } from '@/content/lecciones/types';
 
+import { createClient } from '@/lib/supabase/client';
+
 import styles from './ListeningChoice.module.css';
 
 type ListeningChoiceProps = {
@@ -21,6 +26,10 @@ type ListeningChoiceProps = {
   instructions?: string;
   questions?: ListeningChoiceQuestion[];
   lessonKey: string;
+  exerciseKey?: string;
+  lessonTotalQuestions?: number;
+  showLessonProgress?: boolean;
+  nextLessonHref?: string;
 };
 
 type Answers = Record<number, string[]>;
@@ -29,6 +38,24 @@ type OpenVocabulary = {
   questionId: number;
   optionId: string;
 } | null;
+
+type ProgressRow = {
+  score: number | null;
+  total_questions: number;
+  has_attempted: boolean;
+  is_completed: boolean;
+  completion_source:
+    | 'manual'
+    | 'automatic'
+    | null;
+};
+
+type ExerciseProgressRow = {
+  answers: Record<string, string>;
+  score: number;
+  total_questions: number;
+  has_attempted: boolean;
+};
 
 function arraysHaveSameValues(
   first: string[],
@@ -59,12 +86,45 @@ function questionIsCorrect(
   );
 }
 
+function getAnswersFromDatabase(
+  value: unknown,
+) {
+  if (
+    !value ||
+    typeof value !== 'object' ||
+    Array.isArray(value)
+  ) {
+    return {};
+  }
+
+  return Object.entries(
+    value,
+  ).reduce<Record<number, string[]>>(
+    (result, [questionId, answer]) => {
+      if (
+        typeof answer === 'string' &&
+        answer
+      ) {
+        result[Number(questionId)] =
+          answer.split('|');
+      }
+
+      return result;
+    },
+    {},
+  );
+}
+
 export default function ListeningChoice({
   exercise,
   title,
   instructions,
   questions,
   lessonKey,
+  exerciseKey = 'listening-choice-1',
+  lessonTotalQuestions,
+  showLessonProgress = true,
+  nextLessonHref,
 }: ListeningChoiceProps) {
   const resolvedExercise =
     useMemo<ListeningChoiceExerciseContent>(
@@ -94,6 +154,23 @@ export default function ListeningChoice({
       ],
     );
 
+  const lessonQuestionCount =
+    lessonTotalQuestions ??
+    resolvedExercise.questions.length;
+
+  const supabaseRef =
+    useRef<
+      ReturnType<typeof createClient> | null
+    >(null);
+
+  if (!supabaseRef.current) {
+    supabaseRef.current =
+      createClient();
+  }
+
+  const supabase =
+    supabaseRef.current;
+
   const [answers, setAnswers] =
     useState<Answers>({});
 
@@ -103,16 +180,146 @@ export default function ListeningChoice({
   ] = useState(false);
 
   const [
+    hasAttempted,
+    setHasAttempted,
+  ] = useState(false);
+
+  const [
+    isCompleted,
+    setIsCompleted,
+  ] = useState(false);
+
+  const [
+    completionSource,
+    setCompletionSource,
+  ] = useState<
+    'manual' | 'automatic' | null
+  >(null);
+
+  const [
+    hasPassedAttempt,
+    setHasPassedAttempt,
+  ] = useState(false);
+
+  const [
+    isLoadingProgress,
+    setIsLoadingProgress,
+  ] = useState(true);
+
+  const [
+    isSavingProgress,
+    setIsSavingProgress,
+  ] = useState(false);
+
+  const [
+    progressError,
+    setProgressError,
+  ] = useState<string | null>(null);
+
+  const [
     openVocabulary,
     setOpenVocabulary,
   ] = useState<OpenVocabulary>(
     null,
   );
 
+  function applyProgress(
+    progress: ProgressRow,
+  ) {
+    setHasAttempted(
+      progress.has_attempted,
+    );
+
+    setIsCompleted(
+      progress.is_completed,
+    );
+
+    setCompletionSource(
+      progress.completion_source,
+    );
+
+    setHasPassedAttempt(
+      progress.score !== null &&
+        progress.score * 10 >=
+          progress.total_questions *
+            7,
+    );
+  }
+
+  useEffect(() => {
+    async function loadProgress() {
+      const [
+        exerciseResult,
+        lessonResult,
+      ] = await Promise.all([
+        supabase
+          .from(
+            'lesson_exercise_progress',
+          )
+          .select(
+            'answers, score, total_questions, has_attempted',
+          )
+          .eq('lesson_key', lessonKey)
+          .eq('exercise_key', exerciseKey)
+          .maybeSingle(),
+
+        supabase
+          .from('lesson_progress')
+          .select(
+            'score, total_questions, has_attempted, is_completed, completion_source',
+          )
+          .eq('lesson_key', lessonKey)
+          .maybeSingle(),
+      ]);
+
+      if (exerciseResult.error || lessonResult.error) {
+        setProgressError(
+          exerciseResult.error?.message ??
+            lessonResult.error?.message ??
+            'No se pudo cargar el progreso.',
+        );
+
+        setIsLoadingProgress(false);
+
+        return;
+      }
+
+      if (exerciseResult.data) {
+        const exerciseProgress =
+          exerciseResult.data as ExerciseProgressRow;
+
+        setAnswers(
+          getAnswersFromDatabase(
+            exerciseProgress.answers,
+          ),
+        );
+
+        setHasChecked(
+          exerciseProgress.has_attempted,
+        );
+      }
+
+      if (lessonResult.data) {
+        applyProgress(
+          lessonResult.data as ProgressRow,
+        );
+      }
+
+      setIsLoadingProgress(false);
+    }
+
+    void loadProgress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exerciseKey, lessonKey]);
+
   function toggleOption(
     questionId: number,
     optionId: string,
   ) {
+    if (hasChecked || isSavingProgress) {
+      return;
+    }
+
     setAnswers((current) => {
       const currentAnswers =
         current[questionId] ?? [];
@@ -136,8 +343,6 @@ export default function ListeningChoice({
             ],
       };
     });
-
-    setHasChecked(false);
   }
 
   function toggleVocabulary(
@@ -178,16 +383,132 @@ export default function ListeningChoice({
         ),
     ).length;
 
-  function checkExercise() {
+  const passingScore = Math.ceil(
+    resolvedExercise.questions.length *
+      0.7,
+  );
+
+  const passedCurrentAttempt =
+    hasChecked &&
+    correctAnswers >= passingScore;
+
+  const canMarkManually =
+    !hasAttempted && !isCompleted;
+
+  const canRestoreCompletion =
+    !isCompleted &&
+    hasPassedAttempt &&
+    completionSource === null;
+
+  async function checkExercise() {
     if (!allQuestionsAnswered) {
       return;
     }
 
+    setIsSavingProgress(true);
+    setProgressError(null);
+
+    const answersForDatabase =
+      Object.fromEntries(
+        resolvedExercise.questions.map(
+          (question) => [
+            question.id,
+
+            (
+              answers[question.id] ?? []
+            ).join('|'),
+          ],
+        ),
+      );
+
+    const { data, error } =
+      await supabase.rpc(
+        'save_lesson_exercise_attempt',
+        {
+          p_lesson_key: lessonKey,
+          p_exercise_key: exerciseKey,
+          p_answers: answersForDatabase,
+          p_score: correctAnswers,
+          p_total_questions:
+            resolvedExercise.questions
+              .length,
+          p_lesson_total_questions:
+            lessonQuestionCount,
+        },
+      );
+
+    if (error || !data) {
+      setProgressError(
+        error?.message ??
+          'No se pudo guardar tu resultado. Inténtalo de nuevo.',
+      );
+
+      setIsSavingProgress(false);
+
+      return;
+    }
+
+    applyProgress(
+      data as ProgressRow,
+    );
+
     setHasChecked(true);
+    setOpenVocabulary(null);
+    setIsSavingProgress(false);
+  }
+
+  async function setCompletion(
+    completed: boolean,
+  ) {
+    setIsSavingProgress(true);
+    setProgressError(null);
+
+    const { data, error } =
+      await supabase.rpc(
+        'set_lesson_completion',
+        {
+          p_lesson_key: lessonKey,
+          p_completed: completed,
+        },
+      );
+
+    if (error || !data) {
+      setProgressError(
+        error?.message ??
+          'No se pudo actualizar el progreso. Inténtalo de nuevo.',
+      );
+
+      setIsSavingProgress(false);
+
+      return;
+    }
+
+    applyProgress(
+      data as ProgressRow,
+    );
+
+    setIsSavingProgress(false);
+  }
+
+  function handleRetry() {
+    setAnswers({});
+    setHasChecked(false);
     setOpenVocabulary(null);
   }
 
+  if (isLoadingProgress) {
+    return (
+      <section
+        className={styles.exercise}
+        aria-live="polite"
+      >
+        Cargando tu último intento...
+      </section>
+    );
+  }
+
   return (
+    <>
     <section
       className={styles.exercise}
       aria-labelledby="listening-choice-title"
@@ -229,6 +550,17 @@ export default function ListeningChoice({
           preguntas
         </span>
       </div>
+
+      {progressError && (
+        <p
+          className={
+            styles.incorrectFeedback
+          }
+          role="alert"
+        >
+          {progressError}
+        </p>
+      )}
 
       <div
         className={styles.questions}
@@ -360,6 +692,10 @@ export default function ListeningChoice({
                                 Boolean,
                               )
                               .join(' ')}
+                            disabled={
+                              hasChecked ||
+                              isSavingProgress
+                            }
                             onClick={() =>
                               toggleOption(
                                 question.id,
@@ -504,22 +840,29 @@ export default function ListeningChoice({
         )}
       </div>
 
-      <div
-        className={styles.actions}
-      >
-        <button
-          type="button"
-          className={
-            styles.checkButton
-          }
-          disabled={
-            !allQuestionsAnswered
-          }
-          onClick={checkExercise}
+      {!hasChecked && (
+        <div
+          className={styles.actions}
         >
-          Corregir ejercicio
-        </button>
-      </div>
+          <button
+            type="button"
+            className={
+              styles.checkButton
+            }
+            disabled={
+              !allQuestionsAnswered ||
+              isSavingProgress
+            }
+            onClick={() =>
+              void checkExercise()
+            }
+          >
+            {isSavingProgress
+              ? 'Guardando...'
+              : 'Corregir ejercicio'}
+          </button>
+        </div>
+      )}
 
       {hasChecked && (
         <div
@@ -528,32 +871,228 @@ export default function ListeningChoice({
           }
           aria-live="polite"
         >
-          <p
+          <div>
+            <p
+              className={
+                styles.resultLabel
+              }
+            >
+              TU RESULTADO
+            </p>
+
+            <h4>
+              {correctAnswers} de{' '}
+              {
+                resolvedExercise
+                  .questions.length
+              }{' '}
+              correctas
+            </h4>
+
+            <p>
+              {passedCurrentAttempt
+                ? '¡Excelente! Reconociste todos los sonidos.'
+                : `Necesitas ${passingScore} respuestas correctas para aprobar. Puedes intentarlo de nuevo.`}
+            </p>
+          </div>
+
+          <div
             className={
-              styles.resultLabel
+              styles.resultActions
             }
           >
-            TU RESULTADO
-          </p>
+            <button
+              type="button"
+              className={
+                styles.retryButton
+              }
+              disabled={
+                isSavingProgress
+              }
+              onClick={handleRetry}
+            >
+              Repetir ejercicio
+            </button>
 
-          <h4>
-            {correctAnswers} de{' '}
-            {
-              resolvedExercise
-                .questions.length
-            }{' '}
-            correctas
-          </h4>
-
-          <p>
-            {correctAnswers ===
-            resolvedExercise.questions
-              .length
-              ? '¡Excelente! Reconociste todos los sonidos.'
-              : 'Puedes volver a escuchar los audios y corregir tus respuestas.'}
-          </p>
+            {passedCurrentAttempt &&
+              nextLessonHref && (
+                <Link
+                  href={nextLessonHref}
+                  className={
+                    styles.nextButton
+                  }
+                >
+                  Siguiente lección →
+                </Link>
+              )}
+          </div>
         </div>
       )}
     </section>
+
+    {showLessonProgress && (
+    <section
+      className={styles.resultCard}
+      aria-live="polite"
+    >
+      <div>
+        <p
+          className={
+            styles.resultLabel
+          }
+        >
+          TU PROGRESO
+        </p>
+
+        {isCompleted &&
+        completionSource ===
+          'automatic' ? (
+          <>
+            <h4>
+              ¡La lección se completó
+              automáticamente!
+            </h4>
+
+            <p>
+              Alcanzaste al menos{' '}
+              {Math.ceil(
+                lessonQuestionCount * 0.7,
+              )}{' '}
+              de{' '}
+              {lessonQuestionCount}{' '}
+              preguntas correctas.
+            </p>
+          </>
+        ) : isCompleted &&
+          completionSource ===
+            'manual' ? (
+          <>
+            <h4>
+              Marcaste esta lección
+              como completada.
+            </h4>
+
+            <p>
+              La marcaste sin hacer
+              el ejercicio porque ya
+              dominabas el tema.
+            </p>
+          </>
+        ) : canRestoreCompletion ? (
+          <>
+            <h4>
+              Desmarcaste esta
+              lección como
+              completada.
+            </h4>
+
+            <p>
+              Ya habías aprobado el
+              ejercicio y puedes
+              volver a marcarla.
+            </p>
+          </>
+        ) : hasAttempted ? (
+          <>
+            <h4>
+              Esta lección todavía
+              no está completada.
+            </h4>
+
+            <p>
+              Ya hiciste un intento.
+              Para completarla
+              necesitas obtener al
+              menos{' '}
+              {Math.ceil(
+                lessonQuestionCount * 0.7,
+              )}{' '}
+              de{' '}
+              {lessonQuestionCount}{' '}
+              preguntas correctas.
+            </p>
+          </>
+        ) : (
+          <>
+            <h4>
+              ¿Ya dominas este tema?
+            </h4>
+
+            <p>
+              Puedes marcar esta
+              lección como
+              completada sin hacer
+              el ejercicio.
+            </p>
+          </>
+        )}
+      </div>
+
+      <div
+        className={
+          styles.resultActions
+        }
+      >
+        {isCompleted && (
+          <button
+            type="button"
+            className={
+              styles.retryButton
+            }
+            disabled={
+              isSavingProgress
+            }
+            onClick={() =>
+              void setCompletion(
+                false,
+              )
+            }
+          >
+            Desmarcar como completada
+          </button>
+        )}
+
+        {canMarkManually && (
+          <button
+            type="button"
+            className={
+              styles.nextButton
+            }
+            disabled={
+              isSavingProgress
+            }
+            onClick={() =>
+              void setCompletion(
+                true,
+              )
+            }
+          >
+            Marcar como completada
+          </button>
+        )}
+
+        {canRestoreCompletion && (
+          <button
+            type="button"
+            className={
+              styles.nextButton
+            }
+            disabled={
+              isSavingProgress
+            }
+            onClick={() =>
+              void setCompletion(
+                true,
+              )
+            }
+          >
+            Volver a marcar como
+            completada
+          </button>
+        )}
+      </div>
+    </section>
+    )}
+    </>
   );
 }

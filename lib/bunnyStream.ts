@@ -24,5 +24,5 @@ export function getSignedBunnyEmbedUrl(
   const hashableBase = `${apiKey}${videoId}${expires}`;
   const token = crypto.createHash('sha256').update(hashableBase).digest('hex');
 
-  return `https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}?token=${token}&expires=${expires}`;
+  return `https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}?token=${token}&expires=${expires}&autoplay=false`;
 }
