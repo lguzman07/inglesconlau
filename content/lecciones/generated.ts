@@ -14,6 +14,7 @@ import lesson2 from './a1/02';
 import lesson3 from './a2/01';
 import lesson4 from './a2/02';
 import lesson5 from './b2/01';
+import lesson6 from './b2/02';
 
 export const generatedLessons: Record<
   string,
@@ -24,4 +25,5 @@ export const generatedLessons: Record<
   'a2/1': lesson3,
   'a2/2': lesson4,
   'b2/1': lesson5,
+  'b2/2': lesson6,
 };
