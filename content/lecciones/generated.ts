@@ -11,7 +11,8 @@ import type { LessonContent } from './types';
 
 import lesson1 from './a1/01';
 import lesson2 from './a2/01';
-import lesson3 from './b2/01';
+import lesson3 from './a2/02';
+import lesson4 from './b2/01';
 
 export const generatedLessons: Record<
   string,
@@ -19,5 +20,6 @@ export const generatedLessons: Record<
 > = {
   'a1/1': lesson1,
   'a2/1': lesson2,
-  'b2/1': lesson3,
+  'a2/2': lesson3,
+  'b2/1': lesson4,
 };
