@@ -55,18 +55,21 @@ export default function AdminLessonsChecklist({
     let total = 0;
     let video = 0;
     let exercises = 0;
+    let ready = 0;
 
     for (const lesson of lessons) {
       total += 1;
       if (lesson.hasVideo) video += 1;
       if (lesson.hasExercises) exercises += 1;
+      if (lesson.hasVideo && lesson.hasExercises) ready += 1;
     }
 
-    return { total, video, exercises };
+    return { total, video, exercises, ready };
   }, [lessons]);
 
   const videoPercent = overall.total === 0 ? 0 : Math.round((overall.video / overall.total) * 100);
   const exercisesPercent = overall.total === 0 ? 0 : Math.round((overall.exercises / overall.total) * 100);
+  const readyPercent = overall.total === 0 ? 0 : Math.round((overall.ready / overall.total) * 100);
 
   const visibleLevels = activeLevel === 'all' ? levels : levels.filter((level) => level.slug === activeLevel);
 
@@ -79,6 +82,17 @@ export default function AdminLessonsChecklist({
             {overall.video} / {overall.total} con video ({videoPercent}%) ·{' '}
             {overall.exercises} / {overall.total} con ejercicios ({exercisesPercent}%)
           </p>
+
+          <div className={styles.summaryBarRow}>
+            <span className={styles.summaryBarTrack}>
+              <span
+                className={styles.summaryBarFill}
+                style={{ width: `${readyPercent}%` }}
+              />
+            </span>
+
+            <span className={styles.summaryBarPercent}>{readyPercent}% listo</span>
+          </div>
         </div>
       </div>
 
