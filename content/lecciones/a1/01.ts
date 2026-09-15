@@ -10,7 +10,7 @@ const lessonA1001: LessonContent = {
   subtitle:
     'Aprende a decir quién eres, de dónde eres y cómo decir tu nombre en inglés, incluyendo las formas cortas I’m y My name’s.',
 
-  videoSrc: '9c2220de-de6d-4650-b381-cf7380ca4f6f',
+  videoSrc: 'f6e04b77-1aab-4490-8db9-5d0f2420b2d5',
 
   videoTitle: 'Preséntate en inglés',
 

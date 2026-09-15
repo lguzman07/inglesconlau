@@ -10,12 +10,14 @@
 import type { LessonContent } from './types';
 
 import lesson1 from './a1/01';
-import lesson2 from './b2/01';
+import lesson2 from './a2/01';
+import lesson3 from './b2/01';
 
 export const generatedLessons: Record<
   string,
   LessonContent
 > = {
   'a1/1': lesson1,
-  'b2/1': lesson2,
+  'a2/1': lesson2,
+  'b2/1': lesson3,
 };
