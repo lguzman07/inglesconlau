@@ -43,10 +43,10 @@ export default function PoliticaDePrivacidadPage() {
               educativo. Para ejercer derechos o realizar consultas de
               privacidad, escribe a{' '}
               <a
-                href="mailto:soporte@inglesconlau.com"
+                href="mailto:lau@inglesconlau.com"
                 className={styles.link}
               >
-                soporte@inglesconlau.com
+                lau@inglesconlau.com
               </a>
               .
             </p>
@@ -308,10 +308,10 @@ export default function PoliticaDePrivacidadPage() {
               Para ejercer tus derechos, utiliza Configuración → Eliminar cuenta
               cuando corresponda o escribe a{' '}
               <a
-                href="mailto:soporte@inglesconlau.com"
+                href="mailto:lau@inglesconlau.com"
                 className={styles.link}
               >
-                soporte@inglesconlau.com
+                lau@inglesconlau.com
               </a>
               . Podremos pedir información razonable para verificar tu identidad
               y evitar que otra persona acceda o elimine tus datos. Responderemos
@@ -368,30 +368,6 @@ export default function PoliticaDePrivacidadPage() {
                 <strong>Consultas generales:</strong>{' '}
                 <a href="mailto:lau@inglesconlau.com" className={styles.link}>
                   lau@inglesconlau.com
-                </a>
-              </li>
-
-              <li>
-                <strong>Soporte, cuenta y privacidad:</strong>{' '}
-                <a
-                  href="mailto:soporte@inglesconlau.com"
-                  className={styles.link}
-                >
-                  soporte@inglesconlau.com
-                </a>
-              </li>
-
-              <li>
-                <strong>Pagos, cobros y facturación:</strong>{' '}
-                <a href="mailto:pagos@inglesconlau.com" className={styles.link}>
-                  pagos@inglesconlau.com
-                </a>
-              </li>
-
-              <li>
-                <strong>Eventos y colaboraciones:</strong>{' '}
-                <a href="mailto:eventos@inglesconlau.com" className={styles.link}>
-                  eventos@inglesconlau.com
                 </a>
               </li>
 

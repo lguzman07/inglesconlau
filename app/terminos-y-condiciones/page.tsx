@@ -38,13 +38,10 @@ export default function TerminosYCondicionesPage() {
             <p className={styles.paragraph}>
               Estos Términos regulan el acceso y uso de Inglés con Lau, una
               plataforma digital de aprendizaje de inglés operada desde la
-              República Dominicana. Para consultas generales puedes escribir a{' '}
+              República Dominicana. Para consultas, soporte o solicitudes
+              relacionadas con la cuenta, puedes escribir a{' '}
               <a href="mailto:lau@inglesconlau.com" className={styles.link}>
                 lau@inglesconlau.com
-              </a>{' '}
-              y, para soporte o solicitudes relacionadas con la cuenta, a{' '}
-              <a href="mailto:soporte@inglesconlau.com" className={styles.link}>
-                soporte@inglesconlau.com
               </a>
               .
             </p>
@@ -336,8 +333,8 @@ export default function TerminosYCondicionesPage() {
             <p className={styles.paragraph}>
               Estos Términos se interpretan conforme a las leyes de la República
               Dominicana. Antes de acudir a otras vías, puedes escribir a{' '}
-              <a href="mailto:soporte@inglesconlau.com" className={styles.link}>
-                soporte@inglesconlau.com
+              <a href="mailto:lau@inglesconlau.com" className={styles.link}>
+                lau@inglesconlau.com
               </a>{' '}
               para intentar resolver el asunto. También conservas el derecho de
               acudir a Pro Consumidor, a los tribunales competentes o a
@@ -353,33 +350,6 @@ export default function TerminosYCondicionesPage() {
                 <strong>Consultas generales:</strong>{' '}
                 <a href="mailto:lau@inglesconlau.com" className={styles.link}>
                   lau@inglesconlau.com
-                </a>
-              </li>
-
-              <li>
-                <strong>Soporte, cuenta y privacidad:</strong>{' '}
-                <a
-                  href="mailto:soporte@inglesconlau.com"
-                  className={styles.link}
-                >
-                  soporte@inglesconlau.com
-                </a>
-              </li>
-
-              <li>
-                <strong>Pagos, cobros y facturación:</strong>{' '}
-                <a href="mailto:pagos@inglesconlau.com" className={styles.link}>
-                  pagos@inglesconlau.com
-                </a>
-              </li>
-
-              <li>
-                <strong>Eventos y colaboraciones:</strong>{' '}
-                <a
-                  href="mailto:eventos@inglesconlau.com"
-                  className={styles.link}
-                >
-                  eventos@inglesconlau.com
                 </a>
               </li>
 

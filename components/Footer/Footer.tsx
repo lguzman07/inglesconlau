@@ -61,34 +61,6 @@ export default function Footer() {
                 lau@inglesconlau.com
               </a>
             </li>
-
-            <li>
-              <span>Soporte, cuenta y privacidad</span>
-
-              <a href="mailto:soporte@inglesconlau.com">
-                soporte@inglesconlau.com
-              </a>
-            </li>
-
-            <li>
-              <span>Pagos, cobros y facturación</span>
-
-              <a href="mailto:pagos@inglesconlau.com">
-                pagos@inglesconlau.com
-              </a>
-            </li>
-
-            <li>
-              <span>WhatsApp</span>
-
-              <a
-                href="https://wa.me/18096504884?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20grupales"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                809-650-4884
-              </a>
-            </li>
           </ul>
         </div>
       </div>
