@@ -79,14 +79,6 @@ export default function Footer() {
             </li>
 
             <li>
-              <span>Eventos y colaboraciones</span>
-
-              <a href="mailto:eventos@inglesconlau.com">
-                eventos@inglesconlau.com
-              </a>
-            </li>
-
-            <li>
               <span>WhatsApp</span>
 
               <a
