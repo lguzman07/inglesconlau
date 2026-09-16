@@ -88,7 +88,7 @@ export const lessonTitles: Record<
   a2: {
     1: 'Hábitos vs acciones temporales',
     2: 'Verbos de estado',
-    3: 'Verbos irregulares de alta frecuencia: pasado, participio y práctica de memorización',
+    3: 'Verbos irregulares comunes',
     4: 'Pronunciación de terminaciones -ed: sonidos /t/, /d/ e /ɪd/, con práctica auditiva',
     5: 'Narrar acontecimientos pasados',
     6: 'Secuenciadores: first, then, after that, finally, y narrar una rutina o historia paso a paso',
@@ -254,7 +254,7 @@ export const lessonTitles: Record<
   b2: {
     1: 'Present perfect simple vs continuous avanzado',
     2: 'Past perfect simple vs continuous',
-    3: 'Narración avanzada del pasado',
+    3: 'Verbos irregulares comunes',
     4: 'Future perfect: formación, uso y ejemplos con by the time',
     5: 'Future perfect continuous: formación, uso y contraste con future perfect',
     6: 'Expresar el futuro desde el pasado',
