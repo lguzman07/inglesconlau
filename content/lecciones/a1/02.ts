@@ -18,6 +18,8 @@ const lessonA1002: LessonContent = {
   objective:
     'Al terminar, podrás presentar a los miembros de tu familia usando this is y these are.',
 
+  videoSrc: '414101fd-2166-45b1-85fa-0d0691f3f1de',
+
   exercises: [
     {
       type: 'fill-in-the-blanks',
