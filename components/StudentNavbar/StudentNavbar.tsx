@@ -14,10 +14,13 @@ const DEVICE_ID_STORAGE_KEY = 'ingles-con-lau-device-id';
 const navigationItems = [
   { href: '/inicio', label: 'Inicio' },
   { href: '/lecciones', label: 'Lecciones' },
-  { href: '/clase-en-vivo', label: 'Clase en vivo' },
   { href: '/calendario', label: 'Calendario' },
-  { href: '/configuracion', label: 'Configuración' },
 ];
+
+const configuracionItem = {
+  href: '/configuracion',
+  label: 'Configuración',
+};
 
 const adminNavigationItems = [
   { href: '/admin/estudiantes', label: 'Estudiantes' },
@@ -69,8 +72,9 @@ export default function StudentNavbar() {
     ? [
         ...navigationItems.filter((item) => item.href !== '/calendario'),
         ...adminNavigationItems,
+        configuracionItem,
       ]
-    : navigationItems;
+    : [...navigationItems, configuracionItem];
 
   async function handleLogout() {
     setIsLoggingOut(true);
