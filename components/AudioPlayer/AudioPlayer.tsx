@@ -27,6 +27,8 @@ function getTtsText(
     K: 'letter K',
     S: 'letter S',
     X: 'letter X',
+    V: 'letter V',
+    U: 'letter U',
   };
 
   return letterNames[normalized] ?? text;
