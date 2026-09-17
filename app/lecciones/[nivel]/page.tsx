@@ -4,6 +4,7 @@ import {
   redirect,
 } from 'next/navigation';
 
+import { getLessonContent } from '@/content/lecciones';
 import { lessonTitles } from '@/content/lecciones/catalog';
 import { createClient } from '@/lib/supabase/server';
 
@@ -120,12 +121,28 @@ export default async function NivelPage({
       ([
         lessonNumber,
         lessonTitle,
-      ]) => ({
-        number: Number(
+      ]) => {
+        const number = Number(
           lessonNumber,
-        ),
-        title: lessonTitle,
-      }),
+        );
+
+        const content =
+          getLessonContent(
+            normalizedLevel,
+            number,
+          );
+
+        return {
+          number,
+          title: lessonTitle,
+          hasVideo: Boolean(
+            content?.videoSrc,
+          ),
+          hasExercises:
+            (content?.exercises
+              ?.length ?? 0) > 0,
+        };
+      },
     )
     .filter(
       (lesson) =>
@@ -332,6 +349,8 @@ export default async function NivelPage({
                 number,
                 title:
                   lessonTitle,
+                hasVideo,
+                hasExercises,
               }) => {
                 const canOpenLesson =
                   hasLessonAccess ||
@@ -341,9 +360,12 @@ export default async function NivelPage({
                   `${normalizedLevel}/${number}`;
 
                 const isCompleted =
-                  completedLessonKeys.has(
-                    lessonKey,
-                  );
+                  isAdmin
+                    ? hasVideo &&
+                      hasExercises
+                    : completedLessonKeys.has(
+                        lessonKey,
+                      );
 
                 return (
                   <li key={number}>
@@ -412,9 +434,13 @@ export default async function NivelPage({
                               : ''
                           }`}
                           title={
-                            isCompleted
-                              ? 'Lección completada'
-                              : 'Lección pendiente'
+                            isAdmin
+                              ? isCompleted
+                                ? 'Video y ejercicios listos'
+                                : 'Contenido pendiente'
+                              : isCompleted
+                                ? 'Lección completada'
+                                : 'Lección pendiente'
                           }
                           aria-hidden="true"
                         >
