@@ -9,7 +9,7 @@ export const lessonTitles: Record<
     4: 'Vocales cortas y largas: pares clave como /iː/-/ɪ/ y /uː/-/ʊ/',
     5: 'How do you spell it?: deletrear nombre y apellido, correos electrónicos (at, dot) y dictado',
     6: 'Completar un formulario básico: nombre, apellido, correo electrónico y teléfono',
-    7: 'How are you?: estados y respuestas básicas',
+    7: 'Saludos y despedidas según la hora del día; How are you?: estados y respuestas básicas',
     8: 'Números del 0 al 20 y dictado',
     9: 'Preguntar y decir la edad',
     10: 'Decir y comprender números de teléfono',
