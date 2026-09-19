@@ -1,0 +1,372 @@
+import type { LessonContent } from '../types';
+
+const lessonA1006: LessonContent = {
+  level: 'a1',
+  number: 6,
+  title: 'Números del 0 al 100 y dictado',
+  subtitle: 'Aprende los números del 0 al 100, cómo distinguir -teen de -ty, y cómo decir y escribir números de teléfono.',
+  videoTitle: 'Números del 0 al 100 y dictado',
+  videoDescription: 'En este video aprenderás los números del 0 al 100, la diferencia entre thirteen y thirty, y cómo decir números de teléfono.',
+  objective: 'Al terminar, podrás decir y entender números del 0 al 100 y números de teléfono en inglés.',
+  exercises: [
+    {
+      type: 'listening-choice',
+      title: '-teen o -ty: escucha el número',
+      instructions: 'Escucha el número y toca el que oíste. Cuidado: thirteen (13) y thirty (30) suenan parecido. En -teen el acento cae al final; en -ty, al inicio.',
+      questions: [
+        {
+          id: 1,
+          audioText: 'thirteen',
+          language: 'en',
+          prompt: '¿Qué número escuchaste?',
+          options: [
+            { id: '13', text: '13' },
+            { id: '30', text: '30' },
+          ],
+          correctOptionIds: ['13'],
+          explanation: 'thirteen termina en -teen (acento al final): 13.',
+        },
+        {
+          id: 2,
+          audioText: 'forty',
+          language: 'en',
+          prompt: '¿Qué número escuchaste?',
+          options: [
+            { id: '14', text: '14' },
+            { id: '40', text: '40' },
+          ],
+          correctOptionIds: ['40'],
+          explanation: 'forty termina en -ty (acento al inicio): 40.',
+        },
+        {
+          id: 3,
+          audioText: 'fifteen',
+          language: 'en',
+          prompt: '¿Qué número escuchaste?',
+          options: [
+            { id: '15', text: '15' },
+            { id: '50', text: '50' },
+          ],
+          correctOptionIds: ['15'],
+          explanation: 'fifteen termina en -teen: 15.',
+        },
+        {
+          id: 4,
+          audioText: 'sixty',
+          language: 'en',
+          prompt: '¿Qué número escuchaste?',
+          options: [
+            { id: '16', text: '16' },
+            { id: '60', text: '60' },
+          ],
+          correctOptionIds: ['60'],
+          explanation: 'sixty termina en -ty: 60.',
+        },
+        {
+          id: 5,
+          audioText: 'seventeen',
+          language: 'en',
+          prompt: '¿Qué número escuchaste?',
+          options: [
+            { id: '17', text: '17' },
+            { id: '70', text: '70' },
+          ],
+          correctOptionIds: ['17'],
+          explanation: 'seventeen termina en -teen: 17.',
+        },
+        {
+          id: 6,
+          audioText: 'eighty',
+          language: 'en',
+          prompt: '¿Qué número escuchaste?',
+          options: [
+            { id: '18', text: '18' },
+            { id: '80', text: '80' },
+          ],
+          correctOptionIds: ['80'],
+          explanation: 'eighty termina en -ty: 80.',
+        },
+        {
+          id: 7,
+          audioText: 'nineteen',
+          language: 'en',
+          prompt: '¿Qué número escuchaste?',
+          options: [
+            { id: '19', text: '19' },
+            { id: '90', text: '90' },
+          ],
+          correctOptionIds: ['19'],
+          explanation: 'nineteen termina en -teen: 19.',
+        },
+        {
+          id: 8,
+          audioText: 'ninety',
+          language: 'en',
+          prompt: '¿Qué número escuchaste?',
+          options: [
+            { id: '19', text: '19' },
+            { id: '90', text: '90' },
+          ],
+          correctOptionIds: ['90'],
+          explanation: 'ninety termina en -ty: 90.',
+        },
+      ],
+    },
+    {
+      type: 'listening-choice',
+      title: 'Escucha el número de teléfono',
+      instructions: 'Escucha el número de teléfono y elige cómo se escribe. Los números se dicen uno por uno; el 0 se dice "oh" o "zero".',
+      questions: [
+        {
+          id: 9,
+          audioText: 'My phone number is eight oh nine, five five five, one two three four.',
+          language: 'en',
+          prompt: '¿Qué número escuchaste?',
+          options: [
+            { id: 'a', text: '809-555-1234' },
+            { id: 'b', text: '809-555-1243' },
+            { id: 'c', text: '890-555-1234' },
+          ],
+          correctOptionIds: ['a'],
+          explanation: 'eight oh nine = 809; five five five = 555; one two three four = 1234.',
+        },
+        {
+          id: 10,
+          audioText: 'My phone number is eight two nine, six six six, oh one four seven.',
+          language: 'en',
+          prompt: '¿Qué número escuchaste?',
+          options: [
+            { id: 'a', text: '829-666-1047' },
+            { id: 'b', text: '839-666-0147' },
+            { id: 'c', text: '829-666-0147' },
+          ],
+          correctOptionIds: ['c'],
+          explanation: 'eight two nine = 829; six six six = 666; oh one four seven = 0147.',
+        },
+        {
+          id: 11,
+          audioText: 'My phone number is three one five, nine eight seven, two zero six one.',
+          language: 'en',
+          prompt: '¿Qué número escuchaste?',
+          options: [
+            { id: 'a', text: '315-987-2061' },
+            { id: 'b', text: '351-987-2061' },
+            { id: 'c', text: '315-978-2061' },
+          ],
+          correctOptionIds: ['a'],
+          explanation: 'three one five = 315; nine eight seven = 987; two zero six one = 2061.',
+        },
+        {
+          id: 12,
+          audioText: 'My phone number is seven eight six, four four two, one one nine zero.',
+          language: 'en',
+          prompt: '¿Qué número escuchaste?',
+          options: [
+            { id: 'a', text: '786-442-1190' },
+            { id: 'b', text: '786-424-1190' },
+            { id: 'c', text: '768-442-1190' },
+          ],
+          correctOptionIds: ['a'],
+          explanation: 'seven eight six = 786; four four two = 442; one one nine zero = 1190.',
+        },
+      ],
+    },
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Escribe el número en inglés',
+      instructions: 'Escribe el número con letras, en inglés. El número en dígitos aparece entre paréntesis.',
+      questions: [
+        {
+          id: 13,
+          before: [
+            { word: 'There', translation: 'hay' },
+            { word: 'are', translation: 'hay / son' },
+          ],
+          after: [
+            { word: 'days', translation: 'días' },
+            { word: 'in', translation: 'en' },
+            { word: 'a', translation: 'un/una' },
+            { word: 'week.', translation: 'semana' },
+          ],
+          answer: 'seven',
+          hint: '7',
+          sentenceTranslation: 'Hay siete días en una semana.',
+        },
+        {
+          id: 14,
+          before: [
+            { word: 'There', translation: 'hay' },
+            { word: 'are', translation: 'hay / son' },
+          ],
+          after: [
+            { word: 'months', translation: 'meses' },
+            { word: 'in', translation: 'en' },
+            { word: 'a', translation: 'un/una' },
+            { word: 'year.', translation: 'año' },
+          ],
+          answer: 'twelve',
+          hint: '12',
+          sentenceTranslation: 'Hay doce meses en un año.',
+        },
+        {
+          id: 15,
+          before: [
+            { word: 'A', translation: 'un/una' },
+            { word: 'dollar', translation: 'dólar' },
+            { word: 'has', translation: 'tiene' },
+          ],
+          after: [
+            { word: 'cents.', translation: 'centavos' },
+          ],
+          answer: 'one hundred',
+          hint: '100',
+          sentenceTranslation: 'Un dólar tiene cien centavos.',
+        },
+        {
+          id: 16,
+          before: [
+            { word: 'I', translation: 'yo' },
+            { word: 'have', translation: 'tengo' },
+          ],
+          after: [
+            { word: 'brothers.', translation: 'hermanos' },
+          ],
+          answer: 'three',
+          hint: '3',
+          sentenceTranslation: 'Tengo tres hermanos.',
+        },
+        {
+          id: 17,
+          before: [
+            { word: 'My', translation: 'mi' },
+            { word: 'phone', translation: 'teléfono' },
+            { word: 'number', translation: 'número' },
+            { word: 'has', translation: 'tiene' },
+          ],
+          after: [
+            { word: 'digits.', translation: 'dígitos' },
+          ],
+          answer: 'ten',
+          hint: '10',
+          sentenceTranslation: 'Mi número de teléfono tiene diez dígitos.',
+        },
+        {
+          id: 18,
+          before: [
+            { word: 'She', translation: 'ella' },
+            { word: 'is', translation: 'es' },
+          ],
+          after: [
+            { word: 'years', translation: 'años' },
+            { word: 'old.', translation: 'años (de edad)' },
+          ],
+          answer: 'thirty',
+          hint: '30',
+          sentenceTranslation: 'Ella tiene treinta años.',
+        },
+        {
+          id: 19,
+          before: [
+            { word: 'The', translation: 'el/la' },
+            { word: 'bus', translation: 'autobús' },
+            { word: 'costs', translation: 'cuesta' },
+          ],
+          after: [
+            { word: 'pesos.', translation: 'pesos' },
+          ],
+          answer: 'fifty',
+          hint: '50',
+          sentenceTranslation: 'El autobús cuesta cincuenta pesos.',
+        },
+        {
+          id: 20,
+          before: [
+            { word: 'My', translation: 'mi' },
+            { word: 'address', translation: 'dirección' },
+            { word: 'is', translation: 'es' },
+            { word: 'number', translation: 'número' },
+          ],
+          after: [],
+          answer: 'nineteen',
+          hint: '19',
+          sentenceTranslation: 'Mi dirección es el número diecinueve.',
+        },
+      ],
+    },
+    {
+      type: 'drag-and-drop',
+      title: 'Ordena las palabras',
+      instructions: 'Arrastra las palabras para formar la oración correcta. Las opciones aparecen en orden aleatorio.',
+      questions: [
+        {
+          id: 21,
+          tokens: [
+            { id: 'q21-whats', word: 'What’s', translation: 'cuál es' },
+            { id: 'q21-your', word: 'your', translation: 'tu' },
+            { id: 'q21-phone', word: 'phone', translation: 'teléfono' },
+            { id: 'q21-number', word: 'number?', translation: 'número' },
+          ],
+          correctOrder: ['q21-whats', 'q21-your', 'q21-phone', 'q21-number'],
+          sentenceTranslation: '¿Cuál es tu número de teléfono?',
+        },
+        {
+          id: 22,
+          tokens: [
+            { id: 'q22-my', word: 'My', translation: 'mi' },
+            { id: 'q22-phone', word: 'phone', translation: 'teléfono' },
+            { id: 'q22-number', word: 'number', translation: 'número' },
+            { id: 'q22-is', word: 'is', translation: 'es' },
+            { id: 'q22-six', word: 'six', translation: 'seis' },
+            { id: 'q22-one', word: 'one', translation: 'uno' },
+            { id: 'q22-four', word: 'four.', translation: 'cuatro' },
+          ],
+          correctOrder: ['q22-my', 'q22-phone', 'q22-number', 'q22-is', 'q22-six', 'q22-one', 'q22-four'],
+          sentenceTranslation: 'Mi número de teléfono es seis uno cuatro.',
+        },
+        {
+          id: 23,
+          tokens: [
+            { id: 'q23-can', word: 'Can', translation: 'puedes' },
+            { id: 'q23-you', word: 'you', translation: 'tú' },
+            { id: 'q23-repeat', word: 'repeat', translation: 'repetir' },
+            { id: 'q23-that', word: 'that,', translation: 'eso' },
+            { id: 'q23-please', word: 'please?', translation: 'por favor' },
+          ],
+          correctOrder: ['q23-can', 'q23-you', 'q23-repeat', 'q23-that', 'q23-please'],
+          sentenceTranslation: '¿Puedes repetirlo, por favor?',
+        },
+        {
+          id: 24,
+          tokens: [
+            { id: 'q24-there', word: 'There', translation: 'hay' },
+            { id: 'q24-are', word: 'are', translation: 'hay / son' },
+            { id: 'q24-twelve', word: 'twelve', translation: 'doce' },
+            { id: 'q24-months', word: 'months', translation: 'meses' },
+            { id: 'q24-in', word: 'in', translation: 'en' },
+            { id: 'q24-a', word: 'a', translation: 'un/una' },
+            { id: 'q24-year', word: 'year.', translation: 'año' },
+          ],
+          correctOrder: ['q24-there', 'q24-are', 'q24-twelve', 'q24-months', 'q24-in', 'q24-a', 'q24-year'],
+          sentenceTranslation: 'Hay doce meses en un año.',
+        },
+        {
+          id: 25,
+          tokens: [
+            { id: 'q25-i', word: 'I', translation: 'yo' },
+            { id: 'q25-have', word: 'have', translation: 'tengo' },
+            { id: 'q25-three', word: 'three', translation: 'tres' },
+            {
+              id: 'q25-brothers',
+              word: 'brothers.',
+              translation: 'hermanos',
+            },
+          ],
+          correctOrder: ['q25-i', 'q25-have', 'q25-three', 'q25-brothers'],
+          sentenceTranslation: 'Tengo tres hermanos.',
+        },
+      ],
+    },
+  ],
+};
+
+export default lessonA1006;

@@ -14,16 +14,22 @@ import lesson2 from './a1/02';
 import lesson3 from './a1/03';
 import lesson4 from './a1/04';
 import lesson5 from './a1/05';
-import lesson6 from './a2/01';
-import lesson7 from './a2/02';
-import lesson8 from './a2/03';
-import lesson9 from './a2/04';
-import lesson10 from './a2/05';
-import lesson11 from './b2/01';
-import lesson12 from './b2/02';
-import lesson13 from './b2/03';
-import lesson14 from './b2/04';
-import lesson15 from './b2/05';
+import lesson6 from './a1/06';
+import lesson7 from './a1/07';
+import lesson8 from './a2/01';
+import lesson9 from './a2/02';
+import lesson10 from './a2/03';
+import lesson11 from './a2/04';
+import lesson12 from './a2/05';
+import lesson13 from './a2/06';
+import lesson14 from './a2/07';
+import lesson15 from './b2/01';
+import lesson16 from './b2/02';
+import lesson17 from './b2/03';
+import lesson18 from './b2/04';
+import lesson19 from './b2/05';
+import lesson20 from './b2/06';
+import lesson21 from './b2/07';
 
 export const generatedLessons: Record<
   string,
@@ -34,14 +40,20 @@ export const generatedLessons: Record<
   'a1/3': lesson3,
   'a1/4': lesson4,
   'a1/5': lesson5,
-  'a2/1': lesson6,
-  'a2/2': lesson7,
-  'a2/3': lesson8,
-  'a2/4': lesson9,
-  'a2/5': lesson10,
-  'b2/1': lesson11,
-  'b2/2': lesson12,
-  'b2/3': lesson13,
-  'b2/4': lesson14,
-  'b2/5': lesson15,
+  'a1/6': lesson6,
+  'a1/7': lesson7,
+  'a2/1': lesson8,
+  'a2/2': lesson9,
+  'a2/3': lesson10,
+  'a2/4': lesson11,
+  'a2/5': lesson12,
+  'a2/6': lesson13,
+  'a2/7': lesson14,
+  'b2/1': lesson15,
+  'b2/2': lesson16,
+  'b2/3': lesson17,
+  'b2/4': lesson18,
+  'b2/5': lesson19,
+  'b2/6': lesson20,
+  'b2/7': lesson21,
 };
