@@ -16,20 +16,26 @@ import lesson4 from './a1/04';
 import lesson5 from './a1/05';
 import lesson6 from './a1/06';
 import lesson7 from './a1/07';
-import lesson8 from './a2/01';
-import lesson9 from './a2/02';
-import lesson10 from './a2/03';
-import lesson11 from './a2/04';
-import lesson12 from './a2/05';
-import lesson13 from './a2/06';
-import lesson14 from './a2/07';
-import lesson15 from './b2/01';
-import lesson16 from './b2/02';
-import lesson17 from './b2/03';
-import lesson18 from './b2/04';
-import lesson19 from './b2/05';
-import lesson20 from './b2/06';
-import lesson21 from './b2/07';
+import lesson8 from './a1/08';
+import lesson9 from './a1/09';
+import lesson10 from './a2/01';
+import lesson11 from './a2/02';
+import lesson12 from './a2/03';
+import lesson13 from './a2/04';
+import lesson14 from './a2/05';
+import lesson15 from './a2/06';
+import lesson16 from './a2/07';
+import lesson17 from './a2/08';
+import lesson18 from './a2/09';
+import lesson19 from './b2/01';
+import lesson20 from './b2/02';
+import lesson21 from './b2/03';
+import lesson22 from './b2/04';
+import lesson23 from './b2/05';
+import lesson24 from './b2/06';
+import lesson25 from './b2/07';
+import lesson26 from './b2/08';
+import lesson27 from './b2/09';
 
 export const generatedLessons: Record<
   string,
@@ -42,18 +48,24 @@ export const generatedLessons: Record<
   'a1/5': lesson5,
   'a1/6': lesson6,
   'a1/7': lesson7,
-  'a2/1': lesson8,
-  'a2/2': lesson9,
-  'a2/3': lesson10,
-  'a2/4': lesson11,
-  'a2/5': lesson12,
-  'a2/6': lesson13,
-  'a2/7': lesson14,
-  'b2/1': lesson15,
-  'b2/2': lesson16,
-  'b2/3': lesson17,
-  'b2/4': lesson18,
-  'b2/5': lesson19,
-  'b2/6': lesson20,
-  'b2/7': lesson21,
+  'a1/8': lesson8,
+  'a1/9': lesson9,
+  'a2/1': lesson10,
+  'a2/2': lesson11,
+  'a2/3': lesson12,
+  'a2/4': lesson13,
+  'a2/5': lesson14,
+  'a2/6': lesson15,
+  'a2/7': lesson16,
+  'a2/8': lesson17,
+  'a2/9': lesson18,
+  'b2/1': lesson19,
+  'b2/2': lesson20,
+  'b2/3': lesson21,
+  'b2/4': lesson22,
+  'b2/5': lesson23,
+  'b2/6': lesson24,
+  'b2/7': lesson25,
+  'b2/8': lesson26,
+  'b2/9': lesson27,
 };

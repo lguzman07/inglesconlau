@@ -1,0 +1,342 @@
+import type { LessonContent } from '../types';
+
+const lessonA2008: LessonContent = {
+  level: 'a2',
+  number: 8,
+  title: 'During, for y while',
+  subtitle: 'Aprende a distinguir during, for y while para hablar de cuánto dura una acción y cuándo ocurre.',
+  videoTitle: 'During, for y while',
+  videoDescription: 'En este video verás la diferencia entre during (cuándo), for (cuánto tiempo) y while (mientras), con una historia sencilla.',
+  objective: 'Al terminar, podrás usar during, for y while correctamente para contar historias y hablar de duración.',
+  exercises: [
+    {
+      type: 'fill-in-the-blanks',
+      title: 'During, for o while',
+      instructions: 'Escribe during, for o while. During va con un sustantivo, for con una duración y while con sujeto + verbo.',
+      questions: [
+        {
+          id: 1,
+          before: [
+            { word: 'I', translation: 'yo' },
+            { word: 'fell', translation: 'me quedé' },
+            { word: 'asleep', translation: 'dormido' },
+          ],
+          after: [
+            { word: 'the', translation: 'el/la' },
+            { word: 'movie.', translation: 'película' },
+          ],
+          answer: 'during',
+          sentenceTranslation: 'Me quedé dormido durante la película.',
+        },
+        {
+          id: 2,
+          before: [
+            { word: 'We', translation: 'nosotros' },
+            { word: 'visited', translation: 'visitamos' },
+            { word: 'many', translation: 'muchos' },
+            { word: 'places', translation: 'lugares' },
+          ],
+          after: [
+            { word: 'our', translation: 'nuestras' },
+            { word: 'vacation.', translation: 'vacaciones' },
+          ],
+          answer: 'during',
+          sentenceTranslation: 'Visitamos muchos lugares durante nuestras vacaciones.',
+        },
+        {
+          id: 3,
+          before: [
+            { word: 'She', translation: 'ella' },
+            { word: 'called', translation: 'llamó' },
+            { word: 'me', translation: 'me' },
+          ],
+          after: [
+            { word: 'the', translation: 'el/la' },
+            { word: 'meeting.', translation: 'reunión' },
+          ],
+          answer: 'during',
+          sentenceTranslation: 'Ella me llamó durante la reunión.',
+        },
+        {
+          id: 4,
+          before: [
+            { word: 'I', translation: 'yo' },
+            { word: 'studied', translation: 'estudié' },
+          ],
+          after: [
+            { word: 'three', translation: 'tres' },
+            { word: 'hours.', translation: 'horas' },
+          ],
+          answer: 'for',
+          sentenceTranslation: 'Estudié durante tres horas.',
+        },
+        {
+          id: 5,
+          before: [
+            { word: 'They', translation: 'ellos' },
+            { word: 'lived', translation: 'vivido' },
+            { word: 'in', translation: 'en' },
+            { word: 'Miami', translation: 'Miami' },
+          ],
+          after: [
+            { word: 'five', translation: 'cinco' },
+            { word: 'years.', translation: 'años' },
+          ],
+          answer: 'for',
+          sentenceTranslation: 'Ellos vivieron en Miami por cinco años.',
+        },
+        {
+          id: 6,
+          before: [
+            { word: 'He', translation: 'él' },
+            { word: 'waited', translation: 'esperó' },
+          ],
+          after: [
+            { word: 'twenty', translation: 'veinte' },
+            { word: 'minutes.', translation: 'minutos' },
+          ],
+          answer: 'for',
+          sentenceTranslation: 'Él esperó veinte minutos.',
+        },
+        {
+          id: 7,
+          before: [],
+          after: [
+            { word: 'she', translation: 'ella' },
+            { word: 'was', translation: 'estaba' },
+            { word: 'cooking,', translation: 'cocinando' },
+            { word: 'he', translation: 'él' },
+            { word: 'studied.', translation: 'estudié' },
+          ],
+          answer: 'While',
+          sentenceTranslation: 'Mientras ella cocinaba, él estudiaba.',
+        },
+        {
+          id: 8,
+          before: [
+            { word: 'She', translation: 'ella' },
+            { word: 'listened', translation: 'escuchó' },
+            { word: 'to', translation: 'a' },
+            { word: 'music', translation: 'música' },
+          ],
+          after: [
+            { word: 'she', translation: 'ella' },
+            { word: 'was', translation: 'estaba' },
+            { word: 'running.', translation: 'corriendo' },
+          ],
+          answer: 'while',
+          sentenceTranslation: 'Ella escuchó música mientras corría.',
+        },
+        {
+          id: 9,
+          before: [
+            { word: 'He', translation: 'él' },
+            { word: 'met', translation: 'conoció' },
+            { word: 'her', translation: 'ella' },
+          ],
+          after: [
+            { word: 'we', translation: 'nosotros' },
+            { word: 'were', translation: 'fuera' },
+            { word: 'living', translation: 'viviendo' },
+            { word: 'in', translation: 'en' },
+            { word: 'Spain.', translation: 'España' },
+          ],
+          answer: 'while',
+          sentenceTranslation: 'Él la conoció mientras vivíamos en España.',
+        },
+        {
+          id: 10,
+          before: [
+            { word: 'We', translation: 'nosotros' },
+            { word: 'stayed', translation: 'nos quedamos' },
+          ],
+          after: [
+            { word: 'a', translation: 'un/una' },
+            { word: 'week.', translation: 'semana' },
+          ],
+          answer: 'for',
+          sentenceTranslation: 'Nos quedamos una semana.',
+        },
+      ],
+    },
+    {
+      type: 'listening-choice',
+      title: '¿Qué palabra escuchaste?',
+      instructions: 'Escucha la oración y elige la palabra que se usó: during, for o while.',
+      questions: [
+        {
+          id: 11,
+          audioText: 'I slept for eight hours.',
+          language: 'en',
+          prompt: '¿Qué palabra escuchaste?',
+          options: [
+            { id: 'during', text: 'during' },
+            { id: 'for', text: 'for' },
+            { id: 'while', text: 'while' },
+          ],
+          correctOptionIds: ['for'],
+          explanation: 'for + duración: eight hours.',
+        },
+        {
+          id: 12,
+          audioText: 'I woke up twice during the night.',
+          language: 'en',
+          prompt: '¿Qué palabra escuchaste?',
+          options: [
+            { id: 'during', text: 'during' },
+            { id: 'for', text: 'for' },
+            { id: 'while', text: 'while' },
+          ],
+          correctOptionIds: ['during'],
+          explanation: 'during + sustantivo: the night.',
+        },
+        {
+          id: 13,
+          audioText: 'I read a book while I was waiting.',
+          language: 'en',
+          prompt: '¿Qué palabra escuchaste?',
+          options: [
+            { id: 'during', text: 'during' },
+            { id: 'for', text: 'for' },
+            { id: 'while', text: 'while' },
+          ],
+          correctOptionIds: ['while'],
+          explanation: 'while + sujeto + verbo: I was waiting.',
+        },
+        {
+          id: 14,
+          audioText: 'They lived in Miami for five years.',
+          language: 'en',
+          prompt: '¿Qué palabra escuchaste?',
+          options: [
+            { id: 'during', text: 'during' },
+            { id: 'for', text: 'for' },
+            { id: 'while', text: 'while' },
+          ],
+          correctOptionIds: ['for'],
+          explanation: 'for + duración: five years.',
+        },
+        {
+          id: 15,
+          audioText: 'She called me during the meeting.',
+          language: 'en',
+          prompt: '¿Qué palabra escuchaste?',
+          options: [
+            { id: 'during', text: 'during' },
+            { id: 'for', text: 'for' },
+            { id: 'while', text: 'while' },
+          ],
+          correctOptionIds: ['during'],
+          explanation: 'during + sustantivo: the meeting.',
+        },
+        {
+          id: 16,
+          audioText: 'She listened to music while she was running.',
+          language: 'en',
+          prompt: '¿Qué palabra escuchaste?',
+          options: [
+            { id: 'during', text: 'during' },
+            { id: 'for', text: 'for' },
+            { id: 'while', text: 'while' },
+          ],
+          correctOptionIds: ['while'],
+          explanation: 'while + sujeto + verbo: she was running.',
+        },
+      ],
+    },
+    {
+      type: 'drag-and-drop',
+      title: 'Ordena las palabras',
+      instructions: 'Arrastra las palabras para formar la oración correcta. Las opciones aparecen en orden aleatorio.',
+      questions: [
+        {
+          id: 17,
+          tokens: [
+            { id: 'q17-i', word: 'I', translation: 'yo' },
+            { id: 'q17-fell', word: 'fell', translation: 'me quedé' },
+            { id: 'q17-asleep', word: 'asleep', translation: 'dormido' },
+            { id: 'q17-during', word: 'during', translation: 'durante' },
+            { id: 'q17-the', word: 'the', translation: 'el/la' },
+            { id: 'q17-movie', word: 'movie.', translation: 'película' },
+          ],
+          correctOrder: ['q17-i', 'q17-fell', 'q17-asleep', 'q17-during', 'q17-the', 'q17-movie'],
+          sentenceTranslation: 'Me quedé dormido durante la película.',
+        },
+        {
+          id: 18,
+          tokens: [
+            { id: 'q18-i', word: 'I', translation: 'yo' },
+            { id: 'q18-studied', word: 'studied', translation: 'estudié' },
+            { id: 'q18-for', word: 'for', translation: 'durante' },
+            { id: 'q18-three', word: 'three', translation: 'tres' },
+            { id: 'q18-hours', word: 'hours.', translation: 'horas' },
+          ],
+          correctOrder: ['q18-i', 'q18-studied', 'q18-for', 'q18-three', 'q18-hours'],
+          sentenceTranslation: 'Estudié durante tres horas.',
+        },
+        {
+          id: 19,
+          tokens: [
+            { id: 'q19-while', word: 'While', translation: 'mientras' },
+            { id: 'q19-she', word: 'she', translation: 'ella' },
+            { id: 'q19-was', word: 'was', translation: 'estaba' },
+            {
+              id: 'q19-cooking',
+              word: 'cooking,',
+              translation: 'cocinando',
+            },
+            { id: 'q19-he', word: 'he', translation: 'él' },
+            { id: 'q19-studied', word: 'studied.', translation: 'estudié' },
+          ],
+          correctOrder: ['q19-while', 'q19-she', 'q19-was', 'q19-cooking', 'q19-he', 'q19-studied'],
+          sentenceTranslation: 'Mientras ella cocinaba, él estudiaba.',
+        },
+        {
+          id: 20,
+          tokens: [
+            { id: 'q20-she', word: 'She', translation: 'ella' },
+            { id: 'q20-called', word: 'called', translation: 'llamó' },
+            { id: 'q20-me', word: 'me', translation: 'me' },
+            { id: 'q20-during', word: 'during', translation: 'durante' },
+            { id: 'q20-the', word: 'the', translation: 'el/la' },
+            { id: 'q20-meeting', word: 'meeting.', translation: 'reunión' },
+          ],
+          correctOrder: ['q20-she', 'q20-called', 'q20-me', 'q20-during', 'q20-the', 'q20-meeting'],
+          sentenceTranslation: 'Ella me llamó durante la reunión.',
+        },
+        {
+          id: 21,
+          tokens: [
+            { id: 'q21-they', word: 'They', translation: 'ellos' },
+            { id: 'q21-lived', word: 'lived', translation: 'vivido' },
+            { id: 'q21-in', word: 'in', translation: 'en' },
+            { id: 'q21-miami', word: 'Miami', translation: 'Miami' },
+            { id: 'q21-for', word: 'for', translation: 'durante' },
+            { id: 'q21-five', word: 'five', translation: 'cinco' },
+            { id: 'q21-years', word: 'years.', translation: 'años' },
+          ],
+          correctOrder: ['q21-they', 'q21-lived', 'q21-in', 'q21-miami', 'q21-for', 'q21-five', 'q21-years'],
+          sentenceTranslation: 'Vivieron en Miami cinco años.',
+        },
+        {
+          id: 22,
+          tokens: [
+            { id: 'q22-he', word: 'He', translation: 'él' },
+            { id: 'q22-met', word: 'met', translation: 'conoció' },
+            { id: 'q22-her', word: 'her', translation: 'ella' },
+            { id: 'q22-while', word: 'while', translation: 'mientras' },
+            { id: 'q22-we', word: 'we', translation: 'nosotros' },
+            { id: 'q22-were', word: 'were', translation: 'fuera' },
+            { id: 'q22-living', word: 'living', translation: 'viviendo' },
+            { id: 'q22-in', word: 'in', translation: 'en' },
+            { id: 'q22-spain', word: 'Spain.', translation: 'España' },
+          ],
+          correctOrder: ['q22-he', 'q22-met', 'q22-her', 'q22-while', 'q22-we', 'q22-were', 'q22-living', 'q22-in', 'q22-spain'],
+          sentenceTranslation: 'Él la conoció mientras vivíamos en España.',
+        },
+      ],
+    },
+  ],
+};
+
+export default lessonA2008;
