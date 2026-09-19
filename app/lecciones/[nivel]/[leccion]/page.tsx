@@ -564,14 +564,27 @@ export default async function LeccionPage({
           styles.container
         }
       >
-        <Link
-          href={backHref}
-          className={
-            styles.backLink
-          }
-        >
-          ← Volver a {backLabel}
-        </Link>
+        <div className={styles.topBar}>
+          <Link
+            href={backHref}
+            className={
+              styles.backLink
+            }
+          >
+            ← Volver a {backLabel}
+          </Link>
+
+          {nextLessonHref ? (
+            <Link
+              href={nextLessonHref}
+              className={
+                styles.topNextLink
+              }
+            >
+              Siguiente lección →
+            </Link>
+          ) : null}
+        </div>
 
         <section
           className={
