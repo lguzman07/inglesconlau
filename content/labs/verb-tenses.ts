@@ -56,12 +56,7 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Comienza con am, is y are, sus contracciones, negativos, preguntas y respuestas cortas.',
 
     lessons: [
-      ...createLessons('a1', [
-        1,
-        20,
-        39,
-        40,
-      ]),
+      ...createLessons('a1', [1, 7, 10, 11]),
     ],
   },
 
@@ -74,15 +69,7 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Aprende a hablar de rutinas, hábitos, gustos, hechos y acciones habituales.',
 
     lessons: [
-      ...createLessons('a1', [
-        31,
-        51,
-        56,
-        57,
-        58,
-        59,
-        60,
-      ]),
+      ...createLessons('a1', [27, 28, 29, 30]),
     ],
   },
 
@@ -95,17 +82,8 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Describe acciones que están ocurriendo ahora y aprende a diferenciarlas de los hábitos.',
 
     lessons: [
-      ...createLessons('a1', [
-        68,
-        69,
-        70,
-      ]),
-
-      ...createLessons('a2', [
-        1,
-        2,
-      ]),
-
+      ...createLessons('a1', [32, 33]),
+      ...createLessons('a2', [1, 2]),
       ...createLessons('b1', [1]),
     ],
   },
@@ -119,23 +97,9 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Habla de acontecimientos terminados, verbos regulares e irregulares y hábitos del pasado.',
 
     lessons: [
-      ...createLessons('a1', [
-        77,
-        78,
-        79,
-      ]),
-
-      ...createLessonRange(
-        'a2',
-        3,
-        6,
-      ),
-
-      ...createLessonRange(
-        'b1',
-        10,
-        13,
-      ),
+      ...createLessons('a1', [38, 39]),
+      ...createLessons('a2', [3, 4, 6]),
+      ...createLessons('b1', [7]),
     ],
   },
 
@@ -148,13 +112,8 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Describe acciones en progreso en el pasado, interrupciones y acontecimientos simultáneos.',
 
     lessons: [
-      ...createLessonRange(
-        'a2',
-        7,
-        14,
-      ),
-
-      ...createLessons('b1', [6]),
+      ...createLessons('a2', [5, 7, 8]),
+      ...createLessons('b1', [4]),
     ],
   },
 
@@ -167,19 +126,9 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Conecta el pasado con el presente para hablar de experiencias, duración y acciones recientes.',
 
     lessons: [
-      ...createLessonRange(
-        'a2',
-        15,
-        27,
-      ),
-
-      ...createLessonRange(
-        'b1',
-        2,
-        5,
-      ),
-
-      ...createLessons('b2', [1]),
+      ...createLessonRange('a2', 9, 14),
+      ...createLessons('b1', [2, 3]),
+      ...createLessons('b2', [1, 3]),
     ],
   },
 
@@ -192,16 +141,8 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Expresa qué acción ocurrió primero y construye narraciones con diferentes tiempos pasados.',
 
     lessons: [
-      ...createLessonRange(
-        'b1',
-        7,
-        9,
-      ),
-
-      ...createLessons('b2', [
-        2,
-        3,
-      ]),
+      ...createLessons('b1', [5, 6]),
+      ...createLessons('b2', [2]),
     ],
   },
 
@@ -214,30 +155,11 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Domina going to, will, present continuous, future continuous, future perfect y future in the past.',
 
     lessons: [
-      ...createLessons('a1', [80]),
-
-      ...createLessonRange(
-        'a2',
-        28,
-        34,
-      ),
-
-      ...createLessonRange(
-        'b1',
-        14,
-        16,
-      ),
-
-      ...createLessonRange(
-        'b2',
-        4,
-        7,
-      ),
-
-      ...createLessons('c1', [
-        5,
-        6,
-      ]),
+      ...createLessons('a1', [40]),
+      ...createLessonRange('a2', 15, 18),
+      ...createLessons('b1', [8, 9, 10]),
+      ...createLessonRange('b2', 4, 7),
+      ...createLessons('c1', [5, 6]),
     ],
   },
 
@@ -250,17 +172,8 @@ export const verbTensesModules: VerbTensesModule[] = [
       'Consolida todos los tiempos y elige cada forma verbal según la perspectiva, el aspecto y el contexto.',
 
     lessons: [
-      ...createLessonRange(
-        'b1',
-        1,
-        16,
-      ),
-
-      ...createLessonRange(
-        'c1',
-        1,
-        4,
-      ),
+      ...createLessonRange('b1', 1, 10),
+      ...createLessonRange('c1', 1, 4),
     ],
   },
 ];
