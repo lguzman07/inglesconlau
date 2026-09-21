@@ -1,0 +1,465 @@
+import type { LessonContent } from '../types';
+
+const lessonB2015: LessonContent = {
+  level: 'b2',
+  number: 15,
+  title: 'Causative have y get',
+  subtitle: 'Aprende a hablar de cosas que otros hacen por ti con have y get + participio, y a lograr que alguien haga algo.',
+  videoTitle: 'Causative have y get',
+  videoDescription: 'En este video verás have/get + objeto + participio (I had my car repaired) y have/get + persona + verbo.',
+  objective: 'Al terminar, podrás usar la causativa para servicios y para hacer que otros hagan algo.',
+  exercises: [
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Have, get o having',
+      instructions: 'Escribe la forma de have o get que falta.',
+      questions: [
+        {
+          id: 1,
+          before: [
+            { word: 'I', translation: 'yo' },
+          ],
+          after: [
+            { word: 'my', translation: 'mis' },
+            { word: 'car', translation: 'carro' },
+            { word: 'repaired', translation: 'reparado' },
+            { word: 'yesterday.', translation: 'ayer' },
+          ],
+          answer: 'had',
+          sentenceTranslation: 'Hice reparar mi carro ayer.',
+        },
+        {
+          id: 2,
+          before: [
+            { word: 'She', translation: 'ella' },
+          ],
+          after: [
+            { word: 'her', translation: 'su' },
+            { word: 'hair', translation: 'pelo' },
+            { word: 'cut.', translation: 'cortado' },
+          ],
+          answer: 'got',
+          sentenceTranslation: 'Ella se cortó el pelo.',
+        },
+        {
+          id: 3,
+          before: [
+            { word: 'We', translation: 'nosotros' },
+            { word: 'are', translation: 'son / están' },
+          ],
+          after: [
+            { word: 'the', translation: 'el/la' },
+            { word: 'house', translation: 'casa' },
+            { word: 'painted.', translation: 'pintado' },
+          ],
+          answer: 'having',
+          sentenceTranslation: 'Estamos haciendo pintar la casa.',
+        },
+        {
+          id: 4,
+          before: [
+            { word: 'He', translation: 'él' },
+            { word: 'will', translation: 'auxiliar de futuro' },
+          ],
+          after: [
+            { word: 'his', translation: 'su' },
+            { word: 'suit', translation: 'traje' },
+            { word: 'cleaned.', translation: 'limpiado' },
+          ],
+          answer: 'have',
+          sentenceTranslation: 'Él hará limpiar su traje.',
+        },
+        {
+          id: 5,
+          before: [
+            { word: 'I', translation: 'yo' },
+            { word: 'need', translation: 'necesito' },
+            { word: 'to', translation: 'a' },
+          ],
+          after: [
+            { word: 'my', translation: 'mis' },
+            { word: 'eyes', translation: 'ojos' },
+            { word: 'tested.', translation: 'examinados' },
+          ],
+          answer: 'have',
+          sentenceTranslation: 'Necesito hacerme examinar los ojos.',
+        },
+        {
+          id: 6,
+          before: [
+            { word: 'They', translation: 'ellos' },
+          ],
+          after: [
+            { word: 'their', translation: 'su' },
+            { word: 'photo', translation: 'foto' },
+            { word: 'taken.', translation: 'tomada' },
+          ],
+          answer: 'had',
+          sentenceTranslation: 'Se hicieron tomar una foto.',
+        },
+        {
+          id: 7,
+          before: [
+            { word: 'Where', translation: 'dónde' },
+            { word: 'do', translation: 'hacer' },
+            { word: 'you', translation: 'tú' },
+          ],
+          after: [
+            { word: 'your', translation: 'tu' },
+            { word: 'nails', translation: 'uñas' },
+            { word: 'done?', translation: 'hechas' },
+          ],
+          answer: 'get',
+          sentenceTranslation: '¿Dónde te haces las uñas?',
+        },
+        {
+          id: 8,
+          before: [
+            { word: 'She', translation: 'ella' },
+          ],
+          after: [
+            { word: 'her', translation: 'su' },
+            { word: 'nails', translation: 'uñas' },
+            { word: 'done', translation: 'hechas' },
+            { word: 'every', translation: 'cada' },
+            { word: 'week.', translation: 'semana' },
+          ],
+          answer: 'has',
+          sentenceTranslation: 'Ella se hace las uñas cada semana.',
+        },
+      ],
+    },
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Completa con el participio',
+      instructions: 'Escribe el participio del verbo entre paréntesis.',
+      questions: [
+        {
+          id: 9,
+          before: [
+            { word: 'I', translation: 'yo' },
+            { word: 'had', translation: 'hice' },
+            { word: 'my', translation: 'mis' },
+            { word: 'car', translation: 'carro' },
+          ],
+          after: [],
+          answer: 'repaired',
+          hint: 'repair',
+          sentenceTranslation: 'Hice reparar mi carro.',
+        },
+        {
+          id: 10,
+          before: [
+            { word: 'She', translation: 'ella' },
+            { word: 'got', translation: 'hice' },
+            { word: 'her', translation: 'su' },
+            { word: 'phone', translation: 'teléfono' },
+          ],
+          after: [],
+          answer: 'fixed',
+          hint: 'fix',
+          sentenceTranslation: 'Ella hizo arreglar su teléfono.',
+        },
+        {
+          id: 11,
+          before: [
+            { word: 'We', translation: 'nosotros' },
+            { word: 'had', translation: 'hice' },
+            { word: 'the', translation: 'el/la' },
+            { word: 'windows', translation: 'ventanas' },
+          ],
+          after: [],
+          answer: 'cleaned',
+          hint: 'clean',
+          sentenceTranslation: 'Hicimos limpiar las ventanas.',
+        },
+        {
+          id: 12,
+          before: [
+            { word: 'He', translation: 'él' },
+            { word: 'had', translation: 'hice' },
+            { word: 'his', translation: 'su' },
+            { word: 'passport', translation: 'pasaporte' },
+          ],
+          after: [],
+          answer: 'renewed',
+          hint: 'renew',
+          sentenceTranslation: 'Él hizo renovar su pasaporte.',
+        },
+        {
+          id: 13,
+          before: [
+            { word: 'They', translation: 'ellos' },
+            { word: 'had', translation: 'hice' },
+            { word: 'the', translation: 'el/la' },
+            { word: 'house', translation: 'casa' },
+          ],
+          after: [],
+          answer: 'painted',
+          hint: 'paint',
+          sentenceTranslation: 'Hicieron pintar la casa.',
+        },
+        {
+          id: 14,
+          before: [
+            { word: 'She', translation: 'ella' },
+            { word: 'had', translation: 'hice' },
+            { word: 'her', translation: 'su' },
+            { word: 'bag', translation: 'bolso' },
+          ],
+          after: [],
+          answer: 'stolen',
+          hint: 'steal',
+          sentenceTranslation: 'Le robaron el bolso.',
+        },
+      ],
+    },
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Have o get + persona',
+      instructions: 'Escribe la palabra que falta: el verbo en forma base (después de have) o to (después de get).',
+      questions: [
+        {
+          id: 15,
+          before: [
+            { word: 'I', translation: 'yo' },
+            { word: 'had', translation: 'hice' },
+            { word: 'the', translation: 'el/la' },
+            { word: 'mechanic', translation: 'mecánico' },
+          ],
+          after: [
+            { word: 'the', translation: 'el/la' },
+            { word: 'car.', translation: 'carro' },
+          ],
+          answer: 'check',
+          hint: 'check',
+          sentenceTranslation: 'Hice que el mecánico revisara el carro.',
+        },
+        {
+          id: 16,
+          before: [
+            { word: 'She', translation: 'ella' },
+            { word: 'got', translation: 'hice' },
+            { word: 'her', translation: 'su' },
+            { word: 'son', translation: 'hijo' },
+          ],
+          after: [
+            { word: 'tidy', translation: 'ordenar' },
+            { word: 'his', translation: 'su' },
+            { word: 'room.', translation: 'cuarto' },
+          ],
+          answer: 'to',
+          sentenceTranslation: 'Ella logró que su hijo ordenara su cuarto.',
+        },
+        {
+          id: 17,
+          before: [
+            { word: 'I', translation: 'yo' },
+            { word: 'got', translation: 'hice' },
+            { word: 'him', translation: 'lo' },
+          ],
+          after: [
+            { word: 'help', translation: 'ayudar' },
+            { word: 'me.', translation: 'me' },
+          ],
+          answer: 'to',
+          sentenceTranslation: 'Logré que me ayudara.',
+        },
+        {
+          id: 18,
+          before: [
+            { word: 'The', translation: 'el/la' },
+            { word: 'teacher', translation: 'maestra' },
+            { word: 'had', translation: 'hice' },
+            { word: 'us', translation: 'nos' },
+          ],
+          after: [
+            { word: 'an', translation: 'un/una' },
+            { word: 'essay.', translation: 'ensayo' },
+          ],
+          answer: 'write',
+          hint: 'write',
+          sentenceTranslation: 'La maestra nos hizo escribir un ensayo.',
+        },
+      ],
+    },
+    {
+      type: 'listening-choice',
+      title: '¿Quién hizo la acción?',
+      instructions: 'Escucha la oración y decide si la acción la hizo otra persona (causativa) o el sujeto mismo.',
+      questions: [
+        {
+          id: 19,
+          audioText: 'I had my hair cut.',
+          language: 'en',
+          prompt: '¿Quién hizo la acción?',
+          options: [
+            { id: 'other', text: 'Otra persona la hizo' },
+            { id: 'self', text: 'El mismo sujeto la hizo' },
+          ],
+          correctOptionIds: ['other'],
+          explanation: 'had + participio: otra persona te cortó el pelo.',
+        },
+        {
+          id: 20,
+          audioText: 'I cut my hair.',
+          language: 'en',
+          prompt: '¿Quién hizo la acción?',
+          options: [
+            { id: 'other', text: 'Otra persona la hizo' },
+            { id: 'self', text: 'El mismo sujeto la hizo' },
+          ],
+          correctOptionIds: ['self'],
+          explanation: 'cut: lo hiciste tú.',
+        },
+        {
+          id: 21,
+          audioText: 'She got her phone fixed.',
+          language: 'en',
+          prompt: '¿Quién hizo la acción?',
+          options: [
+            { id: 'other', text: 'Otra persona la hizo' },
+            { id: 'self', text: 'El mismo sujeto la hizo' },
+          ],
+          correctOptionIds: ['other'],
+          explanation: 'got + participio: alguien arregló el teléfono.',
+        },
+        {
+          id: 22,
+          audioText: 'She fixed her phone.',
+          language: 'en',
+          prompt: '¿Quién hizo la acción?',
+          options: [
+            { id: 'other', text: 'Otra persona la hizo' },
+            { id: 'self', text: 'El mismo sujeto la hizo' },
+          ],
+          correctOptionIds: ['self'],
+          explanation: 'fixed: lo hizo ella.',
+        },
+        {
+          id: 23,
+          audioText: 'We had the house painted.',
+          language: 'en',
+          prompt: '¿Quién hizo la acción?',
+          options: [
+            { id: 'other', text: 'Otra persona la hizo' },
+            { id: 'self', text: 'El mismo sujeto la hizo' },
+          ],
+          correctOptionIds: ['other'],
+          explanation: 'had + participio: otra persona pintó.',
+        },
+        {
+          id: 24,
+          audioText: 'We painted the house.',
+          language: 'en',
+          prompt: '¿Quién hizo la acción?',
+          options: [
+            { id: 'other', text: 'Otra persona la hizo' },
+            { id: 'self', text: 'El mismo sujeto la hizo' },
+          ],
+          correctOptionIds: ['self'],
+          explanation: 'painted: lo hicimos nosotros.',
+        },
+      ],
+    },
+    {
+      type: 'drag-and-drop',
+      title: 'Ordena las palabras',
+      instructions: 'Arrastra las palabras para formar la oración correcta. Las opciones aparecen en orden aleatorio.',
+      questions: [
+        {
+          id: 25,
+          tokens: [
+            { id: 'q25-i', word: 'I', translation: 'yo' },
+            { id: 'q25-had', word: 'had', translation: 'hice' },
+            { id: 'q25-my', word: 'my', translation: 'mis' },
+            { id: 'q25-car', word: 'car', translation: 'carro' },
+            {
+              id: 'q25-repaired',
+              word: 'repaired.',
+              translation: 'reparado',
+            },
+          ],
+          correctOrder: ['q25-i', 'q25-had', 'q25-my', 'q25-car', 'q25-repaired'],
+          sentenceTranslation: 'Hice reparar mi carro.',
+        },
+        {
+          id: 26,
+          tokens: [
+            { id: 'q26-she', word: 'She', translation: 'ella' },
+            { id: 'q26-got', word: 'got', translation: 'hice' },
+            { id: 'q26-her', word: 'her', translation: 'su' },
+            { id: 'q26-hair', word: 'hair', translation: 'pelo' },
+            { id: 'q26-cut', word: 'cut.', translation: 'cortado' },
+          ],
+          correctOrder: ['q26-she', 'q26-got', 'q26-her', 'q26-hair', 'q26-cut'],
+          sentenceTranslation: 'Ella se cortó el pelo.',
+        },
+        {
+          id: 27,
+          tokens: [
+            { id: 'q27-we', word: 'We', translation: 'nosotros' },
+            { id: 'q27-are', word: 'are', translation: 'son / están' },
+            {
+              id: 'q27-having',
+              word: 'having',
+              translation: 'estoy haciendo',
+            },
+            { id: 'q27-the', word: 'the', translation: 'el/la' },
+            { id: 'q27-house', word: 'house', translation: 'casa' },
+            { id: 'q27-painted', word: 'painted.', translation: 'pintado' },
+          ],
+          correctOrder: ['q27-we', 'q27-are', 'q27-having', 'q27-the', 'q27-house', 'q27-painted'],
+          sentenceTranslation: 'Estamos haciendo pintar la casa.',
+        },
+        {
+          id: 28,
+          tokens: [
+            { id: 'q28-i', word: 'I', translation: 'yo' },
+            { id: 'q28-had', word: 'had', translation: 'hice' },
+            { id: 'q28-the', word: 'the', translation: 'el/la' },
+            {
+              id: 'q28-mechanic',
+              word: 'mechanic',
+              translation: 'mecánico',
+            },
+            { id: 'q28-check', word: 'check', translation: 'revisara' },
+            { id: 'q28-the-2', word: 'the', translation: 'el/la' },
+            { id: 'q28-car', word: 'car.', translation: 'carro' },
+          ],
+          correctOrder: ['q28-i', 'q28-had', 'q28-the', 'q28-mechanic', 'q28-check', 'q28-the-2', 'q28-car'],
+          sentenceTranslation: 'Hice que el mecánico revisara el carro.',
+        },
+        {
+          id: 29,
+          tokens: [
+            { id: 'q29-he', word: 'He', translation: 'él' },
+            { id: 'q29-got', word: 'got', translation: 'hice' },
+            { id: 'q29-his', word: 'his', translation: 'su' },
+            { id: 'q29-brother', word: 'brother', translation: 'hermano' },
+            { id: 'q29-to', word: 'to', translation: 'a' },
+            { id: 'q29-help', word: 'help', translation: 'ayudar' },
+            { id: 'q29-him', word: 'him.', translation: 'lo' },
+          ],
+          correctOrder: ['q29-he', 'q29-got', 'q29-his', 'q29-brother', 'q29-to', 'q29-help', 'q29-him'],
+          sentenceTranslation: 'Logró que su hermano le ayudara.',
+        },
+        {
+          id: 30,
+          tokens: [
+            { id: 'q30-did', word: 'Did', translation: 'auxiliar' },
+            { id: 'q30-you', word: 'you', translation: 'tú' },
+            { id: 'q30-have', word: 'have', translation: 'tengo' },
+            { id: 'q30-your', word: 'your', translation: 'tu' },
+            { id: 'q30-hair', word: 'hair', translation: 'pelo' },
+            { id: 'q30-cut', word: 'cut?', translation: 'cortado' },
+          ],
+          correctOrder: ['q30-did', 'q30-you', 'q30-have', 'q30-your', 'q30-hair', 'q30-cut'],
+          sentenceTranslation: '¿Te cortaste el pelo?',
+        },
+      ],
+    },
+  ],
+};
+
+export default lessonB2015;

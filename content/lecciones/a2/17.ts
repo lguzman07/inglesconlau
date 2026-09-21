@@ -1,0 +1,366 @@
+import type { LessonContent } from '../types';
+
+const lessonA2017: LessonContent = {
+  level: 'a2',
+  number: 17,
+  title: 'Will: decisiones, ofrecimientos y promesas',
+  subtitle: 'Aprende a usar will para decisiones espontáneas, ofrecimientos, promesas y pedidos.',
+  videoTitle: 'Will: decisiones, ofrecimientos y promesas',
+  videoDescription: 'En este video verás will para decidir en el momento, ofrecer ayuda, prometer y pedir ayuda, y won’t para negarse.',
+  objective: 'Al terminar, podrás usar will para decisiones espontáneas, ofrecimientos, promesas y pedidos.',
+  exercises: [
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Will, shall o not',
+      instructions: 'Escribe will, shall o not para completar la oración.',
+      questions: [
+        {
+          id: 1,
+          before: [
+            { word: 'It’s', translation: 'es' },
+            { word: 'cold.', translation: 'frío' },
+            { word: 'I', translation: 'yo' },
+          ],
+          after: [
+            { word: 'close', translation: 'cierra' },
+            { word: 'the', translation: 'el/la' },
+            { word: 'window.', translation: 'ventana' },
+          ],
+          answer: 'will',
+          sentenceTranslation: 'Hace frío. Cerraré la ventana.',
+        },
+        {
+          id: 2,
+          before: [
+            { word: 'Don’t', translation: 'no' },
+            { word: 'worry.', translation: 'te preocupes' },
+            { word: 'I', translation: 'yo' },
+          ],
+          after: [
+            { word: 'help', translation: 'ayudar' },
+            { word: 'you.', translation: 'tú' },
+          ],
+          answer: 'will',
+          sentenceTranslation: 'No te preocupes. Te ayudaré.',
+        },
+        {
+          id: 3,
+          before: [
+            { word: 'I', translation: 'yo' },
+            { word: 'promise', translation: 'prometo' },
+            { word: 'I', translation: 'yo' },
+            { word: 'will', translation: 'auxiliar de futuro' },
+          ],
+          after: [
+            { word: 'tell', translation: 'decir' },
+            { word: 'anyone.', translation: 'nadie' },
+          ],
+          answer: 'not',
+          sentenceTranslation: 'Prometo que no le diré a nadie.',
+        },
+        {
+          id: 4,
+          before: [
+            { word: 'I', translation: 'yo' },
+          ],
+          after: [
+            { word: 'call', translation: 'llamar' },
+            { word: 'you', translation: 'tú' },
+            { word: 'tomorrow.', translation: 'mañana' },
+          ],
+          answer: 'will',
+          sentenceTranslation: 'Te llamaré mañana.',
+        },
+        {
+          id: 5,
+          before: [],
+          after: [
+            { word: 'you', translation: 'tú' },
+            { word: 'help', translation: 'ayudar' },
+            { word: 'me,', translation: 'me' },
+            { word: 'please?', translation: 'por favor' },
+          ],
+          answer: 'Will',
+          sentenceTranslation: '¿Me ayudas, por favor?',
+        },
+        {
+          id: 6,
+          before: [],
+          after: [
+            { word: 'I', translation: 'yo' },
+            { word: 'open', translation: 'abrir' },
+            { word: 'the', translation: 'el/la' },
+            { word: 'window?', translation: 'ventana' },
+          ],
+          answer: 'Shall',
+          sentenceTranslation: '¿Abro la ventana?',
+        },
+      ],
+    },
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Completa con el verbo',
+      instructions: 'Escribe el verbo en inglés. La pista en español aparece entre paréntesis.',
+      questions: [
+        {
+          id: 7,
+          before: [
+            { word: 'The', translation: 'el/la' },
+            { word: 'phone', translation: 'teléfono' },
+            { word: 'is', translation: 'es / está' },
+            { word: 'ringing.', translation: 'sonando' },
+            { word: 'I’ll', translation: 'yo (futuro)' },
+          ],
+          after: [
+            { word: 'it.', translation: 'eso' },
+          ],
+          answer: 'answer',
+          hint: 'contestar',
+          sentenceTranslation: 'El teléfono suena. Lo contesto.',
+        },
+        {
+          id: 8,
+          before: [
+            { word: 'I’m', translation: 'yo estoy' },
+            { word: 'hungry.', translation: 'hambre' },
+            { word: 'I’ll', translation: 'yo (futuro)' },
+          ],
+          after: [
+            { word: 'a', translation: 'un/una' },
+            { word: 'sandwich.', translation: 'sándwich' },
+          ],
+          answer: 'make',
+          hint: 'preparar',
+          sentenceTranslation: 'Tengo hambre. Prepararé un sándwich.',
+        },
+        {
+          id: 9,
+          before: [
+            { word: 'Let', translation: 'deja' },
+            { word: 'me', translation: 'me' },
+            { word: 'help.', translation: 'ayudar' },
+            { word: 'I’ll', translation: 'yo (futuro)' },
+          ],
+          after: [
+            { word: 'that', translation: 'eso' },
+            { word: 'for', translation: 'por' },
+            { word: 'you.', translation: 'tú' },
+          ],
+          answer: 'carry',
+          hint: 'llevar',
+          sentenceTranslation: 'Déjame ayudar. Te lo llevo.',
+        },
+        {
+          id: 10,
+          before: [
+            { word: 'Oh,', translation: 'ay' },
+            { word: 'I', translation: 'yo' },
+            { word: 'forgot', translation: 'olvidé' },
+            { word: 'my', translation: 'mis' },
+            { word: 'keys!', translation: 'llaves' },
+            { word: 'I’ll', translation: 'yo (futuro)' },
+          ],
+          after: [
+            { word: 'back.', translation: 'de vuelta' },
+          ],
+          answer: 'go',
+          hint: 'ir',
+          sentenceTranslation: '¡Olvidé mis llaves! Voy de vuelta.',
+        },
+      ],
+    },
+    {
+      type: 'listening-choice',
+      title: '¿Qué expresa will?',
+      instructions: 'Escucha la oración y decide si expresa una decisión, un ofrecimiento, una promesa o un pedido.',
+      questions: [
+        {
+          id: 11,
+          audioText: 'I’ll answer it.',
+          language: 'en',
+          prompt: '¿Qué expresa?',
+          options: [
+            { id: 'decision', text: 'Decisión en el momento' },
+            { id: 'offer', text: 'Ofrecimiento' },
+            { id: 'promise', text: 'Promesa' },
+            { id: 'request', text: 'Pedido' },
+          ],
+          correctOptionIds: ['decision'],
+          explanation: 'Decide en el momento de hablar.',
+        },
+        {
+          id: 12,
+          audioText: 'I’ll help you with your bags.',
+          language: 'en',
+          prompt: '¿Qué expresa?',
+          options: [
+            { id: 'decision', text: 'Decisión en el momento' },
+            { id: 'offer', text: 'Ofrecimiento' },
+            { id: 'promise', text: 'Promesa' },
+            { id: 'request', text: 'Pedido' },
+          ],
+          correctOptionIds: ['offer'],
+          explanation: 'Ofrece ayuda.',
+        },
+        {
+          id: 13,
+          audioText: 'I’ll call you tomorrow.',
+          language: 'en',
+          prompt: '¿Qué expresa?',
+          options: [
+            { id: 'decision', text: 'Decisión en el momento' },
+            { id: 'offer', text: 'Ofrecimiento' },
+            { id: 'promise', text: 'Promesa' },
+            { id: 'request', text: 'Pedido' },
+          ],
+          correctOptionIds: ['promise'],
+          explanation: 'Promete.',
+        },
+        {
+          id: 14,
+          audioText: 'Will you help me, please?',
+          language: 'en',
+          prompt: '¿Qué expresa?',
+          options: [
+            { id: 'decision', text: 'Decisión en el momento' },
+            { id: 'offer', text: 'Ofrecimiento' },
+            { id: 'promise', text: 'Promesa' },
+            { id: 'request', text: 'Pedido' },
+          ],
+          correctOptionIds: ['request'],
+          explanation: 'Pide ayuda.',
+        },
+        {
+          id: 15,
+          audioText: 'Shall I open the window?',
+          language: 'en',
+          prompt: '¿Qué expresa?',
+          options: [
+            { id: 'decision', text: 'Decisión en el momento' },
+            { id: 'offer', text: 'Ofrecimiento' },
+            { id: 'promise', text: 'Promesa' },
+            { id: 'request', text: 'Pedido' },
+          ],
+          correctOptionIds: ['offer'],
+          explanation: 'Ofrece hacer algo.',
+        },
+        {
+          id: 16,
+          audioText: 'I won’t tell anyone.',
+          language: 'en',
+          prompt: '¿Qué expresa?',
+          options: [
+            { id: 'decision', text: 'Decisión en el momento' },
+            { id: 'offer', text: 'Ofrecimiento' },
+            { id: 'promise', text: 'Promesa' },
+            { id: 'request', text: 'Pedido' },
+          ],
+          correctOptionIds: ['promise'],
+          explanation: 'Promete no decir.',
+        },
+      ],
+    },
+    {
+      type: 'drag-and-drop',
+      title: 'Ordena las palabras',
+      instructions: 'Arrastra las palabras para formar la oración correcta. Las opciones aparecen en orden aleatorio.',
+      questions: [
+        {
+          id: 17,
+          tokens: [
+            { id: 'q17-i', word: 'I', translation: 'yo' },
+            {
+              id: 'q17-will',
+              word: 'will',
+              translation: 'auxiliar de futuro',
+            },
+            { id: 'q17-help', word: 'help', translation: 'ayudar' },
+            { id: 'q17-you', word: 'you.', translation: 'tú' },
+          ],
+          correctOrder: ['q17-i', 'q17-will', 'q17-help', 'q17-you'],
+          sentenceTranslation: 'Te ayudaré.',
+        },
+        {
+          id: 18,
+          tokens: [
+            { id: 'q18-i', word: 'I', translation: 'yo' },
+            {
+              id: 'q18-will',
+              word: 'will',
+              translation: 'auxiliar de futuro',
+            },
+            { id: 'q18-call', word: 'call', translation: 'llamar' },
+            { id: 'q18-you', word: 'you', translation: 'tú' },
+            {
+              id: 'q18-tomorrow',
+              word: 'tomorrow.',
+              translation: 'mañana',
+            },
+          ],
+          correctOrder: ['q18-i', 'q18-will', 'q18-call', 'q18-you', 'q18-tomorrow'],
+          sentenceTranslation: 'Te llamaré mañana.',
+        },
+        {
+          id: 19,
+          tokens: [
+            { id: 'q19-i', word: 'I', translation: 'yo' },
+            { id: 'q19-wont', word: 'won’t', translation: 'no' },
+            { id: 'q19-tell', word: 'tell', translation: 'decir' },
+            { id: 'q19-anyone', word: 'anyone.', translation: 'nadie' },
+          ],
+          correctOrder: ['q19-i', 'q19-wont', 'q19-tell', 'q19-anyone'],
+          sentenceTranslation: 'No le diré a nadie.',
+        },
+        {
+          id: 20,
+          tokens: [
+            {
+              id: 'q20-will',
+              word: 'Will',
+              translation: 'auxiliar de futuro',
+            },
+            { id: 'q20-you', word: 'you', translation: 'tú' },
+            { id: 'q20-open', word: 'open', translation: 'abrir' },
+            { id: 'q20-the', word: 'the', translation: 'el/la' },
+            { id: 'q20-door', word: 'door?', translation: 'puerta' },
+          ],
+          correctOrder: ['q20-will', 'q20-you', 'q20-open', 'q20-the', 'q20-door'],
+          sentenceTranslation: '¿Abres la puerta?',
+        },
+        {
+          id: 21,
+          tokens: [
+            { id: 'q21-shall', word: 'Shall', translation: 'debo' },
+            { id: 'q21-i', word: 'I', translation: 'yo' },
+            { id: 'q21-open', word: 'open', translation: 'abrir' },
+            { id: 'q21-the', word: 'the', translation: 'el/la' },
+            { id: 'q21-window', word: 'window?', translation: 'ventana' },
+          ],
+          correctOrder: ['q21-shall', 'q21-i', 'q21-open', 'q21-the', 'q21-window'],
+          sentenceTranslation: '¿Abro la ventana?',
+        },
+        {
+          id: 22,
+          tokens: [
+            { id: 'q22-its', word: 'It’s', translation: 'es' },
+            { id: 'q22-cold', word: 'cold,', translation: 'frío' },
+            { id: 'q22-so', word: 'so', translation: 'así que' },
+            { id: 'q22-i', word: 'I', translation: 'yo' },
+            {
+              id: 'q22-will',
+              word: 'will',
+              translation: 'auxiliar de futuro',
+            },
+            { id: 'q22-close', word: 'close', translation: 'cierra' },
+            { id: 'q22-the', word: 'the', translation: 'el/la' },
+            { id: 'q22-window', word: 'window.', translation: 'ventana' },
+          ],
+          correctOrder: ['q22-its', 'q22-cold', 'q22-so', 'q22-i', 'q22-will', 'q22-close', 'q22-the', 'q22-window'],
+          sentenceTranslation: 'Hace frío, así que cerraré la ventana.',
+        },
+      ],
+    },
+  ],
+};
+
+export default lessonA2017;
