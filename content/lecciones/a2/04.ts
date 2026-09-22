@@ -8,6 +8,7 @@ const lessonA2004: LessonContent = {
   videoTitle: 'Past simple: verbos regulares, negativo y preguntas',
   videoDescription: 'En este video verás las reglas para añadir ED a los verbos regulares y cómo usar didn’t y did en negativos y preguntas.',
   objective: 'Al terminar, podrás hablar de acciones terminadas en el pasado con verbos regulares, y hacer oraciones negativas y preguntas.',
+  videoSrc: 'c83b5f04-724f-4721-9118-210e81c4952c',
   exercises: [
     {
       type: 'fill-in-the-blanks',
