@@ -1,0 +1,430 @@
+import type { LessonContent } from '../types';
+
+const lessonB2018: LessonContent = {
+  level: 'b2',
+  number: 18,
+  title: 'Gerundios e infinitivos complejos; participle clauses',
+  subtitle: 'Aprende gerundios e infinitivos perfectos y pasivos, y cláusulas participiales.',
+  videoTitle: 'Gerundios e infinitivos complejos; participle clauses',
+  videoDescription: 'En este video verás having done, to have done, being told, to be told, y las cláusulas participiales y reducidas.',
+  objective: 'Al terminar, podrás usar formas complejas del gerundio y del infinitivo, y cláusulas participiales.',
+  exercises: [
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Having, being o have',
+      instructions: 'Escribe having, being, have o be para completar la forma compleja.',
+      questions: [
+        {
+          id: 1,
+          before: [
+            { word: 'He', translation: 'él' },
+            { word: 'denied', translation: 'negó' },
+          ],
+          after: [
+            { word: 'seen', translation: 'visto' },
+            { word: 'her.', translation: 'su' },
+          ],
+          answer: 'having',
+          sentenceTranslation: 'Negó haberla visto.',
+        },
+        {
+          id: 2,
+          before: [
+            { word: 'I', translation: 'yo' },
+            { word: 'regret', translation: 'lamento' },
+            { word: 'not', translation: 'no' },
+          ],
+          after: [
+            { word: 'called.', translation: 'llamado' },
+          ],
+          answer: 'having',
+          sentenceTranslation: 'Lamento no haber llamado.',
+        },
+        {
+          id: 3,
+          before: [
+            { word: 'She', translation: 'ella' },
+            { word: 'seems', translation: 'parece' },
+            { word: 'to', translation: 'a' },
+          ],
+          after: [
+            { word: 'forgotten.', translation: 'olvidado' },
+          ],
+          answer: 'have',
+          sentenceTranslation: 'Parece que se ha olvidado.',
+        },
+        {
+          id: 4,
+          before: [
+            { word: 'He', translation: 'él' },
+            { word: 'hates', translation: 'odia' },
+          ],
+          after: [
+            { word: 'told', translation: 'dicho' },
+            { word: 'what', translation: 'qué' },
+            { word: 'to', translation: 'a' },
+            { word: 'do.', translation: 'gustan' },
+          ],
+          answer: 'being',
+          sentenceTranslation: 'Odia que le digan qué hacer.',
+        },
+        {
+          id: 5,
+          before: [
+            { word: 'I', translation: 'yo' },
+            { word: 'want', translation: 'quiero' },
+            { word: 'to', translation: 'a' },
+          ],
+          after: [
+            { word: 'paid', translation: 'pagado' },
+            { word: 'on', translation: 'el' },
+            { word: 'time.', translation: 'hora' },
+          ],
+          answer: 'be',
+          sentenceTranslation: 'Quiero que me paguen a tiempo.',
+        },
+        {
+          id: 6,
+          before: [
+            { word: 'After', translation: 'después de' },
+          ],
+          after: [
+            { word: 'eaten,', translation: 'comido' },
+            { word: 'we', translation: 'nosotros' },
+            { word: 'left.', translation: 'izquierda' },
+          ],
+          answer: 'having',
+          sentenceTranslation: 'Después de haber comido, nos fuimos.',
+        },
+        {
+          id: 7,
+          before: [
+            { word: 'It', translation: 'eso' },
+            { word: 'was', translation: 'fue' },
+            { word: 'nice', translation: 'agradable' },
+            { word: 'to', translation: 'a' },
+          ],
+          after: [
+            { word: 'seen', translation: 'visto' },
+            { word: 'you.', translation: 'tú' },
+          ],
+          answer: 'have',
+          sentenceTranslation: 'Fue agradable haberte visto.',
+        },
+        {
+          id: 8,
+          before: [
+            { word: 'She', translation: 'ella' },
+            { word: 'avoided', translation: 'evitó' },
+          ],
+          after: [
+            { word: 'seen.', translation: 'visto' },
+          ],
+          answer: 'being',
+          sentenceTranslation: 'Evitó que la vieran.',
+        },
+      ],
+    },
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Cláusulas participiales',
+      instructions: 'Escribe el participio o la forma con ING del verbo entre paréntesis.',
+      questions: [
+        {
+          id: 9,
+          before: [],
+          after: [
+            { word: 'down', translation: 'por' },
+            { word: 'the', translation: 'el/la' },
+            { word: 'street,', translation: 'calle' },
+            { word: 'I', translation: 'yo' },
+            { word: 'saw', translation: 'vi' },
+            { word: 'Tom.', translation: 'Tom' },
+          ],
+          answer: 'Walking',
+          hint: 'walk',
+          sentenceTranslation: 'Caminando por la calle, vi a Tom.',
+        },
+        {
+          id: 10,
+          before: [],
+          after: [
+            { word: 'tired,', translation: 'cansada' },
+            { word: 'she', translation: 'ella' },
+            { word: 'went', translation: 'se fue' },
+            { word: 'to', translation: 'a' },
+            { word: 'bed.', translation: 'cama' },
+          ],
+          answer: 'Feeling',
+          hint: 'feel',
+          sentenceTranslation: 'Sintiéndose cansada, se fue a la cama.',
+        },
+        {
+          id: 11,
+          before: [],
+          after: [
+            { word: 'finished', translation: 'terminado' },
+            { word: 'the', translation: 'el/la' },
+            { word: 'report,', translation: 'informe' },
+            { word: 'she', translation: 'ella' },
+            { word: 'left.', translation: 'izquierda' },
+          ],
+          answer: 'Having',
+          sentenceTranslation: 'Habiendo terminado el informe, se fue.',
+        },
+        {
+          id: 12,
+          before: [],
+          after: [
+            { word: 'in', translation: 'en' },
+            { word: '1950,', translation: '1950' },
+            { word: 'the', translation: 'el/la' },
+            { word: 'book', translation: 'reservar' },
+            { word: 'is', translation: 'es / está' },
+            { word: 'famous.', translation: 'famoso' },
+          ],
+          answer: 'Written',
+          hint: 'write',
+          sentenceTranslation: 'Escrito en 1950, el libro es famoso.',
+        },
+        {
+          id: 13,
+          before: [
+            { word: 'The', translation: 'el/la' },
+            { word: 'man', translation: 'hombre' },
+          ],
+          after: [
+            { word: 'there', translation: 'allí' },
+            { word: 'is', translation: 'es / está' },
+            { word: 'my', translation: 'mi' },
+            { word: 'uncle.', translation: 'tío' },
+          ],
+          answer: 'standing',
+          hint: 'stand',
+          sentenceTranslation: 'El hombre que está parado allí es mi tío.',
+        },
+        {
+          id: 14,
+          before: [
+            { word: 'The', translation: 'el/la' },
+            { word: 'book', translation: 'reservar' },
+          ],
+          after: [
+            { word: 'by', translation: 'en' },
+            { word: 'Orwell', translation: 'Orwell' },
+            { word: 'is', translation: 'es / está' },
+            { word: 'famous.', translation: 'famoso' },
+          ],
+          answer: 'written',
+          hint: 'write',
+          sentenceTranslation: 'El libro escrito por Orwell es famoso.',
+        },
+      ],
+    },
+    {
+      type: 'drag-and-drop',
+      title: 'Ordena las palabras',
+      instructions: 'Arrastra las palabras para formar la oración correcta. Las opciones aparecen en orden aleatorio.',
+      questions: [
+        {
+          id: 15,
+          tokens: [
+            { id: 'q15-he', word: 'He', translation: 'él' },
+            { id: 'q15-denied', word: 'denied', translation: 'negó' },
+            { id: 'q15-having', word: 'having', translation: 'haber' },
+            { id: 'q15-seen', word: 'seen', translation: 'visto' },
+            { id: 'q15-her', word: 'her.', translation: 'su' },
+          ],
+          correctOrder: ['q15-he', 'q15-denied', 'q15-having', 'q15-seen', 'q15-her'],
+          sentenceTranslation: 'Negó haberla visto.',
+        },
+        {
+          id: 16,
+          tokens: [
+            { id: 'q16-she', word: 'She', translation: 'ella' },
+            { id: 'q16-seems', word: 'seems', translation: 'parece' },
+            { id: 'q16-to', word: 'to', translation: 'a' },
+            { id: 'q16-have', word: 'have', translation: 'tengo' },
+            {
+              id: 'q16-forgotten',
+              word: 'forgotten.',
+              translation: 'olvidado',
+            },
+          ],
+          correctOrder: ['q16-she', 'q16-seems', 'q16-to', 'q16-have', 'q16-forgotten'],
+          sentenceTranslation: 'Parece que se ha olvidado.',
+        },
+        {
+          id: 17,
+          tokens: [
+            { id: 'q17-walking', word: 'Walking', translation: 'caminar' },
+            { id: 'q17-down', word: 'down', translation: 'por' },
+            { id: 'q17-the', word: 'the', translation: 'el/la' },
+            { id: 'q17-street', word: 'street,', translation: 'calle' },
+            { id: 'q17-i', word: 'I', translation: 'yo' },
+            { id: 'q17-saw', word: 'saw', translation: 'vi' },
+            { id: 'q17-tom', word: 'Tom.', translation: 'Tom' },
+          ],
+          correctOrder: ['q17-walking', 'q17-down', 'q17-the', 'q17-street', 'q17-i', 'q17-saw', 'q17-tom'],
+          sentenceTranslation: 'Caminando por la calle, vi a Tom.',
+        },
+        {
+          id: 18,
+          tokens: [
+            { id: 'q18-having', word: 'Having', translation: 'haber' },
+            {
+              id: 'q18-finished',
+              word: 'finished',
+              translation: 'terminado',
+            },
+            { id: 'q18-the', word: 'the', translation: 'el/la' },
+            { id: 'q18-report', word: 'report,', translation: 'informe' },
+            { id: 'q18-she', word: 'she', translation: 'ella' },
+            { id: 'q18-left', word: 'left.', translation: 'izquierda' },
+          ],
+          correctOrder: ['q18-having', 'q18-finished', 'q18-the', 'q18-report', 'q18-she', 'q18-left'],
+          sentenceTranslation: 'Habiendo terminado el informe, se fue.',
+        },
+        {
+          id: 19,
+          tokens: [
+            { id: 'q19-the', word: 'The', translation: 'el/la' },
+            { id: 'q19-man', word: 'man', translation: 'hombre' },
+            { id: 'q19-standing', word: 'standing', translation: 'parado' },
+            { id: 'q19-there', word: 'there', translation: 'allí' },
+            { id: 'q19-is', word: 'is', translation: 'es / está' },
+            { id: 'q19-my', word: 'my', translation: 'mi' },
+            { id: 'q19-uncle', word: 'uncle.', translation: 'tío' },
+          ],
+          correctOrder: ['q19-the', 'q19-man', 'q19-standing', 'q19-there', 'q19-is', 'q19-my', 'q19-uncle'],
+          sentenceTranslation: 'El hombre parado allí es mi tío.',
+        },
+        {
+          id: 20,
+          tokens: [
+            { id: 'q20-he', word: 'He', translation: 'él' },
+            { id: 'q20-hates', word: 'hates', translation: 'odia' },
+            { id: 'q20-being', word: 'being', translation: 'ser' },
+            { id: 'q20-told', word: 'told', translation: 'dicho' },
+            { id: 'q20-what', word: 'what', translation: 'qué' },
+            { id: 'q20-to', word: 'to', translation: 'a' },
+            { id: 'q20-do', word: 'do.', translation: 'gustan' },
+          ],
+          correctOrder: ['q20-he', 'q20-hates', 'q20-being', 'q20-told', 'q20-what', 'q20-to', 'q20-do'],
+          sentenceTranslation: 'Odia que le digan qué hacer.',
+        },
+      ],
+    },
+    {
+      type: 'listening-choice',
+      title: '¿Qué forma es?',
+      instructions: 'Escucha la oración e identifica la forma que se usa.',
+      questions: [
+        {
+          id: 21,
+          audioText: 'He denied having seen her.',
+          language: 'en',
+          prompt: '¿Qué forma escuchaste?',
+          options: [
+            { id: 'pg', text: 'Gerundio perfecto (having + participio)' },
+            {
+              id: 'pi',
+              text: 'Infinitivo perfecto (to have + participio)',
+            },
+            { id: 'ps', text: 'Gerundio pasivo (being + participio)' },
+            { id: 'pc', text: 'Cláusula participial' },
+          ],
+          correctOptionIds: ['pg'],
+          explanation: 'having seen = gerundio perfecto.',
+        },
+        {
+          id: 22,
+          audioText: 'She seems to have forgotten.',
+          language: 'en',
+          prompt: '¿Qué forma escuchaste?',
+          options: [
+            { id: 'pg', text: 'Gerundio perfecto (having + participio)' },
+            {
+              id: 'pi',
+              text: 'Infinitivo perfecto (to have + participio)',
+            },
+            { id: 'ps', text: 'Gerundio pasivo (being + participio)' },
+            { id: 'pc', text: 'Cláusula participial' },
+          ],
+          correctOptionIds: ['pi'],
+          explanation: 'to have forgotten = infinitivo perfecto.',
+        },
+        {
+          id: 23,
+          audioText: 'He hates being told what to do.',
+          language: 'en',
+          prompt: '¿Qué forma escuchaste?',
+          options: [
+            { id: 'pg', text: 'Gerundio perfecto (having + participio)' },
+            {
+              id: 'pi',
+              text: 'Infinitivo perfecto (to have + participio)',
+            },
+            { id: 'ps', text: 'Gerundio pasivo (being + participio)' },
+            { id: 'pc', text: 'Cláusula participial' },
+          ],
+          correctOptionIds: ['ps'],
+          explanation: 'being told = gerundio pasivo.',
+        },
+        {
+          id: 24,
+          audioText: 'Walking down the street, I saw Tom.',
+          language: 'en',
+          prompt: '¿Qué forma escuchaste?',
+          options: [
+            { id: 'pg', text: 'Gerundio perfecto (having + participio)' },
+            {
+              id: 'pi',
+              text: 'Infinitivo perfecto (to have + participio)',
+            },
+            { id: 'ps', text: 'Gerundio pasivo (being + participio)' },
+            { id: 'pc', text: 'Cláusula participial' },
+          ],
+          correctOptionIds: ['pc'],
+          explanation: 'Walking... = cláusula participial.',
+        },
+        {
+          id: 25,
+          audioText: 'I regret not having called.',
+          language: 'en',
+          prompt: '¿Qué forma escuchaste?',
+          options: [
+            { id: 'pg', text: 'Gerundio perfecto (having + participio)' },
+            {
+              id: 'pi',
+              text: 'Infinitivo perfecto (to have + participio)',
+            },
+            { id: 'ps', text: 'Gerundio pasivo (being + participio)' },
+            { id: 'pc', text: 'Cláusula participial' },
+          ],
+          correctOptionIds: ['pg'],
+          explanation: 'having called = gerundio perfecto.',
+        },
+        {
+          id: 26,
+          audioText: 'Written in 1950, the book is famous.',
+          language: 'en',
+          prompt: '¿Qué forma escuchaste?',
+          options: [
+            { id: 'pg', text: 'Gerundio perfecto (having + participio)' },
+            {
+              id: 'pi',
+              text: 'Infinitivo perfecto (to have + participio)',
+            },
+            { id: 'ps', text: 'Gerundio pasivo (being + participio)' },
+            { id: 'pc', text: 'Cláusula participial' },
+          ],
+          correctOptionIds: ['pc'],
+          explanation: 'Written... = cláusula participial pasiva.',
+        },
+      ],
+    },
+  ],
+};
+
+export default lessonB2018;
