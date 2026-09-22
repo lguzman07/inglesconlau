@@ -52,26 +52,32 @@ import lesson40 from './a2/17';
 import lesson41 from './a2/18';
 import lesson42 from './a2/19';
 import lesson43 from './a2/20';
-import lesson44 from './b2/01';
-import lesson45 from './b2/02';
-import lesson46 from './b2/03';
-import lesson47 from './b2/04';
-import lesson48 from './b2/05';
-import lesson49 from './b2/06';
-import lesson50 from './b2/07';
-import lesson51 from './b2/08';
-import lesson52 from './b2/09';
-import lesson53 from './b2/10';
-import lesson54 from './b2/11';
-import lesson55 from './b2/12';
-import lesson56 from './b2/13';
-import lesson57 from './b2/14';
-import lesson58 from './b2/15';
-import lesson59 from './b2/16';
-import lesson60 from './b2/17';
-import lesson61 from './b2/18';
-import lesson62 from './b2/19';
-import lesson63 from './b2/20';
+import lesson44 from './a2/21';
+import lesson45 from './a2/22';
+import lesson46 from './a2/23';
+import lesson47 from './b2/01';
+import lesson48 from './b2/02';
+import lesson49 from './b2/03';
+import lesson50 from './b2/04';
+import lesson51 from './b2/05';
+import lesson52 from './b2/06';
+import lesson53 from './b2/07';
+import lesson54 from './b2/08';
+import lesson55 from './b2/09';
+import lesson56 from './b2/10';
+import lesson57 from './b2/11';
+import lesson58 from './b2/12';
+import lesson59 from './b2/13';
+import lesson60 from './b2/14';
+import lesson61 from './b2/15';
+import lesson62 from './b2/16';
+import lesson63 from './b2/17';
+import lesson64 from './b2/18';
+import lesson65 from './b2/19';
+import lesson66 from './b2/20';
+import lesson67 from './b2/21';
+import lesson68 from './b2/22';
+import lesson69 from './b2/23';
 
 export const generatedLessons: Record<
   string,
@@ -120,24 +126,30 @@ export const generatedLessons: Record<
   'a2/18': lesson41,
   'a2/19': lesson42,
   'a2/20': lesson43,
-  'b2/1': lesson44,
-  'b2/2': lesson45,
-  'b2/3': lesson46,
-  'b2/4': lesson47,
-  'b2/5': lesson48,
-  'b2/6': lesson49,
-  'b2/7': lesson50,
-  'b2/8': lesson51,
-  'b2/9': lesson52,
-  'b2/10': lesson53,
-  'b2/11': lesson54,
-  'b2/12': lesson55,
-  'b2/13': lesson56,
-  'b2/14': lesson57,
-  'b2/15': lesson58,
-  'b2/16': lesson59,
-  'b2/17': lesson60,
-  'b2/18': lesson61,
-  'b2/19': lesson62,
-  'b2/20': lesson63,
+  'a2/21': lesson44,
+  'a2/22': lesson45,
+  'a2/23': lesson46,
+  'b2/1': lesson47,
+  'b2/2': lesson48,
+  'b2/3': lesson49,
+  'b2/4': lesson50,
+  'b2/5': lesson51,
+  'b2/6': lesson52,
+  'b2/7': lesson53,
+  'b2/8': lesson54,
+  'b2/9': lesson55,
+  'b2/10': lesson56,
+  'b2/11': lesson57,
+  'b2/12': lesson58,
+  'b2/13': lesson59,
+  'b2/14': lesson60,
+  'b2/15': lesson61,
+  'b2/16': lesson62,
+  'b2/17': lesson63,
+  'b2/18': lesson64,
+  'b2/19': lesson65,
+  'b2/20': lesson66,
+  'b2/21': lesson67,
+  'b2/22': lesson68,
+  'b2/23': lesson69,
 };

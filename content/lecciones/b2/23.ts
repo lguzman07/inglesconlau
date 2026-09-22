@@ -1,0 +1,345 @@
+import type { LessonContent } from '../types';
+
+const lessonB2023: LessonContent = {
+  level: 'b2',
+  number: 23,
+  title: 'Conectores para estructurar argumentos',
+  subtitle: 'Aprende a introducir, añadir, ejemplificar y concluir un argumento con los conectores adecuados.',
+  videoTitle: 'Conectores para estructurar argumentos',
+  videoDescription: 'En este video verás conectores para introducir puntos, añadir información, dar ejemplos, expresar concesión, causa y propósito, y concluir.',
+  objective: 'Al terminar, podrás estructurar un argumento con conectores de introducción, adición, ejemplo, concesión, causa y conclusión.',
+  exercises: [
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Introducir y añadir',
+      instructions: 'Escribe el conector que falta: firstly, to begin with, what is more o besides.',
+      questions: [
+        {
+          id: 1,
+          before: [],
+          after: [
+            { word: 'the', translation: 'el/la' },
+            { word: 'cost', translation: 'costo' },
+            { word: 'is', translation: 'está' },
+            { word: 'low.', translation: 'bajo' },
+          ],
+          answer: 'Firstly',
+          sentenceTranslation: 'Primero, el costo es bajo.',
+        },
+        {
+          id: 2,
+          before: [],
+          after: [
+            { word: 'begin', translation: 'empezar' },
+            { word: 'with,', translation: 'con' },
+            { word: 'it', translation: 'eso' },
+            { word: 'is', translation: 'está' },
+            { word: 'convenient.', translation: 'conveniente' },
+          ],
+          answer: 'To',
+          sentenceTranslation: 'Para empezar, es conveniente.',
+        },
+        {
+          id: 3,
+          before: [],
+          after: [
+            { word: 'is', translation: 'está' },
+            { word: 'more,', translation: 'más' },
+            { word: 'it', translation: 'eso' },
+            { word: 'reduces', translation: 'reduce' },
+            { word: 'pollution.', translation: 'contaminación' },
+          ],
+          answer: 'What',
+          sentenceTranslation: 'Es más, reduce la contaminación.',
+        },
+        {
+          id: 4,
+          before: [],
+          after: [
+            { word: 'it', translation: 'eso' },
+            { word: 'creates', translation: 'crea' },
+            { word: 'jobs.', translation: 'empleos' },
+          ],
+          answer: 'Besides',
+          sentenceTranslation: 'Además, crea empleos.',
+        },
+      ],
+    },
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Ejemplos, concesión y causa',
+      instructions: 'Escribe la palabra que falta: instance, such, although, despite o because.',
+      questions: [
+        {
+          id: 5,
+          before: [
+            { word: 'For', translation: 'durante' },
+          ],
+          after: [
+            { word: 'remote', translation: 'remoto' },
+            { word: 'work', translation: 'trabajo' },
+            { word: 'saves', translation: 'ahorra' },
+            { word: 'time.', translation: 'hora' },
+          ],
+          answer: 'instance',
+          sentenceTranslation: 'Por ejemplo, el trabajo remoto ahorra tiempo.',
+        },
+        {
+          id: 6,
+          before: [
+            { word: 'Many', translation: 'muchas' },
+            { word: 'cities,', translation: 'ciudades' },
+          ],
+          after: [
+            { word: 'as', translation: 'como' },
+            { word: 'Paris,', translation: 'París' },
+            { word: 'ban', translation: 'prohíben' },
+            { word: 'cars.', translation: 'carros' },
+          ],
+          answer: 'such',
+          sentenceTranslation: 'Muchas ciudades, como París, prohíben los carros.',
+        },
+        {
+          id: 7,
+          before: [],
+          after: [
+            { word: 'it', translation: 'eso' },
+            { word: 'is', translation: 'está' },
+            { word: 'expensive,', translation: 'caro' },
+            { word: 'it', translation: 'eso' },
+            { word: 'is', translation: 'está' },
+            { word: 'worth', translation: 'vale la pena' },
+            { word: 'it.', translation: 'eso' },
+          ],
+          answer: 'Although',
+          sentenceTranslation: 'Aunque es caro, vale la pena.',
+        },
+        {
+          id: 8,
+          before: [],
+          after: [
+            { word: 'the', translation: 'el/la' },
+            { word: 'cost,', translation: 'costo' },
+            { word: 'we', translation: 'nosotros' },
+            { word: 'bought', translation: 'compramos' },
+            { word: 'it.', translation: 'eso' },
+          ],
+          answer: 'Despite',
+          sentenceTranslation: 'A pesar del costo, lo compramos.',
+        },
+        {
+          id: 9,
+          before: [
+            { word: 'The', translation: 'el/la' },
+            { word: 'event', translation: 'evento' },
+            { word: 'was', translation: 'estaba' },
+            { word: 'cancelled', translation: 'cancelado' },
+          ],
+          after: [
+            { word: 'to', translation: 'a' },
+            { word: 'the', translation: 'el/la' },
+            { word: 'rain.', translation: 'lluvia' },
+          ],
+          answer: 'due',
+          sentenceTranslation: 'El evento fue cancelado debido a la lluvia.',
+        },
+        {
+          id: 10,
+          before: [
+            { word: 'He', translation: 'él' },
+            { word: 'left', translation: 'nos fuimos' },
+            { word: 'early', translation: 'temprano' },
+          ],
+          after: [
+            { word: 'order', translation: 'pedido' },
+            { word: 'to', translation: 'a' },
+            { word: 'avoid', translation: 'evitar' },
+            { word: 'traffic.', translation: 'tráfico' },
+          ],
+          answer: 'in',
+          sentenceTranslation: 'Se fue temprano para evitar el tráfico.',
+        },
+      ],
+    },
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Concluir',
+      instructions: 'Escribe la palabra que falta: balance, considered, overall o ultimately.',
+      questions: [
+        {
+          id: 11,
+          before: [
+            { word: 'On', translation: 'puesto' },
+          ],
+          after: [
+            { word: 'the', translation: 'el/la' },
+            { word: 'advantages', translation: 'ventajas' },
+            { word: 'outweigh', translation: 'superan' },
+            { word: 'the', translation: 'el/la' },
+            { word: 'disadvantages.', translation: 'desventajas' },
+          ],
+          answer: 'balance',
+          sentenceTranslation: 'En balance, las ventajas superan las desventajas.',
+        },
+        {
+          id: 12,
+          before: [
+            { word: 'All', translation: 'todo' },
+            { word: 'things', translation: 'cosas' },
+          ],
+          after: [
+            { word: 'it', translation: 'eso' },
+            { word: 'is', translation: 'está' },
+            { word: 'a', translation: 'un/una' },
+            { word: 'good', translation: 'bueno' },
+            { word: 'plan.', translation: 'plan' },
+          ],
+          answer: 'considered',
+          sentenceTranslation: 'Considerándolo todo, es un buen plan.',
+        },
+        {
+          id: 13,
+          before: [],
+          after: [
+            { word: 'the', translation: 'el/la' },
+            { word: 'results', translation: 'resultados' },
+            { word: 'are', translation: 'son' },
+            { word: 'positive.', translation: 'positivos' },
+          ],
+          answer: 'Overall',
+          sentenceTranslation: 'En general, los resultados son positivos.',
+        },
+        {
+          id: 14,
+          before: [],
+          after: [
+            { word: 'the', translation: 'el/la' },
+            { word: 'choice', translation: 'decisión' },
+            { word: 'is', translation: 'está' },
+            { word: 'yours.', translation: 'tuya' },
+          ],
+          answer: 'Ultimately',
+          sentenceTranslation: 'En última instancia, la decisión es tuya.',
+        },
+      ],
+    },
+    {
+      type: 'drag-and-drop',
+      title: 'Ordena las palabras',
+      instructions: 'Arrastra las palabras para formar la oración correcta. Las opciones aparecen en orden aleatorio.',
+      questions: [
+        {
+          id: 15,
+          tokens: [
+            { id: 'q15-firstly', word: 'Firstly,', translation: 'primero' },
+            { id: 'q15-the', word: 'the', translation: 'el/la' },
+            { id: 'q15-cost', word: 'cost', translation: 'costo' },
+            { id: 'q15-is', word: 'is', translation: 'está' },
+            { id: 'q15-low', word: 'low.', translation: 'bajo' },
+          ],
+          correctOrder: ['q15-firstly', 'q15-the', 'q15-cost', 'q15-is', 'q15-low'],
+          sentenceTranslation: 'Primero, el costo es bajo.',
+        },
+        {
+          id: 16,
+          tokens: [
+            { id: 'q16-for', word: 'For', translation: 'durante' },
+            {
+              id: 'q16-instance',
+              word: 'instance,',
+              translation: 'ejemplo',
+            },
+            { id: 'q16-remote', word: 'remote', translation: 'remoto' },
+            { id: 'q16-work', word: 'work', translation: 'trabajo' },
+            { id: 'q16-saves', word: 'saves', translation: 'ahorra' },
+            { id: 'q16-time', word: 'time.', translation: 'hora' },
+          ],
+          correctOrder: ['q16-for', 'q16-instance', 'q16-remote', 'q16-work', 'q16-saves', 'q16-time'],
+          sentenceTranslation: 'Por ejemplo, el trabajo remoto ahorra tiempo.',
+        },
+        {
+          id: 17,
+          tokens: [
+            { id: 'q17-although', word: 'Although', translation: 'aunque' },
+            { id: 'q17-it', word: 'it', translation: 'eso' },
+            { id: 'q17-is', word: 'is', translation: 'está' },
+            {
+              id: 'q17-expensive',
+              word: 'expensive,',
+              translation: 'caro',
+            },
+            { id: 'q17-it-2', word: 'it', translation: 'eso' },
+            { id: 'q17-is-2', word: 'is', translation: 'está' },
+            { id: 'q17-worth', word: 'worth', translation: 'vale la pena' },
+            { id: 'q17-it-3', word: 'it.', translation: 'eso' },
+          ],
+          correctOrder: ['q17-although', 'q17-it', 'q17-is', 'q17-expensive', 'q17-it-2', 'q17-is-2', 'q17-worth', 'q17-it-3'],
+          sentenceTranslation: 'Aunque es caro, vale la pena.',
+        },
+        {
+          id: 18,
+          tokens: [
+            { id: 'q18-the', word: 'The', translation: 'el/la' },
+            { id: 'q18-event', word: 'event', translation: 'evento' },
+            { id: 'q18-was', word: 'was', translation: 'estaba' },
+            {
+              id: 'q18-cancelled',
+              word: 'cancelled',
+              translation: 'cancelado',
+            },
+            { id: 'q18-due', word: 'due', translation: 'debido' },
+            { id: 'q18-to', word: 'to', translation: 'a' },
+            { id: 'q18-the-2', word: 'the', translation: 'el/la' },
+            { id: 'q18-rain', word: 'rain.', translation: 'lluvia' },
+          ],
+          correctOrder: ['q18-the', 'q18-event', 'q18-was', 'q18-cancelled', 'q18-due', 'q18-to', 'q18-the-2', 'q18-rain'],
+          sentenceTranslation: 'El evento fue cancelado debido a la lluvia.',
+        },
+        {
+          id: 19,
+          tokens: [
+            { id: 'q19-on', word: 'On', translation: 'puesto' },
+            {
+              id: 'q19-balance',
+              word: 'balance,',
+              translation: 'en balance',
+            },
+            { id: 'q19-it', word: 'it', translation: 'eso' },
+            { id: 'q19-is', word: 'is', translation: 'está' },
+            { id: 'q19-a', word: 'a', translation: 'un/una' },
+            { id: 'q19-good', word: 'good', translation: 'bueno' },
+            { id: 'q19-plan', word: 'plan.', translation: 'plan' },
+          ],
+          correctOrder: ['q19-on', 'q19-balance', 'q19-it', 'q19-is', 'q19-a', 'q19-good', 'q19-plan'],
+          sentenceTranslation: 'En balance, es un buen plan.',
+        },
+        {
+          id: 20,
+          tokens: [
+            {
+              id: 'q20-overall',
+              word: 'Overall,',
+              translation: 'en general',
+            },
+            { id: 'q20-the', word: 'the', translation: 'el/la' },
+            {
+              id: 'q20-results',
+              word: 'results',
+              translation: 'resultados',
+            },
+            { id: 'q20-are', word: 'are', translation: 'son' },
+            {
+              id: 'q20-positive',
+              word: 'positive.',
+              translation: 'positivos',
+            },
+          ],
+          correctOrder: ['q20-overall', 'q20-the', 'q20-results', 'q20-are', 'q20-positive'],
+          sentenceTranslation: 'En general, los resultados son positivos.',
+        },
+      ],
+    },
+  ],
+};
+
+export default lessonB2023;

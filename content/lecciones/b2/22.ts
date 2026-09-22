@@ -1,0 +1,376 @@
+import type { LessonContent } from '../types';
+
+const lessonB2022: LessonContent = {
+  level: 'b2',
+  number: 22,
+  title: 'Discourse markers avanzados',
+  subtitle: 'Aprende furthermore, moreover, nevertheless, on the other hand, in contrast, consequently y therefore.',
+  videoTitle: 'Discourse markers avanzados',
+  videoDescription: 'En este video verás marcadores de adición, contraste y resultado, y cómo puntuarlos correctamente.',
+  objective: 'Al terminar, podrás conectar ideas con marcadores de adición, contraste y resultado.',
+  exercises: [
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Adición o contraste',
+      instructions: 'Escribe el marcador que falta: furthermore, however, nevertheless u on the other hand.',
+      questions: [
+        {
+          id: 1,
+          before: [
+            { word: 'The', translation: 'el/la' },
+            { word: 'plan', translation: 'plan' },
+            { word: 'is', translation: 'está' },
+            { word: 'cheap.', translation: 'barato' },
+          ],
+          after: [
+            { word: 'it', translation: 'eso' },
+            { word: 'is', translation: 'está' },
+            { word: 'fast.', translation: 'rápido' },
+          ],
+          answer: 'Furthermore',
+          sentenceTranslation: 'Además, es rápido.',
+        },
+        {
+          id: 2,
+          before: [
+            { word: 'It', translation: 'eso' },
+            { word: 'was', translation: 'estaba' },
+            { word: 'raining.', translation: 'lloviendo' },
+          ],
+          after: [
+            { word: 'we', translation: 'nosotros' },
+            { word: 'went', translation: 'salimos' },
+            { word: 'out.', translation: 'fuera' },
+          ],
+          answer: 'Nevertheless',
+          sentenceTranslation: 'Sin embargo, salimos.',
+        },
+        {
+          id: 3,
+          before: [
+            { word: 'The', translation: 'el/la' },
+            { word: 'test', translation: 'examen' },
+            { word: 'was', translation: 'estaba' },
+            { word: 'hard.', translation: 'difícil' },
+          ],
+          after: [
+            { word: 'most', translation: 'la mayoría' },
+            { word: 'passed.', translation: 'aprobó' },
+          ],
+          answer: 'However',
+          sentenceTranslation: 'Sin embargo, la mayoría aprobó.',
+        },
+        {
+          id: 4,
+          before: [
+            { word: 'Cities', translation: 'ciudades' },
+            { word: 'are', translation: 'son' },
+            { word: 'convenient.', translation: 'conveniente' },
+          ],
+          after: [
+            { word: 'the', translation: 'el/la' },
+            { word: 'other', translation: 'otro' },
+            { word: 'hand,', translation: 'lado' },
+            { word: 'they', translation: 'ellos' },
+            { word: 'are', translation: 'son' },
+            { word: 'noisy.', translation: 'ruidosas' },
+          ],
+          answer: 'On',
+          sentenceTranslation: 'Por otro lado, son ruidosas.',
+        },
+        {
+          id: 5,
+          before: [
+            { word: 'She', translation: 'ella' },
+            { word: 'likes', translation: 'prefiere' },
+            { word: 'cities,', translation: 'ciudades' },
+          ],
+          after: [
+            { word: 'he', translation: 'él' },
+            { word: 'prefers', translation: 'prefiere' },
+            { word: 'villages.', translation: 'pueblos' },
+          ],
+          answer: 'whereas',
+          sentenceTranslation: 'Ella prefiere las ciudades, mientras que él prefiere los pueblos.',
+        },
+      ],
+    },
+    {
+      type: 'fill-in-the-blanks',
+      title: 'Resultado',
+      instructions: 'Escribe el marcador que falta: consequently, therefore o as a result.',
+      questions: [
+        {
+          id: 6,
+          before: [
+            { word: 'Prices', translation: 'precios' },
+            { word: 'rose.', translation: 'subieron' },
+          ],
+          after: [
+            { word: 'demand', translation: 'la demanda' },
+            { word: 'fell.', translation: 'cayó' },
+          ],
+          answer: 'Consequently',
+          sentenceTranslation: 'Por consiguiente, la demanda cayó.',
+        },
+        {
+          id: 7,
+          before: [
+            { word: 'He', translation: 'él' },
+            { word: 'was', translation: 'estaba' },
+            { word: 'ill;', translation: 'enfermo' },
+          ],
+          after: [
+            { word: 'he', translation: 'él' },
+            { word: 'stayed', translation: 'se quedó' },
+            { word: 'home.', translation: 'casa' },
+          ],
+          answer: 'therefore',
+          sentenceTranslation: 'Por lo tanto, se quedó en casa.',
+        },
+        {
+          id: 8,
+          before: [],
+          after: [
+            { word: 'a', translation: 'un/una' },
+            { word: 'result,', translation: 'resultado' },
+            { word: 'many', translation: 'muchas' },
+            { word: 'people', translation: 'personas' },
+            { word: 'lost', translation: 'perdieron' },
+            { word: 'jobs.', translation: 'empleos' },
+          ],
+          answer: 'As',
+          sentenceTranslation: 'Como resultado, muchas personas perdieron sus empleos.',
+        },
+        {
+          id: 9,
+          before: [
+            { word: 'Sales', translation: 'ventas' },
+            { word: 'fell.', translation: 'cayó' },
+          ],
+          after: [
+            { word: 'staff', translation: 'personal' },
+            { word: 'were', translation: 'estaban' },
+            { word: 'reduced.', translation: 'redujo' },
+          ],
+          answer: 'Consequently',
+          sentenceTranslation: 'Por consiguiente, se redujo el personal.',
+        },
+      ],
+    },
+    {
+      type: 'listening-choice',
+      title: '¿Adición, contraste o resultado?',
+      instructions: 'Escucha la oración con el marcador y decide qué relación expresa.',
+      questions: [
+        {
+          id: 10,
+          audioText: 'The plan is cheap. Furthermore, it is fast.',
+          language: 'en',
+          prompt: '¿Qué relación expresa?',
+          options: [
+            { id: 'add', text: 'Adición' },
+            { id: 'contrast', text: 'Contraste' },
+            { id: 'result', text: 'Resultado' },
+          ],
+          correctOptionIds: ['add'],
+          explanation: 'Furthermore añade información.',
+        },
+        {
+          id: 11,
+          audioText: 'It was raining. Nevertheless, we went out.',
+          language: 'en',
+          prompt: '¿Qué relación expresa?',
+          options: [
+            { id: 'add', text: 'Adición' },
+            { id: 'contrast', text: 'Contraste' },
+            { id: 'result', text: 'Resultado' },
+          ],
+          correctOptionIds: ['contrast'],
+          explanation: 'Nevertheless contrasta.',
+        },
+        {
+          id: 12,
+          audioText: 'Prices rose. Consequently, demand fell.',
+          language: 'en',
+          prompt: '¿Qué relación expresa?',
+          options: [
+            { id: 'add', text: 'Adición' },
+            { id: 'contrast', text: 'Contraste' },
+            { id: 'result', text: 'Resultado' },
+          ],
+          correctOptionIds: ['result'],
+          explanation: 'Consequently indica resultado.',
+        },
+        {
+          id: 13,
+          audioText: 'Cities are noisy. In contrast, villages are quiet.',
+          language: 'en',
+          prompt: '¿Qué relación expresa?',
+          options: [
+            { id: 'add', text: 'Adición' },
+            { id: 'contrast', text: 'Contraste' },
+            { id: 'result', text: 'Resultado' },
+          ],
+          correctOptionIds: ['contrast'],
+          explanation: 'In contrast expresa contraste.',
+        },
+        {
+          id: 14,
+          audioText: 'He is talented. Moreover, he works hard.',
+          language: 'en',
+          prompt: '¿Qué relación expresa?',
+          options: [
+            { id: 'add', text: 'Adición' },
+            { id: 'contrast', text: 'Contraste' },
+            { id: 'result', text: 'Resultado' },
+          ],
+          correctOptionIds: ['add'],
+          explanation: 'Moreover añade información.',
+        },
+        {
+          id: 15,
+          audioText: 'He was ill; therefore, he stayed home.',
+          language: 'en',
+          prompt: '¿Qué relación expresa?',
+          options: [
+            { id: 'add', text: 'Adición' },
+            { id: 'contrast', text: 'Contraste' },
+            { id: 'result', text: 'Resultado' },
+          ],
+          correctOptionIds: ['result'],
+          explanation: 'Therefore indica resultado.',
+        },
+      ],
+    },
+    {
+      type: 'drag-and-drop',
+      title: 'Ordena las palabras',
+      instructions: 'Arrastra las palabras para formar la oración correcta. Las opciones aparecen en orden aleatorio.',
+      questions: [
+        {
+          id: 16,
+          tokens: [
+            { id: 'q16-the', word: 'The', translation: 'el/la' },
+            { id: 'q16-plan', word: 'plan', translation: 'plan' },
+            { id: 'q16-is', word: 'is', translation: 'está' },
+            { id: 'q16-cheap', word: 'cheap.', translation: 'barato' },
+            {
+              id: 'q16-furthermore',
+              word: 'Furthermore,',
+              translation: 'además',
+            },
+            { id: 'q16-it', word: 'it', translation: 'eso' },
+            { id: 'q16-is-2', word: 'is', translation: 'está' },
+            { id: 'q16-fast', word: 'fast.', translation: 'rápido' },
+          ],
+          correctOrder: ['q16-the', 'q16-plan', 'q16-is', 'q16-cheap', 'q16-furthermore', 'q16-it', 'q16-is-2', 'q16-fast'],
+          sentenceTranslation: 'El plan es barato. Además, es rápido.',
+        },
+        {
+          id: 17,
+          tokens: [
+            { id: 'q17-it', word: 'It', translation: 'eso' },
+            { id: 'q17-was', word: 'was', translation: 'estaba' },
+            {
+              id: 'q17-raining',
+              word: 'raining.',
+              translation: 'lloviendo',
+            },
+            {
+              id: 'q17-nevertheless',
+              word: 'Nevertheless,',
+              translation: 'sin embargo',
+            },
+            { id: 'q17-we', word: 'we', translation: 'nosotros' },
+            { id: 'q17-went', word: 'went', translation: 'salimos' },
+            { id: 'q17-out', word: 'out.', translation: 'fuera' },
+          ],
+          correctOrder: ['q17-it', 'q17-was', 'q17-raining', 'q17-nevertheless', 'q17-we', 'q17-went', 'q17-out'],
+          sentenceTranslation: 'Estaba lloviendo. Sin embargo, salimos.',
+        },
+        {
+          id: 18,
+          tokens: [
+            { id: 'q18-prices', word: 'Prices', translation: 'precios' },
+            { id: 'q18-rose', word: 'rose.', translation: 'subieron' },
+            {
+              id: 'q18-consequently',
+              word: 'Consequently,',
+              translation: 'por consiguiente',
+            },
+            { id: 'q18-demand', word: 'demand', translation: 'la demanda' },
+            { id: 'q18-fell', word: 'fell.', translation: 'cayó' },
+          ],
+          correctOrder: ['q18-prices', 'q18-rose', 'q18-consequently', 'q18-demand', 'q18-fell'],
+          sentenceTranslation: 'Los precios subieron. Por consiguiente, la demanda cayó.',
+        },
+        {
+          id: 19,
+          tokens: [
+            { id: 'q19-cities', word: 'Cities', translation: 'ciudades' },
+            { id: 'q19-are', word: 'are', translation: 'son' },
+            { id: 'q19-noisy', word: 'noisy.', translation: 'ruidosas' },
+            { id: 'q19-in', word: 'In', translation: 'en' },
+            {
+              id: 'q19-contrast',
+              word: 'contrast,',
+              translation: 'contraste',
+            },
+            {
+              id: 'q19-villages',
+              word: 'villages',
+              translation: 'pueblos',
+            },
+            { id: 'q19-are-2', word: 'are', translation: 'son' },
+            { id: 'q19-quiet', word: 'quiet.', translation: 'tranquilos' },
+          ],
+          correctOrder: ['q19-cities', 'q19-are', 'q19-noisy', 'q19-in', 'q19-contrast', 'q19-villages', 'q19-are-2', 'q19-quiet'],
+          sentenceTranslation: 'Las ciudades son ruidosas. En contraste, los pueblos son tranquilos.',
+        },
+        {
+          id: 20,
+          tokens: [
+            { id: 'q20-he', word: 'He', translation: 'él' },
+            { id: 'q20-was', word: 'was', translation: 'estaba' },
+            { id: 'q20-ill', word: 'ill;', translation: 'enfermo' },
+            {
+              id: 'q20-therefore',
+              word: 'therefore,',
+              translation: 'por lo tanto',
+            },
+            { id: 'q20-he-2', word: 'he', translation: 'él' },
+            { id: 'q20-stayed', word: 'stayed', translation: 'se quedó' },
+            { id: 'q20-home', word: 'home.', translation: 'casa' },
+          ],
+          correctOrder: ['q20-he', 'q20-was', 'q20-ill', 'q20-therefore', 'q20-he-2', 'q20-stayed', 'q20-home'],
+          sentenceTranslation: 'Estaba enfermo; por lo tanto, se quedó en casa.',
+        },
+        {
+          id: 21,
+          tokens: [
+            { id: 'q21-she', word: 'She', translation: 'ella' },
+            { id: 'q21-is', word: 'is', translation: 'está' },
+            {
+              id: 'q21-talented',
+              word: 'talented.',
+              translation: 'talentoso',
+            },
+            {
+              id: 'q21-moreover',
+              word: 'Moreover,',
+              translation: 'además',
+            },
+            { id: 'q21-she-2', word: 'she', translation: 'ella' },
+            { id: 'q21-works', word: 'works', translation: 'trabaja' },
+            { id: 'q21-hard', word: 'hard.', translation: 'difícil' },
+          ],
+          correctOrder: ['q21-she', 'q21-is', 'q21-talented', 'q21-moreover', 'q21-she-2', 'q21-works', 'q21-hard'],
+          sentenceTranslation: 'Ella es talentosa. Además, trabaja duro.',
+        },
+      ],
+    },
+  ],
+};
+
+export default lessonB2022;
