@@ -34,6 +34,7 @@ export type AdminStudent = {
   total_purchased: number;
   joined_at: string;
   has_upcoming_class: boolean;
+  manual_active_override: boolean;
 };
 
 export type StudentBooking = {
@@ -299,6 +300,46 @@ export default function AdminStudents({
       [student.user_id]: {
         type: 'success',
         text: `Compra manual confirmada: +${classes} clases.`,
+      },
+    }));
+  }
+
+  function hasRealAccess(student: AdminStudent) {
+    return student.available_classes > 0 || student.has_upcoming_class;
+  }
+
+  async function setSubscriptionOverride(student: AdminStudent, active: boolean) {
+    setBusyId(student.user_id);
+    setNotices((current) => ({ ...current, [student.user_id]: undefined }));
+
+    const { error } = await supabase.rpc('admin_set_subscription_override', {
+      p_user_id: student.user_id,
+      p_active: active,
+    });
+    setBusyId(null);
+
+    if (error) {
+      setNotices((current) => ({
+        ...current,
+        [student.user_id]: { type: 'error', text: error.message },
+      }));
+      return;
+    }
+
+    setStudents((current) =>
+      current.map((item) =>
+        item.user_id === student.user_id
+          ? { ...item, manual_active_override: active }
+          : item,
+      ),
+    );
+    setNotices((current) => ({
+      ...current,
+      [student.user_id]: {
+        type: 'success',
+        text: active
+          ? 'Acceso manual otorgado: la suscripción se ve activa.'
+          : 'Acceso manual retirado.',
       },
     }));
   }
@@ -610,7 +651,20 @@ export default function AdminStudents({
             <article key={student.user_id} className={styles.studentCard}>
               <div className={styles.studentHeading}>
                 <div><h3>{student.full_name}</h3><a href={`mailto:${student.email}`}>{student.email}</a></div>
-                <span className={styles.levelBadge}>{student.english_level}</span>
+                <div className={styles.headingBadges}>
+                  <span className={styles.levelBadge}>{student.english_level}</span>
+                  <span
+                    className={
+                      hasRealAccess(student) || student.manual_active_override
+                        ? styles.subscriptionBadgeActive
+                        : styles.subscriptionBadgeInactive
+                    }
+                  >
+                    {hasRealAccess(student) || student.manual_active_override
+                      ? 'Suscripción activa'
+                      : 'Suscripción inactiva'}
+                  </span>
+                </div>
               </div>
               <dl className={styles.studentDetails}>
                 <div><dt>Clases disponibles</dt><dd>{student.available_classes}</dd></div>
@@ -689,6 +743,32 @@ export default function AdminStudents({
                     <button key={classes} type="button" onClick={() => confirmPurchase(student, classes)} disabled={busyId === student.user_id}>+{classes} clases</button>
                   ))}
                 </div>
+              </div>
+              <div className={styles.subscriptionEditor}>
+                <span>Control manual de suscripción</span>
+                <div className={styles.subscriptionButtons}>
+                  <button
+                    type="button"
+                    className={student.manual_active_override ? styles.subscriptionButtonActive : ''}
+                    onClick={() => setSubscriptionOverride(student, true)}
+                    disabled={busyId === student.user_id || student.manual_active_override}
+                  >
+                    Marcar activa
+                  </button>
+                  <button
+                    type="button"
+                    className={!student.manual_active_override ? styles.subscriptionButtonActive : ''}
+                    onClick={() => setSubscriptionOverride(student, false)}
+                    disabled={busyId === student.user_id || !student.manual_active_override}
+                  >
+                    Marcar inactiva
+                  </button>
+                </div>
+                {hasRealAccess(student) ? (
+                  <p className={styles.subscriptionNote}>
+                    Tiene clases disponibles o agendadas: la suscripción se mantiene activa aunque marques inactiva aquí.
+                  </p>
+                ) : null}
               </div>
               <div className={styles.balanceEditor}>
                 <label htmlFor={`balance-${student.user_id}`}>Ajustar saldo disponible</label>
