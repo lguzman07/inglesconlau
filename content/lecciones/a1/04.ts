@@ -8,6 +8,7 @@ const lessonA1004: LessonContent = {
   videoTitle: 'Vocales cortas y largas',
   videoDescription: 'En este video practicarás los pares de vocales cortas y largas, la doble O y la terminación ED.',
   objective: 'Al terminar, podrás distinguir de oído palabras como man y mane, bit y bite, y saber cuándo la ED de un verbo suena o es muda.',
+  videoSrc: 'bb0fe120-5aeb-48ae-83b7-36127741275f',
   exercises: [
     {
       type: 'listening-choice',
