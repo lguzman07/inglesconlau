@@ -50,12 +50,20 @@ const LEVEL_OPTIONS = [
 const COURSE_START_DATE = '2026-09-14';
 const COURSE_END_DATE = '2027-01-01';
 
+const HOLIDAY_DATES = new Set([
+  '2026-09-24',
+  '2026-11-09',
+  '2026-12-25',
+  '2027-01-01',
+]);
+
 const WEEK_RESERVE_REASONS: Record<string, string> = {
   sin_creditos: 'no tenías suficientes clases disponibles',
   lleno: 'esos horarios ya estaban llenos',
   ya_reservada: 'ya tenías esas clases reservadas',
   fuera_de_curso: 'esos días están fuera del período del curso',
   ya_paso: 'esas clases ya habían comenzado',
+  feriado: 'esos días son feriados nacionales',
 };
 
 const WEEK_DAYS = [
@@ -205,6 +213,7 @@ function getInitialClassDate() {
 
 function isValidClassDate(value: string) {
   if (value < COURSE_START_DATE || value > COURSE_END_DATE) return false;
+  if (HOLIDAY_DATES.has(value)) return false;
 
   const day = new Date(`${value}T12:00:00-04:00`).getDay();
   return day >= 1 && day <= 5;
