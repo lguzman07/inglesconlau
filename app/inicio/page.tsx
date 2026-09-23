@@ -12,11 +12,11 @@ import { createClient } from '@/lib/supabase/client';
 
 import styles from './Inicio.module.css';
 
-const TOTAL_LESSONS = 400;
 const LESSONS_PER_LEVEL = 40;
 const LAST_LESSON_STORAGE_KEY = 'inglesconlau-last-opened-lesson';
 const RECORDING_CONSENT_PENDING_KEY = 'inglesconlau-recording-consent-pending';
 const LEVEL_ORDER = ['a1', 'a2', 'b1', 'b2', 'c1'];
+const TOTAL_LESSONS = LEVEL_ORDER.length * LESSONS_PER_LEVEL;
 
 function getValidLessonKey(value: string | null) {
   if (!value || !/^[a-z0-9-]+\/\d+$/i.test(value)) return null;
@@ -394,7 +394,7 @@ export default function InicioPage() {
         </section>
 
         <Link href="/lecciones" className={styles.exploreButton}>
-          Explorar las 400 lecciones
+          Explorar las {TOTAL_LESSONS} lecciones
         </Link>
       </div>
     </main>
