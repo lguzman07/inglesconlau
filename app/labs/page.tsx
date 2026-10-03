@@ -17,19 +17,19 @@ const BOOKING_URL =
 
 const schedules = [
   {
-    id: 'morning',
-    label: 'Grupo de la mañana',
-    time: '9:30 a. m. – 10:30 a. m.',
+    id: 'a1-4pm',
+    label: 'Grupo de la tarde',
+    time: '4:00 p. m. – 5:00 p. m.',
   },
   {
-    id: 'midday',
-    label: 'Grupo del mediodía',
-    time: '11:00 a. m. – 12:00 p. m.',
-  },
-  {
-    id: 'night',
+    id: 'b2-7pm',
     label: 'Grupo de la noche',
-    time: '9:00 p. m. – 10:00 p. m.',
+    time: '7:00 p. m. – 8:00 p. m.',
+  },
+  {
+    id: 'a2-8pm',
+    label: 'Grupo de la noche',
+    time: '8:00 p. m. – 9:00 p. m.',
   },
 ];
 
