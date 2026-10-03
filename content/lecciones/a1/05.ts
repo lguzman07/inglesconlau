@@ -8,6 +8,7 @@ const lessonA1005: LessonContent = {
   videoTitle: 'How do you spell it?',
   videoDescription: 'En este video aprenderás a preguntar y responder cómo se deletrea algo, las letras dobles y los correos electrónicos.',
   objective: 'Al terminar, podrás deletrear tu nombre, tu apellido y tu correo electrónico en inglés, y entender cuando otra persona los deletrea.',
+  videoSrc: 'ee8555f8-99ba-4e21-95dc-38c3ac25ddb9',
   exercises: [
     {
       type: 'listening-choice',
