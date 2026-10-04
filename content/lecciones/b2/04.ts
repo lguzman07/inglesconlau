@@ -8,6 +8,7 @@ const lessonB2004: LessonContent = {
   videoTitle: 'Future perfect',
   videoDescription: 'En este video verás la formación del future perfect (will have + participio) en afirmativo, negativo y preguntas, y cómo usar by y by the time.',
   objective: 'Al terminar, podrás decir qué habrá pasado antes de un momento futuro y hacer oraciones negativas y preguntas con future perfect.',
+  videoSrc: '946228d1-61bd-4cf0-adc4-f56ece2014ac',
   exercises: [
     {
       type: 'fill-in-the-blanks',
