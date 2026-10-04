@@ -8,6 +8,7 @@ const lessonA1007: LessonContent = {
   videoTitle: 'Saludos, despedidas y How are you?',
   videoDescription: 'En este video aprenderás good morning, good afternoon, good evening, cómo responder a How are you? y cómo decir tu edad.',
   objective: 'Al terminar, podrás saludar y despedirte, decir cómo te sientes y preguntar y decir la edad en inglés.',
+  videoSrc: '225e4846-d394-4fbb-9e08-8a1ef8c1073c',
   exercises: [
     {
       type: 'listening-choice',
