@@ -1,5 +1,11 @@
 import Link from 'next/link';
 
+import LessonSearch, {
+  type SearchableLesson,
+} from '@/components/LessonSearch/LessonSearch';
+import { getLessonContent } from '@/content/lecciones';
+import { lessonTitles } from '@/content/lecciones/catalog';
+
 import styles from './Lecciones.module.css';
 
 const levels = [
@@ -40,6 +46,22 @@ const levels = [
   },
 ];
 
+const searchableLessons: SearchableLesson[] = levels.flatMap(
+  ({ slug }) =>
+    Object.entries(lessonTitles[slug] ?? {}).map(
+      ([lessonNumber, title]) => {
+        const number = Number(lessonNumber);
+
+        return {
+          level: slug,
+          number,
+          title,
+          altTitle: getLessonContent(slug, number)?.title,
+        };
+      },
+    ),
+);
+
 export default function LeccionesPage() {
   return (
     <main className={styles.main}>
@@ -65,6 +87,13 @@ export default function LeccionesPage() {
             >
               Empezar desde A1
             </Link>
+
+            <a
+              href="#buscar"
+              className={styles.backButton}
+            >
+              Buscar lección
+            </a>
 
             <Link
               href="/inicio"
@@ -97,6 +126,14 @@ export default function LeccionesPage() {
               Activa tu suscripción para desbloquear el resto.
             </p>
           </div>
+        </section>
+
+        <section
+          id="buscar"
+          className={styles.searchSection}
+          aria-label="Buscar lecciones"
+        >
+          <LessonSearch lessons={searchableLessons} />
         </section>
 
         <section className={styles.levelsSection}>

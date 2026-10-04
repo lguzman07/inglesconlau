@@ -1,0 +1,133 @@
+.search {
+    padding: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+.label {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.inputWrap {
+    position: relative;
+}
+
+.icon {
+    position: absolute;
+    top: 50%;
+    left: 18px;
+    color: var(--text-light);
+    font-size: 1.3rem;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.input {
+    width: 100%;
+    min-height: 52px;
+    padding: 12px 18px 12px 48px;
+    color: var(--text);
+    font: inherit;
+    font-size: 1rem;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: border-color var(--transition);
+}
+
+.input::placeholder {
+    color: var(--text-light);
+}
+
+.input:focus {
+    outline: 3px solid var(--primary-light);
+    outline-offset: 2px;
+    border-color: var(--primary);
+}
+
+.count,
+.empty {
+    margin: 16px 0 0;
+    color: var(--text-light);
+    font-size: .9rem;
+}
+
+.results {
+    display: grid;
+    gap: 8px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.result {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    color: inherit;
+    text-decoration: none;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    transition:
+        border-color 160ms ease,
+        transform 160ms ease;
+}
+
+.result:hover {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.result:focus-visible {
+    outline: 3px solid var(--primary-light);
+    outline-offset: 2px;
+}
+
+.badge {
+    flex-shrink: 0;
+    padding: 5px 10px;
+    color: var(--primary);
+    font-size: .8rem;
+    font-weight: 800;
+    white-space: nowrap;
+    background: var(--surface-soft);
+    border: 1px solid var(--primary-light);
+    border-radius: 999px;
+}
+
+.resultTitle {
+    flex: 1;
+    min-width: 0;
+    color: var(--text);
+    font-size: .95rem;
+    line-height: 1.45;
+}
+
+.arrow {
+    flex-shrink: 0;
+    color: var(--primary);
+    font-weight: 800;
+}
+
+@media (max-width: 600px) {
+    .search {
+        padding: 22px 18px;
+    }
+
+    .result {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .arrow {
+        display: none;
+    }
+}

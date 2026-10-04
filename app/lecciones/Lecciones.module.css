@@ -109,6 +109,11 @@
     line-height: 1.6;
 }
 
+.searchSection {
+    margin-top: 24px;
+    scroll-margin-top: 96px;
+}
+
 .levelsSection {
     margin-top: 48px;
 }
