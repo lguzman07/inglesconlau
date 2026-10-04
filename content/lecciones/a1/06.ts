@@ -8,6 +8,7 @@ const lessonA1006: LessonContent = {
   videoTitle: 'Números del 0 al 100 y dictado',
   videoDescription: 'En este video aprenderás los números del 0 al 100, la diferencia entre thirteen y thirty, y cómo decir números de teléfono.',
   objective: 'Al terminar, podrás decir y entender números del 0 al 100 y números de teléfono en inglés.',
+  videoSrc: 'b7127112-2008-4e23-936e-8706e44c5929',
   exercises: [
     {
       type: 'listening-choice',
