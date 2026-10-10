@@ -709,12 +709,6 @@ export default function GroupClassesDashboard() {
           <h2 id="group-classes-title">
             Reserva tu próxima clase
           </h2>
-
-          <p className={styles.description}>
-            El programa comienza el 14 de septiembre de 2026
-            y dura 16 semanas. Puedes cambiar una reserva por
-            otro nivel u horario que tenga cupo.
-          </p>
         </div>
 
         <div className={styles.balanceCard}>
