@@ -32,15 +32,6 @@ const plans = [
     cta: 'Empezar',
     featured: true,
   },
-  {
-    packageId: 'complete-80',
-    name: 'Curso completo',
-    price: '7,000',
-    classes: '80 clases',
-    detail: 'RD$87.50 por clase. Ahorras RD$2,600.',
-    cta: 'Comprar',
-    featured: false,
-  },
 ];
 
 export default function PlansTeaser() {

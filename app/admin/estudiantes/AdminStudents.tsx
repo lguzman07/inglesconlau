@@ -70,7 +70,7 @@ export type PurchaseRequest = {
 };
 
 type Notice = { type: 'success' | 'error'; text: string };
-const purchasePackages = [5, 20, 80] as const;
+const purchasePackages = [5, 20] as const;
 
 function formatMoney(value: number) {
   return new Intl.NumberFormat('es-DO').format(value);

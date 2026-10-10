@@ -107,14 +107,6 @@ const PACKAGES = [
     regularPrice: 2400,
     description: 'Veinte clases para avanzar con constancia durante 4 semanas.',
   },
-  {
-    id: 'complete-80',
-    name: 'Curso completo',
-    classes: 80,
-    price: 7000,
-    regularPrice: 9600,
-    description: 'Las 16 semanas completas en un mismo horario principal.',
-  },
 ] as const;
 
 const LEVEL_ORDER = ['a1', 'a2', 'b1', 'b2'];
@@ -430,12 +422,9 @@ export default function GroupClassPackages({
                 aria-checked={isSelected}
                 className={`${styles.packageCard} ${
                   isSelected ? styles.packageCardSelected : ''
-                } ${item.id === 'complete-80' ? styles.bestValueCard : ''}`}
+                }`}
                 onClick={() => setSelectedPackageId(item.id)}
               >
-                {item.id === 'complete-80' ? (
-                  <span className={styles.bestValueBadge}>MEJOR VALOR</span>
-                ) : null}
                 {savings > 0 ? (
                   <span className={styles.savingsBadge}>
                     Ahorra RD${formatMoney(savings)}

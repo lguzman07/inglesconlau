@@ -60,23 +60,6 @@ const groupClassPackages = [
       'Tus clases permanecen disponibles hasta agotarlas.',
     ],
   },
-  {
-    id: '80',
-    name: 'Curso completo',
-    amount: '7,000',
-    period: '/80 clases',
-    badge: 'Mejor valor',
-    button: 'Comprar el curso completo',
-    benefits: [
-      '80 clases grupales en vivo de una hora.',
-      'RD$87.50 por cada clase.',
-      'Ahorras RD$2,600 frente a paquetes de cinco clases.',
-      'Puedes escoger entre A1, A2, B1 y B2.',
-      'Eliges la fecha y el horario de cada clase.',
-      'Máximo 10 estudiantes por grupo.',
-      'Tus clases permanecen disponibles hasta agotarlas.',
-    ],
-  },
 ];
 
 export default function Plan() {

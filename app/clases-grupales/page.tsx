@@ -90,16 +90,15 @@ export default async function ClasesGrupalesPage() {
           </div>
 
           <aside className={styles.priceCard} aria-label="Opciones de compra">
-            <p className={styles.priceLabel}>CUATRO OPCIONES</p>
+            <p className={styles.priceLabel}>TRES OPCIONES</p>
             <div className={styles.packageSummary}>
               <strong>1</strong><span>clase de prueba · RD$100</span>
               <strong>5</strong><span>clases · 1 semana</span>
               <strong>20</strong><span>clases · 4 semanas</span>
-              <strong>80</strong><span>clases · curso completo</span>
             </div>
             <p className={styles.priceDescription}>
-              El curso completo cuesta RD$7,000 y ahorra RD$2,600 frente al
-              precio regular de las 80 clases.
+              El paquete de 4 semanas cuesta RD$1,900 y ahorra RD$500 frente
+              al precio regular de las 20 clases.
             </p>
           </aside>
         </section>
@@ -131,7 +130,7 @@ export default async function ClasesGrupalesPage() {
           <p className={styles.eyebrow}>INSCRIPCIÓN</p>
           <h2 id="process-title">¿Cómo funciona?</h2>
           <ol className={styles.processGrid}>
-            <li className={styles.processCard}><span>01</span><h3>Escoge el paquete</h3><p>Selecciona 5, 20 u 80 clases.</p></li>
+            <li className={styles.processCard}><span>01</span><h3>Escoge el paquete</h3><p>Selecciona la clase de prueba, 5 o 20 clases.</p></li>
             <li className={styles.processCard}><span>02</span><h3>Escoge el horario</h3><p>Verás los niveles, horas y cupos antes de pagar.</p></li>
             <li className={styles.processCard}><span>03</span><h3>Crea tu cuenta</h3><p>Solo te la pedimos al confirmar, no antes de explorar.</p></li>
             <li className={styles.processCard}><span>04</span><h3>Realiza la transferencia</h3><p>El horario se aparta 2 horas mientras confirmamos tu pago.</p></li>
