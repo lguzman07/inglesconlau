@@ -8,6 +8,7 @@ const lessonA1008: LessonContent = {
   videoTitle: 'Colores, formas, tamaños y objetos',
   videoDescription: 'En este video aprenderás colores, formas, tamaños y objetos del aula y de la casa, y cómo preguntar What color is it?',
   objective: 'Al terminar, podrás nombrar colores, formas, tamaños y objetos, y describirlos con oraciones cortas.',
+  videoSrc: '8a603f90-b295-4e26-b5ef-e54234dc4068',
   exercises: [
     {
       type: 'listening-choice',
