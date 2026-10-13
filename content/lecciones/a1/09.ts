@@ -8,6 +8,7 @@ const lessonA1009: LessonContent = {
   videoTitle: 'This is, It is y color + objeto',
   videoDescription: 'En este video aprenderás this is, that is, it is, el orden color + objeto y cuándo usar a o an.',
   objective: 'Al terminar, podrás presentar y describir objetos con oraciones como This is a red pen.',
+  videoSrc: 'e4d2eb67-0640-4246-acc5-749a1faad3a2',
   exercises: [
     {
       type: 'fill-in-the-blanks',
