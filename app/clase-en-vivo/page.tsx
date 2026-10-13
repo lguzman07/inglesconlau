@@ -98,10 +98,10 @@ export default async function ClaseEnVivoPage() {
       <div className={styles.container}>
         <Link href="/inicio" className={styles.backLink}>← Volver al inicio</Link>
 
-        <div className={styles.helpTip}>
-          <p>
-            <strong>¿No te reconoce la cámara o el micrófono?</strong>
-          </p>
+        <details className={styles.helpTip}>
+          <summary className={styles.helpTipToggle}>
+            ¿Problemas con la cámara o el micrófono?
+          </summary>
 
           <ul className={styles.helpTipList}>
             <li>
@@ -164,7 +164,7 @@ export default async function ClaseEnVivoPage() {
               (Zoom, Teams, etc.) y recarga la página.
             </li>
           </ul>
-        </div>
+        </details>
 
         <section className={styles.videoPane} aria-label="Video de la clase">
           <WherebyRoom roomUrl={roomUrl} displayName={user.email ?? undefined} />

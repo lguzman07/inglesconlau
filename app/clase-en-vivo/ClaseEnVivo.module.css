@@ -64,18 +64,61 @@
 }
 
 .helpTip {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.helpTip[open] {
   padding: 0.9rem 1.1rem;
   background: var(--surface-solid);
   border: 1px solid var(--border);
   border-radius: 14px;
 }
 
-.helpTip p {
-  margin: 0;
-  color: var(--text-light);
-  font-size: 0.9rem;
-  line-height: 1.6;
+.helpTipToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.95rem;
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+  list-style: none;
+  cursor: pointer;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  transition: border-color var(--transition);
+}
+
+.helpTipToggle::-webkit-details-marker {
+  display: none;
+}
+
+.helpTipToggle::before {
+  content: '?';
+  display: inline-grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--surface-solid);
+  font-size: 0.75rem;
+  background: var(--primary);
+  border-radius: 50%;
+}
+
+.helpTipToggle:hover {
+  border-color: var(--primary);
+}
+
+.helpTipToggle:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.helpTip[open] .helpTipToggle {
+  padding: 0;
+  background: none;
+  border: 0;
 }
 
 .helpTip strong {
