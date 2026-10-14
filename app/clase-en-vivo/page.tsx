@@ -24,12 +24,14 @@ export default async function ClaseEnVivoPage() {
 
   if (!user) redirect('/iniciar-sesion?next=%2Fclase-en-vivo');
 
-  const [profileResult, accessResult] = await Promise.all([
+  const [adminResult, profileResult, accessResult] = await Promise.all([
+    supabase.rpc('is_current_user_admin'),
     supabase.from('profiles').select('role').eq('id', user.id).maybeSingle(),
     supabase.rpc('student_has_access'),
   ]);
 
-  const isAdmin = profileResult.data?.role === 'admin';
+  const isAdmin =
+    adminResult.data === true || profileResult.data?.role === 'admin';
   const hasAccess = isAdmin || accessResult.data === true;
 
   if (!hasAccess) {
