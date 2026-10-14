@@ -58,15 +58,11 @@ function normalizeAnswer(
   value: string,
 ) {
   return value
-    .trim()
     .toLocaleLowerCase()
     .replace(/[’‘]/g, "'")
+    .replace(/[.,!?;:¡¿]/g, '')
     .replace(/\s+/g, ' ')
-    .replace(
-      /\s+([,.!?;:])/g,
-      '$1',
-    )
-    .replace(/[.!?]+$/g, '');
+    .trim();
 }
 
 function getModelAnswer(

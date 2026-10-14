@@ -73,8 +73,11 @@ const SILENT_AUDIO_SRC =
 
 function normalizeAnswer(value: string) {
   return value
-    .trim()
-    .toLocaleLowerCase();
+    .toLocaleLowerCase()
+    .replace(/[’‘]/g, "'")
+    .replace(/[.,!?;:¡¿]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function getSentence(
