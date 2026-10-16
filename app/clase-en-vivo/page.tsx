@@ -152,15 +152,6 @@ export default async function ClaseEnVivoPage() {
             </li>
 
             <li>
-              <strong>¿Abriste el enlace desde Instagram, Facebook o
-              WhatsApp?</strong> Esos navegadores dentro de la app casi
-              nunca dejan usar la cámara y el micrófono. Copia el
-              enlace y ábrelo directamente en Safari o Chrome (o toca
-              los tres puntos ⋮ arriba y elige &ldquo;Abrir en el
-              navegador&rdquo;).
-            </li>
-
-            <li>
               Si ya los permitiste y sigue sin funcionar, cierra otras
               apps que puedan estar usando la cámara o el micrófono
               (Zoom, Teams, etc.) y recarga la página.
